@@ -30,8 +30,11 @@ class SourceTier(str, Enum):
     TERTIARY = "tertiary"    # Aggregations, summaries, opinion without independent verification
 
 
-# Minimum number of distinct sources before any verdict other than MISSING can be issued.
+# Minimum relevant sources before any verdict other than MISSING can be issued.
 MIN_EVIDENCE_SOURCES = 2
+
+# Minimum relevant sources required to reach VERIFIED (stricter than any-verdict threshold).
+MIN_VERIFIED_SOURCES = 3
 
 
 @dataclass(frozen=True)
@@ -45,12 +48,18 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
     """
     Map an EvidenceSummary to an EpistemicRating.
 
+    Only sources that pass the relevance filter (>= MIN_RELEVANCE_SCORE) in the
+    analysis engine are included in the EvidenceSummary; this function sees only
+    the already-filtered tiers.
+
     Rules applied in priority order:
-      1. Fewer than MIN_EVIDENCE_SOURCES total sources → MISSING.
+      1. Fewer than MIN_EVIDENCE_SOURCES relevant sources → MISSING.
       2. Any primary or secondary debunking source → DEBUNKED.
-      3. At least one primary verifying source → VERIFIED.
-      4. Only secondary or tertiary verifying sources → SPECULATIVE (capped).
-      5. No verifying sources at all → MISSING.
+      3. No verifying sources → MISSING.
+      4. Fewer than MIN_VERIFIED_SOURCES relevant sources → SPECULATIVE
+         (primary source present but threshold not met).
+      5. At least one primary verifying source → VERIFIED.
+      6. Only secondary or tertiary verifying sources → SPECULATIVE (capped).
     """
     total = len(evidence.verifying_tiers) + len(evidence.debunking_tiers)
     if total < MIN_EVIDENCE_SOURCES:
@@ -62,6 +71,9 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
 
     if not evidence.verifying_tiers:
         return EpistemicRating.MISSING
+
+    if total < MIN_VERIFIED_SOURCES:
+        return EpistemicRating.SPECULATIVE
 
     if any(t is SourceTier.PRIMARY for t in evidence.verifying_tiers):
         return EpistemicRating.VERIFIED

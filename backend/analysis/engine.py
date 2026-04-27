@@ -8,6 +8,14 @@ from backend.db.models import Claim, EvaluatedSource, Judgment
 
 logger = logging.getLogger(__name__)
 
+# ── Source thresholds ─────────────────────────────────────────────────────────
+
+# Hard cap on sources collected per claim.
+MAX_SOURCES = 8
+
+# Sources below this relevance score are stored but excluded from rating derivation.
+MIN_RELEVANCE_SCORE = 0.6
+
 # ── Prompt (cached on first use, TTL 5 min) ───────────────────────────────────
 
 _SYSTEM_PROMPT = """\
@@ -16,10 +24,10 @@ fact-checking tool founded in Switzerland. Your only goal is accurate, evidence-
 judgment — not advocacy for any political side.
 
 EPISTEMIC RATINGS:
-  VERIFIED   — factually correct; backed by at least one primary source
+  VERIFIED    — factually correct; backed by ≥3 relevant sources including ≥1 primary
   SPECULATIVE — plausible but not conclusively provable with current evidence
-  DEBUNKED   — factually false; primary or secondary counter-evidence documented
-  MISSING    — insufficient evidence; fewer than 2 independent sources found
+  DEBUNKED    — factually false; primary or secondary counter-evidence documented
+  MISSING     — insufficient evidence; fewer than 2 sources with relevance ≥0.6 found
 
 SOURCE TIERS:
   primary   — original data, official documents, government records, peer-reviewed studies
@@ -32,10 +40,12 @@ SOURCE INDEPENDENCE:
 
 HARD RULES — never violate:
   1. Your own unverified analysis counts as zero sources.
-  2. Fewer than 2 distinct sources → rating must be MISSING.
-  3. Only tertiary sources → rating is capped at SPECULATIVE, never VERIFIED.
-  4. Apply identical scrutiny regardless of political direction (symmetry).
-  5. "We don't know" (MISSING) is a valid and important answer.\
+  2. Only sources with relevance_score ≥0.6 count toward rating thresholds.
+  3. VERIFIED requires ≥3 relevant sources; DEBUNKED requires ≥2.
+  4. Return at most 8 sources total. Prioritise primary and independent sources.
+  5. Only tertiary sources → rating is capped at SPECULATIVE, never VERIFIED.
+  6. Apply identical scrutiny regardless of political direction (symmetry).
+  7. "We don't know" (MISSING) is a valid and important answer.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────
@@ -205,11 +215,13 @@ def analyze_claim(claim_id: str, session) -> Judgment:
     data = _phase2_judgment(client, claim.text, search_findings)
 
     # Build EvidenceSummary from Claude's source evaluations
-    sources_data: list[dict] = data.get("sources", [])
+    sources_data: list[dict] = data.get("sources", [])[:MAX_SOURCES]
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
 
     for src in sources_data:
+        if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
+            continue
         try:
             tier = SourceTier(src["tier"])
         except ValueError:
