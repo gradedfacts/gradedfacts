@@ -1,0 +1,20 @@
+/*
+  Main stylesheet for TransparencyPuzzle.
+
+  Design tokens:
+    --color-verified:    #22c55e  (green)  — VERIFIED judgments
+    --color-speculative: #eab308  (yellow) — SPECULATIVE judgments
+    --color-debunked:    #ef4444  (red)    — DEBUNKED judgments
+    --color-missing:     #6b7280  (gray)   — MISSING / withheld judgment
+
+  Sections:
+    1. CSS custom properties (design tokens)
+    2. Reset and base typography
+    3. Layout grid (claim input + puzzle board + sidebar)
+    4. Puzzle tile component styles
+    5. Rating badge styles (used in source panel and revision trail)
+    6. Source panel
+    7. Revision trail accordion
+    8. Symmetry report sidebar
+    9. Responsive breakpoints
+*/

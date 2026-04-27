@@ -1,0 +1,100 @@
+from __future__ import annotations
+
+import uuid
+from datetime import datetime, timezone
+
+from sqlalchemy import Boolean, Enum as SAEnum, Float, ForeignKey, String, Text
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+from backend.analysis.rating import EpistemicRating, SourceTier
+
+
+def _uuid() -> str:
+    return str(uuid.uuid4())
+
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class Claim(Base):
+    __tablename__ = "claims"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+    submitted_at: Mapped[datetime] = mapped_column(default=_now)
+    # Anonymized submitter token (e.g. hashed session ID) — never stores PII
+    submitter_token: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
+    sources: Mapped[list[EvaluatedSource]] = relationship(back_populates="claim")
+    judgments: Mapped[list[Judgment]] = relationship(
+        back_populates="claim", order_by="Judgment.created_at"
+    )
+
+
+class EvaluatedSource(Base):
+    __tablename__ = "evaluated_sources"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    claim_id: Mapped[str] = mapped_column(ForeignKey("claims.id"), nullable=False)
+    url: Mapped[str] = mapped_column(Text, nullable=False)
+    tier: Mapped[SourceTier] = mapped_column(SAEnum(SourceTier), nullable=False)
+    is_independent: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    # Populated when is_independent is False
+    affiliation_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # 0.0–1.0: how directly this source addresses the specific claim
+    relevance_score: Mapped[float] = mapped_column(Float, nullable=False)
+    excerpt: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Snapshot of full text at fetch time — ensures past judgments remain reproducible
+    full_text_snapshot: Mapped[str | None] = mapped_column(Text, nullable=True)
+    anonymous: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # Required when anonymous is True; no anonymous source accepted without justification
+    anonymity_justification: Mapped[str | None] = mapped_column(Text, nullable=True)
+    fetched_at: Mapped[datetime] = mapped_column(default=_now)
+
+    claim: Mapped[Claim] = relationship(back_populates="sources")
+
+
+class Judgment(Base):
+    __tablename__ = "judgments"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    claim_id: Mapped[str] = mapped_column(ForeignKey("claims.id"), nullable=False)
+    rating: Mapped[EpistemicRating] = mapped_column(SAEnum(EpistemicRating), nullable=False)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    # JSON-encoded SymmetryReport; nullable until the symmetry check completes
+    symmetry_report: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Human analyst ID or Claude model string, e.g. "claude-sonnet-4-6"
+    analyst: Mapped[str] = mapped_column(String(128), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+    # True for the current active judgment; False once superseded by a Revision
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+
+    claim: Mapped[Claim] = relationship(back_populates="judgments")
+    # One-to-one: a judgment is superseded by at most one revision
+    revision: Mapped[Revision | None] = relationship(
+        back_populates="prior_judgment",
+        foreign_keys="Revision.prior_judgment_id",
+        uselist=False,
+    )
+
+
+class Revision(Base):
+    __tablename__ = "revisions"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    claim_id: Mapped[str] = mapped_column(ForeignKey("claims.id"), nullable=False)
+    prior_judgment_id: Mapped[str] = mapped_column(ForeignKey("judgments.id"), nullable=False)
+    new_judgment_id: Mapped[str] = mapped_column(ForeignKey("judgments.id"), nullable=False)
+    # Required: what new evidence or correction triggered this revision
+    trigger_evidence: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=_now)
+
+    prior_judgment: Mapped[Judgment] = relationship(
+        back_populates="revision", foreign_keys=[prior_judgment_id]
+    )
+    new_judgment: Mapped[Judgment] = relationship(foreign_keys=[new_judgment_id])

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TransparencyPuzzle</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <!--
+    Root application shell.
+
+    Mounts the following components:
+      - <claim-input>      Submit a political claim for analysis.
+      - <puzzle-board>     Displays the current judgment as a color-coded
+                           puzzle tile grid (Green/Yellow/Red/Gray).
+      - <source-panel>     Lists all evaluated sources with tier and
+                           independence badges.
+      - <revision-trail>   Accordion showing the full judgment history
+                           for the current claim.
+      - <symmetry-report>  Sidebar confirming equivalent analyses exist
+                           across the political spectrum.
+  -->
+  <div id="app"></div>
+
+  <script type="module" src="components/app.js"></script>
+</body>
+</html>

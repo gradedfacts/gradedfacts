@@ -1,0 +1,24 @@
+# TransparencyPuzzle — Python dependencies
+
+# AI analysis
+anthropic>=0.40.0          # Claude API (analysis engine + prompt caching)
+
+# Web API
+fastapi>=0.115.0           # REST API framework
+uvicorn[standard]>=0.32.0  # ASGI server
+
+# Data validation and settings
+pydantic>=2.9.0            # Model validation (Claim, Judgment, Source schemas)
+pydantic-settings>=2.6.0   # Environment-based configuration
+
+# Database
+sqlalchemy>=2.0.0          # ORM (append-only judgment storage)
+alembic>=1.14.0            # Schema migrations
+
+# Source fetching
+httpx>=0.28.0              # Async HTTP client for source fetching
+beautifulsoup4>=4.12.0     # HTML parsing and text extraction
+lxml>=5.3.0                # Fast HTML/XML parser backend for bs4
+
+# Utilities
+python-dotenv>=1.0.0       # .env file loading
