@@ -1,0 +1,18 @@
+<!--
+  Error partial — returned when:
+    • Text is too short (400)
+    • ANTHROPIC_API_KEY not configured (503)
+    • Analysis pipeline failed (500)
+    • Claim not found (404)
+
+  Rendered inside #result via hx-swap="innerHTML" or hx-swap="outerHTML".
+  No hx-trigger, so HTMX stops polling after this swap.
+-->
+<div id="result">
+  <div class="card">
+    <div class="error-banner">
+      <span class="error-code">{{ code }}</span>
+      {{ message }}
+    </div>
+  </div>
+</div>

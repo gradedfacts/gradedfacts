@@ -1,16 +1,79 @@
 import logging
+import time
 from contextlib import asynccontextmanager
+from pathlib import Path
+from urllib.parse import urlparse
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, Form, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from backend import schemas
 from backend.analysis.engine import analyze_claim
-from backend.db.models import Base, Claim, Judgment
-from backend.db.session import engine, get_session
+from backend.db.models import Base, Claim, EvaluatedSource, Judgment
+from backend.db.session import SessionLocal, engine, get_session
 
 logger = logging.getLogger(__name__)
+
+# ── Template helpers ──────────────────────────────────────────────────────────
+
+_ROOT = Path(__file__).parent.parent
+
+
+def _domain(url: str) -> str:
+    try:
+        host = urlparse(url).hostname or url
+        return host.removeprefix("www.")
+    except Exception:
+        return url
+
+
+def _rating_label(rating) -> str:
+    key = getattr(rating, "value", str(rating))
+    return {
+        "verified":    "Claim is verified",
+        "speculative": "Claim is speculative",
+        "debunked":    "Claim is debunked",
+        "missing":     "Insufficient evidence",
+    }.get(key, key)
+
+
+templates = Jinja2Templates(directory=str(_ROOT / "frontend" / "templates"))
+templates.env.filters["domain"] = _domain
+templates.env.filters["rating_label"] = _rating_label
+
+# ── Background analysis state ─────────────────────────────────────────────────
+
+_LOADING_MESSAGES = [
+    "Searching sources…",
+    "Evaluating independence…",
+    "Deriving rating…",
+]
+
+_TIER_ORDER = {"primary": 0, "secondary": 1, "tertiary": 2}
+
+# claim_id → (http_status_code, human_message)
+_analysis_errors: dict[str, tuple[int, str]] = {}
+
+
+def _sort_sources(sources: list) -> list:
+    return sorted(sources, key=lambda s: (_TIER_ORDER.get(str(s.tier), 9), -s.relevance_score))
+
+
+def _run_analysis(claim_id: str) -> None:
+    """Background task: runs analyze_claim in its own DB session."""
+    with SessionLocal() as session:
+        try:
+            analyze_claim(claim_id, session)
+        except RuntimeError as exc:
+            _analysis_errors[claim_id] = (503, str(exc))
+        except Exception as exc:
+            logger.error("Background analysis failed for %s: %s", claim_id, exc, exc_info=True)
+            _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
 
 
 @asynccontextmanager
@@ -20,6 +83,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="TransparencyPuzzle API", version="0.1.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
+
+app.mount("/static", StaticFiles(directory=str(_ROOT / "frontend")), name="static")
 
 
 @app.post("/claims", response_model=schemas.ClaimOut, status_code=201)
@@ -87,6 +159,18 @@ def get_claim_history(claim_id: str, session: Session = Depends(get_session)):
     )
 
 
+@app.get("/claims/{claim_id}/sources", response_model=list[schemas.SourceOut])
+def get_claim_sources(claim_id: str, session: Session = Depends(get_session)):
+    if not session.get(Claim, claim_id):
+        raise HTTPException(status_code=404, detail="Claim not found")
+    rows = session.execute(
+        select(EvaluatedSource)
+        .where(EvaluatedSource.claim_id == claim_id)
+        .order_by(EvaluatedSource.relevance_score.desc())
+    ).scalars().all()
+    return rows
+
+
 @app.post("/claims/{claim_id}/analyze", response_model=schemas.JudgmentOut, status_code=201)
 def analyze_claim_endpoint(claim_id: str, session: Session = Depends(get_session)):
     claim = session.get(Claim, claim_id)
@@ -109,3 +193,92 @@ def analyze_claim_endpoint(claim_id: str, session: Session = Depends(get_session
     except Exception as exc:
         logger.error("Analysis pipeline failed for claim %s: %s", claim_id, exc, exc_info=True)
         raise HTTPException(status_code=500, detail="Analysis pipeline failed")
+
+
+# ── HTML endpoints (HTMX + Jinja2) ───────────────────────────────────────────
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.post("/ui/analyze", response_class=HTMLResponse)
+def ui_analyze(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    text: str = Form(""),
+    session: Session = Depends(get_session),
+):
+    text = text.strip()
+    if len(text) < 10:
+        return templates.TemplateResponse(
+            "partials/error.html",
+            {"request": request, "code": 400, "message": "Please enter at least 10 characters."},
+        )
+    claim = Claim(text=text[:2000])
+    session.add(claim)
+    session.commit()
+    session.refresh(claim)
+    background_tasks.add_task(_run_analysis, claim.id)
+    return templates.TemplateResponse(
+        "partials/analyzing.html",
+        {"request": request, "claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
+    )
+
+
+@app.get("/ui/claims/{claim_id}/poll", response_class=HTMLResponse)
+def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_session)):
+    if claim_id in _analysis_errors:
+        code, message = _analysis_errors.pop(claim_id)
+        return templates.TemplateResponse(
+            "partials/error.html",
+            {"request": request, "code": code, "message": message},
+        )
+
+    claim = session.get(Claim, claim_id)
+    if not claim:
+        return templates.TemplateResponse(
+            "partials/error.html",
+            {"request": request, "code": 404, "message": "Claim not found."},
+        )
+
+    active_judgment = session.execute(
+        select(Judgment)
+        .where(Judgment.claim_id == claim_id, Judgment.is_active.is_(True))
+        .order_by(Judgment.created_at.desc())
+        .limit(1)
+    ).scalar_one_or_none()
+
+    if not active_judgment:
+        # Still running — return the loading partial so polling continues
+        msg_idx = (int(time.time()) % 18) // 6
+        return templates.TemplateResponse(
+            "partials/analyzing.html",
+            {
+                "request": request,
+                "claim_id": claim_id,
+                "loading_message": _LOADING_MESSAGES[msg_idx],
+            },
+        )
+
+    sources = session.execute(
+        select(EvaluatedSource).where(EvaluatedSource.claim_id == claim_id)
+    ).scalars().all()
+
+    judgments = session.execute(
+        select(Judgment)
+        .where(Judgment.claim_id == claim_id)
+        .options(joinedload(Judgment.revision))
+        .order_by(Judgment.created_at.desc())
+    ).scalars().unique().all()
+
+    return templates.TemplateResponse(
+        "partials/result.html",
+        {
+            "request": request,
+            "claim_text": claim.text,
+            "judgment": active_judgment,
+            "sources": _sort_sources(sources),
+            "judgments": list(judgments),
+        },
+    )

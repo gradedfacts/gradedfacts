@@ -1,0 +1,20 @@
+<!--
+  Analyzing partial — returned by POST /ui/analyze and by GET /ui/claims/:id/poll
+  while analysis is in progress.
+
+  HTMX polls every 2 s. When the poll returns result.html instead of this
+  partial, the hx-trigger disappears and polling stops automatically.
+
+  The loading message cycles server-side: the poll endpoint picks a different
+  string every 6 seconds based on wall-clock time, so each swap shows a new
+  phase label without any client-side JS timer.
+-->
+<div id="result"
+     hx-get="/ui/claims/{{ claim_id }}/poll"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML">
+  <div class="loading-section">
+    <div class="spinner"></div>
+    <span>{{ loading_message }}</span>
+  </div>
+</div>

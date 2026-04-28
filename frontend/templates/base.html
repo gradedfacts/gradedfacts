@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransparencyPuzzle</title>
+  <link rel="stylesheet" href="/static/styles/main.css">
+  <!--
+    HTMX handles form submission, polling, and partial HTML swaps.
+    No SPA framework — the server renders all state transitions.
+  -->
+  <script src="https://unpkg.com/htmx.org@2.0.4" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-wordmark">&#129513; TransparencyPuzzle</span>
+    <span class="site-tagline">Founded in Switzerland &middot; No political funding</span>
+  </header>
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

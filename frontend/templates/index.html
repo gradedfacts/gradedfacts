@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <p class="claim-form-heading">Analyze a claim</p>
+  <!--
+    hx-post        — submits the form to the server
+    hx-target      — the element to update with the server response
+    hx-swap        — replaces the inner HTML of #result
+    hx-disabled-elt — disables the button during the request
+  -->
+  <form class="claim-form"
+        hx-post="/ui/analyze"
+        hx-target="#result"
+        hx-swap="innerHTML"
+        hx-disabled-elt="find button[type='submit']">
+    <textarea
+      name="text"
+      class="claim-textarea"
+      maxlength="2000"
+      placeholder="Enter a political claim to verify — e.g. &#8220;The unemployment rate fell to a 50-year low in 2019&#8221;"
+      rows="4"
+      required
+    ></textarea>
+    <div class="form-footer">
+      <span class="char-count" id="char-count">2000 characters remaining</span>
+      <button type="submit" class="btn btn-primary">Analyze Claim</button>
+    </div>
+  </form>
+</div>
+
+<!-- Result area: filled by HTMX when form submits, then by polling partial -->
+<div id="result"></div>
+
+<script>
+  /* Char count — the only JS on this page; no framework needed. */
+  const ta = document.querySelector('.claim-textarea');
+  const cc = document.getElementById('char-count');
+  ta.addEventListener('input', function () {
+    const r = 2000 - ta.value.length;
+    cc.textContent = r + ' characters remaining';
+    cc.className = 'char-count' + (r < 100 ? ' limit' : r < 400 ? ' near' : '');
+  });
+</script>
+
+{% endblock %}

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from backend.analysis.rating import EpistemicRating
+from backend.analysis.rating import EpistemicRating, SourceTier
 
 
 class ClaimCreate(BaseModel):
@@ -56,3 +56,16 @@ class ClaimHistoryOut(BaseModel):
     text: str
     submitted_at: datetime
     judgments: list[JudgmentHistoryOut]
+
+
+class SourceOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    url: str
+    tier: SourceTier
+    is_independent: bool
+    affiliation_note: str | None
+    relevance_score: float
+    excerpt: str | None
+    fetched_at: datetime

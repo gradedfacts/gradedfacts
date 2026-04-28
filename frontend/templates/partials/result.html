@@ -1,0 +1,176 @@
+<!--
+  Result partial — returned by GET /ui/claims/:id/poll when active_judgment exists.
+  No hx-trigger here, so HTMX stops polling after this swap.
+
+  Tile colors encode source quality (not claim direction, which is not stored):
+    tile-verified    — independent primary, relevance ≥ 0.6
+    tile-speculative — independent secondary, relevance ≥ 0.6
+    tile-debunked    — not independent (any tier)
+    tile-missing     — tertiary or relevance < 0.6
+
+  Clicking a tile scrolls to its source entry and briefly highlights it.
+  The small <script> block at the bottom wires this up; HTMX 2.x executes
+  scripts in swapped content.
+-->
+<div id="result">
+
+  <!-- ── Verdict card ──────────────────────────────────────────────────── -->
+  <div class="card" style="margin-bottom: 1.25rem">
+
+    <div class="board-header">
+      <span class="rating-badge {{ judgment.rating.value }}">
+        <span class="rating-dot"></span>{{ judgment.rating.value }}
+      </span>
+      <span class="board-verdict">{{ judgment.rating | rating_label }}</span>
+    </div>
+
+    <p class="board-rationale">{{ judgment.rationale }}</p>
+
+    {% if sources %}
+    <p class="board-tiles-label">Evidence pieces ({{ sources | length }})</p>
+    <div class="board-tiles" id="tile-grid">
+      {% for source in sources %}
+        {# Tile class encodes source quality, not claim direction #}
+        {% if not source.is_independent %}
+          {% set tile_cls = 'tile-debunked' %}
+        {% elif source.relevance_score < 0.6 %}
+          {% set tile_cls = 'tile-missing' %}
+        {% elif source.tier.value == 'primary' %}
+          {% set tile_cls = 'tile-verified' %}
+        {% elif source.tier.value == 'secondary' %}
+          {% set tile_cls = 'tile-speculative' %}
+        {% else %}
+          {% set tile_cls = 'tile-missing' %}
+        {% endif %}
+        <button
+          class="puzzle-tile {{ tile_cls }}"
+          type="button"
+          data-source-id="{{ source.id }}"
+          title="{{ source.url | domain }} · {{ source.tier.value | capitalize }} · {{ (source.relevance_score * 100) | int }}% relevance · {% if source.is_independent %}Independent{% else %}Not independent{% endif %}"
+        ></button>
+      {% endfor %}
+    </div>
+    <div class="board-legend">
+      <span class="legend-item"><span class="legend-swatch tile-verified"></span>Independent primary</span>
+      <span class="legend-item"><span class="legend-swatch tile-speculative"></span>Independent secondary</span>
+      <span class="legend-item"><span class="legend-swatch tile-debunked"></span>Compromised source</span>
+      <span class="legend-item"><span class="legend-swatch tile-missing"></span>Weak / excluded</span>
+    </div>
+    {% endif %}
+
+  </div><!-- /verdict card -->
+
+  <!-- ── Sources + Symmetry ────────────────────────────────────────────── -->
+  <div class="result-columns">
+
+    <!-- Source list -->
+    <div class="card">
+      <p class="panel-heading">Sources ({{ sources | length }})</p>
+      {% if sources %}
+      <ul class="source-list">
+        {% for source in sources %}
+        <li class="source-item{% if not source.is_independent %} not-independent{% endif %}"
+            id="source-{{ source.id }}">
+
+          <div class="source-header">
+            <a class="source-domain"
+               href="{{ source.url }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               title="{{ source.url }}">{{ source.url | domain }}</a>
+            <span class="badge badge-{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
+            {% if source.is_independent %}
+              <span class="badge badge-indep">Independent</span>
+            {% else %}
+              <span class="badge badge-not-indep">Not independent</span>
+            {% endif %}
+          </div>
+
+          <div class="relevance-row">
+            <span class="relevance-label">Relevance</span>
+            <div class="relevance-track">
+              <div class="relevance-fill" style="width: {{ (source.relevance_score * 100) | int }}%"></div>
+            </div>
+            <span class="relevance-pct">{{ (source.relevance_score * 100) | int }}%</span>
+          </div>
+
+          {% if source.excerpt %}
+          <p class="source-excerpt">{{ source.excerpt }}</p>
+          {% endif %}
+
+          {% if not source.is_independent and source.affiliation_note %}
+          <p class="affiliation-note">{{ source.affiliation_note }}</p>
+          {% endif %}
+
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p style="color: var(--text-3); font-size: .875rem">No sources were stored for this judgment.</p>
+      {% endif %}
+    </div><!-- /source-panel -->
+
+    <!-- Symmetry report -->
+    <div class="card">
+      <p class="panel-heading">Symmetry check</p>
+      {% if judgment.symmetry_report %}
+      <div class="symmetry-banner confirmed">
+        <span class="symmetry-icon">&#10003;</span>
+        <span>Symmetry confirmed — an equivalent analysis exists for the opposing claim.</span>
+      </div>
+      {% else %}
+      <div class="symmetry-banner pending">
+        <span class="symmetry-icon">&#9888;</span>
+        <span>Symmetry check pending — an equivalent analysis for the opposing claim has not yet been run. This judgment stands; the gap is noted transparently.</span>
+      </div>
+      {% endif %}
+    </div><!-- /symmetry -->
+
+  </div><!-- /result-columns -->
+
+  <!-- ── Revision trail ────────────────────────────────────────────────── -->
+  <div class="card" style="margin-top: 1.25rem">
+    <p class="panel-heading">Judgment history ({{ judgments | length }})</p>
+    <ol class="judgment-list">
+      {% for j in judgments %}
+      <li class="judgment-entry">
+        <details {% if j.is_active %}open{% endif %}>
+          <summary class="judgment-summary">
+            <span class="rating-badge {{ j.rating.value }}">
+              <span class="rating-dot"></span>{{ j.rating.value }}
+            </span>
+            {% if j.is_active %}
+            <span class="judgment-current-tag">current</span>
+            {% endif %}
+            <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
+          </summary>
+          <div class="judgment-body">
+            <p class="judgment-rationale">{{ j.rationale }}</p>
+            <p class="judgment-analyst">Analyst: {{ j.analyst }}</p>
+            {% if j.revision %}
+            <div class="judgment-trigger">
+              <span class="judgment-trigger-label">Revised because:</span>
+              {{ j.revision.trigger_evidence }}
+            </div>
+            {% endif %}
+          </div>
+        </details>
+      </li>
+      {% endfor %}
+    </ol>
+  </div><!-- /revision-trail -->
+
+</div><!-- #result -->
+
+<script>
+  /* Wire tile clicks to scroll-and-highlight the matching source entry. */
+  document.querySelectorAll('#tile-grid [data-source-id]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var el = document.getElementById('source-' + btn.dataset.sourceId);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('highlighted');
+      setTimeout(function () { el.classList.remove('highlighted'); }, 2000);
+    });
+  });
+</script>
