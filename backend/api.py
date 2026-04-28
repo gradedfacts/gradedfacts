@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session, joinedload
 from backend import schemas
 from backend.analysis.engine import analyze_claim
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
+from backend.db.rate_limit import check_and_increment
 from backend.db.session import SessionLocal, engine, get_session
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,13 @@ _LOADING_MESSAGES = [
 ]
 
 _TIER_ORDER = {"primary": 0, "secondary": 1, "tertiary": 2}
+
+
+def _client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 
 # claim_id → (http_status_code, human_message)
 _analysis_errors: dict[str, tuple[int, str]] = {}
@@ -209,6 +217,12 @@ def ui_analyze(
     text: str = Form(""),
     session: Session = Depends(get_session),
 ):
+    if not check_and_increment(_client_ip(request), session):
+        return templates.TemplateResponse(
+            request,
+            "partials/error.html",
+            {"code": 429, "message": "You've used your 5 free analyses today. Pro plan coming soon."},
+        )
     text = text.strip()
     if len(text) < 10:
         return templates.TemplateResponse(

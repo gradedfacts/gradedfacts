@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, Enum as SAEnum, Float, ForeignKey, String, Text
+from sqlalchemy import Boolean, Enum as SAEnum, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from backend.analysis.rating import EpistemicRating, SourceTier
@@ -98,3 +98,13 @@ class Revision(Base):
         back_populates="revision", foreign_keys=[prior_judgment_id]
     )
     new_judgment: Mapped[Judgment] = relationship(foreign_keys=[new_judgment_id])
+
+
+class RateLimit(Base):
+    __tablename__ = "rate_limits"
+
+    # SHA-256 of the client IP — raw IP is never stored
+    ip_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    # ISO date string "YYYY-MM-DD" in UTC — resets at midnight UTC
+    date: Mapped[str] = mapped_column(String(10), primary_key=True)
+    count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
