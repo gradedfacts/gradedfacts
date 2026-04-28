@@ -5,6 +5,7 @@ import anthropic
 from backend.analysis.rating import EvidenceSummary, SourceTier, derive_rating
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
+from backend.sources.evaluator import evaluate_source
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,21 @@ SOURCE INDEPENDENCE:
   A source is NOT independent if it has documented ties to political parties, PACs,
   governments with a stake in the outcome, or ideologically funded organisations.
 
+  CRITICAL — Official ≠ Independent:
+  A government agency, law enforcement body, or official institution is NOT automatically
+  independent.  If the institution's leadership has documented political dependency —
+  appointed on loyalty criteria, subject to political interference, or operating under
+  a government with a direct stake in the outcome — mark is_independent=False and
+  populate affiliation_note with the specific concern.  Tier (primary/secondary/tertiary)
+  reflects document type; independence reflects editorial and institutional integrity.
+  These are separate dimensions.
+
+  Examples of official-but-not-independent sources:
+    - FBI press releases while under a director appointed on loyalty criteria
+    - DOJ statements from an AG confirmed after pledging personal loyalty
+    - State media outlets (RT, CGTN, TRT, MTVA) regardless of their official status
+    - Official government statements from authoritarian regimes on claims about themselves
+
 HARD RULES — never violate:
   1. Your own unverified analysis counts as zero sources.
   2. Only sources with relevance_score ≥0.6 count toward rating thresholds.
@@ -45,7 +61,10 @@ HARD RULES — never violate:
   4. Return at most 8 sources total. Prioritise primary and independent sources.
   5. Only tertiary sources → rating is capped at SPECULATIVE, never VERIFIED.
   6. Apply identical scrutiny regardless of political direction (symmetry).
-  7. "We don't know" (MISSING) is a valid and important answer.\
+  7. "We don't know" (MISSING) is a valid and important answer.
+  8. Official ≠ Independent. Evaluate institutional independence separately from
+     document tier. A non-independent primary source cannot substitute for an
+     independent one when assessing trustworthiness.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────
@@ -214,8 +233,13 @@ def analyze_claim(claim_id: str, session) -> Judgment:
     # Phase 2: structured judgment (forced tool call)
     data = _phase2_judgment(client, claim.text, search_findings)
 
-    # Build EvidenceSummary from Claude's source evaluations
-    sources_data: list[dict] = data.get("sources", [])[:MAX_SOURCES]
+    # Apply independence registry + quality checks before rating derivation.
+    # This overrides Claude's own is_independent assessment for known compromised
+    # institutions and caps their relevance_score at COMPROMISED_SCORE_CAP.
+    sources_data: list[dict] = [
+        evaluate_source(src)
+        for src in data.get("sources", [])[:MAX_SOURCES]
+    ]
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
 
@@ -226,6 +250,11 @@ def analyze_claim(claim_id: str, session) -> Judgment:
             tier = SourceTier(src["tier"])
         except ValueError:
             tier = SourceTier.TERTIARY
+        # Non-independent primary sources are treated as secondary for rating purposes:
+        # a captured official institution cannot substitute for an independent primary
+        # source when establishing VERIFIED.
+        if not src.get("is_independent", True) and tier is SourceTier.PRIMARY:
+            tier = SourceTier.SECONDARY
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
     rating = derive_rating(EvidenceSummary(
