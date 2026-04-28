@@ -1,29 +1,31 @@
 # GradedFacts — Python dependencies
+# Pinned to exact versions for reproducible production builds.
+# To upgrade: pip install --upgrade <package> && pip freeze > requirements.txt
 
 # AI analysis
-anthropic>=0.40.0          # Claude API (analysis engine + prompt caching)
+anthropic==0.97.0          # Claude API (analysis engine + prompt caching)
 
 # Web API
-fastapi>=0.115.0           # REST API framework
-uvicorn[standard]>=0.32.0  # ASGI server
+fastapi==0.136.1           # REST API framework
+uvicorn[standard]==0.46.0  # ASGI server (includes watchfiles, httptools, websockets)
 
 # Data validation and settings
-pydantic>=2.9.0            # Model validation (Claim, Judgment, Source schemas)
-pydantic-settings>=2.6.0   # Environment-based configuration
+pydantic==2.13.3           # Model validation (Claim, Judgment, Source schemas)
+pydantic-settings==2.14.0  # Environment-based configuration
 
 # Database
-sqlalchemy>=2.0.0          # ORM (append-only judgment storage)
-alembic>=1.14.0            # Schema migrations
+sqlalchemy==2.0.49         # ORM (append-only judgment storage)
+alembic==1.18.4            # Schema migrations
 
 # Source fetching
-httpx>=0.28.0              # Async HTTP client for source fetching
-beautifulsoup4>=4.12.0     # HTML parsing and text extraction
-lxml>=5.3.0                # Fast HTML/XML parser backend for bs4
+httpx==0.28.1              # Async HTTP client for source fetching
+beautifulsoup4==4.14.3     # HTML parsing and text extraction
+lxml==6.1.0                # Fast HTML/XML parser backend for bs4
 
 # Templating and form parsing (HTMX + Jinja2 UI)
-jinja2>=3.1.0              # Server-side HTML templates
-python-multipart>=0.0.9    # Form body parsing (hx-post)
-aiofiles>=24.0.0           # Async static file serving
+jinja2==3.1.6              # Server-side HTML templates
+python-multipart==0.0.27   # Form body parsing (hx-post)
+aiofiles==25.1.0           # Async static file serving
 
 # Utilities
-python-dotenv>=1.0.0       # .env file loading
+python-dotenv==1.2.2       # .env file loading
