@@ -199,7 +199,7 @@ def analyze_claim_endpoint(claim_id: str, session: Session = Depends(get_session
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html")
 
 
 @app.post("/ui/analyze", response_class=HTMLResponse)
@@ -212,8 +212,9 @@ def ui_analyze(
     text = text.strip()
     if len(text) < 10:
         return templates.TemplateResponse(
+            request,
             "partials/error.html",
-            {"request": request, "code": 400, "message": "Please enter at least 10 characters."},
+            {"code": 400, "message": "Please enter at least 10 characters."},
         )
     claim = Claim(text=text[:2000])
     session.add(claim)
@@ -221,8 +222,9 @@ def ui_analyze(
     session.refresh(claim)
     background_tasks.add_task(_run_analysis, claim.id)
     return templates.TemplateResponse(
+        request,
         "partials/analyzing.html",
-        {"request": request, "claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
+        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
     )
 
 
@@ -231,15 +233,17 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
     if claim_id in _analysis_errors:
         code, message = _analysis_errors.pop(claim_id)
         return templates.TemplateResponse(
+            request,
             "partials/error.html",
-            {"request": request, "code": code, "message": message},
+            {"code": code, "message": message},
         )
 
     claim = session.get(Claim, claim_id)
     if not claim:
         return templates.TemplateResponse(
+            request,
             "partials/error.html",
-            {"request": request, "code": 404, "message": "Claim not found."},
+            {"code": 404, "message": "Claim not found."},
         )
 
     active_judgment = session.execute(
@@ -253,9 +257,9 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
         # Still running — return the loading partial so polling continues
         msg_idx = (int(time.time()) % 18) // 6
         return templates.TemplateResponse(
+            request,
             "partials/analyzing.html",
             {
-                "request": request,
                 "claim_id": claim_id,
                 "loading_message": _LOADING_MESSAGES[msg_idx],
             },
@@ -273,9 +277,9 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
     ).scalars().unique().all()
 
     return templates.TemplateResponse(
+        request,
         "partials/result.html",
         {
-            "request": request,
             "claim_text": claim.text,
             "judgment": active_judgment,
             "sources": _sort_sources(sources),
