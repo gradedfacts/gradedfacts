@@ -1,0 +1,287 @@
+{
+  "_meta": {
+    "description": "TransparencyPuzzle US Source Registry — public, versioned registry of core US sources with independence and quality assessments.",
+    "version": "1.0.0",
+    "last_updated": "2026-04-28",
+    "methodology": "Tier reflects document type: primary = original data or official records produced by the institution itself; secondary = journalism that cites and attributes primary sources; tertiary = aggregation, opinion, or commentary without independent verification. Independence is assessed on ownership, funding, and documented editorial control — being an official government body does NOT imply independence. The same evidentiary standard is applied symmetrically across all political directions.",
+    "schema": {
+      "tier": "primary | secondary | tertiary",
+      "is_independent": "true when no documented editorial control by political parties, PACs, governments with a direct stake in the outcome, or politically-aligned major funders",
+      "category": "government | news_agency | newspaper | broadcaster | academic | fact_checker | nonprofit | social_media"
+    }
+  },
+  "sources": [
+    {
+      "name": "Bureau of Labor Statistics",
+      "domain": "bls.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Career civil servants follow established statistical methodology (since 1884). Data releases are locked down on a pre-announced schedule to prevent political intervention. Executive branch agency, but no documented interference with statistical output. Methodology is publicly documented and internationally benchmarked."
+    },
+    {
+      "name": "Bureau of Economic Analysis",
+      "domain": "bea.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Career economists follow established national accounts methodology (GDP, PCE, personal income). Executive branch agency with strong procedural independence on statistical output. BEA data are used by Federal Reserve and financial markets that would react immediately to politically manipulated figures — a structural deterrent to interference."
+    },
+    {
+      "name": "Federal Reserve Economic Data (FRED)",
+      "domain": "fred.stlouisfed.org",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "FRED is operated by the Federal Reserve Bank of St. Louis, one of twelve regional Federal Reserve Banks. The Federal Reserve has statutory independence from the executive branch under the Federal Reserve Act. FRED aggregates official economic data without editorial commentary. The Fed's board structure (14-year terms for governors, staggered) insulates it from short-term political direction."
+    },
+    {
+      "name": "US Census Bureau",
+      "domain": "census.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Career statisticians follow established survey methodology. Executive branch agency; independence was contested in 2019–2020 when the Supreme Court blocked a citizenship question addition (Dept. of Commerce v. New York, 2019) that the Court found was pretextual. Underlying statistical methodology remained intact. Population and economic survey outputs are methodologically independent."
+    },
+    {
+      "name": "Congressional Budget Office",
+      "domain": "cbo.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Nonpartisan congressional agency (established 1974) staffed entirely by career economists and analysts. Serves both parties of Congress equally; CBO directors are appointed jointly by the Speaker and Senate President pro tempore. No documented instances of partisan interference with economic or budgetary analysis in its 50-year history."
+    },
+    {
+      "name": "Government Accountability Office",
+      "domain": "gao.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Nonpartisan congressional watchdog (established 1921). Career professional staff produce audits, investigations, and policy analyses for Congress regardless of which party controls the executive branch. Comptroller General serves a single 15-year term specifically to insulate the office from political pressure."
+    },
+    {
+      "name": "PACER — Public Access to Court Electronic Records",
+      "domain": "pacer.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Federal court records are official judicial documents produced under the constitutional independence of the federal judiciary. PACER is a neutral access system for court filings — it is a registry, not analysis or interpretation. Article III courts are structurally independent from political control."
+    },
+    {
+      "name": "Federal Register",
+      "domain": "federalregister.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Official record of all federal agency rules, proposed rules, executive orders, and notices. Content necessarily reflects current administration policy (it records what the executive branch does), but the Register itself is a neutral official record with no editorial commentary or selective omission. Useful as a primary document source; should not be confused with independent analysis."
+    },
+    {
+      "name": "SEC EDGAR",
+      "domain": "sec.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "government",
+      "independence_note": "Mandatory corporate disclosure database. Filings (10-K, 10-Q, 8-K, proxy statements, etc.) are produced by reporting companies under penalty of law; EDGAR is a neutral repository. The Securities and Exchange Commission itself has some statutory independence (five commissioners serve staggered five-year terms). Individual filings should be read for what the company discloses, not as independent third-party assessments."
+    },
+    {
+      "name": "C-SPAN",
+      "domain": "c-span.org",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "broadcaster",
+      "independence_note": "Nonprofit public affairs network (since 1979) funded by the cable television industry as a public service obligation. Broadcasts congressional proceedings, White House events, and public affairs programming without commentary, advertising, or editorial selection of which statements to air. No sponsor influence on content. Unedited primary record of official proceedings."
+    },
+    {
+      "name": "Associated Press",
+      "domain": "apnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "news_agency",
+      "independence_note": "Member-owned cooperative (since 1846); not controlled by any single corporate owner. More than 1,800 member news organizations globally. Operates under the AP Statement of News Values and Principles, which bans opinion in news reports and requires sourcing transparency. Distributes content to outlets across the full political spectrum, creating a strong institutional incentive for neutrality."
+    },
+    {
+      "name": "Reuters",
+      "domain": "reuters.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "news_agency",
+      "independence_note": "Owned by Thomson Reuters Corporation (Woodbridge family trust holds ~70%). Reuters Trust Principles, adopted in 1941 and codified in the Thomson Reuters editorial policy, legally require independence, integrity, and freedom from bias as a condition of operation. The Trust Principles cannot be overridden by Thomson Reuters management. One of three global wire services."
+    },
+    {
+      "name": "Agence France-Presse (AFP)",
+      "domain": "afp.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "news_agency",
+      "independence_note": "Established as a public agency under French law (1957). An AFP charter explicitly prohibits French government interference in editorial decisions. Funded partly through French state subscriptions, but editorial output on US political coverage has shown no French government influence in independent assessments. One of three global wire services. Member of IFCN fact-checking network."
+    },
+    {
+      "name": "BBC News",
+      "domain": "bbc.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "broadcaster",
+      "independence_note": "UK Royal Charter and Agreement (most recently renewed 2017) legally establishes editorial independence from UK government. BBC Editorial Guidelines are publicly documented and enforced by an independent Editorial Standards Committee. For US political coverage, no UK government interest creates a structural editorial conflict. The BBC's institutional independence has been tested (e.g., Hutton Inquiry 2004) and upheld."
+    },
+    {
+      "name": "NPR",
+      "domain": "npr.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "broadcaster",
+      "independence_note": "Nonprofit public radio network (since 1970) funded primarily by member station fees (~40%), listener contributions (~30%), and corporate underwriting. Federal funding through the Corporation for Public Broadcasting represents approximately 1% of NPR's network-level revenue. NPR Ethics Handbook explicitly prohibits sponsors from influencing content. No documented interference with editorial decisions from funders."
+    },
+    {
+      "name": "PBS NewsHour",
+      "domain": "pbs.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "broadcaster",
+      "independence_note": "PBS is a nonprofit public broadcaster; PBS NewsHour is produced by WETA (Washington, DC) and co-produced by WGBH (Boston). Funded by CPB, foundations, and viewer contributions. CPB federal funding creates a theoretical political vulnerability (Congress controls appropriations), but no documented case of funding levels being used to direct editorial coverage in PBS NewsHour's 50-year history."
+    },
+    {
+      "name": "CNN",
+      "domain": "cnn.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "broadcaster",
+      "independence_note": "Owned by Warner Bros. Discovery (since 2022 spin-off from AT&T). Primarily news-oriented with some opinion programming. Has faced criticism from both the political left and right, which is consistent with centrist positioning. Corporate ownership changes (AT&T → WarnerMedia → Warner Bros. Discovery) have introduced editorial uncertainty, but no documented systematic political coordination with either party. Independence assessed as maintained."
+    },
+    {
+      "name": "MSNBC",
+      "domain": "msnbc.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "category": "broadcaster",
+      "independence_note": "Owned by NBCUniversal (Comcast). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under TransparencyPuzzle's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
+    },
+    {
+      "name": "Fox News",
+      "domain": "foxnews.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "category": "broadcaster",
+      "independence_note": "Owned by Fox Corporation (Murdoch family controls ~39% of voting shares). The Dominion Voting Systems lawsuit (settled April 2023, $787.5M) produced internal communications in which Fox hosts privately acknowledged the falsity of 2020 election fraud claims while publicly promoting them. Multiple studies document systematic alignment with Republican Party messaging in prime-time opinion programming. Note: the Fox News news division (daytime, Bret Baier's Special Report) is distinct from opinion programming and has a stronger factual record — consumers should distinguish between the two."
+    },
+    {
+      "name": "The New York Times",
+      "domain": "nytimes.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Publicly traded (NYT); Sulzberger family holds Class B super-voting shares but has maintained institutional editorial independence since 1896. No political party ownership or funding. Strong investigative journalism track record (130+ Pulitzer Prizes). Editorial pages and opinion section are separate from the news division. Family control is a concentration risk but no documented case of Sulzberger family directing news coverage for political benefit."
+    },
+    {
+      "name": "The Washington Post",
+      "domain": "washingtonpost.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned personally by Jeff Bezos (via Nash Holdings LLC) since 2013; Amazon is a separate entity. Amazon holds significant federal cloud computing contracts (AWS GovCloud), creating a theoretical ownership-level conflict of interest on government technology coverage. No documented instance of Bezos or Amazon directing WaPo coverage to protect commercial interests. Journalistic investigations critical of Amazon and Bezos have been published under his ownership. Editorial independence assessed as maintained."
+    },
+    {
+      "name": "The Wall Street Journal",
+      "domain": "wsj.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned by News Corp (Murdoch family holds approximately 39% of voting shares). The WSJ news division has historically maintained institutional separation from its explicitly right-leaning opinion pages; multiple journalists and editors have publicly confirmed this division. However, Murdoch family ownership is a genuine concentration risk, and some current and former WSJ journalists have alleged editorial pressure on news coverage. Consumers should evaluate news reporting and opinion content separately. Independence of the news division is assessed as maintained with noted caveats."
+    },
+    {
+      "name": "USA Today",
+      "domain": "usatoday.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned by Gannett Co. Inc. / USA Today Network, the largest US newspaper chain by print circulation. Publicly traded company with no political party ownership or documented systematic political alignment. Standard commercial media pressures (advertising, reach) apply. No documented cases of ownership-level interference with political news coverage."
+    },
+    {
+      "name": "Los Angeles Times",
+      "domain": "latimes.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned by Dr. Patrick Soon-Shiong (biotech billionaire) since 2018. No political party funding. Editorial independence was tested in 2024 when owner-imposed budget cuts led to mass staff departures; editorial leadership has stated independence is maintained. No documented case of ownership directing political coverage. Assessed as independent with noted ownership-change turbulence."
+    },
+    {
+      "name": "ProPublica",
+      "domain": "propublica.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "nonprofit",
+      "independence_note": "Nonprofit investigative journalism organization (since 2008) funded by foundations (Sandler Foundation, Knight Foundation, MacArthur Foundation, others). No commercial advertising revenue. Conflict-of-interest policies prohibit funder influence on specific stories. Has produced investigations critical of actors across the political spectrum. Multiple Pulitzer Prizes. Structural separation between editorial and fundraising functions is documented."
+    },
+    {
+      "name": "The Guardian US",
+      "domain": "theguardian.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "US arm of The Guardian, owned by the Scott Trust Ltd. (since 1936), a not-for-profit entity whose sole legal purpose is to preserve The Guardian's editorial independence in perpetuity. No commercial shareholders; surplus funds are reinvested into journalism. The trust structure legally prevents sale to a politically-aligned owner. One of the strongest institutional independence frameworks in English-language journalism."
+    },
+    {
+      "name": "Politico",
+      "domain": "politico.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned by Axel Springer SE (German media company) since 2021. Axel Springer's editorial principles require factual accuracy and political pluralism. No US political party ownership. Politico has published reporting critical of both major parties and has broken significant stories across the political spectrum. No documented systematic political bias in news coverage."
+    },
+    {
+      "name": "The Hill",
+      "domain": "thehill.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "Owned by Nexstar Media Group, the largest US local television broadcaster by station count. Publicly traded; no political party ownership. The Hill publishes both news reporting and opinion content from contributors across the political spectrum; consumers should distinguish news articles from opinion columns. No documented systematic bias in news reporting."
+    },
+    {
+      "name": "Axios",
+      "domain": "axios.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "For-profit digital media company (founded 2017) with backing from Cox Enterprises and venture capital. No political party ownership or documented systematic political alignment. Focused on DC policy, technology, and business reporting. Publishes a subscriber-based local news service as well as national coverage. No documented interference with editorial content from investors."
+    },
+    {
+      "name": "Breitbart News",
+      "domain": "breitbart.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "category": "newspaper",
+      "independence_note": "Received documented major investment from the Mercer family (Robert Mercer, conservative megadonor and co-CEO of hedge fund Renaissance Technologies) starting approximately 2012. Former executive chairman Steve Bannon served as CEO of the 2016 Trump presidential campaign and subsequently as Trump White House Chief Strategist. Content systematically promotes far-right political positions. Multiple fact-checking organizations have documented a pattern of false or misleading articles. Not independent under any reasonable editorial standard."
+    },
+    {
+      "name": "Truth Social",
+      "domain": "truthsocial.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "category": "social_media",
+      "independence_note": "Owned by Trump Media & Technology Group (TMTG, NASDAQ: DJT). As of 2025, former President Donald Trump holds a majority equity stake. The platform was created specifically to serve as Trump's primary social media outlet after his removal from Twitter/X. Platform content moderation policies enforce a conservative viewpoint per the company's stated mission. Statements from this platform are primary sources for Trump's own positions but cannot be treated as independent information about claims involving Trump."
+    },
+    {
+      "name": "FactCheck.org",
+      "domain": "factcheck.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "fact_checker",
+      "independence_note": "Operated by the Annenberg Public Policy Center at the University of Pennsylvania (since 2003). Funded by the Annenberg Foundation, a private foundation with no documented political party affiliation. Nonpartisan; applies fact-checking methodology to claims from politicians of all parties. Member of the International Fact-Checking Network (IFCN). No documented instances of political funding influencing editorial decisions."
+    },
+    {
+      "name": "PolitiFact",
+      "domain": "politifact.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "fact_checker",
+      "independence_note": "Owned and operated by the Poynter Institute for Media Studies, a nonprofit journalism school and research organization (since 2018; previously a Tampa Bay Times project). Pulitzer Prize recipient (2009). Applies a structured six-point rating methodology (True / Mostly True / Half True / Mostly False / False / Pants on Fire) consistently to claims from all political directions. Member of IFCN. No political party funding."
+    },
+    {
+      "name": "PubMed / National Library of Medicine",
+      "domain": "pubmed.ncbi.nlm.nih.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "category": "academic",
+      "independence_note": "National Library of Medicine database (NIH / HHS) indexing peer-reviewed biomedical and life-sciences literature. The database itself is a neutral aggregator of published research — it does not produce original findings. Individual studies should be evaluated for methodology, sample size, replication status, funding source, and conflicts of interest. NIH is an executive branch agency, but published research is subject to peer review independent of NIH editorial control. Primary source for scientific and medical claims; does not apply to social science or political claims."
+    }
+  ]
+}
