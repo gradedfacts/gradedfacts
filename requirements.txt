@@ -1,4 +1,4 @@
-# TransparencyPuzzle — Python dependencies
+# GradedFacts — Python dependencies
 
 # AI analysis
 anthropic>=0.40.0          # Claude API (analysis engine + prompt caching)

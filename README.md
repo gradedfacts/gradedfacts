@@ -1,10 +1,10 @@
-# TransparencyPuzzle
+# GradedFacts
 
 A politically independent fact-checking tool that helps citizens evaluate political claims against verifiable evidence. Founded in Switzerland. No funding from political parties, PACs, or politically dependent media.
 
 ## How it works
 
-Submit a political claim. TransparencyPuzzle fetches sources, evaluates them, and returns a structured judgment using a four-status epistemic framework:
+Submit a political claim. GradedFacts fetches sources, evaluates them, and returns a structured judgment using a four-status epistemic framework:
 
 | Status | Color | Meaning |
 |--------|-------|---------|
@@ -18,7 +18,7 @@ Every judgment cites its sources. Every revision is archived. Every method appli
 ## Project structure
 
 ```
-transparencypuzzle/
+gradedfacts/
 ├── backend/
 │   ├── analysis/
 │   │   ├── engine.py       # Epistemic analysis pipeline

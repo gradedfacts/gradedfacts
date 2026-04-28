@@ -191,7 +191,7 @@ function render() {
 function init() {
   document.getElementById('app').innerHTML = `
     <header class="site-header">
-      <span class="site-wordmark">&#x1f9e9; TransparencyPuzzle</span>
+      <span class="site-wordmark">&#x1f9e9; GradedFacts</span>
       <span class="site-tagline">Founded in Switzerland &middot; No political funding</span>
     </header>
 

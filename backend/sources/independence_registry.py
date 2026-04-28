@@ -6,7 +6,7 @@ dependency that undermines editorial or investigative independence — regardles
 of its official legal status.  Being an official government body does NOT
 imply independence.
 
-Rule (TransparencyPuzzle epistemic framework):
+Rule (GradedFacts epistemic framework):
   Institutional independence overrides institutional status.
   Official documents from compromised institutions get is_independent=False
   and relevance_score capped at COMPROMISED_SCORE_CAP, with an explicit

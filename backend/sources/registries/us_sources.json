@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "TransparencyPuzzle US Source Registry — public, versioned registry of core US sources with independence and quality assessments.",
+    "description": "GradedFacts US Source Registry — public, versioned registry of core US sources with independence and quality assessments.",
     "version": "1.0.0",
     "last_updated": "2026-04-28",
     "methodology": "Tier reflects document type: primary = original data or official records produced by the institution itself; secondary = journalism that cites and attributes primary sources; tertiary = aggregation, opinion, or commentary without independent verification. Independence is assessed on ownership, funding, and documented editorial control — being an official government body does NOT imply independence. The same evidentiary standard is applied symmetrically across all political directions.",
@@ -153,7 +153,7 @@
       "tier": "secondary",
       "is_independent": false,
       "category": "broadcaster",
-      "independence_note": "Owned by NBCUniversal (Comcast). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under TransparencyPuzzle's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
+      "independence_note": "Owned by NBCUniversal (Comcast). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under GradedFacts's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
     },
     {
       "name": "Fox News",

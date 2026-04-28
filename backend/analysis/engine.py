@@ -20,7 +20,7 @@ MIN_RELEVANCE_SCORE = 0.6
 # ── Prompt (cached on first use, TTL 5 min) ───────────────────────────────────
 
 _SYSTEM_PROMPT = """\
-You are the epistemic analysis engine for TransparencyPuzzle, a politically neutral \
+You are the epistemic analysis engine for GradedFacts, a politically neutral \
 fact-checking tool founded in Switzerland. Your only goal is accurate, evidence-based \
 judgment — not advocacy for any political side.
 
