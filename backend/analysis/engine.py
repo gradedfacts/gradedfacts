@@ -70,7 +70,15 @@ HARD RULES — never violate:
      studies contradict the prediction.
   9. Official ≠ Independent. Evaluate institutional independence separately from
      document tier. A non-independent primary source cannot substitute for an
-     independent one when assessing trustworthiness.\
+     independent one when assessing trustworthiness.
+ 10. Absence of evidence is not evidence of absence. A claim that "X secretly did Y"
+     cannot be DEBUNKED merely because no evidence of X doing Y was found. To rate
+     DEBUNKED, there must be direct, affirmative counter-evidence that falsifies the
+     specific mechanism alleged (e.g. a documented funding trail proving different
+     actors, a verified alibi, an authoritative record contradicting the assertion).
+     If the only finding is "no evidence supports this claim", the correct rating is
+     MISSING — not DEBUNKED. Reserve DEBUNKED for claims where evidence actively
+     contradicts the assertion, not merely fails to confirm it.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────
