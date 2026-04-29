@@ -563,7 +563,28 @@ a:hover { text-decoration: underline; }
   border-top: 1px solid var(--border);
 }
 
-/* ── 11. Responsive breakpoints ──────────────────────────────────────────── */
+/* ── 11. Coverage notice ─────────────────────────────────────────────────── */
+.coverage-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 3px solid #3b82f6;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  color: #1e3a8a;
+  line-height: 1.55;
+}
+.coverage-notice-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  color: #2563eb;
+}
+
+/* ── 12. Responsive breakpoints ──────────────────────────────────────────── */
 @media (max-width: 660px) {
   .result-columns { grid-template-columns: 1fr; }
   .site-tagline { display: none; }
