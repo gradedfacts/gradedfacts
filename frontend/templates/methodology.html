@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card meth-header">
+  <h1 class="meth-title">Open Source Methodology</h1>
+  <p class="meth-subtitle">
+    How GradedFacts evaluates political claims &mdash; written for journalists, researchers,
+    and anyone who wants to understand our process before trusting our conclusions.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">What we are &mdash; and are not</h2>
+  <p>
+    GradedFacts is an epistemic tool, not a final arbiter of truth. We assess whether
+    a claim is <strong>supported by verifiable evidence at the time of analysis</strong>.
+    We do not determine whether a claim is morally right, politically convenient, or
+    widely believed.
+  </p>
+  <p>
+    We are politically independent. We do not accept funding from political parties, PACs,
+    or ideologically dependent media. Our analysis applies identical scrutiny to claims
+    from every point on the political spectrum.
+  </p>
+  <p>
+    New evidence can change any judgment. When it does, the prior judgment is archived
+    with a timestamp and the reason for revision &mdash; it is never silently overwritten.
+    Transparency about uncertainty and revision is part of the methodology, not a weakness in it.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Epistemic Ratings</h2>
+  <p>
+    Every claim receives exactly one of four ratings. These ratings reflect the state of
+    the evidence &mdash; not our opinion of the claimant.
+  </p>
+
+  <div class="rating-grid">
+    <div class="rating-entry">
+      <div class="rating-entry-head">
+        <span class="status-dot verified"></span>
+        <strong>Verified</strong>
+      </div>
+      <p>
+        The claim is factually correct and backed by at least three relevant sources,
+        including at least one primary source (original data, official documents, or
+        peer-reviewed research). All supporting sources have been checked for independence.
+        A Verified rating reflects the evidence available now &mdash; not a permanent declaration of truth.
+      </p>
+    </div>
+
+    <div class="rating-entry">
+      <div class="rating-entry-head">
+        <span class="status-dot speculative"></span>
+        <strong>Speculative</strong>
+      </div>
+      <p>
+        The claim is plausible but cannot be conclusively proved or disproved with currently
+        available evidence. This includes predictions about future events, claims where sources
+        are mixed or contested, and situations where evidence is suggestive but not sufficient
+        for a firm conclusion. Speculative is not a dismissal &mdash; it is an honest description
+        of epistemic uncertainty.
+      </p>
+    </div>
+
+    <div class="rating-entry">
+      <div class="rating-entry-head">
+        <span class="status-dot debunked"></span>
+        <strong>Debunked</strong>
+      </div>
+      <p>
+        Direct, affirmative counter-evidence exists that falsifies the specific claim. This
+        requires at least two relevant sources that actively contradict the assertion &mdash;
+        not merely the absence of supporting evidence. A claim for which &ldquo;no evidence
+        was found&rdquo; does not meet the threshold for Debunked; it meets the threshold for Missing.
+      </p>
+    </div>
+
+    <div class="rating-entry">
+      <div class="rating-entry-head">
+        <span class="status-dot missing"></span>
+        <strong>Missing</strong>
+      </div>
+      <p>
+        The evidence is insufficient to reach a judgment. Fewer than two sources with a
+        relevance score of 0.6 or higher were found, or the available evidence does not
+        directly address the claim. Missing is not a verdict &mdash; it is a statement that
+        the puzzle is incomplete. &ldquo;We don&rsquo;t know&rdquo; is a valid and important answer.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Source Tiers</h2>
+  <p>
+    Not all sources carry equal weight. We classify every source on two independent
+    dimensions: <strong>tier</strong> (document type) and <strong>independence</strong>
+    (institutional integrity). Tier and independence are evaluated separately.
+  </p>
+
+  <div class="tier-list">
+    <div class="tier-entry">
+      <span class="badge badge-primary">Primary</span>
+      <p>
+        Original data, official government records, court filings, peer-reviewed research,
+        or direct statements from the relevant institution. Primary sources are closest to
+        the original event or dataset.
+      </p>
+    </div>
+    <div class="tier-entry">
+      <span class="badge badge-secondary">Secondary</span>
+      <p>
+        Journalism or analysis that cites and attributes primary sources with full
+        transparency. Secondary sources do not generate new data &mdash; they accurately
+        report and contextualise existing data.
+      </p>
+    </div>
+    <div class="tier-entry">
+      <span class="badge badge-tertiary">Tertiary</span>
+      <p>
+        Aggregations, opinion pieces, summaries, or commentary without independent
+        verification of the underlying data. A claim supported only by tertiary sources
+        is capped at Speculative &mdash; it cannot be rated Verified.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Source Independence</h2>
+  <p>
+    A source&rsquo;s tier describes what kind of document it is. Independence describes whether
+    the institution that produced it is free from conflicts of interest that would bias
+    the output. <strong>These are separate dimensions. Official does not mean independent.</strong>
+  </p>
+  <p>
+    A government agency, law enforcement body, or official institution is not automatically
+    independent. If the institution&rsquo;s leadership has documented political dependency &mdash;
+    appointed on loyalty criteria, subject to political interference, or operating under
+    a government with a direct stake in the outcome &mdash; it is marked non-independent and
+    an affiliation note is included explaining the specific concern.
+  </p>
+  <p>Examples of sources that are official but not independent:</p>
+  <ul class="prose-list">
+    <li>Press releases from law enforcement agencies under politically appointed leadership</li>
+    <li>Statements from an attorney general who confirmed a personal loyalty pledge to the executive</li>
+    <li>State media outlets (RT, CGTN, TRT, and equivalents), regardless of their official status</li>
+    <li>Official government statements from authoritarian governments on claims about themselves</li>
+  </ul>
+  <p>
+    When a primary source is non-independent, it is downgraded to secondary weight for rating
+    purposes. A captured institution cannot substitute for an independent primary source when
+    establishing Verified.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">The Ten Hard Rules</h2>
+  <p>
+    These rules constrain our analysis engine at all times. No instruction or argument can
+    override them. They exist to prevent the most common failure modes in automated and
+    human fact-checking.
+  </p>
+  <ol class="rule-list">
+    <li>
+      <strong>No self-citation.</strong> The engine&rsquo;s own unverified analysis counts as
+      zero sources. A conclusion is only as strong as the external evidence behind it.
+    </li>
+    <li>
+      <strong>Relevance threshold.</strong> Only sources with a relevance score of 0.6 or
+      higher (on a 0&ndash;1 scale) count toward rating thresholds. Sources below this threshold
+      are stored for transparency but excluded from the verdict.
+    </li>
+    <li>
+      <strong>Minimum source counts.</strong> Verified requires at least 3 relevant sources.
+      Debunked requires at least 2. These floors prevent single-source conclusions.
+    </li>
+    <li>
+      <strong>Source cap.</strong> A maximum of 8 sources are collected per claim, prioritising
+      primary and independent sources. This prevents the verdict from being determined by
+      volume rather than quality.
+    </li>
+    <li>
+      <strong>Tertiary cap.</strong> If all qualifying sources are tertiary, the rating is
+      capped at Speculative. Opinion and aggregation cannot establish Verified.
+    </li>
+    <li>
+      <strong>Symmetry.</strong> The same analytical method is applied to every claim regardless
+      of the political direction of the claimant or the conclusion. No double standards,
+      no exceptions.
+    </li>
+    <li>
+      <strong>Uncertainty is valid.</strong> &ldquo;We don&rsquo;t know&rdquo; (Missing) is a
+      legitimate and important outcome. Uncertainty is never concealed, downplayed, or forced
+      into a stronger rating to appear more decisive.
+    </li>
+    <li>
+      <strong>Future predictions cannot be Debunked.</strong> Claims that use language like
+      &ldquo;will&rdquo;, &ldquo;would&rdquo;, &ldquo;by [year]&rdquo;, or &ldquo;is projected to&rdquo;
+      are inherently untestable until the relevant date passes. Such claims can only be rated
+      Debunked if the predicted event was already supposed to have occurred and demonstrably
+      did not. When evidence is mixed or contested, the default is Speculative.
+    </li>
+    <li>
+      <strong>Official &ne; Independent.</strong> Institutional tier (document type) and
+      independence (editorial integrity) are evaluated separately. A non-independent primary
+      source cannot substitute for an independent one.
+    </li>
+    <li>
+      <strong>Absence of evidence is not evidence of absence.</strong> Failing to find evidence
+      for a claim does not falsify it. To rate Debunked, there must be direct, affirmative
+      counter-evidence &mdash; a documented funding trail, a verified alibi, an authoritative
+      record that specifically contradicts the assertion. If the only finding is &ldquo;no
+      evidence supports this claim,&rdquo; the correct rating is Missing, not Debunked.
+    </li>
+  </ol>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">The Symmetry Principle</h2>
+  <p>
+    Every analytical method applied to a claim from one political side must be applied
+    identically to equivalent claims from all other sides. This is not a soft preference
+    &mdash; it is a hard structural constraint enforced across every analysis.
+  </p>
+  <p>
+    Symmetry means: if we scrutinise the independence of a government agency cited in support
+    of a left-leaning claim, we apply the same scrutiny to government agencies cited in support
+    of right-leaning claims. If we apply a higher evidentiary threshold to an extraordinary
+    claim from one direction, we apply it from the other direction too.
+  </p>
+  <p>
+    Apparent asymmetry in outcomes &mdash; for example, if claims from one political direction
+    receive a particular rating more often &mdash; reflects the evidence, not the analyst.
+    We do not adjust ratings to achieve a predetermined balance. Consistency in method is the
+    goal, not symmetry in outcomes.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Revision and Archiving</h2>
+  <p>
+    No judgment is permanent. New evidence, corrected sources, or improved analysis can trigger
+    a revision. When a judgment is revised:
+  </p>
+  <ul class="prose-list">
+    <li>The original judgment is archived, not deleted.</li>
+    <li>The revision is timestamped and includes the reason for the change.</li>
+    <li>The full revision trail is publicly visible on every claim page.</li>
+  </ul>
+  <p>
+    This means you can always see not just what we currently believe, but what we previously
+    believed and why we changed our mind.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Corrections and feedback</h2>
+  <p>
+    If you believe a rating is incorrect, a source has been miscategorised, or our independence
+    assessment is wrong, we want to know. The methodology is open source &mdash; you can read the
+    exact rules the analysis engine follows, submit a correction, or propose an improvement via
+    our <a href="https://github.com/gradedfacts/gradedfacts" target="_blank" rel="noopener">GitHub&nbsp;repository</a>.
+  </p>
+  <p>
+    GradedFacts is founded in Switzerland and operates under Swiss law.
+    We are not subject to US Cloud Act jurisdiction.
+  </p>
+</div>
+
+{% endblock %}

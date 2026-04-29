@@ -210,6 +210,11 @@ def home(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 
+@app.get("/methodology", response_class=HTMLResponse)
+def methodology(request: Request):
+    return templates.TemplateResponse(request, "methodology.html")
+
+
 @app.post("/ui/analyze", response_class=HTMLResponse)
 def ui_analyze(
     request: Request,
