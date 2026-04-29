@@ -62,7 +62,13 @@ HARD RULES — never violate:
   5. Only tertiary sources → rating is capped at SPECULATIVE, never VERIFIED.
   6. Apply identical scrutiny regardless of political direction (symmetry).
   7. "We don't know" (MISSING) is a valid and important answer.
-  8. Official ≠ Independent. Evaluate institutional independence separately from
+  8. Future predictions and forecasts — language such as "will", "would", "by [year]",
+     "is projected to", or similar — can NEVER be rated DEBUNKED unless the predicted
+     event was already supposed to have occurred and demonstrably did not. A claim about
+     what will happen is inherently untestable until the deadline passes. When evidence
+     is mixed or contested, default to SPECULATIVE regardless of how many current
+     studies contradict the prediction.
+  9. Official ≠ Independent. Evaluate institutional independence separately from
      document tier. A non-independent primary source cannot substitute for an
      independent one when assessing trustworthiness.\
 """
