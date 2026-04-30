@@ -30,6 +30,46 @@
 </div>
 
 <div class="card prose">
+  <h2 class="section-heading">Analysis Pipeline</h2>
+  <p>
+    Every submitted claim passes through three sequential steps before a rating is issued.
+    Each step is logged and auditable.
+  </p>
+  <ol class="rule-list">
+    <li>
+      <strong>Specificity pre-flight.</strong>
+      Before any web search or judgment is attempted, a fast preliminary check determines
+      whether the claim is specific enough to analyse meaningfully. Claims that name a real
+      person, event, organisation, document, or concrete action always proceed to full analysis
+      &mdash; even when the alleged actor is vague (&ldquo;the Deep State&rdquo; in the context
+      of the JFK assassination, for example). Only entirely content-free claims &mdash;
+      generalisations with no identifiable subject such as &ldquo;politicians lie&rdquo; or
+      &ldquo;the government is bad&rdquo; &mdash; are returned immediately with a Missing rating
+      and an explanation of what specific information would make the claim analysable. When in
+      doubt, the gate passes the claim and lets the evidence speak.
+    </li>
+    <li>
+      <strong>Web search.</strong>
+      The engine searches for relevant sources using live web search, targeting primary and
+      independent sources that directly address the claim. The search phase intentionally
+      allows some variation in query construction so that different runs may surface different
+      evidence, improving coverage across multiple analyses of the same claim.
+    </li>
+    <li>
+      <strong>Structured judgment.</strong>
+      The engine evaluates the evidence and produces a structured verdict: a rating, a rationale,
+      and a scored, tiered source list. This step runs at <strong>temperature&nbsp;0</strong>
+      &mdash; the verdict is fully deterministic. Given the same claim and the same evidence,
+      the engine will always produce the same rating and rationale. This ensures reproducibility:
+      two analyses of the same claim at the same point in time will not randomly disagree.
+      The engine&rsquo;s explicit rating always takes precedence over any algorithmic derivation
+      from source tiers alone, preventing mismatches between the written rationale and the
+      displayed verdict.
+    </li>
+  </ol>
+</div>
+
+<div class="card prose">
   <h2 class="section-heading">Epistemic Ratings</h2>
   <p>
     Every claim receives exactly one of four ratings. These ratings reflect the state of
