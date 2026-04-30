@@ -14,7 +14,10 @@
      hx-trigger="every 2s"
      hx-swap="outerHTML">
   <div class="loading-section">
-    <div class="spinner"></div>
-    <span>{{ loading_message }}</span>
+    <div class="loading-row">
+      <div class="spinner"></div>
+      <span>{{ loading_message }}</span>
+    </div>
+    <p class="loading-note">Analysis typically takes 1–2 minutes while sources are being searched and evaluated.</p>
   </div>
 </div>
