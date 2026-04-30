@@ -150,6 +150,9 @@ _JUDGMENT_TOOL = {
     },
 }
 
+# Model used for the cheap pre-flight specificity gate (no web search, no tools).
+_SPECIFICITY_MODEL = "claude-haiku-4-5-20251001"
+
 # ── Client (lazy, checked at call time) ──────────────────────────────────────
 
 _client: anthropic.Anthropic | None = None
@@ -169,6 +172,66 @@ def _cached_system() -> list[dict]:
 
 
 # ── Pipeline phases ───────────────────────────────────────────────────────────
+
+_SPECIFICITY_PROMPT = """\
+You are a fact-checking specificity gate. Decide whether a claim is specific \
+enough to fact-check meaningfully.
+
+A claim is TOO VAGUE if it:
+- Lacks a named subject (a specific person, organisation, or government body)
+- Lacks a concrete allegation, action, or assertion
+- Is a broad generalisation about groups or institutions
+- Cannot in principle be verified or refuted with evidence
+
+Respond with exactly two lines:
+Line 1: SPECIFIC or VAGUE
+Line 2: If VAGUE, one sentence explaining what specific information (who, what, \
+when, which documents or actions) would make the claim analyzable. \
+If SPECIFIC, write OK.\
+"""
+
+
+def _check_specificity(client: anthropic.Anthropic, claim_text: str) -> tuple[bool, str]:
+    """
+    Fast pre-flight gate using a cheap model.
+
+    Returns (is_specific, rationale).
+    - is_specific=True  → proceed to full analysis; rationale is empty.
+    - is_specific=False → claim is too vague; rationale is a human-readable
+                          MISSING explanation ready to store on the Judgment.
+    """
+    try:
+        resp = client.messages.create(
+            model=_SPECIFICITY_MODEL,
+            max_tokens=256,
+            messages=[{
+                "role": "user",
+                "content": f"{_SPECIFICITY_PROMPT}\n\nClaim: {claim_text}",
+            }],
+        )
+        text = next(
+            (b.text for b in resp.content if hasattr(b, "text") and b.text),
+            "",
+        ).strip()
+    except Exception as exc:
+        logger.warning("Specificity check failed (%s); treating claim as specific.", exc)
+        return True, ""
+
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    verdict = lines[0].upper() if lines else "SPECIFIC"
+
+    if verdict != "VAGUE":
+        return True, ""
+
+    guidance = lines[1] if len(lines) > 1 else "Please provide a more specific claim."
+    rationale = (
+        "This claim is too vague to fact-check meaningfully. "
+        f"{guidance} "
+        "Please refine the claim with specific names, dates, actions, or "
+        "allegations and resubmit."
+    )
+    return False, rationale
+
 
 def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
     """
@@ -251,6 +314,21 @@ def analyze_claim(claim_id: str, session) -> Judgment:
         raise ValueError(f"Claim {claim_id} not found")
 
     client = _get_client()
+
+    # Pre-flight: reject claims that are too vague to fact-check meaningfully.
+    is_specific, vague_rationale = _check_specificity(client, claim.text)
+    if not is_specific:
+        judgment = Judgment(
+            claim_id=claim_id,
+            rating=EpistemicRating.MISSING,
+            rationale=vague_rationale,
+            analyst="claude-sonnet-4-6",
+            is_active=True,
+        )
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
 
     # Phase 1: gather evidence via web search (best-effort)
     search_findings = _phase1_search(client, claim.text)

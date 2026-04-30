@@ -1,0 +1,259 @@
+"""
+Tests for the claim specificity pre-flight gate.
+
+Covers:
+  - _check_specificity() response parsing (unit)
+  - analyze_claim() short-circuits when claim is too vague (integration)
+  - analyze_claim() proceeds normally when claim is specific (integration)
+"""
+
+from unittest.mock import MagicMock, patch
+
+import pytest
+
+from backend.analysis.rating import EpistemicRating
+from backend.db.models import Judgment
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _make_text_response(text: str):
+    """Return a minimal fake anthropic response with a single text block."""
+    block = MagicMock()
+    block.text = text
+    resp = MagicMock()
+    resp.content = [block]
+    return resp
+
+
+# ── _check_specificity unit tests ─────────────────────────────────────────────
+
+def test_vague_verdict_returns_false_with_rationale():
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("VAGUE\nPlease name the specific individual and the document set.")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, "Trump in the Epstein files")
+
+    assert is_specific is False
+    assert "vague" in rationale.lower() or "specific" in rationale.lower()
+    assert "Please name the specific individual and the document set." in rationale
+
+
+def test_specific_verdict_returns_true():
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("SPECIFIC\nOK")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, "Donald Trump signed the TCJA in December 2017.")
+
+    assert is_specific is True
+    assert rationale == ""
+
+
+def test_unexpected_verdict_treated_as_specific():
+    """Any response that isn't exactly 'VAGUE' is treated as specific (fail-open)."""
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("UNCLEAR\nCould not determine.")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, _ = eng._check_specificity(mock_client, "Some claim")
+
+    assert is_specific is True
+
+
+def test_api_exception_treated_as_specific():
+    """If the API call itself raises, the gate fails open so analysis can proceed."""
+    from backend.analysis import engine as eng
+
+    mock_client = MagicMock()
+    mock_client.messages.create.side_effect = Exception("network error")
+
+    is_specific, rationale = eng._check_specificity(mock_client, "Some claim")
+
+    assert is_specific is True
+    assert rationale == ""
+
+
+def test_empty_response_treated_as_specific():
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, _ = eng._check_specificity(mock_client, "Some claim")
+
+    assert is_specific is True
+
+
+def test_vague_without_guidance_line_uses_fallback():
+    """A 'VAGUE' response with no second line must still produce a usable rationale."""
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("VAGUE")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, "Politicians lie")
+
+    assert is_specific is False
+    assert len(rationale) > 0
+
+
+def test_specificity_check_uses_cheap_model():
+    """The gate must use _SPECIFICITY_MODEL, not the main analysis model."""
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("SPECIFIC\nOK")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    eng._check_specificity(mock_client, "Some claim")
+
+    call_kwargs = mock_client.messages.create.call_args
+    assert call_kwargs.kwargs.get("model") == eng._SPECIFICITY_MODEL
+
+
+# ── analyze_claim integration tests ──────────────────────────────────────────
+
+def _run_analyze(claim_text: str, specificity_result: tuple, judgment_data: dict | None = None):
+    """
+    Run analyze_claim with mocked specificity check and phase functions.
+    Returns (captured_judgment, stored_sources, phase1_mock, phase2_mock).
+    """
+    from backend.analysis import engine as eng
+
+    if judgment_data is None:
+        judgment_data = {
+            "rationale": "Evidence found.",
+            "sources": [],
+            "rating": "missing",
+        }
+
+    mock_claim = MagicMock()
+    mock_claim.text = claim_text
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+
+    captured: dict = {}
+    stored_sources: list = []
+
+    def fake_add(obj):
+        if isinstance(obj, Judgment):
+            captured["judgment"] = obj
+
+    mock_session.add.side_effect = fake_add
+    mock_session.add_all.side_effect = lambda objs: stored_sources.extend(objs)
+
+    with patch.object(eng, "_check_specificity", return_value=specificity_result), \
+         patch.object(eng, "_phase1_search", return_value="") as p1, \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data) as p2, \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+        eng.analyze_claim("claim-1", mock_session)
+
+    return captured.get("judgment"), stored_sources, p1, p2
+
+
+def test_vague_claim_returns_missing_judgment():
+    guidance = "Please name the specific official and the corrupt action alleged."
+    rationale = (
+        "This claim is too vague to fact-check meaningfully. "
+        f"{guidance} "
+        "Please refine the claim with specific names, dates, actions, or allegations and resubmit."
+    )
+    judgment, _, _, _ = _run_analyze(
+        "The government is corrupt",
+        specificity_result=(False, rationale),
+    )
+
+    assert judgment is not None
+    assert judgment.rating == EpistemicRating.MISSING
+    assert "vague" in judgment.rationale.lower() or "specific" in judgment.rationale.lower()
+
+
+def test_vague_claim_stores_no_sources():
+    judgment, sources, _, _ = _run_analyze(
+        "Politicians lie",
+        specificity_result=(False, "Too vague. Please name specific politicians and specific lies."),
+    )
+
+    assert sources == []
+
+
+def test_vague_claim_does_not_call_phase1_or_phase2():
+    _, _, phase1, phase2 = _run_analyze(
+        "Trump in the Epstein files",
+        specificity_result=(False, "Please specify the allegation."),
+    )
+
+    phase1.assert_not_called()
+    phase2.assert_not_called()
+
+
+def test_vague_claim_judgment_analyst_is_set():
+    judgment, _, _, _ = _run_analyze(
+        "The media is biased",
+        specificity_result=(False, "Please name a specific outlet and a specific false claim."),
+    )
+
+    assert judgment.analyst == "claude-sonnet-4-6"
+
+
+def test_specific_claim_proceeds_to_full_pipeline():
+    sources = [
+        {
+            "url": f"https://reuters.com/article/{i}",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        }
+        for i in range(3)
+    ]
+    judgment_data = {"rationale": "Well-sourced.", "sources": sources, "rating": "verified"}
+
+    judgment, _, phase1, phase2 = _run_analyze(
+        "Donald Trump signed the Tax Cuts and Jobs Act on 22 December 2017.",
+        specificity_result=(True, ""),
+        judgment_data=judgment_data,
+    )
+
+    phase1.assert_called_once()
+    phase2.assert_called_once()
+    assert judgment.rating == EpistemicRating.VERIFIED
+
+
+def test_specific_claim_uses_model_rating():
+    """When the claim is specific, the model's explicit rating is honoured."""
+    sources = [
+        {
+            "url": "https://apnews.com/1",
+            "tier": "secondary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        },
+        {
+            "url": "https://apnews.com/2",
+            "tier": "secondary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        },
+    ]
+    judgment_data = {"rationale": "Plausible but thin.", "sources": sources, "rating": "speculative"}
+
+    judgment, _, _, _ = _run_analyze(
+        "Joe Biden's approval rating fell below 40% in November 2021.",
+        specificity_result=(True, ""),
+        judgment_data=judgment_data,
+    )
+
+    assert judgment.rating == EpistemicRating.SPECULATIVE
