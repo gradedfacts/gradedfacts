@@ -2,7 +2,7 @@ import logging
 
 import anthropic
 
-from backend.analysis.rating import EvidenceSummary, SourceTier, derive_rating
+from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source
@@ -93,8 +93,19 @@ _JUDGMENT_TOOL = {
     ),
     "input_schema": {
         "type": "object",
-        "required": ["rationale", "sources"],
+        "required": ["rationale", "sources", "rating"],
         "properties": {
+            "rating": {
+                "type": "string",
+                "enum": ["verified", "speculative", "debunked", "missing"],
+                "description": (
+                    "Your explicit epistemic rating. This always takes precedence over "
+                    "the algorithmic rating derived from source tiers. Use MISSING when "
+                    "evidence is absent rather than contradictory — even if some sources "
+                    "nominally debunk the claim, absence of affirmative counter-evidence "
+                    "means MISSING, not DEBUNKED."
+                ),
+            },
             "rationale": {
                 "type": "string",
                 "description": (
@@ -271,10 +282,24 @@ def analyze_claim(claim_id: str, session) -> Judgment:
             tier = SourceTier.SECONDARY
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
-    rating = derive_rating(EvidenceSummary(
+    derived_rating = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
         debunking_tiers=debunking_tiers,
     ))
+
+    # Model's explicit rating always takes precedence; derive_rating() is fallback only.
+    model_rating_str = data.get("rating")
+    if model_rating_str:
+        try:
+            rating = EpistemicRating(model_rating_str)
+        except ValueError:
+            logger.warning(
+                "Model returned unknown rating %r for claim %s; using derived rating %s.",
+                model_rating_str, claim_id, derived_rating,
+            )
+            rating = derived_rating
+    else:
+        rating = derived_rating
 
     # Atomic write: sources + judgment committed together
     evaluated_sources = [

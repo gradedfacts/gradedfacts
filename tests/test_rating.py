@@ -342,6 +342,135 @@ def test_registry_override_stored_in_evaluated_source():
     assert "Kash Patel" in fbi_src.affiliation_note
 
 
+# ── Model-explicit rating overrides derive_rating ─────────────────────────────
+
+def test_model_explicit_rating_takes_precedence_over_derived():
+    """
+    When the model includes a 'rating' field in submit_judgment, that rating is
+    used even when derive_rating() would have returned something different.
+
+    Here: source tiers would yield DEBUNKED (primary debunking source present),
+    but the model explicitly concludes MISSING (no affirmative counter-evidence).
+    The model's MISSING must win.
+    """
+    from unittest.mock import MagicMock, patch
+
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    sources = [
+        {
+            "url": "https://a.example/1",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": False,  # debunking primary → derive_rating → DEBUNKED
+        },
+        {
+            "url": "https://a.example/2",
+            "tier": "secondary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": False,
+        },
+    ]
+    judgment_data = {
+        "rationale": "No affirmative counter-evidence found; absence is not falsification.",
+        "sources": sources,
+        "rating": "missing",  # model explicitly concludes MISSING
+    }
+
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+
+    captured: dict = {}
+
+    def fake_add(obj):
+        if isinstance(obj, Judgment):
+            captured["judgment"] = obj
+
+    mock_session.add.side_effect = fake_add
+    mock_session.add_all.side_effect = lambda objs: None
+
+    with patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+        eng.analyze_claim("claim-1", mock_session)
+
+    assert captured["judgment"].rating == EpistemicRating.MISSING
+
+
+def test_no_explicit_rating_falls_back_to_derive_rating():
+    """
+    When the model does not include a 'rating' field, derive_rating() is used as
+    the fallback and must still produce the correct result.
+    """
+    # Three independent primary verifying sources → derive_rating returns VERIFIED
+    sources = [
+        {
+            "url": f"https://www.reuters.com/article/fallback-{i}",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        }
+        for i in range(3)
+    ]
+    # No 'rating' key in judgment_data → must fall back to derive_rating
+    judgment = _run_engine_with_sources(sources)
+    assert judgment.rating == EpistemicRating.VERIFIED
+
+
+def test_invalid_explicit_rating_falls_back_to_derive_rating():
+    """
+    An unrecognised rating string must log a warning and fall back to derive_rating().
+    """
+    from unittest.mock import MagicMock, patch
+
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    sources = [
+        {
+            "url": f"https://www.reuters.com/article/invalid-{i}",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        }
+        for i in range(3)
+    ]
+    judgment_data = {
+        "rationale": "test",
+        "sources": sources,
+        "rating": "not-a-real-rating",  # invalid → fallback
+    }
+
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+
+    captured: dict = {}
+
+    def fake_add(obj):
+        if isinstance(obj, Judgment):
+            captured["judgment"] = obj
+
+    mock_session.add.side_effect = fake_add
+    mock_session.add_all.side_effect = lambda objs: None
+
+    with patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+        eng.analyze_claim("claim-1", mock_session)
+
+    # derive_rating: 3 independent primary verifying → VERIFIED
+    assert captured["judgment"].rating == EpistemicRating.VERIFIED
+
+
 def test_compromised_source_relevance_capped_in_db():
     """
     A compromised source with relevance_score=0.95 must be stored with
