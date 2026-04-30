@@ -278,9 +278,13 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
             "If you cannot identify at least 2 verifiable sources, return an empty sources list."
         )
 
+    # temperature=0 makes the rating deterministic: the same claim and the same
+    # evidence must always produce the same rating, source tiers, and rationale.
+    # Phase 1 intentionally omits this so query variation can surface different sources.
     resp = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=4096,
+        temperature=0,
         system=_cached_system(),
         tools=[_JUDGMENT_TOOL],
         tool_choice={"type": "tool", "name": "submit_judgment"},
