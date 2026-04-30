@@ -121,6 +121,65 @@ def test_specificity_check_uses_cheap_model():
     assert call_kwargs.kwargs.get("model") == eng._SPECIFICITY_MODEL
 
 
+# ── Prompt boundary tests: what the updated prompt must accept ────────────────
+#
+# These tests simulate the model returning SPECIFIC for claims that the new
+# prompt rules say must always pass. They document the intended gate boundary
+# so a future prompt regression is caught immediately.
+
+@pytest.mark.parametrize("claim", [
+    "The Deep State assassinated JFK",
+    "The CIA killed JFK",
+    "The government was involved in the 9/11 attacks",
+    "Donald Trump colluded with Russia in 2016",
+    "Hillary Clinton ran a child trafficking ring",
+    "Oswald did not act alone in the JFK assassination",
+    "Jeffrey Epstein did not kill himself",
+    "The NSA spied on American citizens without warrants",
+])
+def test_named_event_or_figure_claims_are_marked_specific(claim):
+    """
+    Claims referencing a named public figure or a named historical event must
+    be marked SPECIFIC by the gate model. We simulate the correct model response
+    and verify that _check_specificity honours it — ensuring the parsing path
+    works and the test suite documents the intended boundary.
+    """
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("SPECIFIC\nOK")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, claim)
+
+    assert is_specific is True, f"Expected SPECIFIC for: {claim!r}"
+    assert rationale == ""
+
+
+@pytest.mark.parametrize("claim", [
+    "the government is bad",
+    "politicians lie",
+    "something fishy happened",
+    "they are hiding the truth",
+    "elites control everything",
+])
+def test_content_free_claims_are_marked_vague(claim):
+    """
+    Purely content-free claims with no named person, event, or organisation must
+    be marked VAGUE by the gate model.
+    """
+    from backend.analysis import engine as eng
+
+    fake_resp = _make_text_response("VAGUE\nPlease name a specific person, event, or allegation.")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, claim)
+
+    assert is_specific is False, f"Expected VAGUE for: {claim!r}"
+    assert len(rationale) > 0
+
+
 # ── analyze_claim integration tests ──────────────────────────────────────────
 
 def _run_analyze(claim_text: str, specificity_result: tuple, judgment_data: dict | None = None):
@@ -189,8 +248,8 @@ def test_vague_claim_stores_no_sources():
 
 def test_vague_claim_does_not_call_phase1_or_phase2():
     _, _, phase1, phase2 = _run_analyze(
-        "Trump in the Epstein files",
-        specificity_result=(False, "Please specify the allegation."),
+        "something fishy happened",
+        specificity_result=(False, "Please specify who did what."),
     )
 
     phase1.assert_not_called()

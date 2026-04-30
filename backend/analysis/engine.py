@@ -177,11 +177,21 @@ _SPECIFICITY_PROMPT = """\
 You are a fact-checking specificity gate. Decide whether a claim is specific \
 enough to fact-check meaningfully.
 
-A claim is TOO VAGUE if it:
-- Lacks a named subject (a specific person, organisation, or government body)
-- Lacks a concrete allegation, action, or assertion
-- Is a broad generalisation about groups or institutions
-- Cannot in principle be verified or refuted with evidence
+A claim is SPECIFIC (and must pass) if ANY of the following are true:
+- It names a real public figure (politician, official, executive, celebrity, etc.)
+- It names a real historical or current event (JFK assassination, 9/11, a named war, \
+a named policy, a named scandal, etc.)
+- It names a specific organisation, institution, law, document, or place
+- The alleged actor is vague ("the Deep State", "the CIA", "elites") but the event \
+or subject is a named real-world thing — pass it; full analysis will evaluate the evidence
+
+A claim is VAGUE (and must be rejected) only if it is entirely content-free:
+- No named person, event, organisation, or concrete action whatsoever
+- Pure generalisations: "politicians lie", "the government is bad", \
+"something fishy happened", "they are hiding the truth"
+
+When in doubt, mark SPECIFIC — it is better to analyse a borderline claim \
+than to silently reject a historically significant one.
 
 Respond with exactly two lines:
 Line 1: SPECIFIC or VAGUE
