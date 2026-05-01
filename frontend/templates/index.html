@@ -42,6 +42,9 @@
   </form>
 </div>
 
+<!-- Result area: filled by HTMX when form submits, then by polling partial -->
+<div id="result"></div>
+
 <div class="coverage-notice">
   <span class="coverage-notice-icon">ℹ</span>
   <div>
@@ -51,9 +54,6 @@
     incomplete or unreliable results. International coverage is planned for Phase&nbsp;2.
   </div>
 </div>
-
-<!-- Result area: filled by HTMX when form submits, then by polling partial -->
-<div id="result"></div>
 
 <script>
   /* Char count — the only JS on this page; no framework needed. */
