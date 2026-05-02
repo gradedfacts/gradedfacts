@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from backend import schemas
+from backend.analysis.consensus import analyze_claim_with_consensus
 from backend.analysis.engine import analyze_claim
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
 from backend.db.rate_limit import check_and_increment
@@ -81,6 +82,18 @@ def _run_analysis(claim_id: str) -> None:
             _analysis_errors[claim_id] = (503, str(exc))
         except Exception as exc:
             logger.error("Background analysis failed for %s: %s", claim_id, exc, exc_info=True)
+            _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
+
+
+def _run_consensus_analysis(claim_id: str) -> None:
+    """Background task: runs analyze_claim_with_consensus in its own DB session."""
+    with SessionLocal() as session:
+        try:
+            analyze_claim_with_consensus(claim_id, session)
+        except RuntimeError as exc:
+            _analysis_errors[claim_id] = (503, str(exc))
+        except Exception as exc:
+            logger.error("Background consensus analysis failed for %s: %s", claim_id, exc, exc_info=True)
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
 
 
@@ -240,6 +253,38 @@ def ui_analyze(
     session.commit()
     session.refresh(claim)
     background_tasks.add_task(_run_analysis, claim.id)
+    return templates.TemplateResponse(
+        request,
+        "partials/analyzing.html",
+        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
+    )
+
+
+@app.post("/ui/analyze/consensus", response_class=HTMLResponse)
+def ui_analyze_consensus(
+    request: Request,
+    background_tasks: BackgroundTasks,
+    text: str = Form(""),
+    session: Session = Depends(get_session),
+):
+    if not check_and_increment(_client_ip(request), session):
+        return templates.TemplateResponse(
+            request,
+            "partials/error.html",
+            {"code": 429, "message": "You've used your 5 free analyses today. Pro plan coming soon."},
+        )
+    text = text.strip()
+    if len(text) < 10:
+        return templates.TemplateResponse(
+            request,
+            "partials/error.html",
+            {"code": 400, "message": "Please enter at least 10 characters."},
+        )
+    claim = Claim(text=text[:2000])
+    session.add(claim)
+    session.commit()
+    session.refresh(claim)
+    background_tasks.add_task(_run_consensus_analysis, claim.id)
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
