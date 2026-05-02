@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 
 import httpx
@@ -302,7 +302,15 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
     mistral_data: dict | None = None
 
     if mistral_available:
-        with ThreadPoolExecutor(max_workers=2) as executor:
+        # Do NOT use `with ThreadPoolExecutor(...) as executor` here.
+        # The context manager calls shutdown(wait=True) on exit, which blocks until
+        # every submitted thread finishes.  If the Mistral thread hangs (no HTTP
+        # timeout on the SDK call), the background task would block forever and the
+        # poll endpoint would never find a completed judgment.
+        # shutdown(wait=False) lets the Mistral thread run to natural completion
+        # without blocking the main pipeline.
+        executor = ThreadPoolExecutor(max_workers=2)
+        try:
             claude_future = executor.submit(
                 _phase2_judgment, claude_client, claim.text, search_findings
             )
@@ -313,12 +321,19 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
             )
             claude_data = claude_future.result()
             try:
-                mistral_data = mistral_future.result()
+                mistral_data = mistral_future.result(timeout=45)
+            except FuturesTimeoutError:
+                logger.warning(
+                    "Mistral Phase 2 timed out for claim %s; proceeding with Claude-only result.",
+                    claim_id,
+                )
             except Exception as exc:
                 logger.warning(
                     "Mistral Phase 2 failed for claim %s (%s); proceeding without consensus.",
                     claim_id, exc,
                 )
+        finally:
+            executor.shutdown(wait=False)
     else:
         logger.info("MISTRAL_API_KEY not set; running single-engine (Claude-only) analysis.")
         claude_data = _phase2_judgment(claude_client, claim.text, search_findings)

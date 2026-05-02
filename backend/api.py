@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import inspect, text
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
@@ -97,9 +98,28 @@ def _run_consensus_analysis(claim_id: str) -> None:
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
 
 
+_JUDGMENT_ADDCOLS = [
+    ("analyst_secondary", "VARCHAR(128)"),
+    ("consensus_rating",  "VARCHAR(11)"),
+    ("models_agree",      "BOOLEAN"),
+]
+
+
+def _migrate_judgments() -> None:
+    """Add columns introduced by the ConsensusEngine to pre-existing databases."""
+    with engine.connect() as conn:
+        existing = {col["name"] for col in inspect(engine).get_columns("judgments")}
+        for col, col_type in _JUDGMENT_ADDCOLS:
+            if col not in existing:
+                conn.execute(text(f"ALTER TABLE judgments ADD COLUMN {col} {col_type}"))
+                logger.info("DB migration: added judgments.%s", col)
+        conn.commit()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    _migrate_judgments()
     yield
 
 
