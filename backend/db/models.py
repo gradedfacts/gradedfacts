@@ -70,6 +70,14 @@ class Judgment(Base):
     symmetry_report: Mapped[str | None] = mapped_column(Text, nullable=True)
     # Human analyst ID or Claude model string, e.g. "claude-sonnet-4-6"
     analyst: Mapped[str] = mapped_column(String(128), nullable=False)
+    # Secondary analyst model string (e.g. "mistral-large-latest"); null = single-engine run
+    analyst_secondary: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # Resolved consensus rating; null = single-engine run (no cross-validation performed)
+    consensus_rating: Mapped[EpistemicRating | None] = mapped_column(
+        SAEnum(EpistemicRating), nullable=True
+    )
+    # True when primary and secondary analysts agreed; null = no secondary analyst
+    models_agree: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=_now)
     # True for the current active judgment; False once superseded by a Revision
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

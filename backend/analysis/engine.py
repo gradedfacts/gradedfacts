@@ -313,7 +313,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
 # ── Public entry point ────────────────────────────────────────────────────────
 
-def analyze_claim(claim_id: str, session) -> Judgment:
+def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6") -> Judgment:
     """
     Run the full epistemic analysis pipeline for a claim.
 
@@ -336,7 +336,7 @@ def analyze_claim(claim_id: str, session) -> Judgment:
             claim_id=claim_id,
             rating=EpistemicRating.MISSING,
             rationale=vague_rationale,
-            analyst="claude-sonnet-4-6",
+            analyst=analyst,
             is_active=True,
         )
         session.add(judgment)
@@ -412,7 +412,7 @@ def analyze_claim(claim_id: str, session) -> Judgment:
         claim_id=claim_id,
         rating=rating,
         rationale=data["rationale"],
-        analyst="claude-sonnet-4-6",
+        analyst=analyst,
         is_active=True,
     )
 

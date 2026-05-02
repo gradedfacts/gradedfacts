@@ -25,6 +25,9 @@ class JudgmentOut(BaseModel):
     rating: EpistemicRating
     rationale: str
     analyst: str
+    analyst_secondary: str | None = None
+    consensus_rating: EpistemicRating | None = None
+    models_agree: bool | None = None
     symmetry_report: str | None
     created_at: datetime
     is_active: bool

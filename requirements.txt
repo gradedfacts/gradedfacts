@@ -4,6 +4,7 @@
 
 # AI analysis
 anthropic==0.97.0          # Claude API (analysis engine + prompt caching)
+mistralai==2.4.4           # Mistral API (consensus secondary analyst)
 
 # Web API
 fastapi==0.136.1           # REST API framework
