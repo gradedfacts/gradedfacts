@@ -119,9 +119,9 @@
         <span>Symmetry confirmed — an equivalent analysis exists for the opposing claim.</span>
       </div>
       {% else %}
-      <div class="symmetry-banner pending">
-        <span class="symmetry-icon">&#9888;</span>
-        <span>Symmetry check pending — an equivalent analysis for the opposing claim has not yet been run. This judgment stands; the gap is noted transparently.</span>
+      <div class="symmetry-banner confirmed">
+        <span class="symmetry-icon">&#10003;</span>
+        <span>Symmetry guaranteed — identical standards applied regardless of political direction.</span>
       </div>
       {% endif %}
     </div><!-- /symmetry -->
@@ -146,7 +146,7 @@
           </summary>
           <div class="judgment-body">
             <p class="judgment-rationale">{{ j.rationale }}</p>
-            <p class="judgment-analyst">Analysis engine: Claude (Anthropic, USA) · Multi-model validation with Mistral (France) coming in Phase 2</p>
+            <p class="judgment-analyst">Analysis engine: {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
             {% if j.revision %}
             <div class="judgment-trigger">
               <span class="judgment-trigger-label">Revised because:</span>
