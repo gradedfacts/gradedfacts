@@ -44,8 +44,10 @@ In the Jelastic dashboard: **your environment → Settings → Variables**
 
 | Variable | Value |
 |---|---|
-| `DATABASE_URL` | `sqlite:///./gradedfacts.db` |
+| `DATABASE_URL` | `postgresql://gradedfacts:<password>@<pg-host>:5432/gradedfacts` (see section 9) |
 | `ANTHROPIC_API_KEY` | your live key from console.anthropic.com |
+| `MISTRAL_API_KEY` | your live key from console.mistral.ai |
+| `BRAVE_API_KEY` | your live key from brave.com/search/api |
 | `RATE_LIMIT_ENABLED` | `true` |
 | `ENVIRONMENT` | `production` |
 | `PORT` | `8000` (set automatically by Jelastic; override only if needed) |
@@ -149,18 +151,68 @@ curl https://gradedfacts.com/docs
 
 ---
 
-## 9. Persistent database
+## 9. PostgreSQL database
 
-SQLite writes to the local filesystem. In Jelastic, the app node filesystem is
-persistent across restarts **within the same environment**, but not across
-redeployments that reset the root.
+GradedFacts uses PostgreSQL in production. The Jelastic topology should include
+a dedicated **PostgreSQL** node alongside the Python application node.
 
-For a zero-data-loss setup before switching to PostgreSQL:
+### A. Add the PostgreSQL node
 
-- Mount a **Jelastic Shared Storage** volume at `/var/www/webroot/ROOT/data/`
-- Set `DATABASE_URL=sqlite:////var/www/webroot/ROOT/data/gradedfacts.db`
+1. Jelastic dashboard → your environment → **Change topology**
+2. Under **SQL**, add **PostgreSQL 16** (or latest available)
+3. Set the node resources (256 MB RAM / 1 cloudlet is sufficient for initial load)
+4. Click **Apply** — Jelastic provisions the node and prints the root credentials
 
-PostgreSQL migration is planned for Phase 2.
+### B. Create the application database and user
+
+SSH into the PostgreSQL node (Jelastic → PostgreSQL node → **Web SSH**), then:
+
+```sql
+psql -U webadmin postgres
+
+CREATE DATABASE gradedfacts;
+CREATE USER gradedfacts WITH PASSWORD 'choose-a-strong-password';
+GRANT ALL PRIVILEGES ON DATABASE gradedfacts TO gradedfacts;
+-- PostgreSQL 15+ also requires:
+\c gradedfacts
+GRANT ALL ON SCHEMA public TO gradedfacts;
+\q
+```
+
+### C. Get the connection string
+
+The PostgreSQL node's internal hostname is shown in the Jelastic dashboard under
+the node tile (e.g. `node12345-env-name.jelastic.infomaniak.com`). Use the
+**internal hostname** (not the public one) so traffic stays within the Jelastic
+private network:
+
+```
+postgresql://gradedfacts:<password>@<internal-pg-host>:5432/gradedfacts
+```
+
+Set this as the `DATABASE_URL` environment variable (see section 4).
+
+Both `postgres://` and `postgresql://` schemes are accepted — the application
+normalises `postgres://` to `postgresql://` automatically.
+
+### D. Initialise the schema
+
+On the Python application node, run the Alembic migration to create the tables:
+
+```bash
+cd /var/www/webroot/ROOT
+alembic upgrade head
+```
+
+This is a one-time step on a fresh database. Re-deployments are safe to run
+`alembic upgrade head` again — it is idempotent.
+
+### E. Verify the connection
+
+```bash
+python -c "from backend.db.session import engine; print(engine.url)"
+# Should print: postgresql://gradedfacts:***@<host>:5432/gradedfacts
+```
 
 ---
 
