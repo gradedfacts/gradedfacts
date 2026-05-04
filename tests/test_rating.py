@@ -251,10 +251,11 @@ def test_independent_primary_source_enables_verified():
     """
     Three genuine independent primary sources must still produce VERIFIED.
     The fix must not over-penalise legitimate sources.
+    Uses bls.gov which is a registry-confirmed primary independent source.
     """
     sources = [
         {
-            "url": f"https://www.reuters.com/article/item-{i}",
+            "url": f"https://www.bls.gov/news.release/cpi.nr0-{i}.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
@@ -268,12 +269,13 @@ def test_independent_primary_source_enables_verified():
 
 def test_mixed_independent_and_compromised_can_reach_verified():
     """
-    One independent primary + two compromised (secondary after downgrade) sources
-    with total ≥3 relevant → VERIFIED because there IS one independent primary.
+    One independent primary + two compromised sources with total ≥3 relevant →
+    VERIFIED because there IS one independent primary.
+    Uses bls.gov (registry-confirmed primary) as the independent source.
     """
     sources = [
         {
-            "url": "https://www.reuters.com/article/item-0",
+            "url": "https://www.bls.gov/news.release/cpi.nr0.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
@@ -282,20 +284,20 @@ def test_mixed_independent_and_compromised_can_reach_verified():
         {
             "url": "https://www.fbi.gov/news/press-releases/2025/item-1",
             "tier": "primary",
-            "is_independent": True,  # Will be overridden by registry
+            "is_independent": True,  # Will be overridden by compromised registry
             "relevance_score": 0.9,
             "supports_claim": True,
         },
         {
             "url": "https://www.fbi.gov/news/press-releases/2025/item-2",
             "tier": "primary",
-            "is_independent": True,  # Will be overridden by registry
+            "is_independent": True,  # Will be overridden by compromised registry
             "relevance_score": 0.9,
             "supports_claim": True,
         },
     ]
     judgment = _run_engine_with_sources(sources)
-    # Reuters (independent primary) + 2 FBI (downgraded to secondary) = 1 primary + 2 secondary
+    # BLS (independent primary) + 2 FBI (downgraded to not-independent) = 1 primary + 2 downgraded
     # 3 total relevant, has independent primary → VERIFIED
     assert judgment.rating == EpistemicRating.VERIFIED
 
@@ -410,7 +412,7 @@ def test_no_explicit_rating_falls_back_to_derive_rating():
     # Three independent primary verifying sources → derive_rating returns VERIFIED
     sources = [
         {
-            "url": f"https://www.reuters.com/article/fallback-{i}",
+            "url": f"https://www.bls.gov/news.release/fallback-{i}.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
@@ -434,7 +436,7 @@ def test_invalid_explicit_rating_falls_back_to_derive_rating():
 
     sources = [
         {
-            "url": f"https://www.reuters.com/article/invalid-{i}",
+            "url": f"https://www.bls.gov/news.release/invalid-{i}.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,

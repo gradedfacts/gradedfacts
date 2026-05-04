@@ -1,5 +1,7 @@
 # GradedFacts
 
+For the GradedFacts / TransparencyPuzzle project, the project root is: /home/pc/transparencypuzzle
+
 A politically independent fact-checking and analysis tool supporting democratic transparency. Founded in Switzerland. No funding from political parties, PACs, or politically dependent media.
 
 ## Mission

@@ -1,0 +1,66 @@
+{
+  "_meta": {
+    "description": "GradedFacts UK Source Registry — UK government statistical bodies, public broadcasters, newspapers, and official institutions with independence and quality assessments.",
+    "version": "1.0.0",
+    "last_updated": "2026-05-04",
+    "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
+    "schema": {
+      "tier": "primary | secondary | tertiary",
+      "is_independent": "true when no documented editorial control by political actors with a direct stake in outcomes",
+      "affiliation_note": "required when is_independent is false; explains the documented dependency",
+      "country": "ISO 3166-1 alpha-2",
+      "region": "geographic region"
+    }
+  },
+  "sources": [
+    {
+      "name": "Office for National Statistics (ONS)",
+      "domain": "ons.gov.uk",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "BBC (UK)",
+      "domain": "bbc.co.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "The Guardian",
+      "domain": "theguardian.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "UK Parliament",
+      "domain": "parliament.uk",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "UK Supreme Court",
+      "domain": "supremecourt.uk",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Gov.uk",
+      "domain": "gov.uk",
+      "tier": "primary",
+      "is_independent": false,
+      "affiliation_note": "Gov.uk is the official UK government website, publishing policy documents, guidance, and official statistics across all departments. Content represents current government policy and communications and is not independent of the executive. Useful as an authoritative primary source for official government decisions, legislation, and announcements; not a source of independent analysis.",
+      "country": "GB",
+      "region": "Europe"
+    }
+  ]
+}

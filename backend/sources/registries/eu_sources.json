@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "description": "GradedFacts EU Source Registry — EU supranational and Council of Europe institutions with independence and quality assessments.",
+    "version": "1.0.0",
+    "last_updated": "2026-05-04",
+    "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction. The same evidentiary standard is applied symmetrically regardless of the institution's stated mandate.",
+    "schema": {
+      "tier": "primary | secondary | tertiary",
+      "is_independent": "true when no documented editorial control by political actors with a direct stake in outcomes",
+      "affiliation_note": "required when is_independent is false; explains the documented dependency",
+      "country": "ISO 3166-1 alpha-2, or EU for EU institutions, or INT for broader international bodies",
+      "region": "geographic region"
+    }
+  },
+  "sources": [
+    {
+      "name": "Eurostat",
+      "domain": "eurostat.ec.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "European Central Bank (ECB)",
+      "domain": "ecb.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "European Parliament",
+      "domain": "europarl.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "European Commission",
+      "domain": "ec.europa.eu",
+      "tier": "primary",
+      "is_independent": false,
+      "affiliation_note": "The European Commission is the EU's political executive body. Commissioners are nominated by member state governments and subject to a political program (agenda) voted by the European Parliament. Press releases, policy proposals, and communications represent the current Commission's political priorities and are not independent analysis. Reliable as the primary source for the authentic text of EU regulations, directives, and decisions; not reliable for independent assessment of those measures.",
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "Court of Justice of the EU (CJEU / EuGH) and General Court (EuG)",
+      "domain": "curia.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "European Court of Human Rights (ECHR / EGMR)",
+      "domain": "echr.coe.int",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "European Ombudsman",
+      "domain": "ombudsman.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "EU Publications Office",
+      "domain": "publications.europa.eu",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "European External Action Service (EEAS)",
+      "domain": "eeas.europa.eu",
+      "tier": "primary",
+      "is_independent": false,
+      "affiliation_note": "The EEAS is the EU's diplomatic service. It operates under the direct political authority of the High Representative of the Union for Foreign Affairs and Security Policy, who simultaneously serves as a Vice-President of the European Commission. EEAS publications represent official EU foreign policy positions, not independent analysis of international events.",
+      "country": "EU",
+      "region": "Europe"
+    }
+  ]
+}
