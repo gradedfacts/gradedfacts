@@ -50,21 +50,24 @@
     </li>
     <li>
       <strong>Web search.</strong>
-      The engine searches for relevant sources using live web search, targeting primary and
-      independent sources that directly address the claim. The search phase intentionally
+      The engine searches for relevant sources using <strong>Brave Search</strong>, targeting
+      primary and independent sources that directly address the claim. The two parallel analysis
+      pipelines (Claude and Mistral) each run their own independent Brave Search queries, so
+      neither pipeline&rsquo;s findings influence the other. The search phase intentionally
       allows some variation in query construction so that different runs may surface different
       evidence, improving coverage across multiple analyses of the same claim.
     </li>
     <li>
       <strong>Structured judgment.</strong>
-      The engine evaluates the evidence and produces a structured verdict: a rating, a rationale,
-      and a scored, tiered source list. This step runs at <strong>temperature&nbsp;0</strong>
-      &mdash; the verdict is fully deterministic. Given the same claim and the same evidence,
-      the engine will always produce the same rating and rationale. This ensures reproducibility:
-      two analyses of the same claim at the same point in time will not randomly disagree.
-      The engine&rsquo;s explicit rating always takes precedence over any algorithmic derivation
-      from source tiers alone, preventing mismatches between the written rationale and the
-      displayed verdict.
+      Two models evaluate the evidence in parallel and independently.
+      <strong>Claude</strong> (Anthropic) acts as the primary pipeline; <strong>Mistral</strong>
+      acts as the secondary pipeline, using its own Brave Search results.
+      Each produces a structured verdict: a rating, a rationale, and a scored, tiered source list.
+      Both pipelines run at <strong>temperature&nbsp;0</strong> &mdash; given the same claim and
+      the same evidence, each engine always produces the same output.
+      Where the two models agree, that rating is returned. Where they disagree, the verdict
+      defaults to <strong>Speculative</strong> until additional evidence resolves the conflict.
+      Mistral is optional: if unavailable, the system falls back gracefully to the Claude-only result.
     </li>
   </ol>
 </div>
@@ -293,6 +296,28 @@
   <p>
     This means you can always see not just what we currently believe, but what we previously
     believed and why we changed our mind.
+  </p>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Geographic Coverage &mdash; Phase 1</h2>
+  <p>
+    Phase 1 covers <strong>the United States and Europe</strong>. The source registry
+    includes curated institutions and media from:
+  </p>
+  <ul class="prose-list">
+    <li><strong>United States</strong> &mdash; federal statistical agencies, Congress, courts, wire services, and major news outlets</li>
+    <li><strong>European Union</strong> &mdash; Eurostat, ECB, European Parliament, European Commission, CJEU, ECHR, and other supranational bodies</li>
+    <li><strong>Switzerland (CH)</strong> &mdash; BFS, Federal Chancellery, Federal Supreme Court, SRF, RTS, NZZ, Tages-Anzeiger, swissinfo.ch</li>
+    <li><strong>United Kingdom (UK)</strong> &mdash; ONS, UK Parliament, UK Supreme Court, BBC, The Guardian, Gov.uk</li>
+    <li><strong>Germany (DE)</strong> &mdash; Destatis, Bundestag, Bundesverfassungsgericht, ARD, Der Spiegel, Zeit Online</li>
+    <li><strong>France (FR)</strong> &mdash; INSEE, Assembl&eacute;e nationale, Conseil constitutionnel, Le Monde, France 24</li>
+  </ul>
+  <p>
+    Every source in the registry carries an independence assessment. Sources that are
+    official but not editorially independent &mdash; such as the European Commission or
+    France 24 &mdash; are clearly marked with an affiliation note explaining the specific
+    concern. Global coverage is planned for Phase 2.
   </p>
 </div>
 
