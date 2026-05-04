@@ -297,6 +297,11 @@
     This means you can always see not just what we currently believe, but what we previously
     believed and why we changed our mind.
   </p>
+  <p>
+    All judgments and revision history are stored in <strong>PostgreSQL</strong>. Records
+    survive server restarts and redeployments — nothing is held only in memory or in a
+    filesystem that resets on deploy.
+  </p>
 </div>
 
 <div class="card prose">

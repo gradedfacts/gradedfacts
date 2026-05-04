@@ -15,7 +15,7 @@ Submit a political claim. GradedFacts searches for sources using **Brave Search*
 | Debunked | Red | Counter-evidence actively contradicts the claim |
 | Missing | Gray | Insufficient evidence to issue any judgment |
 
-Every judgment cites its sources. Every revision is archived. Every method applied to one political side is applied identically to all others.
+Every judgment cites its sources. Every revision is archived. Every method applied to one political side is applied identically to all others. Judgments and revision history are stored in **PostgreSQL** — records survive server restarts and redeployments.
 
 ## Project structure
 
