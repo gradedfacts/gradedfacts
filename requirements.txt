@@ -31,3 +31,11 @@ aiofiles==25.1.0           # Async static file serving
 
 # Utilities
 python-dotenv==1.2.2       # .env file loading
+
+# ── Development / testing only (not required in production) ──────────────────
+# Unit tests
+pytest==9.0.3
+# E2E browser tests (also run: playwright install chromium)
+playwright==1.59.0
+pytest-playwright==0.7.2
+pytest-base-url==2.1.0
