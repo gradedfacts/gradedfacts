@@ -153,6 +153,7 @@
       "tier": "secondary",
       "is_independent": false,
       "category": "broadcaster",
+      "affiliation_note": "Owned by NBCUniversal/Comcast. Documented progressive-leaning editorial orientation with systematic framing favoring Democratic positions. Ownership structure creates commercial incentives misaligned with editorial neutrality.",
       "independence_note": "Owned by NBCUniversal (Comcast). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under GradedFacts's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
     },
     {
@@ -161,6 +162,7 @@
       "tier": "secondary",
       "is_independent": false,
       "category": "broadcaster",
+      "affiliation_note": "Fox Corporation (Murdoch family ownership). Internal communications subpoenaed in Dominion Voting Systems lawsuit (2023) showed hosts and executives knowingly broadcast false 2020 election claims while privately acknowledging they were false. $787.5M settlement. Editorial independence structurally compromised by ownership and documented pattern of partisan alignment.",
       "independence_note": "Owned by Fox Corporation (Murdoch family controls ~39% of voting shares). The Dominion Voting Systems lawsuit (settled April 2023, $787.5M) produced internal communications in which Fox hosts privately acknowledged the falsity of 2020 election fraud claims while publicly promoting them. Multiple studies document systematic alignment with Republican Party messaging in prime-time opinion programming. Note: the Fox News news division (daytime, Bret Baier's Special Report) is distinct from opinion programming and has a stronger factual record — consumers should distinguish between the two."
     },
     {
@@ -249,6 +251,7 @@
       "tier": "tertiary",
       "is_independent": false,
       "category": "newspaper",
+      "affiliation_note": "Documented major investment by the Mercer family (Robert Mercer, Renaissance Technologies co-CEO and major Republican donor) beginning ~2012. Former executive chairman Steve Bannon served as CEO of the 2016 Trump presidential campaign and subsequently as White House Chief Strategist. Content systematically promotes far-right political positions. Multiple IFCN-member fact-checking organizations have documented a sustained pattern of false or misleading articles. Editorial output reflects direct ownership political alignment.",
       "independence_note": "Received documented major investment from the Mercer family (Robert Mercer, conservative megadonor and co-CEO of hedge fund Renaissance Technologies) starting approximately 2012. Former executive chairman Steve Bannon served as CEO of the 2016 Trump presidential campaign and subsequently as Trump White House Chief Strategist. Content systematically promotes far-right political positions. Multiple fact-checking organizations have documented a pattern of false or misleading articles. Not independent under any reasonable editorial standard."
     },
     {
@@ -257,6 +260,7 @@
       "tier": "tertiary",
       "is_independent": false,
       "category": "social_media",
+      "affiliation_note": "Owned by Trump Media & Technology Group (TMTG, NASDAQ: DJT); former President Donald Trump holds majority equity stake as of 2025. Platform was created specifically as Trump's primary social media outlet following his removal from Twitter/X. Content moderation policies enforce a conservative viewpoint per the company's stated mission. Posts by Trump are primary sources for his own statements but cannot be treated as independent information about claims involving Trump or his political interests.",
       "independence_note": "Owned by Trump Media & Technology Group (TMTG, NASDAQ: DJT). As of 2025, former President Donald Trump holds a majority equity stake. The platform was created specifically to serve as Trump's primary social media outlet after his removal from Twitter/X. Platform content moderation policies enforce a conservative viewpoint per the company's stated mission. Statements from this platform are primary sources for Trump's own positions but cannot be treated as independent information about claims involving Trump."
     },
     {
