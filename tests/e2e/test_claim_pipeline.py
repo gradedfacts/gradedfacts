@@ -105,7 +105,7 @@ class TestClaimPipeline:
         page.locator("textarea[name='text']").fill(_CLAIM_VERIFIABLE)
         page.locator("button[type='submit']").click()
 
-        verified_badge = page.locator(".rating-badge.verified")
+        verified_badge = page.locator("#result .board-header .rating-badge.verified")
         expect(verified_badge).to_be_visible(timeout=_RESULT_TIMEOUT_MS)
 
     def test_vague_claim_returns_missing(self, page: Page) -> None:
@@ -123,7 +123,7 @@ class TestClaimPipeline:
         page.locator("textarea[name='text']").fill(_CLAIM_VAGUE)
         page.locator("button[type='submit']").click()
 
-        missing_badge = page.locator(".rating-badge.missing")
+        missing_badge = page.locator("#result .board-header .rating-badge.missing")
         expect(missing_badge).to_be_visible(timeout=_RESULT_TIMEOUT_MS)
 
     def test_short_claim_returns_error(self, page: Page) -> None:
@@ -177,7 +177,7 @@ class TestClaimPipeline:
         )
         page.locator("button[type='submit']").click()
 
-        speculative_badge = page.locator(".rating-badge.speculative")
+        speculative_badge = page.locator("#result .board-header .rating-badge.speculative")
         expect(speculative_badge).to_be_visible(timeout=10_000)
 
         expect(page.locator("text=[Claude Analysis]")).to_be_visible(timeout=5_000)
