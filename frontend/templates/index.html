@@ -36,7 +36,7 @@
       required
     ></textarea>
     <div class="form-footer">
-      <span class="char-count" id="char-count">2000 characters remaining</span>
+      <span class="char-count">One claim per check &middot; Pro: multiple claims</span>
       <button type="submit" class="btn btn-primary">Fact-check</button>
     </div>
   </form>
@@ -53,16 +53,5 @@
     Global coverage expanding in Phase&nbsp;2.
   </div>
 </div>
-
-<script>
-  /* Char count — the only JS on this page; no framework needed. */
-  const ta = document.querySelector('.claim-textarea');
-  const cc = document.getElementById('char-count');
-  ta.addEventListener('input', function () {
-    const r = 2000 - ta.value.length;
-    cc.textContent = r + ' characters remaining';
-    cc.className = 'char-count' + (r < 100 ? ' limit' : r < 400 ? ' near' : '');
-  });
-</script>
 
 {% endblock %}

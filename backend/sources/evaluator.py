@@ -15,6 +15,7 @@ The evaluator never mutates input dicts — it returns new ones.
 
 from __future__ import annotations
 
+from backend.sources.classifier import is_wikipedia
 from backend.sources.independence_registry import apply_independence_override
 from backend.sources.registries import apply_registry_override
 
@@ -31,6 +32,12 @@ def evaluate_source(src: dict) -> dict:
     """
     # Step 1: apply regional registry overrides (known sources get curated metadata)
     src = apply_registry_override(src)
+
+    # Step 1b: Hard rule — Wikipedia/Wikimedia is always Tertiary, overriding any
+    # registry entry or model assignment.
+    if is_wikipedia(src.get("url", "")) and src.get("tier") != "tertiary":
+        src = dict(src)
+        src["tier"] = "tertiary"
 
     # Step 2: apply compromised-institution registry (can further downgrade independence)
     src = apply_independence_override(src)

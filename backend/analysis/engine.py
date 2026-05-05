@@ -78,7 +78,12 @@ HARD RULES — never violate:
      actors, a verified alibi, an authoritative record contradicting the assertion).
      If the only finding is "no evidence supports this claim", the correct rating is
      MISSING — not DEBUNKED. Reserve DEBUNKED for claims where evidence actively
-     contradicts the assertion, not merely fails to confirm it.\
+     contradicts the assertion, not merely fails to confirm it.
+ 11. Wikipedia (wikipedia.org, wikimedia.org) is always classified as Tertiary —
+     no exceptions, regardless of the quality of the specific article. Wikipedia
+     is a crowd-edited aggregation of secondary and tertiary material; it is not
+     a primary or secondary source. Wikipedia can point to primary sources: those
+     primary sources count and should be cited directly. Wikipedia itself does not.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────

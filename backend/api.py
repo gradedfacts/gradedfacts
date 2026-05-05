@@ -248,6 +248,11 @@ def methodology(request: Request):
     return templates.TemplateResponse(request, "methodology.html")
 
 
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    return templates.TemplateResponse(request, "about.html")
+
+
 @app.post("/ui/analyze", response_class=HTMLResponse)
 def ui_analyze(
     request: Request,
