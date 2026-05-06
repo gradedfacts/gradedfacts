@@ -32,7 +32,9 @@ from backend.analysis.engine import (
     MIN_RELEVANCE_SCORE,
     _JUDGMENT_TOOL,
     _SYSTEM_PROMPT,
+    _build_lang_instruction,
     _check_specificity,
+    _detect_language,
     _get_client,
     _phase1_search,
     _phase2_judgment,
@@ -75,7 +77,7 @@ def _get_mistral_client() -> Mistral:
 
 # ── Mistral Phase 2 ───────────────────────────────────────────────────────────
 
-def _mistral_phase2_judgment(claim_text: str, search_findings: str) -> dict:
+def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
     """
     Force Mistral to emit a submit_judgment tool call.
     Returns the parsed tool input dict (same schema as Claude's Phase 2).
@@ -92,6 +94,8 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str) -> dict:
             "Evaluate based on your knowledge and note that sources could not be verified online. "
             "If you cannot identify at least 2 verifiable sources, return an empty sources list."
         )
+    if lang_instruction:
+        user_content += f"\n\n{lang_instruction}"
 
     response = client.chat.complete(
         model=_MISTRAL_MODEL,
@@ -165,7 +169,7 @@ def _mistral_phase1_brave_search(claim_text: str) -> str:
         return ""
 
 
-def _mistral_search_and_judge(claim_text: str) -> dict:
+def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:
     """
     Mistral's independent Phase 1+2: fetch Brave findings then run Phase 2 judgment.
     Runs inside the Phase 2 ThreadPoolExecutor alongside Claude's thread.
@@ -173,7 +177,7 @@ def _mistral_search_and_judge(claim_text: str) -> dict:
     handles that case with a knowledge-only fallback message.
     """
     brave_findings = _mistral_phase1_brave_search(claim_text)
-    return _mistral_phase2_judgment(claim_text, brave_findings)
+    return _mistral_phase2_judgment(claim_text, brave_findings, lang_instruction)
 
 
 # ── Consensus resolution ──────────────────────────────────────────────────────
@@ -292,6 +296,13 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
         session.refresh(judgment)
         return judgment
 
+    # Detect claim language once; both Claude and Mistral Phase 2 receive the same
+    # instruction so their rationale and all output match the claim's language.
+    lang_name = _detect_language(claim.text)
+    lang_instruction = _build_lang_instruction(lang_name)
+    if lang_instruction:
+        logger.debug("Claim language detected as %s.", lang_name)
+
     # ── Phase 1: web search (Claude only — Mistral has no built-in search) ────
     search_findings = _phase1_search(claude_client, claim.text)
 
@@ -312,12 +323,12 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
         executor = ThreadPoolExecutor(max_workers=2)
         try:
             claude_future = executor.submit(
-                _phase2_judgment, claude_client, claim.text, search_findings
+                _phase2_judgment, claude_client, claim.text, search_findings, lang_instruction
             )
             # _mistral_search_and_judge runs its own independent Brave Search Phase 1
             # then Mistral Phase 2 — no shared state with Claude's thread.
             mistral_future = executor.submit(
-                _mistral_search_and_judge, claim.text
+                _mistral_search_and_judge, claim.text, lang_instruction
             )
             claude_data = claude_future.result()
             try:
@@ -336,7 +347,7 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
             executor.shutdown(wait=False)
     else:
         logger.info("MISTRAL_API_KEY not set; running single-engine (Claude-only) analysis.")
-        claude_data = _phase2_judgment(claude_client, claim.text, search_findings)
+        claude_data = _phase2_judgment(claude_client, claim.text, search_findings, lang_instruction)
 
     # ── Process Claude's sources and derive its rating ────────────────────────
     claude_sources, claude_derived = _process_sources(claude_data.get("sources", []))

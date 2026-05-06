@@ -2,12 +2,62 @@ import logging
 
 import anthropic
 
+try:
+    from langdetect import detect as _ld_detect, DetectorFactory as _LDFactory
+    _LDFactory.seed = 0  # make detection deterministic across runs
+    _LANGDETECT_AVAILABLE = True
+except ImportError:
+    _LANGDETECT_AVAILABLE = False
+
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source
 
 logger = logging.getLogger(__name__)
+
+# ── Language detection ────────────────────────────────────────────────────────
+
+_LANG_NAMES: dict[str, str] = {
+    "af": "Afrikaans", "ar": "Arabic", "bg": "Bulgarian", "ca": "Catalan",
+    "cs": "Czech", "cy": "Welsh", "da": "Danish", "de": "German",
+    "el": "Greek", "en": "English", "es": "Spanish", "et": "Estonian",
+    "fa": "Persian", "fi": "Finnish", "fr": "French", "gl": "Galician",
+    "gu": "Gujarati", "he": "Hebrew", "hi": "Hindi", "hr": "Croatian",
+    "hu": "Hungarian", "id": "Indonesian", "it": "Italian", "ja": "Japanese",
+    "kn": "Kannada", "ko": "Korean", "lt": "Lithuanian", "lv": "Latvian",
+    "mk": "Macedonian", "ml": "Malayalam", "mr": "Marathi", "ne": "Nepali",
+    "nl": "Dutch", "no": "Norwegian", "pa": "Punjabi", "pl": "Polish",
+    "pt": "Portuguese", "ro": "Romanian", "ru": "Russian", "sk": "Slovak",
+    "sl": "Slovenian", "so": "Somali", "sq": "Albanian", "sv": "Swedish",
+    "sw": "Swahili", "ta": "Tamil", "te": "Telugu", "th": "Thai",
+    "tl": "Filipino", "tr": "Turkish", "uk": "Ukrainian", "ur": "Urdu",
+    "vi": "Vietnamese", "zh-cn": "Chinese", "zh-tw": "Chinese (Traditional)",
+    "zh": "Chinese",
+}
+
+
+def _detect_language(claim_text: str) -> str:
+    """Detect the natural language of the claim. Falls back to 'English' on any error."""
+    if not _LANGDETECT_AVAILABLE:
+        return "English"
+    try:
+        code = _ld_detect(claim_text)
+        return _LANG_NAMES.get(code, "English")
+    except Exception:
+        return "English"
+
+
+def _build_lang_instruction(lang_name: str) -> str:
+    """Return a per-request language instruction string, or '' for English claims."""
+    if lang_name == "English":
+        return ""
+    return (
+        f"IMPORTANT: Respond in the same language as the claim. "
+        f"The claim is in {lang_name}. "
+        f"Write your entire analysis, rationale, and all text in {lang_name}."
+    )
+
 
 # ── Source thresholds ─────────────────────────────────────────────────────────
 
@@ -278,7 +328,7 @@ def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
         return ""
 
 
-def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str) -> dict:
+def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
     """
     Force Claude to emit a submit_judgment tool call with structured source evaluations.
     Raises RuntimeError if the model does not return the expected tool call.
@@ -292,6 +342,8 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
             "Evaluate based on your knowledge and note that sources could not be verified online. "
             "If you cannot identify at least 2 verifiable sources, return an empty sources list."
         )
+    if lang_instruction:
+        user_content += f"\n\n{lang_instruction}"
 
     # temperature=0 makes the rating deterministic: the same claim and the same
     # evidence must always produce the same rating, source tiers, and rationale.
@@ -349,11 +401,18 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6") ->
         session.refresh(judgment)
         return judgment
 
+    # Detect claim language once; pass instruction to Phase 2 so the rationale
+    # and all model output are written in the same language as the claim.
+    lang_name = _detect_language(claim.text)
+    lang_instruction = _build_lang_instruction(lang_name)
+    if lang_instruction:
+        logger.debug("Claim language detected as %s.", lang_name)
+
     # Phase 1: gather evidence via web search (best-effort)
     search_findings = _phase1_search(client, claim.text)
 
     # Phase 2: structured judgment (forced tool call)
-    data = _phase2_judgment(client, claim.text, search_findings)
+    data = _phase2_judgment(client, claim.text, search_findings, lang_instruction)
 
     # Apply independence registry + quality checks before rating derivation.
     # This overrides Claude's own is_independent assessment for known compromised

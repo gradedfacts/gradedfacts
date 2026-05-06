@@ -576,7 +576,7 @@ class TestBraveIntegration:
 
         captured_findings: list[str] = []
 
-        def fake_mistral_p2(claim_text, findings):
+        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
             captured_findings.append(findings)
             return mistral_j
 
@@ -607,11 +607,11 @@ class TestBraveIntegration:
         captured_claude: list[str] = []
         captured_mistral: list[str] = []
 
-        def fake_claude_p2(client, claim_text, findings):
+        def fake_claude_p2(client, claim_text, findings, lang_instruction=""):
             captured_claude.append(findings)
             return claude_j
 
-        def fake_mistral_p2(claim_text, findings):
+        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
             captured_mistral.append(findings)
             return mistral_j
 
@@ -642,7 +642,7 @@ class TestBraveIntegration:
 
         captured_findings: list[str] = []
 
-        def fake_mistral_p2(claim_text, findings):
+        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
             captured_findings.append(findings)
             return mistral_j
 
@@ -671,7 +671,7 @@ class TestBraveIntegration:
 
         captured_findings: list[str] = []
 
-        def fake_mistral_p2(claim_text, findings):
+        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
             captured_findings.append(findings)
             return mistral_j
 

@@ -5,6 +5,7 @@
 # AI analysis
 anthropic==0.97.0          # Claude API (analysis engine + prompt caching)
 mistralai==2.4.4           # Mistral API (consensus secondary analyst)
+langdetect==1.0.9          # Claim language detection (fallback: English)
 
 # Web API
 fastapi==0.136.1           # REST API framework
