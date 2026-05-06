@@ -10,25 +10,91 @@
     No SPA framework — the server renders all state transitions.
   -->
   <script src="https://unpkg.com/htmx.org@2.0.4" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/i18next@23/i18next.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/i18next-http-backend@2/i18nextHttpBackend.min.js" crossorigin="anonymous"></script>
+  <style>
+    .lang-selector { display: flex; align-items: center; }
+    .lang-selector select {
+      appearance: none;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-3);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .lang-selector select:hover { border-color: var(--text-3); }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <a href="/" class="site-wordmark"><svg width="20" height="18" viewBox="0 0 20 18" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:0.35em"><rect x="0"  y="4"  width="4" height="14" rx="1" fill="#22c55e"/><rect x="5"  y="0"  width="4" height="18" rx="1" fill="#f59e0b"/><rect x="10" y="9"  width="4" height="9"  rx="1" fill="#9ca3af"/><rect x="15" y="6"  width="4" height="12" rx="1" fill="#ef4444"/></svg>GradedFacts</a>
-    <span class="site-tagline">
-      Politically independent &middot; No party funding &middot; No ideological agenda
+    <span class="site-tagline" data-i18n="tagline">
+      Politically independent · No party funding · No ideological agenda
     </span>
+    <div class="lang-selector">
+      <select id="lang-select" onchange="switchLanguage(this.value)" aria-label="Language">
+        <option value="en">🇬🇧 EN</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="it">🇮🇹 IT</option>
+      </select>
+    </div>
   </header>
   <main class="site-main">
     {% block content %}{% endblock %}
   </main>
   <footer class="site-footer">
-    <span>Hosted in Switzerland &middot; No US Cloud Act jurisdiction</span>
+    <span data-i18n="footer.hosting">Hosted in Switzerland · No US Cloud Act jurisdiction</span>
     <span>
-      <a href="/methodology">Open Source Methodology</a>
+      <a href="/methodology" data-i18n="footer.methodology">Open Source Methodology</a>
       &middot;
-      <a href="/about">About</a>
+      <a href="/about" data-i18n="footer.about">About</a>
     </span>
-    <span>Powered by Claude (Anthropic) + Mistral (France) &middot; Brave Search independent index</span>
+    <span data-i18n="footer.powered">Powered by Claude (Anthropic) + Mistral (France) · Brave Search independent index</span>
   </footer>
+
+  <script>
+    function applyTranslations(root) {
+      var container = root || document;
+      container.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var key = el.getAttribute('data-i18n');
+        var optStr = el.getAttribute('data-i18n-options');
+        var opts = optStr ? JSON.parse(optStr) : {};
+        var result = i18next.t(key, opts);
+        if (el.getAttribute('data-i18n-target') === 'placeholder') {
+          el.placeholder = result;
+        } else {
+          el.textContent = result;
+        }
+      });
+    }
+
+    i18next
+      .use(i18nextHttpBackend)
+      .init({
+        lng: localStorage.getItem('lang') || navigator.language.split('-')[0],
+        fallbackLng: 'en',
+        supportedLngs: ['en', 'de', 'fr', 'it'],
+        backend: { loadPath: '/static/locales/{{lng}}/translation.json' },
+        interpolation: { escapeValue: false }
+      }, function (err) {
+        if (err) console.error('i18next:', err);
+        applyTranslations();
+        var sel = document.getElementById('lang-select');
+        if (sel) sel.value = i18next.language;
+      });
+
+    function switchLanguage(lng) {
+      localStorage.setItem('lang', lng);
+      i18next.changeLanguage(lng, function () { applyTranslations(); });
+    }
+
+    document.body.addEventListener('htmx:afterSwap', function () {
+      if (i18next.isInitialized) applyTranslations();
+    });
+  </script>
 </body>
 </html>

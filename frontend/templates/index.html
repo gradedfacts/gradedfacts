@@ -2,20 +2,20 @@
 {% block content %}
 
 <div class="trust-block">
-  <p class="trust-signal">
-    Politically independent &middot; No party funding &middot; No ideological agenda
+  <p class="trust-signal" data-i18n="tagline">
+    Politically independent · No party funding · No ideological agenda
   </p>
   <ul class="framework-list">
-    <li><span class="status-dot verified"></span><strong>Verified</strong> — factually correct with cited sources</li>
-    <li><span class="status-dot speculative"></span><strong>Speculative</strong> — plausible but not conclusively provable</li>
-    <li><span class="status-dot debunked"></span><strong>Debunked</strong> — counter-evidence available</li>
-    <li><span class="status-dot missing"></span><strong>Missing</strong> — insufficient evidence, judgment withheld</li>
+    <li><span class="status-dot verified"></span><strong data-i18n="trust.verified">Verified</strong> — <span data-i18n="trust.verified_desc">factually correct with cited sources</span></li>
+    <li><span class="status-dot speculative"></span><strong data-i18n="trust.speculative">Speculative</strong> — <span data-i18n="trust.speculative_desc">plausible but not conclusively provable</span></li>
+    <li><span class="status-dot debunked"></span><strong data-i18n="trust.debunked">Debunked</strong> — <span data-i18n="trust.debunked_desc">counter-evidence available</span></li>
+    <li><span class="status-dot missing"></span><strong data-i18n="trust.missing">Missing</strong> — <span data-i18n="trust.missing_desc">insufficient evidence, judgment withheld</span></li>
   </ul>
-  <p class="claims-counter">Symmetry tracking active &mdash; equal scrutiny across the political spectrum.</p>
+  <p class="claims-counter" data-i18n="trust.symmetry">Symmetry tracking active — equal scrutiny across the political spectrum.</p>
 </div>
 
 <div class="card">
-  <p class="claim-form-heading">Fact-check a claim</p>
+  <p class="claim-form-heading" data-i18n="form.heading">Fact-check a claim</p>
   <!--
     hx-post        — submits the form to the server
     hx-target      — the element to update with the server response
@@ -31,13 +31,15 @@
       name="text"
       class="claim-textarea"
       maxlength="2000"
+      data-i18n="form.placeholder"
+      data-i18n-target="placeholder"
       placeholder="Enter a political claim to verify — e.g. &quot;The US unemployment rate fell to 3.4% in January 2023&quot;"
       rows="4"
       required
     ></textarea>
     <div class="form-footer">
-      <span class="char-count">One claim per check &middot; Pro: multiple claims</span>
-      <button type="submit" class="btn btn-primary">Fact-check</button>
+      <span class="char-count" data-i18n="form.hint">One claim per check · Pro: multiple claims</span>
+      <button type="submit" class="btn btn-primary" data-i18n="form.submit">Fact-check</button>
     </div>
   </form>
 </div>
@@ -48,9 +50,8 @@
 <div class="coverage-notice">
   <span class="coverage-notice-icon">ℹ</span>
   <div>
-    <strong>Phase 1 — United States and Europe.</strong>
-    Analysis draws from US and European government records, institutions, and media (EU, CH, UK, DE, FR).
-    Global coverage expanding in Phase&nbsp;2.
+    <strong data-i18n="coverage.phase1_title">Phase 1 — United States and Europe.</strong>
+    <span data-i18n="coverage.phase1_body">Analysis draws from US and European government records, institutions, and media (EU, CH, UK, DE, FR). Global coverage expanding in Phase 2.</span>
   </div>
 </div>
 

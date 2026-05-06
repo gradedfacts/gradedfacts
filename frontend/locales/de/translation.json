@@ -1,0 +1,74 @@
+{
+  "tagline": "Politisch unabhängig · Keine Parteienfinanzierung · Keine ideologische Agenda",
+  "trust": {
+    "verified": "Bestätigt",
+    "verified_desc": "sachlich korrekt mit zitierten Quellen",
+    "speculative": "Spekulativ",
+    "speculative_desc": "plausibel, aber nicht abschließend beweisbar",
+    "debunked": "Widerlegt",
+    "debunked_desc": "Gegenbeweise vorhanden",
+    "missing": "Fehlend",
+    "missing_desc": "unzureichende Beweise, Urteil zurückgehalten",
+    "symmetry": "Symmetrieverfolgung aktiv — gleiche Prüfung über das politische Spektrum hinweg."
+  },
+  "form": {
+    "heading": "Eine Behauptung überprüfen",
+    "placeholder": "Geben Sie eine politische Behauptung ein — z.B. „Die US-Arbeitslosenquote sank im Januar 2023 auf 3,4 %"",
+    "hint": "Eine Behauptung pro Prüfung · Pro: mehrere Behauptungen",
+    "submit": "Faktencheck"
+  },
+  "coverage": {
+    "phase1_title": "Phase 1 — Vereinigte Staaten und Europa.",
+    "phase1_body": "Die Analyse stützt sich auf US-amerikanische und europäische Regierungsunterlagen, Institutionen und Medien (EU, CH, UK, DE, FR). Globale Abdeckung wird in Phase 2 erweitert."
+  },
+  "footer": {
+    "hosting": "In der Schweiz gehostet · Keine US-Cloud-Act-Jurisdiktion",
+    "methodology": "Open-Source-Methodik",
+    "about": "Über uns",
+    "powered": "Betrieben von Claude (Anthropic) + Mistral (Frankreich) · Brave Search unabhängiger Index"
+  },
+  "analyzing": {
+    "searching": "Quellen werden durchsucht…",
+    "evaluating": "Unabhängigkeit wird bewertet…",
+    "deriving": "Bewertung wird abgeleitet…",
+    "note": "Die Analyse dauert in der Regel 1–2 Minuten, während Quellen gesucht und ausgewertet werden."
+  },
+  "rating": {
+    "verified": "bestätigt",
+    "speculative": "spekulativ",
+    "debunked": "widerlegt",
+    "missing": "fehlend"
+  },
+  "rating_label": {
+    "verified": "Behauptung ist bestätigt",
+    "speculative": "Behauptung ist spekulativ",
+    "debunked": "Behauptung ist widerlegt",
+    "missing": "Unzureichende Beweise"
+  },
+  "result": {
+    "evidence_pieces": "Beweisstücke ({{count}})",
+    "legend": {
+      "independent_primary": "Unabhängige Primärquelle",
+      "independent_secondary": "Unabhängige Sekundärquelle",
+      "compromised": "Kompromittierte Quelle",
+      "weak": "Schwach / ausgeschlossen"
+    },
+    "sources": "Quellen ({{count}})",
+    "no_sources": "Für dieses Urteil wurden keine Quellen gespeichert.",
+    "relevance": "Relevanz",
+    "independent": "Unabhängig",
+    "not_independent": "Nicht unabhängig",
+    "symmetry_heading": "Symmetrieprüfung",
+    "symmetry_confirmed": "Symmetrie bestätigt — eine gleichwertige Analyse für die gegenteilige Behauptung existiert.",
+    "symmetry_guaranteed": "Symmetrie garantiert — identische Standards unabhängig von der politischen Richtung.",
+    "history": "Urteilshistorie ({{count}})",
+    "current": "aktuell",
+    "analysis_engine": "Analyse-Engine:",
+    "revised_because": "Überarbeitet, weil:"
+  },
+  "tier": {
+    "primary": "Primär",
+    "secondary": "Sekundär",
+    "tertiary": "Tertiär"
+  }
+}

@@ -52,9 +52,9 @@ templates.env.filters["rating_label"] = _rating_label
 # ── Background analysis state ─────────────────────────────────────────────────
 
 _LOADING_MESSAGES = [
-    "Searching sources…",
-    "Evaluating independence…",
-    "Deriving rating…",
+    {"key": "analyzing.searching",  "text": "Searching sources…"},
+    {"key": "analyzing.evaluating", "text": "Evaluating independence…"},
+    {"key": "analyzing.deriving",   "text": "Deriving rating…"},
 ]
 
 _TIER_ORDER = {"primary": 0, "secondary": 1, "tertiary": 2}
@@ -281,7 +281,7 @@ def ui_analyze(
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
-        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
+        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]["text"], "loading_key": _LOADING_MESSAGES[0]["key"]},
     )
 
 
@@ -313,7 +313,7 @@ def ui_analyze_consensus(
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
-        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]},
+        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]["text"], "loading_key": _LOADING_MESSAGES[0]["key"]},
     )
 
 
@@ -350,7 +350,8 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
             "partials/analyzing.html",
             {
                 "claim_id": claim_id,
-                "loading_message": _LOADING_MESSAGES[msg_idx],
+                "loading_message": _LOADING_MESSAGES[msg_idx]["text"],
+                "loading_key": _LOADING_MESSAGES[msg_idx]["key"],
             },
         )
 

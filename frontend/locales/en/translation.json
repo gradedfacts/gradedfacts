@@ -1,0 +1,74 @@
+{
+  "tagline": "Politically independent · No party funding · No ideological agenda",
+  "trust": {
+    "verified": "Verified",
+    "verified_desc": "factually correct with cited sources",
+    "speculative": "Speculative",
+    "speculative_desc": "plausible but not conclusively provable",
+    "debunked": "Debunked",
+    "debunked_desc": "counter-evidence available",
+    "missing": "Missing",
+    "missing_desc": "insufficient evidence, judgment withheld",
+    "symmetry": "Symmetry tracking active — equal scrutiny across the political spectrum."
+  },
+  "form": {
+    "heading": "Fact-check a claim",
+    "placeholder": "Enter a political claim to verify — e.g. \"The US unemployment rate fell to 3.4% in January 2023\"",
+    "hint": "One claim per check · Pro: multiple claims",
+    "submit": "Fact-check"
+  },
+  "coverage": {
+    "phase1_title": "Phase 1 — United States and Europe.",
+    "phase1_body": "Analysis draws from US and European government records, institutions, and media (EU, CH, UK, DE, FR). Global coverage expanding in Phase 2."
+  },
+  "footer": {
+    "hosting": "Hosted in Switzerland · No US Cloud Act jurisdiction",
+    "methodology": "Open Source Methodology",
+    "about": "About",
+    "powered": "Powered by Claude (Anthropic) + Mistral (France) · Brave Search independent index"
+  },
+  "analyzing": {
+    "searching": "Searching sources…",
+    "evaluating": "Evaluating independence…",
+    "deriving": "Deriving rating…",
+    "note": "Analysis typically takes 1–2 minutes while sources are being searched and evaluated."
+  },
+  "rating": {
+    "verified": "verified",
+    "speculative": "speculative",
+    "debunked": "debunked",
+    "missing": "missing"
+  },
+  "rating_label": {
+    "verified": "Claim is verified",
+    "speculative": "Claim is speculative",
+    "debunked": "Claim is debunked",
+    "missing": "Insufficient evidence"
+  },
+  "result": {
+    "evidence_pieces": "Evidence pieces ({{count}})",
+    "legend": {
+      "independent_primary": "Independent primary",
+      "independent_secondary": "Independent secondary",
+      "compromised": "Compromised source",
+      "weak": "Weak / excluded"
+    },
+    "sources": "Sources ({{count}})",
+    "no_sources": "No sources were stored for this judgment.",
+    "relevance": "Relevance",
+    "independent": "Independent",
+    "not_independent": "Not independent",
+    "symmetry_heading": "Symmetry check",
+    "symmetry_confirmed": "Symmetry confirmed — an equivalent analysis exists for the opposing claim.",
+    "symmetry_guaranteed": "Symmetry guaranteed — identical standards applied regardless of political direction.",
+    "history": "Judgment history ({{count}})",
+    "current": "current",
+    "analysis_engine": "Analysis engine:",
+    "revised_because": "Revised because:"
+  },
+  "tier": {
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "tertiary": "Tertiary"
+  }
+}

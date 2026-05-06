@@ -1,0 +1,74 @@
+{
+  "tagline": "Politicamente indipendente · Nessun finanziamento partitico · Nessuna agenda ideologica",
+  "trust": {
+    "verified": "Verificato",
+    "verified_desc": "fattualmente corretto con fonti citate",
+    "speculative": "Speculativo",
+    "speculative_desc": "plausibile ma non conclusivamente dimostrabile",
+    "debunked": "Confutato",
+    "debunked_desc": "contro-prove disponibili",
+    "missing": "Mancante",
+    "missing_desc": "prove insufficienti, giudizio sospeso",
+    "symmetry": "Monitoraggio della simmetria attivo — eguale scrutinio su tutto lo spettro politico."
+  },
+  "form": {
+    "heading": "Verifica un'affermazione",
+    "placeholder": "Inserisci un'affermazione politica da verificare — es. «Il tasso di disoccupazione USA è sceso al 3,4% a gennaio 2023»",
+    "hint": "Un'affermazione per verifica · Pro: affermazioni multiple",
+    "submit": "Verifica"
+  },
+  "coverage": {
+    "phase1_title": "Fase 1 — Stati Uniti ed Europa.",
+    "phase1_body": "L'analisi attinge da documenti governativi, istituzioni e media statunitensi ed europei (UE, CH, UK, DE, FR). Copertura globale in espansione nella Fase 2."
+  },
+  "footer": {
+    "hosting": "Ospitato in Svizzera · Nessuna giurisdizione US Cloud Act",
+    "methodology": "Metodologia open source",
+    "about": "Chi siamo",
+    "powered": "Gestito da Claude (Anthropic) + Mistral (Francia) · Indice indipendente Brave Search"
+  },
+  "analyzing": {
+    "searching": "Ricerca delle fonti…",
+    "evaluating": "Valutazione dell'indipendenza…",
+    "deriving": "Derivazione del giudizio…",
+    "note": "L'analisi richiede generalmente 1–2 minuti mentre le fonti vengono cercate e valutate."
+  },
+  "rating": {
+    "verified": "verificato",
+    "speculative": "speculativo",
+    "debunked": "confutato",
+    "missing": "mancante"
+  },
+  "rating_label": {
+    "verified": "Affermazione verificata",
+    "speculative": "Affermazione speculativa",
+    "debunked": "Affermazione confutata",
+    "missing": "Prove insufficienti"
+  },
+  "result": {
+    "evidence_pieces": "Prove raccolte ({{count}})",
+    "legend": {
+      "independent_primary": "Fonte primaria indipendente",
+      "independent_secondary": "Fonte secondaria indipendente",
+      "compromised": "Fonte compromessa",
+      "weak": "Debole / esclusa"
+    },
+    "sources": "Fonti ({{count}})",
+    "no_sources": "Nessuna fonte è stata memorizzata per questo giudizio.",
+    "relevance": "Rilevanza",
+    "independent": "Indipendente",
+    "not_independent": "Non indipendente",
+    "symmetry_heading": "Controllo simmetria",
+    "symmetry_confirmed": "Simmetria confermata — esiste un'analisi equivalente per l'affermazione opposta.",
+    "symmetry_guaranteed": "Simmetria garantita — standard identici applicati indipendentemente dalla direzione politica.",
+    "history": "Cronologia dei giudizi ({{count}})",
+    "current": "attuale",
+    "analysis_engine": "Motore di analisi:",
+    "revised_because": "Rivisto perché:"
+  },
+  "tier": {
+    "primary": "Primario",
+    "secondary": "Secondario",
+    "tertiary": "Terziario"
+  }
+}

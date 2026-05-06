@@ -19,15 +19,15 @@
 
     <div class="board-header">
       <span class="rating-badge {{ judgment.rating.value }}">
-        <span class="rating-dot"></span>{{ judgment.rating.value }}
+        <span class="rating-dot"></span><span data-i18n="rating.{{ judgment.rating.value }}">{{ judgment.rating.value }}</span>
       </span>
-      <span class="board-verdict">{{ judgment.rating | rating_label }}</span>
+      <span class="board-verdict" data-i18n="rating_label.{{ judgment.rating.value }}">{{ judgment.rating | rating_label }}</span>
     </div>
 
     <p class="board-rationale">{{ judgment.rationale }}</p>
 
     {% if sources %}
-    <p class="board-tiles-label">Evidence pieces ({{ sources | length }})</p>
+    <p class="board-tiles-label" data-i18n="result.evidence_pieces" data-i18n-options='{"count": {{ sources | length }}}'>Evidence pieces ({{ sources | length }})</p>
     <div class="board-tiles" id="tile-grid">
       {% for source in sources %}
         {# Tile class encodes source quality, not claim direction #}
@@ -51,10 +51,10 @@
       {% endfor %}
     </div>
     <div class="board-legend">
-      <span class="legend-item"><span class="legend-swatch tile-verified"></span>Independent primary</span>
-      <span class="legend-item"><span class="legend-swatch tile-speculative"></span>Independent secondary</span>
-      <span class="legend-item"><span class="legend-swatch tile-debunked"></span>Compromised source</span>
-      <span class="legend-item"><span class="legend-swatch tile-missing"></span>Weak / excluded</span>
+      <span class="legend-item"><span class="legend-swatch tile-verified"></span><span data-i18n="result.legend.independent_primary">Independent primary</span></span>
+      <span class="legend-item"><span class="legend-swatch tile-speculative"></span><span data-i18n="result.legend.independent_secondary">Independent secondary</span></span>
+      <span class="legend-item"><span class="legend-swatch tile-debunked"></span><span data-i18n="result.legend.compromised">Compromised source</span></span>
+      <span class="legend-item"><span class="legend-swatch tile-missing"></span><span data-i18n="result.legend.weak">Weak / excluded</span></span>
     </div>
     {% endif %}
 
@@ -65,7 +65,7 @@
 
     <!-- Source list -->
     <div class="card">
-      <p class="panel-heading">Sources ({{ sources | length }})</p>
+      <p class="panel-heading" data-i18n="result.sources" data-i18n-options='{"count": {{ sources | length }}}'>Sources ({{ sources | length }})</p>
       {% if sources %}
       <ul class="source-list">
         {% for source in sources %}
@@ -78,16 +78,16 @@
                target="_blank"
                rel="noopener noreferrer"
                title="{{ source.url }}">{{ source.url | domain }}</a>
-            <span class="badge badge-{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
+            <span class="badge badge-{{ source.tier.value }}" data-i18n="tier.{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
             {% if source.is_independent %}
-              <span class="badge badge-indep">Independent</span>
+              <span class="badge badge-indep" data-i18n="result.independent">Independent</span>
             {% else %}
-              <span class="badge badge-not-indep">Not independent</span>
+              <span class="badge badge-not-indep" data-i18n="result.not_independent">Not independent</span>
             {% endif %}
           </div>
 
           <div class="relevance-row">
-            <span class="relevance-label">Relevance</span>
+            <span class="relevance-label" data-i18n="result.relevance">Relevance</span>
             <div class="relevance-track">
               <div class="relevance-fill" style="width: {{ (source.relevance_score * 100) | int }}%"></div>
             </div>
@@ -106,22 +106,22 @@
         {% endfor %}
       </ul>
       {% else %}
-      <p style="color: var(--text-3); font-size: .875rem">No sources were stored for this judgment.</p>
+      <p style="color: var(--text-3); font-size: .875rem" data-i18n="result.no_sources">No sources were stored for this judgment.</p>
       {% endif %}
     </div><!-- /source-panel -->
 
     <!-- Symmetry report -->
     <div class="card">
-      <p class="panel-heading">Symmetry check</p>
+      <p class="panel-heading" data-i18n="result.symmetry_heading">Symmetry check</p>
       {% if judgment.symmetry_report %}
       <div class="symmetry-banner confirmed">
         <span class="symmetry-icon">&#10003;</span>
-        <span>Symmetry confirmed — an equivalent analysis exists for the opposing claim.</span>
+        <span data-i18n="result.symmetry_confirmed">Symmetry confirmed — an equivalent analysis exists for the opposing claim.</span>
       </div>
       {% else %}
       <div class="symmetry-banner confirmed">
         <span class="symmetry-icon">&#10003;</span>
-        <span>Symmetry guaranteed — identical standards applied regardless of political direction.</span>
+        <span data-i18n="result.symmetry_guaranteed">Symmetry guaranteed — identical standards applied regardless of political direction.</span>
       </div>
       {% endif %}
     </div><!-- /symmetry -->
@@ -130,26 +130,26 @@
 
   <!-- ── Revision trail ────────────────────────────────────────────────── -->
   <div class="card" style="margin-top: 1.25rem">
-    <p class="panel-heading">Judgment history ({{ judgments | length }})</p>
+    <p class="panel-heading" data-i18n="result.history" data-i18n-options='{"count": {{ judgments | length }}}'>Judgment history ({{ judgments | length }})</p>
     <ol class="judgment-list">
       {% for j in judgments %}
       <li class="judgment-entry">
         <details {% if j.is_active %}open{% endif %}>
           <summary class="judgment-summary">
             <span class="rating-badge {{ j.rating.value }}">
-              <span class="rating-dot"></span>{{ j.rating.value }}
+              <span class="rating-dot"></span><span data-i18n="rating.{{ j.rating.value }}">{{ j.rating.value }}</span>
             </span>
             {% if j.is_active %}
-            <span class="judgment-current-tag">current</span>
+            <span class="judgment-current-tag" data-i18n="result.current">current</span>
             {% endif %}
             <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
           </summary>
           <div class="judgment-body">
             <p class="judgment-rationale">{{ j.rationale }}</p>
-            <p class="judgment-analyst">Analysis engine: {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
+            <p class="judgment-analyst"><span data-i18n="result.analysis_engine">Analysis engine:</span> {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
             {% if j.revision %}
             <div class="judgment-trigger">
-              <span class="judgment-trigger-label">Revised because:</span>
+              <span class="judgment-trigger-label" data-i18n="result.revised_because">Revised because:</span>
               {{ j.revision.trigger_evidence }}
             </div>
             {% endif %}
