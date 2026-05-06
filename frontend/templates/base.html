@@ -78,7 +78,7 @@
         lng: localStorage.getItem('lang') || navigator.language.split('-')[0],
         fallbackLng: 'en',
         supportedLngs: ['en', 'de', 'fr', 'it'],
-        backend: { loadPath: '/static/locales/{{lng}}/translation.json' },
+        backend: { loadPath: '{% raw %}/static/locales/{{lng}}/translation.json{% endraw %}' },
         interpolation: { escapeValue: false }
       }, function (err) {
         if (err) console.error('i18next:', err);
