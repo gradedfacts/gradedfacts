@@ -1,0 +1,74 @@
+{
+  "tagline": "Politiskt oberoende · Ingen partifinansiering · Ingen ideologisk agenda",
+  "trust": {
+    "verified": "Verifierat",
+    "verified_desc": "faktamässigt korrekt med citerade källor",
+    "speculative": "Spekulativt",
+    "speculative_desc": "rimligt men inte slutgiltigt bevisbart",
+    "debunked": "Motbevisat",
+    "debunked_desc": "motbevis tillgängliga",
+    "missing": "Otillräckligt",
+    "missing_desc": "otillräckliga bevis, omdöme avhållet",
+    "symmetry": "Symmetrispårning aktiv — lika granskning över hela det politiska spektrumet."
+  },
+  "form": {
+    "heading": "Faktakontrollera ett påstående",
+    "placeholder": "Ange ett politiskt påstående att verifiera — t.ex. «Den amerikanska arbetslöshetsnivån sjönk till 3,4% i januari 2023»",
+    "hint": "Ett påstående per kontroll · Pro: flera påståenden",
+    "submit": "Faktakontroll"
+  },
+  "coverage": {
+    "phase1_title": "Fas 1 — USA och Europa.",
+    "phase1_body": "Analysen bygger på amerikanska och europeiska regeringshandlingar, institutioner och medier (EU, CH, UK, DE, FR). Global täckning utökas i Fas 2."
+  },
+  "footer": {
+    "hosting": "Hostat i Schweiz · Ingen amerikansk Cloud Act-jurisdiktion",
+    "methodology": "Metodik med öppen källkod",
+    "about": "Om",
+    "powered": "Drivs av Claude (USA) + Mistral (Frankrike) · Brave Search oberoende index"
+  },
+  "analyzing": {
+    "searching": "Söker källor…",
+    "evaluating": "Utvärderar oberoende…",
+    "deriving": "Härleder betyg…",
+    "note": "Analysen tar vanligtvis 1–2 minuter medan källor söks och utvärderas."
+  },
+  "rating": {
+    "verified": "verifierat",
+    "speculative": "spekulativt",
+    "debunked": "motbevisat",
+    "missing": "otillräckligt"
+  },
+  "rating_label": {
+    "verified": "Påstående verifierat",
+    "speculative": "Påstående spekulativt",
+    "debunked": "Påstående motbevisat",
+    "missing": "Otillräckliga bevis"
+  },
+  "result": {
+    "evidence_pieces": "Bevis ({{count}})",
+    "legend": {
+      "independent_primary": "Oberoende primär källa",
+      "independent_secondary": "Oberoende sekundär källa",
+      "compromised": "Komprometterad källa",
+      "weak": "Svag / utesluten"
+    },
+    "sources": "Källor ({{count}})",
+    "no_sources": "Inga källor sparades för detta omdöme.",
+    "relevance": "Relevans",
+    "independent": "Oberoende",
+    "not_independent": "Inte oberoende",
+    "symmetry_heading": "Symmetrikontroll",
+    "symmetry_confirmed": "Symmetri bekräftad — en likvärdig analys finns för det motsatta påståendet.",
+    "symmetry_guaranteed": "Symmetri garanterad — identiska standarder tillämpas oavsett politisk riktning.",
+    "history": "Omdömeshistorik ({{count}})",
+    "current": "nuvarande",
+    "analysis_engine": "Analysmotor:",
+    "revised_because": "Reviderades eftersom:"
+  },
+  "tier": {
+    "primary": "Primär",
+    "secondary": "Sekundär",
+    "tertiary": "Tertiär"
+  }
+}

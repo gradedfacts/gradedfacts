@@ -1,0 +1,74 @@
+{
+  "tagline": "政治独立 · 不接受政党资助 · 无意识形态议程",
+  "trust": {
+    "verified": "已核实",
+    "verified_desc": "经引用来源事实核查属实",
+    "speculative": "推测性",
+    "speculative_desc": "合理但无法决定性证明",
+    "debunked": "已驳斥",
+    "debunked_desc": "存在反驳证据",
+    "missing": "证据不足",
+    "missing_desc": "证据不足，判断暂缓",
+    "symmetry": "对称性追踪已激活 — 对政治频谱各方进行同等审查。"
+  },
+  "form": {
+    "heading": "核实一项主张",
+    "placeholder": "输入需要核实的政治主张 — 例如：「2023年1月美国失业率降至3.4%」",
+    "hint": "每次核实一个主张 · 专业版：多个主张",
+    "submit": "事实核查"
+  },
+  "coverage": {
+    "phase1_title": "第一阶段 — 美国和欧洲。",
+    "phase1_body": "分析来源于美国和欧洲的政府记录、机构和媒体（EU、CH、UK、DE、FR）。第二阶段将扩展至全球。"
+  },
+  "footer": {
+    "hosting": "托管于瑞士 · 不受美国《云法案》管辖",
+    "methodology": "开源方法论",
+    "about": "关于",
+    "powered": "由 Claude（USA）+ Mistral（法国）· Brave Search 独立索引提供支持"
+  },
+  "analyzing": {
+    "searching": "正在搜索来源…",
+    "evaluating": "正在评估独立性…",
+    "deriving": "正在推导评级…",
+    "note": "分析通常需要1–2分钟，期间正在搜索和评估来源。"
+  },
+  "rating": {
+    "verified": "已核实",
+    "speculative": "推测性",
+    "debunked": "已驳斥",
+    "missing": "证据不足"
+  },
+  "rating_label": {
+    "verified": "主张已核实",
+    "speculative": "主张具有推测性",
+    "debunked": "主张已被驳斥",
+    "missing": "证据不足"
+  },
+  "result": {
+    "evidence_pieces": "证据 ({{count}})",
+    "legend": {
+      "independent_primary": "独立一手来源",
+      "independent_secondary": "独立二手来源",
+      "compromised": "可信度受损的来源",
+      "weak": "薄弱 / 已排除"
+    },
+    "sources": "来源 ({{count}})",
+    "no_sources": "此判断没有存储任何来源。",
+    "relevance": "相关性",
+    "independent": "独立",
+    "not_independent": "非独立",
+    "symmetry_heading": "对称性检查",
+    "symmetry_confirmed": "对称性已确认 — 对立主张存在等效分析。",
+    "symmetry_guaranteed": "对称性已保证 — 无论政治方向，均适用相同标准。",
+    "history": "判断历史 ({{count}})",
+    "current": "当前",
+    "analysis_engine": "分析引擎：",
+    "revised_because": "修订原因："
+  },
+  "tier": {
+    "primary": "主要",
+    "secondary": "次要",
+    "tertiary": "第三级"
+  }
+}

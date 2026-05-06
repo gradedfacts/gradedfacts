@@ -1,0 +1,74 @@
+{
+  "tagline": "Siyasi açıdan bağımsız · Parti finansmanı yok · İdeolojik gündem yok",
+  "trust": {
+    "verified": "Doğrulandı",
+    "verified_desc": "kaynaklara dayalı olarak doğrulanmış",
+    "speculative": "Spekülatif",
+    "speculative_desc": "makul ancak kesin olarak kanıtlanamaz",
+    "debunked": "Çürütüldü",
+    "debunked_desc": "karşı kanıtlar mevcut",
+    "missing": "Yetersiz",
+    "missing_desc": "yetersiz kanıt, karar beklemede",
+    "symmetry": "Simetri takibi etkin — siyasi spektrum genelinde eşit inceleme."
+  },
+  "form": {
+    "heading": "Bir iddiayı doğrula",
+    "placeholder": "Doğrulanacak siyasi bir iddia girin — ör. «ABD işsizlik oranı Ocak 2023'te %3,4'e düştü»",
+    "hint": "Kontrol başına bir iddia · Pro: birden fazla iddia",
+    "submit": "Gerçeği doğrula"
+  },
+  "coverage": {
+    "phase1_title": "Aşama 1 — Amerika Birleşik Devletleri ve Avrupa.",
+    "phase1_body": "Analiz, ABD ve Avrupa hükümet kayıtlarından, kurumlardan ve medyadan (AB, CH, UK, DE, FR) yararlanmaktadır. Küresel kapsam Aşama 2'de genişliyor."
+  },
+  "footer": {
+    "hosting": "İsviçre'de barındırılıyor · ABD Bulut Yasası yargı yetkisi yok",
+    "methodology": "Açık kaynak metodolojisi",
+    "about": "Hakkında",
+    "powered": "Claude (USA) + Mistral (Fransa) · Brave Search bağımsız dizini tarafından desteklenmektedir"
+  },
+  "analyzing": {
+    "searching": "Kaynaklar aranıyor…",
+    "evaluating": "Bağımsızlık değerlendiriliyor…",
+    "deriving": "Değerlendirme türetiliyor…",
+    "note": "Kaynaklar aranırken ve değerlendirilirken analiz genellikle 1–2 dakika sürer."
+  },
+  "rating": {
+    "verified": "doğrulandı",
+    "speculative": "spekülatif",
+    "debunked": "çürütüldü",
+    "missing": "yetersiz"
+  },
+  "rating_label": {
+    "verified": "İddia doğrulandı",
+    "speculative": "İddia spekülatif",
+    "debunked": "İddia çürütüldü",
+    "missing": "Yetersiz kanıt"
+  },
+  "result": {
+    "evidence_pieces": "Kanıtlar ({{count}})",
+    "legend": {
+      "independent_primary": "Bağımsız birincil kaynak",
+      "independent_secondary": "Bağımsız ikincil kaynak",
+      "compromised": "Güvenilirliği sorgulanabilir kaynak",
+      "weak": "Zayıf / dışlandı"
+    },
+    "sources": "Kaynaklar ({{count}})",
+    "no_sources": "Bu karar için kaynak kaydedilmedi.",
+    "relevance": "Alaka düzeyi",
+    "independent": "Bağımsız",
+    "not_independent": "Bağımsız değil",
+    "symmetry_heading": "Simetri kontrolü",
+    "symmetry_confirmed": "Simetri onaylandı — karşı iddia için eşdeğer bir analiz mevcuttur.",
+    "symmetry_guaranteed": "Simetri garantilendi — siyasi yönden bağımsız olarak aynı standartlar uygulandı.",
+    "history": "Karar geçmişi ({{count}})",
+    "current": "mevcut",
+    "analysis_engine": "Analiz motoru:",
+    "revised_because": "Revize edildi çünkü:"
+  },
+  "tier": {
+    "primary": "Birincil",
+    "secondary": "İkincil",
+    "tertiary": "Üçüncül"
+  }
+}

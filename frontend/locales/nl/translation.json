@@ -1,0 +1,74 @@
+{
+  "tagline": "Politiek onafhankelijk · Geen partijfinanciering · Geen ideologische agenda",
+  "trust": {
+    "verified": "Geverifieerd",
+    "verified_desc": "feitelijk juist met geciteerde bronnen",
+    "speculative": "Speculatief",
+    "speculative_desc": "aannemelijk maar niet aantoonbaar",
+    "debunked": "Ontkracht",
+    "debunked_desc": "tegenbewijs beschikbaar",
+    "missing": "Onvoldoende",
+    "missing_desc": "onvoldoende bewijs, oordeel uitgesteld",
+    "symmetry": "Symmetriebewaking actief — gelijke controle over het politieke spectrum."
+  },
+  "form": {
+    "heading": "Een bewering controleren",
+    "placeholder": "Voer een politieke bewering in om te verifiëren — bijv. «De Amerikaanse werkloosheid daalde naar 3,4% in januari 2023»",
+    "hint": "Eén bewering per controle · Pro: meerdere beweringen",
+    "submit": "Factcheck"
+  },
+  "coverage": {
+    "phase1_title": "Fase 1 — Verenigde Staten en Europa.",
+    "phase1_body": "De analyse is gebaseerd op Amerikaanse en Europese overheidsdocumenten, instellingen en media (EU, CH, UK, DE, FR). Wereldwijde dekking breidt uit in Fase 2."
+  },
+  "footer": {
+    "hosting": "Gehost in Zwitserland · Geen Amerikaanse Cloud Act-jurisdictie",
+    "methodology": "Open-source methodologie",
+    "about": "Over",
+    "powered": "Mogelijk gemaakt door Claude (USA) + Mistral (Frankrijk) · Brave Search onafhankelijke index"
+  },
+  "analyzing": {
+    "searching": "Bronnen zoeken…",
+    "evaluating": "Onafhankelijkheid beoordelen…",
+    "deriving": "Beoordeling afleiden…",
+    "note": "De analyse duurt doorgaans 1–2 minuten terwijl bronnen worden gezocht en beoordeeld."
+  },
+  "rating": {
+    "verified": "geverifieerd",
+    "speculative": "speculatief",
+    "debunked": "ontkracht",
+    "missing": "onvoldoende"
+  },
+  "rating_label": {
+    "verified": "Bewering geverifieerd",
+    "speculative": "Bewering speculatief",
+    "debunked": "Bewering ontkracht",
+    "missing": "Onvoldoende bewijs"
+  },
+  "result": {
+    "evidence_pieces": "Bewijsstukken ({{count}})",
+    "legend": {
+      "independent_primary": "Onafhankelijke primaire bron",
+      "independent_secondary": "Onafhankelijke secundaire bron",
+      "compromised": "Gecompromitteerde bron",
+      "weak": "Zwak / uitgesloten"
+    },
+    "sources": "Bronnen ({{count}})",
+    "no_sources": "Er zijn geen bronnen opgeslagen voor dit oordeel.",
+    "relevance": "Relevantie",
+    "independent": "Onafhankelijk",
+    "not_independent": "Niet onafhankelijk",
+    "symmetry_heading": "Symmetriecontrole",
+    "symmetry_confirmed": "Symmetrie bevestigd — een equivalente analyse bestaat voor de tegenovergestelde bewering.",
+    "symmetry_guaranteed": "Symmetrie gegarandeerd — identieke normen toegepast ongeacht de politieke richting.",
+    "history": "Oordeelsgeschiedenis ({{count}})",
+    "current": "huidig",
+    "analysis_engine": "Analyse-engine:",
+    "revised_because": "Herzien omdat:"
+  },
+  "tier": {
+    "primary": "Primair",
+    "secondary": "Secundair",
+    "tertiary": "Tertiair"
+  }
+}

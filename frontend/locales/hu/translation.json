@@ -1,0 +1,74 @@
+{
+  "tagline": "Politikailag független · Nincs pártfinanszírozás · Nincs ideológiai agenda",
+  "trust": {
+    "verified": "Igazolt",
+    "verified_desc": "tényszerűen helyes, idézett forrásokkal",
+    "speculative": "Spekulatív",
+    "speculative_desc": "valószínű, de nem bizonyítható véglegesen",
+    "debunked": "Megcáfolt",
+    "debunked_desc": "ellenérvek rendelkezésre állnak",
+    "missing": "Hiányos",
+    "missing_desc": "nem elegendő bizonyíték, az ítélet felfüggesztve",
+    "symmetry": "Szimmetria-követés aktív — egyenlő vizsgálat a politikai spektrum egészén."
+  },
+  "form": {
+    "heading": "Állítás ellenőrzése",
+    "placeholder": "Adjon meg egy politikai állítást ellenőrzésre — pl. «Az amerikai munkanélküliségi ráta 3,4%-ra csökkent 2023 januárjában»",
+    "hint": "Ellenőrzésenként egy állítás · Pro: több állítás",
+    "submit": "Tényellenőrzés"
+  },
+  "coverage": {
+    "phase1_title": "1. fázis — Egyesült Államok és Európa.",
+    "phase1_body": "Az elemzés az USA és Európa kormányzati dokumentumain, intézményein és médiáján alapul (EU, CH, UK, DE, FR). A globális lefedettség a 2. fázisban bővül."
+  },
+  "footer": {
+    "hosting": "Svájcban üzemeltetve · Az USA Cloud Act joghatóságán kívül",
+    "methodology": "Nyílt forráskódú módszertan",
+    "about": "Rólunk",
+    "powered": "Claude (USA) + Mistral (Franciaország) · Brave Search független index alapján"
+  },
+  "analyzing": {
+    "searching": "Források keresése…",
+    "evaluating": "Függetlenség értékelése…",
+    "deriving": "Értékelés levezetése…",
+    "note": "Az elemzés általában 1–2 percet vesz igénybe, amíg a forrásokat keresik és értékelik."
+  },
+  "rating": {
+    "verified": "igazolt",
+    "speculative": "spekulatív",
+    "debunked": "megcáfolt",
+    "missing": "hiányos"
+  },
+  "rating_label": {
+    "verified": "Az állítás igazolt",
+    "speculative": "Az állítás spekulatív",
+    "debunked": "Az állítás megcáfolt",
+    "missing": "Nem elegendő bizonyíték"
+  },
+  "result": {
+    "evidence_pieces": "Bizonyítékok ({{count}})",
+    "legend": {
+      "independent_primary": "Független elsődleges forrás",
+      "independent_secondary": "Független másodlagos forrás",
+      "compromised": "Kompromittált forrás",
+      "weak": "Gyenge / kizárt"
+    },
+    "sources": "Források ({{count}})",
+    "no_sources": "Ehhez az ítélethez nem tároltak forrásokat.",
+    "relevance": "Relevancia",
+    "independent": "Független",
+    "not_independent": "Nem független",
+    "symmetry_heading": "Szimmetria-ellenőrzés",
+    "symmetry_confirmed": "Szimmetria megerősítve — az ellentétes állításra vonatkozó egyenértékű elemzés létezik.",
+    "symmetry_guaranteed": "Szimmetria garantált — azonos mércék alkalmazva a politikai iránytól függetlenül.",
+    "history": "Ítéletek előzményei ({{count}})",
+    "current": "aktuális",
+    "analysis_engine": "Elemzőmotor:",
+    "revised_because": "Felülvizsgálat oka:"
+  },
+  "tier": {
+    "primary": "Elsődleges",
+    "secondary": "Másodlagos",
+    "tertiary": "Harmadlagos"
+  }
+}

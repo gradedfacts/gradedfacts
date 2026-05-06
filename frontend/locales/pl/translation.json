@@ -1,0 +1,74 @@
+{
+  "tagline": "Politycznie niezależny · Bez finansowania partyjnego · Bez agendy ideologicznej",
+  "trust": {
+    "verified": "Zweryfikowany",
+    "verified_desc": "faktycznie poprawny z cytowanymi źródłami",
+    "speculative": "Spekulatywny",
+    "speculative_desc": "wiarygodny, ale nie dowiedziony ostatecznie",
+    "debunked": "Obalony",
+    "debunked_desc": "dostępne kontrargumenty",
+    "missing": "Niewystarczający",
+    "missing_desc": "niewystarczające dowody, osąd wstrzymany",
+    "symmetry": "Śledzenie symetrii aktywne — jednakowa kontrola w całym spektrum politycznym."
+  },
+  "form": {
+    "heading": "Sprawdź twierdzenie",
+    "placeholder": "Wprowadź twierdzenie polityczne do weryfikacji — np. «Bezrobocie w USA spadło do 3,4% w styczniu 2023»",
+    "hint": "Jedno twierdzenie na sprawdzenie · Pro: wiele twierdzeń",
+    "submit": "Sprawdź fakty"
+  },
+  "coverage": {
+    "phase1_title": "Faza 1 — Stany Zjednoczone i Europa.",
+    "phase1_body": "Analiza opiera się na dokumentach rządowych, instytucjach i mediach USA i Europy (UE, CH, UK, DE, FR). Globalny zasięg rozszerza się w Fazie 2."
+  },
+  "footer": {
+    "hosting": "Hostowany w Szwajcarii · Bez jurysdykcji US Cloud Act",
+    "methodology": "Metodologia open source",
+    "about": "O nas",
+    "powered": "Oparty na Claude (USA) + Mistral (Francja) · Niezależny indeks Brave Search"
+  },
+  "analyzing": {
+    "searching": "Wyszukiwanie źródeł…",
+    "evaluating": "Ocena niezależności…",
+    "deriving": "Wyznaczanie oceny…",
+    "note": "Analiza zazwyczaj zajmuje 1–2 minuty, podczas gdy źródła są wyszukiwane i oceniane."
+  },
+  "rating": {
+    "verified": "zweryfikowany",
+    "speculative": "spekulatywny",
+    "debunked": "obalony",
+    "missing": "niewystarczający"
+  },
+  "rating_label": {
+    "verified": "Twierdzenie zweryfikowane",
+    "speculative": "Twierdzenie spekulatywne",
+    "debunked": "Twierdzenie obalone",
+    "missing": "Niewystarczające dowody"
+  },
+  "result": {
+    "evidence_pieces": "Dowody ({{count}})",
+    "legend": {
+      "independent_primary": "Niezależne źródło podstawowe",
+      "independent_secondary": "Niezależne źródło wtórne",
+      "compromised": "Źródło skompromitowane",
+      "weak": "Słabe / wykluczone"
+    },
+    "sources": "Źródła ({{count}})",
+    "no_sources": "Brak zapisanych źródeł dla tego orzeczenia.",
+    "relevance": "Trafność",
+    "independent": "Niezależny",
+    "not_independent": "Zależny",
+    "symmetry_heading": "Kontrola symetrii",
+    "symmetry_confirmed": "Symetria potwierdzona — istnieje równoważna analiza dla przeciwnego twierdzenia.",
+    "symmetry_guaranteed": "Symetria zagwarantowana — identyczne standardy stosowane niezależnie od kierunku politycznego.",
+    "history": "Historia orzeczeń ({{count}})",
+    "current": "bieżący",
+    "analysis_engine": "Silnik analizy:",
+    "revised_because": "Zmieniono, ponieważ:"
+  },
+  "tier": {
+    "primary": "Podstawowe",
+    "secondary": "Wtórne",
+    "tertiary": "Trzeciorzędne"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "tagline": "정치적으로 독립 · 정당 자금 없음 · 이념적 의제 없음",
+  "trust": {
+    "verified": "확인됨",
+    "verified_desc": "인용된 출처로 사실 확인됨",
+    "speculative": "추정적",
+    "speculative_desc": "그럴듯하지만 결정적으로 증명 불가",
+    "debunked": "반증됨",
+    "debunked_desc": "반증 자료 있음",
+    "missing": "불충분",
+    "missing_desc": "증거 불충분, 판단 보류",
+    "symmetry": "대칭성 추적 활성 — 정치 스펙트럼 전반에 걸쳐 동등한 검토."
+  },
+  "form": {
+    "heading": "주장 사실 확인",
+    "placeholder": "확인할 정치적 주장을 입력하세요 — 예: «2023년 1월 미국 실업률이 3.4%로 하락했다»",
+    "hint": "확인당 하나의 주장 · 프로: 여러 주장",
+    "submit": "팩트체크"
+  },
+  "coverage": {
+    "phase1_title": "1단계 — 미국 및 유럽.",
+    "phase1_body": "분석은 미국 및 유럽의 정부 기록, 기관, 언론(EU, CH, UK, DE, FR)을 기반으로 합니다. 2단계에서 글로벌 커버리지 확대 중."
+  },
+  "footer": {
+    "hosting": "스위스에서 호스팅 · 미국 클라우드법 관할권 없음",
+    "methodology": "오픈소스 방법론",
+    "about": "소개",
+    "powered": "Claude (USA) + Mistral (프랑스) · Brave Search 독립 인덱스로 운영"
+  },
+  "analyzing": {
+    "searching": "출처 검색 중…",
+    "evaluating": "독립성 평가 중…",
+    "deriving": "등급 도출 중…",
+    "note": "출처를 검색하고 평가하는 동안 분석은 일반적으로 1–2분 소요됩니다."
+  },
+  "rating": {
+    "verified": "확인됨",
+    "speculative": "추정적",
+    "debunked": "반증됨",
+    "missing": "불충분"
+  },
+  "rating_label": {
+    "verified": "주장이 확인됨",
+    "speculative": "주장이 추정적임",
+    "debunked": "주장이 반증됨",
+    "missing": "증거 불충분"
+  },
+  "result": {
+    "evidence_pieces": "증거 ({{count}})",
+    "legend": {
+      "independent_primary": "독립적 1차 출처",
+      "independent_secondary": "독립적 2차 출처",
+      "compromised": "신뢰성 손상 출처",
+      "weak": "약함 / 제외됨"
+    },
+    "sources": "출처 ({{count}})",
+    "no_sources": "이 판단에 대해 저장된 출처가 없습니다.",
+    "relevance": "관련성",
+    "independent": "독립",
+    "not_independent": "비독립",
+    "symmetry_heading": "대칭성 확인",
+    "symmetry_confirmed": "대칭성 확인됨 — 반대 주장에 대한 동등한 분석이 존재합니다.",
+    "symmetry_guaranteed": "대칭성 보장됨 — 정치적 방향에 관계없이 동일한 기준 적용.",
+    "history": "판단 기록 ({{count}})",
+    "current": "현재",
+    "analysis_engine": "분석 엔진:",
+    "revised_because": "수정 이유:"
+  },
+  "tier": {
+    "primary": "1차",
+    "secondary": "2차",
+    "tertiary": "3차"
+  }
+}
