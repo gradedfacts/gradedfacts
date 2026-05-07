@@ -62,15 +62,33 @@
   var btn = form.querySelector('button[type="submit"]');
   if (!btn) return;
 
+  function enableButton() {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+
+  // Disable as soon as the form request starts.
   form.addEventListener('htmx:beforeRequest', function () {
     btn.disabled = true;
     btn.classList.add('loading');
   });
 
-  form.addEventListener('htmx:afterSwap', function () {
-    btn.disabled = false;
-    btn.classList.remove('loading');
+  // Re-enable only when the final result (or error) is shown.
+  // The analyzing partial always renders #result WITH hx-trigger="every 2s"
+  // (for polling); result.html and error.html render #result WITHOUT it.
+  // This listener fires for every swap — polls included — so checking for the
+  // absence of hx-trigger is the exact signal that analysis has finished.
+  document.body.addEventListener('htmx:afterSwap', function () {
+    var result = document.getElementById('result');
+    if (result && !result.hasAttribute('hx-trigger')) {
+      enableButton();
+    }
   });
+
+  // Safety net: re-enable if HTMX itself reports a transport or server error
+  // before any swap occurs (e.g. network failure, non-2xx with no body).
+  form.addEventListener('htmx:responseError', enableButton);
+  form.addEventListener('htmx:sendError', enableButton);
 })();
 </script>
 
