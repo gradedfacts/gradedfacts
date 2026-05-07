@@ -25,8 +25,7 @@
   <form class="claim-form"
         hx-post="/ui/analyze/consensus"
         hx-target="#result"
-        hx-swap="innerHTML"
-        hx-disabled-elt="find button[type='submit']">
+        hx-swap="innerHTML">
     <textarea
       name="text"
       class="claim-textarea"
@@ -57,38 +56,73 @@
 
 <script>
 (function () {
-  var form = document.querySelector('.claim-form');
-  if (!form) return;
-  var btn = form.querySelector('button[type="submit"]');
-  if (!btn) return;
+  try {
+    console.log('[GF] button-disable script running; htmx available:', typeof htmx !== 'undefined');
 
-  function enableButton() {
-    btn.disabled = false;
-    btn.classList.remove('loading');
-  }
+    var form = document.querySelector('.claim-form');
+    if (!form) { console.warn('[GF] .claim-form not found'); return; }
+    var btn = form.querySelector('button[type="submit"]');
+    if (!btn) { console.warn('[GF] submit button not found'); return; }
 
-  // Disable as soon as the form request starts.
-  form.addEventListener('htmx:beforeRequest', function () {
-    btn.disabled = true;
-    btn.classList.add('loading');
-  });
+    var _originalText = btn.textContent;
+    var _isAnalyzing = false;
 
-  // Re-enable only when the final result (or error) is shown.
-  // The analyzing partial always renders #result WITH hx-trigger="every 2s"
-  // (for polling); result.html and error.html render #result WITHOUT it.
-  // This listener fires for every swap — polls included — so checking for the
-  // absence of hx-trigger is the exact signal that analysis has finished.
-  document.body.addEventListener('htmx:afterSwap', function () {
-    var result = document.getElementById('result');
-    if (result && !result.hasAttribute('hx-trigger')) {
-      enableButton();
+    function disableButton() {
+      _isAnalyzing = true;
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = 'LOADING...';
+      btn.style.background = '#dc2626';
+      console.log('[GF] button DISABLED');
     }
-  });
 
-  // Safety net: re-enable if HTMX itself reports a transport or server error
-  // before any swap occurs (e.g. network failure, non-2xx with no body).
-  form.addEventListener('htmx:responseError', enableButton);
-  form.addEventListener('htmx:sendError', enableButton);
+    function enableButton() {
+      _isAnalyzing = false;
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.textContent = _originalText;
+      btn.style.background = '';
+      console.log('[GF] button ENABLED');
+    }
+
+    // Disable the moment the form fires its request.
+    form.addEventListener('htmx:beforeRequest', function () {
+      console.log('[GF] htmx:beforeRequest on form');
+      disableButton();
+    });
+
+    // Re-enable only when the analysis is fully done.
+    //
+    // The form uses hx-swap="innerHTML" on #result, so analyzing.html is
+    // injected *inside* the existing outer #result div.  getElementById returns
+    // the outer div (no hx-trigger), so hx-trigger presence cannot be used as
+    // a signal.  Instead we detect the .loading-section spinner:
+    //   • analyzing.html always contains .loading-section  → keep disabled
+    //   • result.html and error.html never contain it      → re-enable
+    //
+    // hx-disabled-elt is intentionally absent from the form: it re-enables
+    // the button after the *initial* POST completes (when analyzing.html is
+    // first shown), which is too early — polling is still running at that point.
+    document.body.addEventListener('htmx:afterSwap', function () {
+      console.log('[GF] htmx:afterSwap on body; _isAnalyzing:', _isAnalyzing,
+                  '; .loading-section:', !!document.querySelector('.loading-section'));
+      if (_isAnalyzing && !document.querySelector('.loading-section')) {
+        enableButton();
+      }
+    });
+
+    // Safety net for network-level or server errors where no swap occurs.
+    function onError(e) {
+      console.warn('[GF] htmx error event:', e.type);
+      if (_isAnalyzing) enableButton();
+    }
+    form.addEventListener('htmx:responseError', onError);
+    form.addEventListener('htmx:sendError', onError);
+
+    console.log('[GF] listeners registered');
+  } catch (err) {
+    console.error('[GF] setup error:', err);
+  }
 })();
 </script>
 
