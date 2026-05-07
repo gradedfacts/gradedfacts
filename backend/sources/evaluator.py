@@ -15,9 +15,33 @@ The evaluator never mutates input dicts — it returns new ones.
 
 from __future__ import annotations
 
+from urllib.parse import urlparse
+
 from backend.sources.classifier import is_wikipedia
 from backend.sources.independence_registry import apply_independence_override
 from backend.sources.registries import apply_registry_override
+
+
+def extract_domain(url: str) -> str:
+    """
+    Return the root domain of a URL, stripping www. and subdomains.
+
+    Examples:
+        https://www.reuters.com/article  → reuters.com
+        https://stats.cbs.nl/data        → cbs.nl
+        https://data.cbs.nl/data         → cbs.nl
+
+    Takes the last two hostname labels, which covers most TLDs (.com, .nl, .de …).
+    Returns "" for unparseable or non-HTTP URLs.
+    """
+    try:
+        host = urlparse(url).hostname or ""
+    except Exception:
+        return ""
+    parts = host.lower().split(".")
+    if len(parts) < 2:
+        return host
+    return ".".join(parts[-2:])
 
 _GENERIC_AFFILIATION_NOTE = (
     "Source is not editorially independent; specific affiliation not documented."

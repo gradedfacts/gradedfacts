@@ -70,15 +70,52 @@ class TestResolveConsensus:
             assert rating == r
             assert agree is None
 
-    def test_disagree_result_is_always_speculative_regardless_of_inputs(self):
-        # Covers all disagree pairs; none should produce VERIFIED or DEBUNKED
+    def test_debunked_plus_missing_resolves_to_debunked(self):
+        rating, agree = self._fn(EpistemicRating.DEBUNKED, EpistemicRating.MISSING)
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_missing_plus_debunked_resolves_to_debunked(self):
+        rating, agree = self._fn(EpistemicRating.MISSING, EpistemicRating.DEBUNKED)
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_verified_plus_missing_resolves_to_speculative(self):
+        rating, agree = self._fn(EpistemicRating.VERIFIED, EpistemicRating.MISSING)
+        assert rating == EpistemicRating.SPECULATIVE
+        assert agree is False
+
+    def test_missing_plus_verified_resolves_to_speculative(self):
+        rating, agree = self._fn(EpistemicRating.MISSING, EpistemicRating.VERIFIED)
+        assert rating == EpistemicRating.SPECULATIVE
+        assert agree is False
+
+    def test_disagree_result_is_never_verified(self):
+        # All disagreeing pairs must not produce VERIFIED
         ratings = list(EpistemicRating)
         for r1 in ratings:
             for r2 in ratings:
                 if r1 != r2:
                     result, flag = self._fn(r1, r2)
-                    assert result == EpistemicRating.SPECULATIVE
+                    assert result != EpistemicRating.VERIFIED
                     assert flag is False
+
+    def test_real_conflicts_downgrade_to_speculative(self):
+        # Pairs that are genuine conflicts (not DEBUNKED+MISSING) → SPECULATIVE
+        real_conflicts = [
+            (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED),
+            (EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED),
+            (EpistemicRating.VERIFIED, EpistemicRating.SPECULATIVE),
+            (EpistemicRating.SPECULATIVE, EpistemicRating.VERIFIED),
+            (EpistemicRating.DEBUNKED, EpistemicRating.SPECULATIVE),
+            (EpistemicRating.SPECULATIVE, EpistemicRating.DEBUNKED),
+            (EpistemicRating.SPECULATIVE, EpistemicRating.MISSING),
+            (EpistemicRating.MISSING, EpistemicRating.SPECULATIVE),
+        ]
+        for r1, r2 in real_conflicts:
+            result, flag = self._fn(r1, r2)
+            assert result == EpistemicRating.SPECULATIVE, f"Expected SPECULATIVE for {r1}+{r2}, got {result}"
+            assert flag is False
 
 
 # ── _mistral_phase2_judgment ──────────────────────────────────────────────────

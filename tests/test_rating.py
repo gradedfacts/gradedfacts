@@ -87,16 +87,16 @@ def test_engine_filters_low_relevance_sources():
     from unittest.mock import MagicMock, patch
 
     sources = [
-        # Two high-relevance primary sources — should be included
+        # Two high-relevance primary sources from different domains — both included
         {
-            "url": "https://a.example/1",
+            "url": "https://reuters.com/1",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
             "supports_claim": True,
         },
         {
-            "url": "https://a.example/2",
+            "url": "https://apnews.com/2",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.7,
@@ -104,7 +104,7 @@ def test_engine_filters_low_relevance_sources():
         },
         # Low-relevance source — must be excluded from rating derivation
         {
-            "url": "https://a.example/3",
+            "url": "https://lowquality.example/3",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.4,
@@ -227,41 +227,66 @@ def _run_engine_with_sources(sources: list[dict]) -> "Judgment":
 
 def test_compromised_primary_source_cannot_alone_enable_verified():
     """
-    Three FBI (compromised) primary sources marked independent by Claude must NOT
-    produce VERIFIED — the registry override must downgrade them to secondary, and
+    Three compromised primary sources (from different domains) marked independent by Claude
+    must NOT produce VERIFIED — the registry override must downgrade them to secondary, and
     only secondaries cannot reach VERIFIED without an independent primary.
     """
     sources = [
         {
-            "url": f"https://www.fbi.gov/news/press-releases/2025/item-{i}",
+            "url": "https://www.fbi.gov/news/press-releases/2025/item-1",
             "tier": "primary",
-            "is_independent": True,  # Claude incorrectly marks these as independent
+            "is_independent": True,  # Will be overridden by compromised registry
             "relevance_score": 0.9,
             "supports_claim": True,
-        }
-        for i in range(3)
+        },
+        {
+            "url": "https://www.justice.gov/opa/press-release/2025/item-2",
+            "tier": "primary",
+            "is_independent": True,  # Will be overridden by compromised registry
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
+        {
+            "url": "https://rt.com/news/item-3",
+            "tier": "primary",
+            "is_independent": True,  # Will be overridden by compromised registry
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
     ]
     judgment = _run_engine_with_sources(sources)
     # Registry must override is_independent → False and downgrade tier to secondary.
-    # Three secondaries → SPECULATIVE (no independent primary → never VERIFIED).
+    # Three secondaries (different domains) → SPECULATIVE (no independent primary → never VERIFIED).
     assert judgment.rating == EpistemicRating.SPECULATIVE
 
 
 def test_independent_primary_source_enables_verified():
     """
-    Three genuine independent primary sources must still produce VERIFIED.
-    The fix must not over-penalise legitimate sources.
-    Uses bls.gov which is a registry-confirmed primary independent source.
+    Three genuine independent primary sources from different domains must still produce VERIFIED.
+    Uses bls.gov, reuters.com, apnews.com — all registry-confirmed independent sources.
     """
     sources = [
         {
-            "url": f"https://www.bls.gov/news.release/cpi.nr0-{i}.htm",
+            "url": "https://www.bls.gov/news.release/cpi.nr0.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
             "supports_claim": True,
-        }
-        for i in range(3)
+        },
+        {
+            "url": "https://www.reuters.com/article/economy-1",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
+        {
+            "url": "https://apnews.com/article/economy-2",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
     ]
     judgment = _run_engine_with_sources(sources)
     assert judgment.rating == EpistemicRating.VERIFIED
@@ -269,9 +294,10 @@ def test_independent_primary_source_enables_verified():
 
 def test_mixed_independent_and_compromised_can_reach_verified():
     """
-    One independent primary + two compromised sources with total ≥3 relevant →
+    One independent primary + two compromised sources from different domains with total ≥3 →
     VERIFIED because there IS one independent primary.
     Uses bls.gov (registry-confirmed primary) as the independent source.
+    FBI and DOJ are compromised but still count as unique domains for the threshold.
     """
     sources = [
         {
@@ -289,7 +315,7 @@ def test_mixed_independent_and_compromised_can_reach_verified():
             "supports_claim": True,
         },
         {
-            "url": "https://www.fbi.gov/news/press-releases/2025/item-2",
+            "url": "https://www.justice.gov/opa/press-release/2025/item-1",
             "tier": "primary",
             "is_independent": True,  # Will be overridden by compromised registry
             "relevance_score": 0.9,
@@ -297,7 +323,7 @@ def test_mixed_independent_and_compromised_can_reach_verified():
         },
     ]
     judgment = _run_engine_with_sources(sources)
-    # BLS (independent primary) + 2 FBI (downgraded to not-independent) = 1 primary + 2 downgraded
+    # BLS (independent primary) + FBI + DOJ (both downgraded to secondary) = 3 unique domains
     # 3 total relevant, has independent primary → VERIFIED
     assert judgment.rating == EpistemicRating.VERIFIED
 
@@ -409,16 +435,29 @@ def test_no_explicit_rating_falls_back_to_derive_rating():
     When the model does not include a 'rating' field, derive_rating() is used as
     the fallback and must still produce the correct result.
     """
-    # Three independent primary verifying sources → derive_rating returns VERIFIED
+    # Three independent primary verifying sources from different domains → VERIFIED
     sources = [
         {
-            "url": f"https://www.bls.gov/news.release/fallback-{i}.htm",
+            "url": "https://www.bls.gov/news.release/fallback.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
             "supports_claim": True,
-        }
-        for i in range(3)
+        },
+        {
+            "url": "https://www.reuters.com/article/fallback",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
+        {
+            "url": "https://apnews.com/article/fallback",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
     ]
     # No 'rating' key in judgment_data → must fall back to derive_rating
     judgment = _run_engine_with_sources(sources)
@@ -436,13 +475,26 @@ def test_invalid_explicit_rating_falls_back_to_derive_rating():
 
     sources = [
         {
-            "url": f"https://www.bls.gov/news.release/invalid-{i}.htm",
+            "url": "https://www.bls.gov/news.release/invalid.htm",
             "tier": "primary",
             "is_independent": True,
             "relevance_score": 0.9,
             "supports_claim": True,
-        }
-        for i in range(3)
+        },
+        {
+            "url": "https://www.reuters.com/article/invalid",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
+        {
+            "url": "https://apnews.com/article/invalid",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            "supports_claim": True,
+        },
     ]
     judgment_data = {
         "rationale": "test",

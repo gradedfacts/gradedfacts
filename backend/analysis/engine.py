@@ -12,7 +12,7 @@ except ImportError:
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
-from backend.sources.evaluator import evaluate_source
+from backend.sources.evaluator import evaluate_source, extract_domain
 
 logger = logging.getLogger(__name__)
 
@@ -421,12 +421,20 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6") ->
         evaluate_source(src)
         for src in data.get("sources", [])[:MAX_SOURCES]
     ]
+    # Domain deduplication: multiple sources from the same root domain count as one
+    # for threshold purposes. All sources remain in sources_data for UI display.
+    seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
 
     for src in sources_data:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
             continue
+        domain = extract_domain(src.get("url", ""))
+        if domain:
+            if domain in seen_domains:
+                continue
+            seen_domains.add(domain)
         try:
             tier = SourceTier(src["tier"])
         except ValueError:

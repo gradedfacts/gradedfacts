@@ -42,7 +42,7 @@ from backend.analysis.engine import (
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
-from backend.sources.evaluator import evaluate_source
+from backend.sources.evaluator import evaluate_source, extract_domain
 
 logger = logging.getLogger(__name__)
 
@@ -189,14 +189,22 @@ def _resolve_consensus(
     """
     Returns (consensus_rating, models_agree).
 
-    - mistral_rating is None  → Mistral unavailable; pass through Claude's rating unchanged.
-    - Both agree              → that shared rating; models_agree=True.
-    - They disagree           → SPECULATIVE (conservative floor); models_agree=False.
+    Agreement matrix:
+      - mistral_rating is None           → pass through Claude's rating; models_agree=None.
+      - Both identical                   → that shared rating; models_agree=True.
+      - DEBUNKED + MISSING (either order)→ DEBUNKED (stronger signal wins); models_agree=False.
+      - VERIFIED + MISSING (either order)→ SPECULATIVE (positive claim needs both to confirm).
+      - All other conflicts              → SPECULATIVE (conservative floor); models_agree=False.
     """
     if mistral_rating is None:
         return claude_rating, None
     if claude_rating == mistral_rating:
         return claude_rating, True
+
+    pair = {claude_rating, mistral_rating}
+    if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
+        return EpistemicRating.DEBUNKED, False
+
     return EpistemicRating.SPECULATIVE, False
 
 
@@ -208,15 +216,25 @@ def _process_sources(
     """
     Apply evaluate_source(), filter by relevance, downgrade non-independent primaries,
     and derive an algorithmic rating from the resulting tiers.
+
+    Domain deduplication: multiple sources from the same root domain count as one
+    for threshold purposes (e.g. three CBS articles = one unique source). All sources
+    remain in the returned list for UI display.
     """
     sources_data = [evaluate_source(src) for src in sources_raw[:MAX_SOURCES]]
 
+    seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
 
     for src in sources_data:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
             continue
+        domain = extract_domain(src.get("url", ""))
+        if domain:
+            if domain in seen_domains:
+                continue
+            seen_domains.add(domain)
         try:
             tier = SourceTier(src["tier"])
         except (KeyError, ValueError):

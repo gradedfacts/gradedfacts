@@ -2,10 +2,10 @@
 Tests for backend/sources/evaluator.py.
 
 Covers: evaluate_source() — independence override, affiliation_note enforcement,
-and relevance_score clamping.
+and relevance_score clamping. Also covers extract_domain() deduplication helper.
 """
 
-from backend.sources.evaluator import evaluate_source
+from backend.sources.evaluator import evaluate_source, extract_domain
 from backend.sources.independence_registry import COMPROMISED_SCORE_CAP
 
 
@@ -118,3 +118,33 @@ class TestEvaluateSource:
         assert result["is_independent"] is True
         assert result["relevance_score"] == 0.85
         assert result.get("affiliation_note") is None
+
+
+class TestExtractDomain:
+
+    def test_strips_www_prefix(self):
+        assert extract_domain("https://www.reuters.com/article/1") == "reuters.com"
+
+    def test_strips_subdomain(self):
+        assert extract_domain("https://stats.cbs.nl/data") == "cbs.nl"
+
+    def test_different_subdomains_same_root(self):
+        assert extract_domain("https://data.cbs.nl/x") == extract_domain("https://stats.cbs.nl/y")
+
+    def test_no_subdomain(self):
+        assert extract_domain("https://reuters.com/article") == "reuters.com"
+
+    def test_lowercases_result(self):
+        assert extract_domain("https://WWW.REUTERS.COM/article") == "reuters.com"
+
+    def test_empty_url_returns_empty(self):
+        assert extract_domain("") == ""
+
+    def test_non_url_returns_empty(self):
+        assert extract_domain("not a url") == ""
+
+    def test_url_with_path_query_ignored(self):
+        assert extract_domain("https://www.bbc.com/news/world?page=2#section") == "bbc.com"
+
+    def test_returns_empty_for_single_label_host(self):
+        assert extract_domain("https://localhost/path") == "localhost"
