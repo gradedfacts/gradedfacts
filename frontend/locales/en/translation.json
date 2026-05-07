@@ -15,7 +15,8 @@
     "heading": "Fact-check a claim",
     "placeholder": "Enter a political claim to verify — e.g. \"The US unemployment rate fell to 3.4% in January 2023\"",
     "hint": "One claim per check · Pro: multiple claims",
-    "submit": "Fact-check"
+    "submit": "Fact-check",
+    "analyzing": "Analysing..."
   },
   "coverage": {
     "phase1_title": "Phase 1 — United States and Europe.",

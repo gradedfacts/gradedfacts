@@ -15,7 +15,8 @@
     "heading": "Faktakontrollera ett påstående",
     "placeholder": "Ange ett politiskt påstående att verifiera — t.ex. «Den amerikanska arbetslöshetsnivån sjönk till 3,4% i januari 2023»",
     "hint": "Ett påstående per kontroll · Pro: flera påståenden",
-    "submit": "Faktakontroll"
+    "submit": "Faktakontroll",
+    "analyzing": "Analyserar..."
   },
   "coverage": {
     "phase1_title": "Fas 1 — USA och Europa.",

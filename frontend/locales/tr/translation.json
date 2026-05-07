@@ -15,7 +15,8 @@
     "heading": "Bir iddiayı doğrula",
     "placeholder": "Doğrulanacak siyasi bir iddia girin — ör. «ABD işsizlik oranı Ocak 2023'te %3,4'e düştü»",
     "hint": "Kontrol başına bir iddia · Pro: birden fazla iddia",
-    "submit": "Gerçeği doğrula"
+    "submit": "Gerçeği doğrula",
+    "analyzing": "Analiz ediliyor..."
   },
   "coverage": {
     "phase1_title": "Aşama 1 — Amerika Birleşik Devletleri ve Avrupa.",

@@ -63,12 +63,14 @@
     if (!btn) return;
 
     var _isAnalyzing = false;
+    var _originalText = btn.textContent;
 
     function disableButton() {
       _isAnalyzing = true;
       btn.disabled = true;
       btn.classList.add('loading');
       btn.style.background = '#dc2626';
+      btn.textContent = i18next.isInitialized ? i18next.t('form.analyzing') : _originalText;
     }
 
     function enableButton() {
@@ -76,6 +78,7 @@
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.style.background = '';
+      btn.textContent = _originalText;
     }
 
     // Disable the moment the form fires its request.

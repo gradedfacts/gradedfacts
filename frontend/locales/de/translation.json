@@ -15,7 +15,8 @@
     "heading": "Eine Behauptung überprüfen",
     "placeholder": "Geben Sie eine politische Behauptung ein — z.B. „Die US-Arbeitslosenquote sank im Januar 2023 auf 3,4 %“",
     "hint": "Eine Behauptung pro Prüfung · Pro: mehrere Behauptungen",
-    "submit": "Faktencheck"
+    "submit": "Faktencheck",
+    "analyzing": "Analysiere..."
   },
   "coverage": {
     "phase1_title": "Phase 1 — Vereinigte Staaten und Europa.",
