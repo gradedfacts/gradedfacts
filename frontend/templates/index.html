@@ -65,12 +65,25 @@
     var _isAnalyzing = false;
     var _originalText = btn.textContent;
 
+    // Populate data-analyzing-text once i18next is ready and keep it current on
+    // language switches.  Reading the attribute in disableButton() avoids any
+    // race between the user clicking and i18next finishing its async init.
+    function setAnalyzingText() {
+      btn.dataset.analyzingText = i18next.t('form.analyzing');
+    }
+    if (i18next.isInitialized) {
+      setAnalyzingText();
+    } else {
+      i18next.on('initialized', setAnalyzingText);
+    }
+    i18next.on('languageChanged', setAnalyzingText);
+
     function disableButton() {
       _isAnalyzing = true;
       btn.disabled = true;
       btn.classList.add('loading');
       btn.style.background = '#dc2626';
-      btn.textContent = i18next.isInitialized ? i18next.t('form.analyzing') : _originalText;
+      btn.textContent = btn.dataset.analyzingText || _originalText;
     }
 
     function enableButton() {
@@ -78,7 +91,9 @@
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.style.background = '';
-      btn.textContent = _originalText;
+      // Use i18next directly so the restored text matches the current locale,
+      // not the stale _originalText captured before translations were applied.
+      btn.textContent = i18next.isInitialized ? i18next.t('form.submit') : _originalText;
     }
 
     // Disable the moment the form fires its request.
@@ -96,9 +111,18 @@
     // hx-disabled-elt is intentionally absent from the form: it re-enables
     // the button after the *initial* POST completes (when analyzing.html is
     // first shown), which is too early — polling is still running at that point.
+    //
+    // base.html registers its htmx:afterSwap listener before this script runs,
+    // so applyTranslations() fires first and resets btn.textContent to the
+    // submit key on every poll tick.  The else branch reapplies the analyzing
+    // text so it stays visible throughout the full polling cycle.
     document.body.addEventListener('htmx:afterSwap', function () {
-      if (_isAnalyzing && !document.querySelector('.loading-section')) {
-        enableButton();
+      if (_isAnalyzing) {
+        if (!document.querySelector('.loading-section')) {
+          enableButton();
+        } else {
+          btn.textContent = btn.dataset.analyzingText || _originalText;
+        }
       }
     });
 
