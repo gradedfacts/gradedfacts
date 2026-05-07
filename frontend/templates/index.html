@@ -55,4 +55,23 @@
   </div>
 </div>
 
+<script>
+(function () {
+  var form = document.querySelector('.claim-form');
+  if (!form) return;
+  var btn = form.querySelector('button[type="submit"]');
+  if (!btn) return;
+
+  form.addEventListener('htmx:beforeRequest', function () {
+    btn.disabled = true;
+    btn.classList.add('loading');
+  });
+
+  form.addEventListener('htmx:afterSwap', function () {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  });
+})();
+</script>
+
 {% endblock %}
