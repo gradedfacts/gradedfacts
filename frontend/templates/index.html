@@ -65,25 +65,24 @@
     var _isAnalyzing = false;
     var _originalText = btn.textContent;
 
-    // Populate data-analyzing-text once i18next is ready and keep it current on
-    // language switches.  Reading the attribute in disableButton() avoids any
-    // race between the user clicking and i18next finishing its async init.
-    function setAnalyzingText() {
-      btn.dataset.analyzingText = i18next.t('form.analyzing');
+    var _analyzingTexts = {
+      en: 'Analysing...', de: 'Analysiere...', fr: 'Analyse...', it: 'Analisi...',
+      es: 'Analizando...', pt: 'Analisando...', nl: 'Analyseren...', pl: 'Analizuję...',
+      sv: 'Analyserar...', ru: 'Анализирую...', uk: 'Аналізую...', tr: 'Analiz ediliyor...',
+      ar: '...جارٍ التحليل', zh: '分析中...', ja: '分析中...', ko: '분석 중...', hu: 'Elemzés...'
+    };
+
+    function getAnalyzingText() {
+      var lang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
+      return _analyzingTexts[lang] || _analyzingTexts['en'];
     }
-    if (i18next.isInitialized) {
-      setAnalyzingText();
-    } else {
-      i18next.on('initialized', setAnalyzingText);
-    }
-    i18next.on('languageChanged', setAnalyzingText);
 
     function disableButton() {
       _isAnalyzing = true;
       btn.disabled = true;
       btn.classList.add('loading');
       btn.style.background = '#dc2626';
-      btn.textContent = btn.dataset.analyzingText || _originalText;
+      btn.textContent = getAnalyzingText();
     }
 
     function enableButton() {
@@ -91,9 +90,7 @@
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.style.background = '';
-      // Use i18next directly so the restored text matches the current locale,
-      // not the stale _originalText captured before translations were applied.
-      btn.textContent = i18next.isInitialized ? i18next.t('form.submit') : _originalText;
+      btn.textContent = _originalText;
     }
 
     // Disable the moment the form fires its request.
@@ -121,7 +118,7 @@
         if (!document.querySelector('.loading-section')) {
           enableButton();
         } else {
-          btn.textContent = btn.dataset.analyzingText || _originalText;
+          btn.textContent = getAnalyzingText();
         }
       }
     });
