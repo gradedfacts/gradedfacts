@@ -118,7 +118,13 @@
         if (!document.querySelector('.loading-section')) {
           enableButton();
         } else {
-          btn.textContent = getAnalyzingText();
+          // Our listener is registered before base.html's, so applyTranslations()
+          // runs AFTER us and resets btn.textContent to the submit key.
+          // setTimeout(0) defers the override until all synchronous htmx:afterSwap
+          // handlers — including applyTranslations() — have finished.
+          setTimeout(function () {
+            if (_isAnalyzing) btn.textContent = getAnalyzingText();
+          }, 0);
         }
       }
     });
