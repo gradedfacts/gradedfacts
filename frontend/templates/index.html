@@ -57,39 +57,29 @@
 <script>
 (function () {
   try {
-    console.log('[GF] button-disable script running; htmx available:', typeof htmx !== 'undefined');
-
     var form = document.querySelector('.claim-form');
-    if (!form) { console.warn('[GF] .claim-form not found'); return; }
+    if (!form) return;
     var btn = form.querySelector('button[type="submit"]');
-    if (!btn) { console.warn('[GF] submit button not found'); return; }
+    if (!btn) return;
 
-    var _originalText = btn.textContent;
     var _isAnalyzing = false;
 
     function disableButton() {
       _isAnalyzing = true;
       btn.disabled = true;
       btn.classList.add('loading');
-      btn.textContent = 'LOADING...';
       btn.style.background = '#dc2626';
-      console.log('[GF] button DISABLED');
     }
 
     function enableButton() {
       _isAnalyzing = false;
       btn.disabled = false;
       btn.classList.remove('loading');
-      btn.textContent = _originalText;
       btn.style.background = '';
-      console.log('[GF] button ENABLED');
     }
 
     // Disable the moment the form fires its request.
-    form.addEventListener('htmx:beforeRequest', function () {
-      console.log('[GF] htmx:beforeRequest on form');
-      disableButton();
-    });
+    form.addEventListener('htmx:beforeRequest', disableButton);
 
     // Re-enable only when the analysis is fully done.
     //
@@ -104,25 +94,18 @@
     // the button after the *initial* POST completes (when analyzing.html is
     // first shown), which is too early — polling is still running at that point.
     document.body.addEventListener('htmx:afterSwap', function () {
-      console.log('[GF] htmx:afterSwap on body; _isAnalyzing:', _isAnalyzing,
-                  '; .loading-section:', !!document.querySelector('.loading-section'));
       if (_isAnalyzing && !document.querySelector('.loading-section')) {
         enableButton();
       }
     });
 
     // Safety net for network-level or server errors where no swap occurs.
-    function onError(e) {
-      console.warn('[GF] htmx error event:', e.type);
+    function onError() {
       if (_isAnalyzing) enableButton();
     }
     form.addEventListener('htmx:responseError', onError);
     form.addEventListener('htmx:sendError', onError);
-
-    console.log('[GF] listeners registered');
-  } catch (err) {
-    console.error('[GF] setup error:', err);
-  }
+  } catch (err) {}
 })();
 </script>
 
