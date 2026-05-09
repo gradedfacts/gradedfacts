@@ -32,7 +32,7 @@
     "searching": "Söker källor…",
     "evaluating": "Utvärderar oberoende…",
     "deriving": "Härleder betyg…",
-    "note": "Analysen tar vanligtvis 1–2 minuter medan källor söks och utvärderas."
+    "note": "Live-analys körs — live källsökning och utvärdering. En epistemiskt korrekt analys tar 1–2 minuter."
   },
   "rating": {
     "verified": "verifierat",

@@ -28,6 +28,80 @@
   --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 
+/* ── 1b. Dark mode overrides ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:      #0f172a;
+  --surface: #1e293b;
+  --border:  #334155;
+  --text:    #f1f5f9;
+  --text-2:  #cbd5e1;
+  --text-3:  #64748b;
+
+  --verified-bg:    #052e16;
+  --speculative-bg: #1c1500;
+  --debunked-bg:    #1c0505;
+  --missing-bg:     #1e293b;
+
+  --shadow: 0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+}
+
+[data-theme="dark"] a { color: #60a5fa; }
+
+[data-theme="dark"] .coverage-notice {
+  background: #0c1a3a;
+  border-color: #1e3a8a;
+  border-left-color: #3b82f6;
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .judgment-body { background: #0f172a; }
+
+[data-theme="dark"] .judgment-summary:hover { background: #0f172a; }
+
+[data-theme="dark"] .judgment-trigger {
+  background: #1c1209;
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .badge-primary    { background: #1e3a8a; color: #93c5fd; }
+[data-theme="dark"] .badge-secondary  { background: #2e1065; color: #c4b5fd; }
+[data-theme="dark"] .badge-tertiary   { background: #1e293b; color: #94a3b8; }
+[data-theme="dark"] .badge-indep      { background: #052e16; color: #4ade80; }
+[data-theme="dark"] .badge-not-indep  { background: #1c0505; color: #f87171; }
+
+[data-theme="dark"] .judgment-current-tag { background: #1e3a8a; color: #93c5fd; }
+
+[data-theme="dark"] .rating-badge.missing { border-color: var(--border); }
+
+[data-theme="dark"] .btn-primary { background: #1d4ed8; }
+[data-theme="dark"] .btn-primary:hover:not(:disabled) { background: #1e40af; }
+
+[data-theme="dark"] .symmetry-banner.pending {
+  background: #1c1209;
+  border-color: #92400e;
+  color: #fbbf24;
+}
+[data-theme="dark"] .symmetry-banner.confirmed {
+  background: #052e16;
+  border-color: #166534;
+  color: #4ade80;
+}
+
+/* Dark mode toggle button */
+.dark-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 0.25rem 0.35rem;
+  cursor: pointer;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.dark-toggle:hover { border-color: var(--text-3); color: var(--text); }
+
 /* ── 2. Reset and base typography ────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

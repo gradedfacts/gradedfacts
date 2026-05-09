@@ -29,6 +29,8 @@ class Claim(Base):
     submitted_at: Mapped[datetime] = mapped_column(default=_now)
     # Anonymized submitter token (e.g. hashed session ID) — never stores PII
     submitter_token: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # Political leaning of the claim as assessed: "left", "right", or "none"
+    political_leaning: Mapped[str | None] = mapped_column(String(10), nullable=True)
 
     sources: Mapped[list[EvaluatedSource]] = relationship(back_populates="claim")
     judgments: Mapped[list[Judgment]] = relationship(

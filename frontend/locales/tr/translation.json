@@ -32,7 +32,7 @@
     "searching": "Kaynaklar aranıyor…",
     "evaluating": "Bağımsızlık değerlendiriliyor…",
     "deriving": "Değerlendirme türetiliyor…",
-    "note": "Kaynaklar aranırken ve değerlendirilirken analiz genellikle 1–2 dakika sürer."
+    "note": "Canlı analiz çalışıyor — canlı kaynak araması ve değerlendirmesi. Epistemik açıdan doğru bir analiz 1–2 dakika sürer."
   },
   "rating": {
     "verified": "doğrulandı",

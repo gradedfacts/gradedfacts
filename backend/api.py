@@ -4,12 +4,14 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from urllib.parse import urlparse
 
+from datetime import datetime, timedelta, timezone
+
 from fastapi import BackgroundTasks, Depends, FastAPI, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import inspect, text
+from sqlalchemy import func, inspect, text
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
@@ -104,6 +106,10 @@ _JUDGMENT_ADDCOLS = [
     ("models_agree",      "BOOLEAN"),
 ]
 
+_CLAIM_ADDCOLS = [
+    ("political_leaning", "VARCHAR(10)"),
+]
+
 
 def _migrate_judgments() -> None:
     """Add columns introduced by the ConsensusEngine to pre-existing databases."""
@@ -116,10 +122,22 @@ def _migrate_judgments() -> None:
         conn.commit()
 
 
+def _migrate_claims() -> None:
+    """Add columns introduced after initial schema creation to the claims table."""
+    with engine.connect() as conn:
+        existing = {col["name"] for col in inspect(engine).get_columns("claims")}
+        for col, col_type in _CLAIM_ADDCOLS:
+            if col not in existing:
+                conn.execute(text(f"ALTER TABLE claims ADD COLUMN {col} {col_type}"))
+                logger.info("DB migration: added claims.%s", col)
+        conn.commit()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     _migrate_judgments()
+    _migrate_claims()
     yield
 
 
@@ -253,6 +271,21 @@ def about(request: Request):
     return templates.TemplateResponse(request, "about.html")
 
 
+@app.get("/ui/symmetry-stats")
+def ui_symmetry_stats(session: Session = Depends(get_session)):
+    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    rows = session.execute(
+        select(Claim.political_leaning, func.count(Claim.id))
+        .where(Claim.submitted_at >= cutoff)
+        .group_by(Claim.political_leaning)
+    ).all()
+    counts: dict[str, int] = {"left": 0, "right": 0, "none": 0}
+    for leaning, count in rows:
+        key = leaning if leaning in counts else "none"
+        counts[key] += count
+    return JSONResponse(counts)
+
+
 @app.post("/ui/analyze", response_class=HTMLResponse)
 def ui_analyze(
     request: Request,
@@ -264,7 +297,7 @@ def ui_analyze(
         return templates.TemplateResponse(
             request,
             "partials/error.html",
-            {"code": 429, "message": "You've used your 5 free analyses today. Pro plan coming soon."},
+            {"code": 429, "message": "You've used your 3 free analyses today. Pro plan coming soon."},
         )
     text = text.strip()
     if len(text) < 10:
@@ -296,7 +329,7 @@ def ui_analyze_consensus(
         return templates.TemplateResponse(
             request,
             "partials/error.html",
-            {"code": 429, "message": "You've used your 5 free analyses today. Pro plan coming soon."},
+            {"code": 429, "message": "You've used your 3 free analyses today. Pro plan coming soon."},
         )
     text = text.strip()
     if len(text) < 10:

@@ -32,7 +32,7 @@
     "searching": "Searching sources…",
     "evaluating": "Evaluating independence…",
     "deriving": "Deriving rating…",
-    "note": "Analysis typically takes 1–2 minutes while sources are being searched and evaluated."
+    "note": "Live analysis running — live source search and evaluation. An epistemically correct analysis takes 1–2 minutes."
   },
   "rating": {
     "verified": "verified",

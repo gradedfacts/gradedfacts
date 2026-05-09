@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GradedFacts</title>
   <link rel="stylesheet" href="/static/styles/main.css">
+  <script>
+    (function () {
+      var s = localStorage.getItem('theme');
+      var d = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+    })();
+  </script>
   <!--
     HTMX handles form submission, polling, and partial HTML swaps.
     No SPA framework — the server renders all state transitions.
@@ -13,6 +20,7 @@
   <script src="https://unpkg.com/i18next@23/i18next.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/i18next-http-backend@2/i18nextHttpBackend.min.js" crossorigin="anonymous"></script>
   <style>
+    .header-controls { display: flex; align-items: center; gap: 0.5rem; }
     .lang-selector { display: flex; align-items: center; }
     .lang-selector select {
       appearance: none;
@@ -36,26 +44,32 @@
     <span class="site-tagline" data-i18n="tagline">
       Politically independent · No party funding · No ideological agenda
     </span>
-    <div class="lang-selector">
-      <select id="lang-select" onchange="switchLanguage(this.value)" aria-label="Language">
-        <option value="en">EN</option>
-        <option value="de">DE</option>
-        <option value="fr">FR</option>
-        <option value="it">IT</option>
-        <option value="es">ES</option>
-        <option value="pt">PT</option>
-        <option value="nl">NL</option>
-        <option value="pl">PL</option>
-        <option value="sv">SV</option>
-        <option value="ru">RU</option>
-        <option value="uk">UK</option>
-        <option value="tr">TR</option>
-        <option value="ar">AR</option>
-        <option value="zh">ZH</option>
-        <option value="ja">JA</option>
-        <option value="ko">KO</option>
-        <option value="hu">HU</option>
-      </select>
+    <div class="header-controls">
+      <div class="lang-selector">
+        <select id="lang-select" onchange="switchLanguage(this.value)" aria-label="Language">
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+          <option value="fr">FR</option>
+          <option value="it">IT</option>
+          <option value="es">ES</option>
+          <option value="pt">PT</option>
+          <option value="nl">NL</option>
+          <option value="pl">PL</option>
+          <option value="sv">SV</option>
+          <option value="ru">RU</option>
+          <option value="uk">UK</option>
+          <option value="tr">TR</option>
+          <option value="ar">AR</option>
+          <option value="zh">ZH</option>
+          <option value="ja">JA</option>
+          <option value="ko">KO</option>
+          <option value="hu">HU</option>
+        </select>
+      </div>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode" onclick="toggleDarkMode()">
+        <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun"  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
     </div>
   </header>
   <main class="site-main">
@@ -106,6 +120,26 @@
       localStorage.setItem('lang', lng);
       i18next.changeLanguage(lng, function () { applyTranslations(); });
     }
+
+    function _applyThemeIcons(dark) {
+      var moon = document.getElementById('icon-moon');
+      var sun  = document.getElementById('icon-sun');
+      if (moon) moon.style.display = dark ? 'none' : '';
+      if (sun)  sun.style.display  = dark ? '' : 'none';
+    }
+
+    function toggleDarkMode() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var next = !isDark;
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+      _applyThemeIcons(next);
+    }
+
+    (function () {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      _applyThemeIcons(isDark);
+    })();
 
     document.body.addEventListener('htmx:afterSwap', function () {
       if (i18next.isInitialized) applyTranslations();

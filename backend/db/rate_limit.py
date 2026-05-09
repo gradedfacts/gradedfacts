@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from backend.config import settings
 from backend.db.models import RateLimit
 
-DAILY_LIMIT = 5
+DAILY_LIMIT = 3
 
 
 def _hash_ip(ip: str) -> str:
