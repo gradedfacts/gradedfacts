@@ -74,6 +74,11 @@
 
 [data-theme="dark"] .rating-badge.missing { border-color: var(--border); }
 
+[data-theme="dark"] .claim-textarea {
+  background: #ffffff;
+  color: #1e293b;
+}
+
 [data-theme="dark"] .btn-primary { background: #1d4ed8; }
 [data-theme="dark"] .btn-primary:hover:not(:disabled) { background: #1e40af; }
 
