@@ -170,7 +170,13 @@ _JUDGMENT_TOOL = {
             },
             "sources": {
                 "type": "array",
-                "description": "Every source you consulted, including ones that debunk the claim.",
+                "description": (
+                    "Every source you consulted, including ones that debunk the claim. "
+                    "Each element MUST be a JSON object with fields: url (string), title (string), "
+                    "tier (\"primary\"|\"secondary\"|\"tertiary\"), is_independent (boolean), "
+                    "relevance_score (number 0.0–1.0), supports_claim (boolean). "
+                    "Do NOT return plain URL strings — always use the object format."
+                ),
                 "items": {
                     "type": "object",
                     "required": ["url", "tier", "is_independent", "relevance_score", "supports_claim"],

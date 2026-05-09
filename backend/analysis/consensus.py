@@ -243,10 +243,19 @@ def _process_sources(
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
     """
-    non_dict = sum(1 for s in sources_raw[:MAX_SOURCES] if not isinstance(s, dict))
-    if non_dict:
-        logger.warning("_process_sources: dropping %d non-dict items from sources_raw", non_dict)
-    sources_data = [evaluate_source(src) for src in sources_raw[:MAX_SOURCES] if isinstance(src, dict)]
+    coerced: list[dict] = []
+    for s in sources_raw[:MAX_SOURCES]:
+        if isinstance(s, dict):
+            coerced.append(s)
+        elif isinstance(s, str) and s.strip():
+            logger.warning("_process_sources: coercing string URL %r to minimal source dict", s)
+            coerced.append({
+                "url": s, "title": s, "tier": "secondary",
+                "is_independent": True, "relevance_score": 0.6,
+            })
+        else:
+            logger.warning("_process_sources: dropping unrecognised source item %r", s)
+    sources_data = [evaluate_source(src) for src in coerced]
     logger.debug("_process_sources: %d raw → %d evaluated", len(sources_raw), len(sources_data))
 
     seen_domains: set[str] = set()
