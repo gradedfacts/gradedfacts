@@ -241,7 +241,7 @@ def _process_sources(
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
     """
-    sources_data = [evaluate_source(src) for src in sources_raw[:MAX_SOURCES]]
+    sources_data = [evaluate_source(src) for src in sources_raw[:MAX_SOURCES] if isinstance(src, dict)]
 
     seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
@@ -412,6 +412,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                 )
         mistral_sources_eval = [
             evaluate_source(s) for s in mistral_data.get("sources", [])[:MAX_SOURCES]
+            if isinstance(s, dict)
         ]
         mistral_has_primary = _has_primary_independent(mistral_sources_eval)
 
