@@ -338,9 +338,11 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
     else:
         user_content += (
-            "\n\nNo web search results available. "
-            "Evaluate based on your knowledge and note that sources could not be verified online. "
-            "If you cannot identify at least 2 verifiable sources, return an empty sources list."
+            "\n\nNo live web search results available. "
+            "Evaluate based on your training knowledge. "
+            "Include every source you reference in the sources array — use the canonical homepage URL "
+            "(e.g. https://bls.gov) when you do not have a direct article URL. "
+            "Only return an empty sources array if you genuinely cannot name any source for this claim."
         )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
@@ -468,18 +470,23 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         rating = derived_rating
 
     # Atomic write: sources + judgment committed together
+    no_url = sum(1 for s in sources_data if not s.get("url"))
+    if no_url:
+        logger.warning(
+            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
+        )
     evaluated_sources = [
         EvaluatedSource(
             claim_id=claim_id,
-            url=src.get("url", ""),
+            url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
             is_independent=bool(src.get("is_independent", True)),
             affiliation_note=src.get("affiliation_note"),
-            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score", 0.5)))),
+            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),
         )
         for src in sources_data
-        if src.get("url")  # drop any entries Claude returned without a URL
+        if src.get("url") or src.get("title")
     ]
 
     judgment = Judgment(

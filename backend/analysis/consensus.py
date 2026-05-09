@@ -90,9 +90,11 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
     else:
         user_content += (
-            "\n\nNo web search results available. "
-            "Evaluate based on your knowledge and note that sources could not be verified online. "
-            "If you cannot identify at least 2 verifiable sources, return an empty sources list."
+            "\n\nNo live web search results available. "
+            "Evaluate based on your training knowledge. "
+            "Include every source you reference in the sources array — use the canonical homepage URL "
+            "(e.g. https://bls.gov) when you do not have a direct article URL. "
+            "Only return an empty sources array if you genuinely cannot name any source for this claim."
         )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
@@ -241,7 +243,11 @@ def _process_sources(
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
     """
+    non_dict = sum(1 for s in sources_raw[:MAX_SOURCES] if not isinstance(s, dict))
+    if non_dict:
+        logger.warning("_process_sources: dropping %d non-dict items from sources_raw", non_dict)
     sources_data = [evaluate_source(src) for src in sources_raw[:MAX_SOURCES] if isinstance(src, dict)]
+    logger.debug("_process_sources: %d raw → %d evaluated", len(sources_raw), len(sources_data))
 
     seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
@@ -451,18 +457,24 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         rationale = claude_data["rationale"]
 
     # ── Atomic write: sources + consensus judgment ────────────────────────────
+    no_url = sum(1 for s in claude_sources if not s.get("url"))
+    if no_url:
+        logger.warning(
+            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
+        )
+    logger.debug("claim %s: storing %d evaluated sources", claim_id, len(claude_sources))
     evaluated_sources = [
         EvaluatedSource(
             claim_id=claim_id,
-            url=src.get("url", ""),
+            url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
             is_independent=bool(src.get("is_independent", True)),
             affiliation_note=src.get("affiliation_note"),
-            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score", 0.5)))),
+            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),
         )
         for src in claude_sources
-        if src.get("url")
+        if src.get("url") or src.get("title")
     ]
 
     judgment = Judgment(
