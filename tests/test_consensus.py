@@ -90,8 +90,8 @@ class TestResolveConsensus:
         assert rating == EpistemicRating.SPECULATIVE
         assert agree is False
 
-    def test_disagree_result_is_never_verified(self):
-        # All disagreeing pairs must not produce VERIFIED
+    def test_disagree_result_is_never_verified_without_source_quality(self):
+        # Without source quality advantage (defaults), disagreement never yields VERIFIED
         ratings = list(EpistemicRating)
         for r1 in ratings:
             for r2 in ratings:
@@ -99,6 +99,43 @@ class TestResolveConsensus:
                     result, flag = self._fn(r1, r2)
                     assert result != EpistemicRating.VERIFIED
                     assert flag is False
+
+    def test_disagree_claude_primary_wins(self):
+        rating, agree = self._fn(
+            EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
+            claude_has_primary_independent=True,
+            mistral_has_primary_independent=False,
+        )
+        assert rating == EpistemicRating.VERIFIED
+        assert agree is False
+
+    def test_disagree_mistral_primary_wins(self):
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
+            claude_has_primary_independent=False,
+            mistral_has_primary_independent=True,
+        )
+        assert rating == EpistemicRating.VERIFIED
+        assert agree is False
+
+    def test_disagree_both_primary_falls_back_to_speculative(self):
+        rating, agree = self._fn(
+            EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
+            claude_has_primary_independent=True,
+            mistral_has_primary_independent=True,
+        )
+        assert rating == EpistemicRating.SPECULATIVE
+        assert agree is False
+
+    def test_disagree_debunked_missing_source_quality_does_not_override(self):
+        # DEBUNKED+MISSING is resolved before source quality check
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.MISSING,
+            claude_has_primary_independent=False,
+            mistral_has_primary_independent=True,
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
 
     def test_real_conflicts_downgrade_to_speculative(self):
         # Pairs that are genuine conflicts (not DEBUNKED+MISSING) → SPECULATIVE
@@ -239,7 +276,7 @@ class TestMistralPhase2:
 
 _THREE_INDEPENDENT_PRIMARIES = [
     {
-        "url": f"https://www.reuters.com/article/consensus-{i}",
+        "url": f"https://www.bls.gov/data/consensus-{i}",
         "tier": "primary",
         "is_independent": True,
         "relevance_score": 0.9,
@@ -335,8 +372,20 @@ class TestAnalyzeClaimWithConsensus:
 
         assert j.rationale == "Claude rationale."
 
-    def test_models_disagree_consensus_is_speculative(self):
+    def test_models_disagree_source_quality_advantage_wins(self):
+        """Claude has Primary/Independent sources; Mistral has none — Claude's rating wins."""
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
+
+        j = _run_consensus(claude_j, mistral_j)
+
+        assert j.rating == EpistemicRating.VERIFIED
+        assert j.consensus_rating == EpistemicRating.VERIFIED
+        assert j.models_agree is False
+
+    def test_models_disagree_no_source_advantage_is_speculative(self):
+        """Neither model has Primary/Independent sources — disagreement falls back to SPECULATIVE."""
+        claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
         j = _run_consensus(claude_j, mistral_j)
@@ -353,6 +402,14 @@ class TestAnalyzeClaimWithConsensus:
 
         assert "VERIFIED" in j.rationale
         assert "DEBUNKED" in j.rationale
+        assert "source quality" in j.rationale  # resolved by source quality, not SPECULATIVE
+
+    def test_models_disagree_rationale_speculative_note_when_no_advantage(self):
+        claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
+
+        j = _run_consensus(claude_j, mistral_j)
+
         assert "Consensus downgraded to SPECULATIVE" in j.rationale
 
     def test_mistral_phase2_raises_falls_back_to_claude(self):

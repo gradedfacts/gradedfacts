@@ -1,4 +1,6 @@
+import html
 import logging
+import re
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -47,9 +49,33 @@ def _rating_label(rating) -> str:
     }.get(key, key)
 
 
+_BADGE_RE = re.compile(r'\[([A-Za-z]+): ([A-Z]+)\]')
+
+
+def _render_model_badges(text: str) -> str:
+    """Replace [Model: RATING] tags with styled rating-badge spans. Returns safe HTML."""
+    escaped = html.escape(text)
+
+    def _badge(m: re.Match) -> str:
+        model = m.group(1)
+        rating_upper = m.group(2)
+        rating_lower = rating_upper.lower()
+        return (
+            f'<span class="rating-badge {rating_lower}" style="vertical-align:middle;margin-right:0.35em">'
+            f'<span class="rating-dot"></span>'
+            f'{model}: {rating_upper}'
+            f'</span>'
+        )
+
+    result = _BADGE_RE.sub(_badge, escaped)
+    result = result.replace('\n\n', '<br><br>').replace('\n', '<br>')
+    return result
+
+
 templates = Jinja2Templates(directory=str(_ROOT / "frontend" / "templates"))
 templates.env.filters["domain"] = _domain
 templates.env.filters["rating_label"] = _rating_label
+templates.env.filters["render_model_badges"] = _render_model_badges
 
 # ── Background analysis state ─────────────────────────────────────────────────
 

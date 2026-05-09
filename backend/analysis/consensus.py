@@ -182,19 +182,33 @@ def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> di
 
 # ── Consensus resolution ──────────────────────────────────────────────────────
 
+def _has_primary_independent(sources: list[dict]) -> bool:
+    """Return True if any source is Primary tier, independent, and meets minimum relevance."""
+    return any(
+        src.get("tier") == "primary"
+        and bool(src.get("is_independent", True))
+        and float(src.get("relevance_score", 0.0)) >= MIN_RELEVANCE_SCORE
+        for src in sources
+    )
+
+
 def _resolve_consensus(
     claude_rating: EpistemicRating,
     mistral_rating: EpistemicRating | None,
+    *,
+    claude_has_primary_independent: bool = False,
+    mistral_has_primary_independent: bool = False,
 ) -> tuple[EpistemicRating, bool | None]:
     """
     Returns (consensus_rating, models_agree).
 
-    Agreement matrix:
-      - mistral_rating is None           → pass through Claude's rating; models_agree=None.
-      - Both identical                   → that shared rating; models_agree=True.
-      - DEBUNKED + MISSING (either order)→ DEBUNKED (stronger signal wins); models_agree=False.
-      - VERIFIED + MISSING (either order)→ SPECULATIVE (positive claim needs both to confirm).
-      - All other conflicts              → SPECULATIVE (conservative floor); models_agree=False.
+    Resolution order (first match wins):
+      1. mistral_rating is None           → pass through Claude's rating; models_agree=None.
+      2. Both identical                   → that shared rating; models_agree=True.
+      3. DEBUNKED + MISSING (either order)→ DEBUNKED (stronger signal wins); models_agree=False.
+      4. Source quality tiebreaker        → model with ≥1 Primary/Independent source wins
+                                            when the other has zero; models_agree=False.
+      5. All other conflicts              → SPECULATIVE (conservative floor); models_agree=False.
     """
     if mistral_rating is None:
         return claude_rating, None
@@ -204,6 +218,12 @@ def _resolve_consensus(
     pair = {claude_rating, mistral_rating}
     if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
         return EpistemicRating.DEBUNKED, False
+
+    # Source quality tiebreaker: clear advantage → that model's rating wins.
+    if claude_has_primary_independent and not mistral_has_primary_independent:
+        return claude_rating, False
+    if mistral_has_primary_independent and not claude_has_primary_independent:
+        return mistral_rating, False
 
     return EpistemicRating.SPECULATIVE, False
 
@@ -370,10 +390,12 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
     # ── Process Claude's sources and derive its rating ────────────────────────
     claude_sources, claude_derived = _process_sources(claude_data.get("sources", []))
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
+    claude_has_primary = _has_primary_independent(claude_sources)
 
-    # ── Extract Mistral's explicit rating (no source processing needed for consensus) ──
+    # ── Extract Mistral's explicit rating and assess source quality ───────────
     mistral_rating: EpistemicRating | None = None
     mistral_rationale: str | None = None
+    mistral_has_primary = False
     if mistral_data is not None:
         mistral_rationale = mistral_data.get("rationale", "")
         raw_mistral_rating = mistral_data.get("rating")
@@ -385,16 +407,41 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
                     "Mistral returned unknown rating %r for claim %s; ignoring Mistral verdict.",
                     raw_mistral_rating, claim_id,
                 )
+        mistral_sources_eval = [
+            evaluate_source(s) for s in mistral_data.get("sources", [])[:MAX_SOURCES]
+        ]
+        mistral_has_primary = _has_primary_independent(mistral_sources_eval)
 
     # ── Consensus resolution ──────────────────────────────────────────────────
-    consensus_rating, models_agree = _resolve_consensus(claude_rating, mistral_rating)
+    consensus_rating, models_agree = _resolve_consensus(
+        claude_rating, mistral_rating,
+        claude_has_primary_independent=claude_has_primary,
+        mistral_has_primary_independent=mistral_has_primary,
+    )
 
     # Build a combined rationale that surfaces both verdicts when models disagree
     if models_agree is False:
+        pair = {claude_rating, mistral_rating}
+        if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
+            resolution_note = "Models disagreed. DEBUNKED signal prevails over MISSING."
+        elif (
+            claude_has_primary and not mistral_has_primary
+            and consensus_rating == claude_rating
+        ) or (
+            mistral_has_primary and not claude_has_primary
+            and consensus_rating == mistral_rating
+        ):
+            winner = "Claude" if consensus_rating == claude_rating else "Mistral"
+            resolution_note = (
+                f"Models disagreed. Resolved by source quality — "
+                f"{winner}'s rating applied (Primary/Independent sources present)."
+            )
+        else:
+            resolution_note = "Models disagreed. Consensus downgraded to SPECULATIVE."
         rationale = (
             f"[Claude: {claude_rating.value.upper()}] {claude_data['rationale']}\n\n"
             f"[Mistral: {mistral_rating.value.upper()}] {mistral_rationale}\n\n"  # type: ignore[union-attr]
-            f"Models disagreed. Consensus downgraded to SPECULATIVE."
+            f"{resolution_note}"
         )
     else:
         rationale = claude_data["rationale"]
