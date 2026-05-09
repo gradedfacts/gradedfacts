@@ -102,11 +102,11 @@ def _sort_sources(sources: list) -> list:
     return sorted(sources, key=lambda s: (_TIER_ORDER.get(str(s.tier), 9), -s.relevance_score))
 
 
-def _run_analysis(claim_id: str) -> None:
+def _run_analysis(claim_id: str, user_language: str | None = None) -> None:
     """Background task: runs analyze_claim in its own DB session."""
     with SessionLocal() as session:
         try:
-            analyze_claim(claim_id, session)
+            analyze_claim(claim_id, session, user_language=user_language)
         except RuntimeError as exc:
             _analysis_errors[claim_id] = (503, str(exc))
         except Exception as exc:
@@ -114,11 +114,11 @@ def _run_analysis(claim_id: str) -> None:
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
 
 
-def _run_consensus_analysis(claim_id: str) -> None:
+def _run_consensus_analysis(claim_id: str, user_language: str | None = None) -> None:
     """Background task: runs analyze_claim_with_consensus in its own DB session."""
     with SessionLocal() as session:
         try:
-            analyze_claim_with_consensus(claim_id, session)
+            analyze_claim_with_consensus(claim_id, session, user_language=user_language)
         except RuntimeError as exc:
             _analysis_errors[claim_id] = (503, str(exc))
         except Exception as exc:
@@ -317,6 +317,7 @@ def ui_analyze(
     request: Request,
     background_tasks: BackgroundTasks,
     text: str = Form(""),
+    lang: str = Form("en"),
     session: Session = Depends(get_session),
 ):
     if not check_and_increment(_client_ip(request), session):
@@ -332,11 +333,12 @@ def ui_analyze(
             "partials/error.html",
             {"code": 400, "message": "Please enter at least 10 characters."},
         )
+    user_language = lang.strip()[:10] or None
     claim = Claim(text=text[:2000])
     session.add(claim)
     session.commit()
     session.refresh(claim)
-    background_tasks.add_task(_run_analysis, claim.id)
+    background_tasks.add_task(_run_analysis, claim.id, user_language)
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
@@ -349,6 +351,7 @@ def ui_analyze_consensus(
     request: Request,
     background_tasks: BackgroundTasks,
     text: str = Form(""),
+    lang: str = Form("en"),
     session: Session = Depends(get_session),
 ):
     if not check_and_increment(_client_ip(request), session):
@@ -364,11 +367,12 @@ def ui_analyze_consensus(
             "partials/error.html",
             {"code": 400, "message": "Please enter at least 10 characters."},
         )
+    user_language = lang.strip()[:10] or None
     claim = Claim(text=text[:2000])
     session.add(claim)
     session.commit()
     session.refresh(claim)
-    background_tasks.add_task(_run_consensus_analysis, claim.id)
+    background_tasks.add_task(_run_consensus_analysis, claim.id, user_language)
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",

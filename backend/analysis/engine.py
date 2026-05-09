@@ -370,7 +370,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
 # ── Public entry point ────────────────────────────────────────────────────────
 
-def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6") -> Judgment:
+def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", user_language: str | None = None) -> Judgment:
     """
     Run the full epistemic analysis pipeline for a claim.
 
@@ -401,12 +401,14 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6") ->
         session.refresh(judgment)
         return judgment
 
-    # Detect claim language once; pass instruction to Phase 2 so the rationale
-    # and all model output are written in the same language as the claim.
-    lang_name = _detect_language(claim.text)
+    # Resolve claim language: use caller-supplied UI language if provided, otherwise detect.
+    if user_language:
+        lang_name = _LANG_NAMES.get(user_language, "English")
+    else:
+        lang_name = _detect_language(claim.text)
     lang_instruction = _build_lang_instruction(lang_name)
     if lang_instruction:
-        logger.debug("Claim language detected as %s.", lang_name)
+        logger.debug("Claim language: %s.", lang_name)
 
     # Phase 1: gather evidence via web search (best-effort)
     search_findings = _phase1_search(client, claim.text)

@@ -298,7 +298,7 @@ class ConsensusResult:
     models_agree: bool | None
 
 
-def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
+def analyze_claim_with_consensus(claim_id: str, session, user_language: str | None = None) -> Judgment:
     """
     Full consensus pipeline: Claude (Phase 1 + Phase 2) + Mistral (Brave Phase 1 + Phase 2).
 
@@ -334,12 +334,15 @@ def analyze_claim_with_consensus(claim_id: str, session) -> Judgment:
         session.refresh(judgment)
         return judgment
 
-    # Detect claim language once; both Claude and Mistral Phase 2 receive the same
-    # instruction so their rationale and all output match the claim's language.
-    lang_name = _detect_language(claim.text)
+    # Resolve claim language: use caller-supplied UI language if provided, otherwise detect.
+    if user_language:
+        from backend.analysis.engine import _LANG_NAMES
+        lang_name = _LANG_NAMES.get(user_language, "English")
+    else:
+        lang_name = _detect_language(claim.text)
     lang_instruction = _build_lang_instruction(lang_name)
     if lang_instruction:
-        logger.debug("Claim language detected as %s.", lang_name)
+        logger.debug("Claim language: %s.", lang_name)
 
     # ── Phase 1: web search (Claude only — Mistral has no built-in search) ────
     search_findings = _phase1_search(claude_client, claim.text)

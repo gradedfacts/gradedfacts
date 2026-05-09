@@ -53,11 +53,19 @@
       rows="4"
       required
     ></textarea>
+    <input type="hidden" name="lang" id="lang-hidden" value="en">
     <div class="form-footer">
       <span class="char-count" data-i18n="form.hint">One claim per check · Pro: multiple claims</span>
       <button type="submit" class="btn btn-primary" data-i18n="form.submit">Fact-check</button>
     </div>
   </form>
+<script>
+(function () {
+  var lang = localStorage.getItem('lang') || (navigator.language || '').split('-')[0] || 'en';
+  var el = document.getElementById('lang-hidden');
+  if (el) el.value = lang;
+})();
+</script>
 </div>
 
 <!-- Result area: filled by HTMX when form submits, then by polling partial -->
