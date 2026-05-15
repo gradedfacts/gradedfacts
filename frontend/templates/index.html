@@ -80,37 +80,6 @@
   </div>
 </div>
 
-<div class="example-claims">
-  <p class="example-heading" data-i18n="examples.heading">Try an example</p>
-  <div class="example-cards">
-    <button class="example-card" type="button"
-            data-claim="Die SNB hat den Leitzins 2024 viermal gesenkt."
-            onclick="fillExampleClaim(this)">
-      <span class="example-claim-text" data-i18n="examples.claim1">Die SNB hat den Leitzins 2024 viermal gesenkt.</span>
-      <span class="rating-badge verified"><span class="rating-dot"></span><span data-i18n="rating.verified">verified</span></span>
-    </button>
-    <button class="example-card" type="button"
-            data-claim="Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten."
-            onclick="fillExampleClaim(this)">
-      <span class="example-claim-text" data-i18n="examples.claim2">Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.</span>
-      <span class="rating-badge debunked"><span class="rating-dot"></span><span data-i18n="rating.debunked">debunked</span></span>
-    </button>
-    <button class="example-card" type="button"
-            data-claim="Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
-            onclick="fillExampleClaim(this)">
-      <span class="example-claim-text" data-i18n="examples.claim3">Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen.</span>
-      <span class="rating-badge speculative"><span class="rating-dot"></span><span data-i18n="rating.speculative">speculative</span></span>
-    </button>
-  </div>
-</div>
-<script>
-function fillExampleClaim(btn) {
-  var claim = btn.getAttribute('data-claim');
-  var ta = document.querySelector('.claim-textarea');
-  if (ta) { ta.value = claim; ta.focus(); }
-}
-</script>
-
 <script>
 (function () {
   try {

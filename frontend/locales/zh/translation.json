@@ -72,11 +72,5 @@
     "primary": "主要",
     "secondary": "次要",
     "tertiary": "第三级"
-  },
-  "examples": {
-    "heading": "试试示例",
-    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
-    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
-    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }
