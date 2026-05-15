@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session, joinedload
 from backend import schemas
 from backend.analysis.consensus import analyze_claim_with_consensus
 from backend.analysis.engine import analyze_claim
+from backend.sources.evaluator import extract_domain
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
 from backend.db.rate_limit import check_and_increment
 from backend.db.session import SessionLocal, engine, get_session
@@ -100,6 +101,22 @@ _analysis_errors: dict[str, tuple[int, str]] = {}
 
 def _sort_sources(sources: list) -> list:
     return sorted(sources, key=lambda s: (_TIER_ORDER.get(str(s.tier), 9), -s.relevance_score))
+
+
+def _group_sources_by_domain(sources: list) -> list[dict]:
+    """Group a sorted source list by root domain, preserving sort order."""
+    seen: dict[str, list] = {}
+    order: list[str] = []
+    for source in sources:
+        dom = extract_domain(source.url) or source.url
+        if dom not in seen:
+            seen[dom] = []
+            order.append(dom)
+        seen[dom].append(source)
+    return [
+        {"domain": dom, "sources": seen[dom], "is_multi": len(seen[dom]) > 1}
+        for dom in order
+    ]
 
 
 def _run_analysis(claim_id: str, user_language: str | None = None) -> None:
@@ -429,13 +446,15 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
         .order_by(Judgment.created_at.desc())
     ).scalars().unique().all()
 
+    sorted_sources = _sort_sources(sources)
     return templates.TemplateResponse(
         request,
         "partials/result.html",
         {
             "claim_text": claim.text,
             "judgment": active_judgment,
-            "sources": _sort_sources(sources),
+            "sources": sorted_sources,
+            "grouped_sources": _group_sources_by_domain(sorted_sources),
             "judgments": list(judgments),
         },
     )

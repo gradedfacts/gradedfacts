@@ -68,41 +68,49 @@
       <p class="panel-heading" data-i18n="result.sources" data-i18n-options='{"count": {{ sources | length }}}'>Sources ({{ sources | length }})</p>
       {% if sources %}
       <ul class="source-list">
-        {% for source in sources %}
-        <li class="source-item{% if not source.is_independent %} not-independent{% endif %}"
-            id="source-{{ source.id }}">
+        {% for group in grouped_sources %}
+          {% if group.is_multi %}
+          <li class="source-group-header-item">
+            <span class="source-group-domain">{{ group.domain }}</span>
+            <span class="source-group-note">{{ group.sources | length }} articles — counts as 1 source for rating threshold</span>
+          </li>
+          {% endif %}
+          {% for source in group.sources %}
+          <li class="source-item{% if group.is_multi %} source-item-grouped{% endif %}{% if not source.is_independent %} not-independent{% endif %}"
+              id="source-{{ source.id }}">
 
-          <div class="source-header">
-            <a class="source-domain"
-               href="{{ source.url }}"
-               target="_blank"
-               rel="noopener noreferrer"
-               title="{{ source.url }}">{{ source.url | domain }}</a>
-            <span class="badge badge-{{ source.tier.value }}" data-i18n="tier.{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
-            {% if source.is_independent %}
-              <span class="badge badge-indep" data-i18n="result.independent">Independent</span>
-            {% else %}
-              <span class="badge badge-not-indep" data-i18n="result.not_independent">Not independent</span>
-            {% endif %}
-          </div>
-
-          <div class="relevance-row">
-            <span class="relevance-label" data-i18n="result.relevance">Relevance</span>
-            <div class="relevance-track">
-              <div class="relevance-fill" style="width: {{ (source.relevance_score * 100) | int }}%"></div>
+            <div class="source-header">
+              <a class="source-domain"
+                 href="{{ source.url }}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 title="{{ source.url }}">{{ source.url | domain }}</a>
+              <span class="badge badge-{{ source.tier.value }}" data-i18n="tier.{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
+              {% if source.is_independent %}
+                <span class="badge badge-indep" data-i18n="result.independent">Independent</span>
+              {% else %}
+                <span class="badge badge-not-indep" data-i18n="result.not_independent">Not independent</span>
+              {% endif %}
             </div>
-            <span class="relevance-pct">{{ (source.relevance_score * 100) | int }}%</span>
-          </div>
 
-          {% if source.excerpt %}
-          <p class="source-excerpt">{{ source.excerpt }}</p>
-          {% endif %}
+            <div class="relevance-row">
+              <span class="relevance-label" data-i18n="result.relevance">Relevance</span>
+              <div class="relevance-track">
+                <div class="relevance-fill" style="width: {{ (source.relevance_score * 100) | int }}%"></div>
+              </div>
+              <span class="relevance-pct">{{ (source.relevance_score * 100) | int }}%</span>
+            </div>
 
-          {% if not source.is_independent and source.affiliation_note %}
-          <p class="affiliation-note">{{ source.affiliation_note }}</p>
-          {% endif %}
+            {% if source.excerpt %}
+            <p class="source-excerpt">{{ source.excerpt }}</p>
+            {% endif %}
 
-        </li>
+            {% if not source.is_independent and source.affiliation_note %}
+            <p class="affiliation-note">{{ source.affiliation_note }}</p>
+            {% endif %}
+
+          </li>
+          {% endfor %}
         {% endfor %}
       </ul>
       {% else %}

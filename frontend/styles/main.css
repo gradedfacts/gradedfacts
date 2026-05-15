@@ -297,6 +297,28 @@ a:hover { text-decoration: underline; }
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .source-item.not-independent { border-left: 3px solid var(--color-debunked); }
+.source-group-header-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.3rem 0.625rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+}
+.source-group-domain {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.source-group-note {
+  font-size: 0.73rem;
+  color: var(--text-3);
+  font-style: italic;
+}
+.source-item-grouped { margin-left: 0.875rem; }
 .source-item.highlighted {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59,130,246,.12);
