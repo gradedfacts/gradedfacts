@@ -9,7 +9,8 @@
     "debunked_desc": "motbevis tillgängliga",
     "missing": "Otillräckligt",
     "missing_desc": "otillräckliga bevis, omdöme avhållet",
-    "symmetry": "Symmetrispårning aktiv — lika granskning över hela det politiska spektrumet."
+    "symmetry": "Symmetrispårning aktiv — lika granskning över hela det politiska spektrumet.",
+    "leaning_hint": "Politisk klassificering aktiveras automatiskt i takt med att fler påståenden analyseras."
   },
   "form": {
     "heading": "Faktakontrollera ett påstående",
@@ -71,5 +72,11 @@
     "primary": "Primär",
     "secondary": "Sekundär",
     "tertiary": "Tertiär"
+  },
+  "examples": {
+    "heading": "Prova ett exempel",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

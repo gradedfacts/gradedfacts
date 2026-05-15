@@ -9,7 +9,8 @@
     "debunked_desc": "доступні контраргументи",
     "missing": "Недостатньо",
     "missing_desc": "недостатньо доказів, рішення відкладено",
-    "symmetry": "Відстеження симетрії активне — однакова ретельність по всьому політичному спектру."
+    "symmetry": "Відстеження симетрії активне — однакова ретельність по всьому політичному спектру.",
+    "leaning_hint": "Класифікація політичних нахилів активується автоматично в міру аналізу більшої кількості тверджень."
   },
   "form": {
     "heading": "Перевірити твердження",
@@ -71,5 +72,11 @@
     "primary": "Первинний",
     "secondary": "Вторинний",
     "tertiary": "Третинний"
+  },
+  "examples": {
+    "heading": "Спробувати приклад",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

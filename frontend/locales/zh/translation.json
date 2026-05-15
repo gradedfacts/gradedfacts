@@ -9,7 +9,8 @@
     "debunked_desc": "存在反驳证据",
     "missing": "证据不足",
     "missing_desc": "证据不足，判断暂缓",
-    "symmetry": "对称性追踪已激活 — 对政治频谱各方进行同等审查。"
+    "symmetry": "对称性追踪已激活 — 对政治频谱各方进行同等审查。",
+    "leaning_hint": "随着分析的声明越来越多，政治倾向分类将自动启用。"
   },
   "form": {
     "heading": "核实一项主张",
@@ -71,5 +72,11 @@
     "primary": "主要",
     "secondary": "次要",
     "tertiary": "第三级"
+  },
+  "examples": {
+    "heading": "试试示例",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

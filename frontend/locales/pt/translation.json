@@ -9,7 +9,8 @@
     "debunked_desc": "contra-evidências disponíveis",
     "missing": "Insuficiente",
     "missing_desc": "evidência insuficiente, julgamento suspenso",
-    "symmetry": "Acompanhamento de simetria ativo — igual escrutínio em todo o espectro político."
+    "symmetry": "Acompanhamento de simetria ativo — igual escrutínio em todo o espectro político.",
+    "leaning_hint": "A classificação de tendência política ativa-se automaticamente à medida que mais afirmações são analisadas."
   },
   "form": {
     "heading": "Verificar uma afirmação",
@@ -71,5 +72,11 @@
     "primary": "Primário",
     "secondary": "Secundário",
     "tertiary": "Terciário"
+  },
+  "examples": {
+    "heading": "Tentar um exemplo",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

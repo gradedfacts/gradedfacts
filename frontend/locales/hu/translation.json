@@ -9,7 +9,8 @@
     "debunked_desc": "ellenérvek rendelkezésre állnak",
     "missing": "Hiányos",
     "missing_desc": "nem elegendő bizonyíték, az ítélet felfüggesztve",
-    "symmetry": "Szimmetria-követés aktív — egyenlő vizsgálat a politikai spektrum egészén."
+    "symmetry": "Szimmetria-követés aktív — egyenlő vizsgálat a politikai spektrum egészén.",
+    "leaning_hint": "A politikai besorolás automatikusan aktiválódik, ahogy egyre több állítást elemzünk."
   },
   "form": {
     "heading": "Állítás ellenőrzése",
@@ -71,5 +72,11 @@
     "primary": "Elsődleges",
     "secondary": "Másodlagos",
     "tertiary": "Harmadlagos"
+  },
+  "examples": {
+    "heading": "Próbáljon egy példát",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

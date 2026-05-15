@@ -9,7 +9,8 @@
     "debunked_desc": "доступны контрдоказательства",
     "missing": "Недостаточно",
     "missing_desc": "недостаточно доказательств, решение отложено",
-    "symmetry": "Отслеживание симметрии активно — одинаковый контроль по всему политическому спектру."
+    "symmetry": "Отслеживание симметрии активно — одинаковый контроль по всему политическому спектру.",
+    "leaning_hint": "Классификация политической принадлежности активируется автоматически по мере анализа всё большего числа утверждений."
   },
   "form": {
     "heading": "Проверить утверждение",
@@ -71,5 +72,11 @@
     "primary": "Первичный",
     "secondary": "Вторичный",
     "tertiary": "Третичный"
+  },
+  "examples": {
+    "heading": "Попробовать пример",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

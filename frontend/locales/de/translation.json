@@ -9,7 +9,8 @@
     "debunked_desc": "Gegenbeweise vorhanden",
     "missing": "Fehlend",
     "missing_desc": "unzureichende Beweise, Urteil zurückgehalten",
-    "symmetry": "Symmetrieverfolgung aktiv — gleiche Prüfung über das politische Spektrum hinweg."
+    "symmetry": "Symmetrieverfolgung aktiv — gleiche Prüfung über das politische Spektrum hinweg.",
+    "leaning_hint": "Die politische Einordnung aktiviert sich automatisch, sobald mehr Behauptungen analysiert werden."
   },
   "form": {
     "heading": "Eine Behauptung überprüfen",
@@ -71,5 +72,11 @@
     "primary": "Primär",
     "secondary": "Sekundär",
     "tertiary": "Tertiär"
+  },
+  "examples": {
+    "heading": "Beispiel ausprobieren",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

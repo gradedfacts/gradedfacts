@@ -780,7 +780,45 @@ button[type='submit']:disabled { opacity: 0.5; cursor: not-allowed; pointer-even
   color: #2563eb;
 }
 
-/* ── 13. Responsive — mobile-first ──────────────────────────────────────── */
+/* ── 13. Leaning hint & Example claim cards ─────────────────────────────── */
+.leaning-hint {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  font-style: italic;
+  margin-top: 0.375rem;
+}
+
+.example-claims { margin-top: 1rem; }
+.example-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.example-cards { display: flex; flex-direction: column; gap: 0.5rem; }
+.example-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+}
+.example-card:hover { border-color: #94a3b8; background: var(--bg); }
+.example-claim-text { flex: 1; line-height: 1.45; }
+
+/* ── 14. Responsive — mobile-first ──────────────────────────────────────── */
 @media (min-width: 768px) {
   body { font-size: 15px; }
   .site-header { padding: 0.875rem 1.5rem; }

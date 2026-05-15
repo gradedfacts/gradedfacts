@@ -9,7 +9,8 @@
     "debunked_desc": "dostępne kontrargumenty",
     "missing": "Niewystarczający",
     "missing_desc": "niewystarczające dowody, osąd wstrzymany",
-    "symmetry": "Śledzenie symetrii aktywne — jednakowa kontrola w całym spektrum politycznym."
+    "symmetry": "Śledzenie symetrii aktywne — jednakowa kontrola w całym spektrum politycznym.",
+    "leaning_hint": "Klasyfikacja polityczna aktywuje się automatycznie w miarę analizowania kolejnych twierdzeń."
   },
   "form": {
     "heading": "Sprawdź twierdzenie",
@@ -71,5 +72,11 @@
     "primary": "Podstawowe",
     "secondary": "Wtórne",
     "tertiary": "Trzeciorzędne"
+  },
+  "examples": {
+    "heading": "Wypróbuj przykład",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

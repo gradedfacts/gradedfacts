@@ -9,7 +9,8 @@
     "debunked_desc": "contro-prove disponibili",
     "missing": "Mancante",
     "missing_desc": "prove insufficienti, giudizio sospeso",
-    "symmetry": "Monitoraggio della simmetria attivo — eguale scrutinio su tutto lo spettro politico."
+    "symmetry": "Monitoraggio della simmetria attivo — eguale scrutinio su tutto lo spettro politico.",
+    "leaning_hint": "La classificazione dell'orientamento politico si attiva automaticamente man mano che vengono analizzate più affermazioni."
   },
   "form": {
     "heading": "Verifica un'affermazione",
@@ -71,5 +72,11 @@
     "primary": "Primario",
     "secondary": "Secondario",
     "tertiary": "Terziario"
+  },
+  "examples": {
+    "heading": "Prova un esempio",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

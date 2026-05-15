@@ -9,7 +9,8 @@
     "debunked_desc": "karşı kanıtlar mevcut",
     "missing": "Yetersiz",
     "missing_desc": "yetersiz kanıt, karar beklemede",
-    "symmetry": "Simetri takibi etkin — siyasi spektrum genelinde eşit inceleme."
+    "symmetry": "Simetri takibi etkin — siyasi spektrum genelinde eşit inceleme.",
+    "leaning_hint": "Siyasi eğilim sınıflandırması, daha fazla iddia analiz edildikçe otomatik olarak etkinleşir."
   },
   "form": {
     "heading": "Bir iddiayı doğrula",
@@ -71,5 +72,11 @@
     "primary": "Birincil",
     "secondary": "İkincil",
     "tertiary": "Üçüncül"
+  },
+  "examples": {
+    "heading": "Örnek deneyin",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

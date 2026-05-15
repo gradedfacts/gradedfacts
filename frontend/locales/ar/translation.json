@@ -9,7 +9,8 @@
     "debunked_desc": "أدلة مضادة متاحة",
     "missing": "غير كافٍ",
     "missing_desc": "أدلة غير كافية، الحكم معلق",
-    "symmetry": "تتبع التماثل نشط — تدقيق متساوٍ عبر الطيف السياسي."
+    "symmetry": "تتبع التماثل نشط — تدقيق متساوٍ عبر الطيف السياسي.",
+    "leaning_hint": "يتفعّل تصنيف التوجه السياسي تلقائياً كلما زاد عدد الادعاءات المحللة."
   },
   "form": {
     "heading": "التحقق من ادعاء",
@@ -71,5 +72,11 @@
     "primary": "أساسي",
     "secondary": "ثانوي",
     "tertiary": "ثالثي"
+  },
+  "examples": {
+    "heading": "جرّب مثالاً",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

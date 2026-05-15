@@ -9,7 +9,8 @@
     "debunked_desc": "反証が存在する",
     "missing": "不十分",
     "missing_desc": "証拠不十分、判断保留",
-    "symmetry": "対称性の追跡が有効 — 政治的スペクトル全体にわたる平等な精査。"
+    "symmetry": "対称性の追跡が有効 — 政治的スペクトル全体にわたる平等な精査。",
+    "leaning_hint": "より多くの主張が分析されると、政治的傾向の分類が自動的に有効になります。"
   },
   "form": {
     "heading": "主張を確認する",
@@ -71,5 +72,11 @@
     "primary": "一次",
     "secondary": "二次",
     "tertiary": "三次"
+  },
+  "examples": {
+    "heading": "例を試す",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }

@@ -9,7 +9,8 @@
     "debunked_desc": "반증 자료 있음",
     "missing": "불충분",
     "missing_desc": "증거 불충분, 판단 보류",
-    "symmetry": "대칭성 추적 활성 — 정치 스펙트럼 전반에 걸쳐 동등한 검토."
+    "symmetry": "대칭성 추적 활성 — 정치 스펙트럼 전반에 걸쳐 동등한 검토.",
+    "leaning_hint": "더 많은 주장이 분석될수록 정치적 성향 분류가 자동으로 활성화됩니다."
   },
   "form": {
     "heading": "주장 사실 확인",
@@ -71,5 +72,11 @@
     "primary": "1차",
     "secondary": "2차",
     "tertiary": "3차"
+  },
+  "examples": {
+    "heading": "예시 시도",
+    "claim1": "Die SNB hat den Leitzins 2024 viermal gesenkt.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz wird 2025 ein bedingungsloses Grundeinkommen einführen."
   }
 }
