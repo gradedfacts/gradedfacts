@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 
@@ -140,6 +141,9 @@ def _mistral_phase1_brave_search(claim_text: str) -> str:
     This keeps Mistral's pipeline fully independent of Claude's: an empty string
     is passed to _mistral_phase2_judgment, which handles the no-context case.
     """
+    logger.info("_mistral_phase1_brave_search called, key present: %s", bool(settings.brave_api_key))
+    logger.info("Starting Mistral Brave Search phase")
+    logger.info("BRAVE_API_KEY present: %s", bool(os.getenv("BRAVE_API_KEY")))
     if not settings.brave_api_key:
         return ""
     try:
@@ -181,6 +185,7 @@ def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> di
     Brave findings may be "" if Brave is unavailable; _mistral_phase2_judgment
     handles that case with a knowledge-only fallback message.
     """
+    logger.info("_mistral_search_and_judge called")
     brave_findings = _mistral_phase1_brave_search(claim_text)
     return _mistral_phase2_judgment(claim_text, brave_findings, lang_instruction)
 
@@ -367,6 +372,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
 
     # ── Phase 2: parallel judgment ────────────────────────────────────────────
     mistral_available = bool(settings.mistral_api_key)
+    logger.info("mistral_available: %s", mistral_available)
 
     claude_data: dict
     mistral_data: dict | None = None
