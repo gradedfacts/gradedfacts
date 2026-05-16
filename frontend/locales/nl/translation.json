@@ -10,6 +10,7 @@
     "missing": "Onvoldoende",
     "missing_desc": "onvoldoende bewijs, oordeel uitgesteld",
     "symmetry": "Symmetriebewaking actief — gelijke controle over het politieke spectrum.",
+    "symmetry_stats": "Afgelopen 30 dagen: {{left}} links · {{right}} rechts · {{none}} geen politieke oriëntatie",
     "leaning_hint": "Politieke classificatie wordt automatisch geactiveerd naarmate meer beweringen worden geanalyseerd."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Oordeelsgeschiedenis ({{count}})",
     "current": "huidig",
     "analysis_engine": "Analyse-engine:",
-    "revised_because": "Herzien omdat:"
+    "revised_because": "Herzien omdat:",
+    "affiliation_disclosure": "Affiliatieverklaring"
   },
   "tier": {
     "primary": "Primair",

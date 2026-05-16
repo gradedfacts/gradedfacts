@@ -12,8 +12,11 @@
     <li><span class="status-dot missing"></span><strong data-i18n="trust.missing">Missing</strong> — <span data-i18n="trust.missing_desc">insufficient evidence, judgment withheld</span></li>
   </ul>
   <p class="claims-counter" data-i18n="trust.symmetry">Symmetry tracking active — equal scrutiny across the political spectrum.</p>
-  <p class="claims-counter symmetry-stats" id="symmetry-stats" style="display:none">
-    Last 30 days: <span id="stat-left">0</span> left-leaning · <span id="stat-right">0</span> right-leaning · <span id="stat-none">0</span> no political leaning
+  <p class="claims-counter symmetry-stats" id="symmetry-stats"
+     data-i18n="trust.symmetry_stats"
+     data-i18n-options='{"left":0,"right":0,"none":0}'
+     style="display:none">
+    Last 30 days: 0 left-leaning · 0 right-leaning · 0 no political leaning
   </p>
   <p class="leaning-hint" data-i18n="trust.leaning_hint">Political leaning classification activates automatically as more claims are analyzed.</p>
 </div>
@@ -23,10 +26,13 @@
   fetch('/ui/symmetry-stats')
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      document.getElementById('stat-left').textContent  = d.left;
-      document.getElementById('stat-right').textContent = d.right;
-      document.getElementById('stat-none').textContent  = d.none;
-      document.getElementById('symmetry-stats').style.display = '';
+      var el = document.getElementById('symmetry-stats');
+      var opts = {left: d.left, right: d.right, none: d.none};
+      el.setAttribute('data-i18n-options', JSON.stringify(opts));
+      el.textContent = i18next.isInitialized
+        ? i18next.t('trust.symmetry_stats', opts)
+        : 'Last 30 days: ' + d.left + ' left-leaning · ' + d.right + ' right-leaning · ' + d.none + ' no political leaning';
+      el.style.display = '';
     })
     .catch(function () {});
 })();

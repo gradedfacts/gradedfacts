@@ -10,6 +10,7 @@
     "missing": "不十分",
     "missing_desc": "証拠不十分、判断保留",
     "symmetry": "対称性の追跡が有効 — 政治的スペクトル全体にわたる平等な精査。",
+    "symmetry_stats": "過去30日間：{{left}} 左寄り · {{right}} 右寄り · {{none}} 政治的傾向なし",
     "leaning_hint": "より多くの主張が分析されると、政治的傾向の分類が自動的に有効になります。"
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "判断履歴 ({{count}})",
     "current": "現在",
     "analysis_engine": "分析エンジン：",
-    "revised_because": "改訂理由："
+    "revised_because": "改訂理由：",
+    "affiliation_disclosure": "所属開示"
   },
   "tier": {
     "primary": "一次",

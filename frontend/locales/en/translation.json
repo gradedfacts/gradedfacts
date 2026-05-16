@@ -10,6 +10,7 @@
     "missing": "Missing",
     "missing_desc": "insufficient evidence, judgment withheld",
     "symmetry": "Symmetry tracking active — equal scrutiny across the political spectrum.",
+    "symmetry_stats": "Last 30 days: {{left}} left-leaning · {{right}} right-leaning · {{none}} no political leaning",
     "leaning_hint": "Political leaning classification activates automatically as more claims are analyzed."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Judgment history ({{count}})",
     "current": "current",
     "analysis_engine": "Analysis engine:",
-    "revised_because": "Revised because:"
+    "revised_because": "Revised because:",
+    "affiliation_disclosure": "Affiliation disclosure"
   },
   "tier": {
     "primary": "Primary",

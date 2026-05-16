@@ -10,6 +10,7 @@
     "missing": "Insuffisant",
     "missing_desc": "preuves insuffisantes, jugement suspendu",
     "symmetry": "Suivi de symétrie actif — même rigueur sur tout le spectre politique.",
+    "symmetry_stats": "30 derniers jours : {{left}} à gauche · {{right}} à droite · {{none}} sans orientation politique",
     "leaning_hint": "La classification politique s'active automatiquement à mesure que davantage d'affirmations sont analysées."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Historique des jugements ({{count}})",
     "current": "actuel",
     "analysis_engine": "Moteur d'analyse :",
-    "revised_because": "Révisé car :"
+    "revised_because": "Révisé car :",
+    "affiliation_disclosure": "Déclaration d'affiliation"
   },
   "tier": {
     "primary": "Primaire",

@@ -10,6 +10,7 @@
     "missing": "Yetersiz",
     "missing_desc": "yetersiz kanıt, karar beklemede",
     "symmetry": "Simetri takibi etkin — siyasi spektrum genelinde eşit inceleme.",
+    "symmetry_stats": "Son 30 gün: {{left}} solcu · {{right}} sağcı · {{none}} siyasi eğilim yok",
     "leaning_hint": "Siyasi eğilim sınıflandırması, daha fazla iddia analiz edildikçe otomatik olarak etkinleşir."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Karar geçmişi ({{count}})",
     "current": "mevcut",
     "analysis_engine": "Analiz motoru:",
-    "revised_because": "Revize edildi çünkü:"
+    "revised_because": "Revize edildi çünkü:",
+    "affiliation_disclosure": "Bağlantı açıklaması"
   },
   "tier": {
     "primary": "Birincil",

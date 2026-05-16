@@ -10,6 +10,7 @@
     "missing": "Niewystarczający",
     "missing_desc": "niewystarczające dowody, osąd wstrzymany",
     "symmetry": "Śledzenie symetrii aktywne — jednakowa kontrola w całym spektrum politycznym.",
+    "symmetry_stats": "Ostatnie 30 dni: {{left}} lewicowych · {{right}} prawicowych · {{none}} bez orientacji politycznej",
     "leaning_hint": "Klasyfikacja polityczna aktywuje się automatycznie w miarę analizowania kolejnych twierdzeń."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Historia orzeczeń ({{count}})",
     "current": "bieżący",
     "analysis_engine": "Silnik analizy:",
-    "revised_because": "Zmieniono, ponieważ:"
+    "revised_because": "Zmieniono, ponieważ:",
+    "affiliation_disclosure": "Informacja o powiązaniach"
   },
   "tier": {
     "primary": "Podstawowe",

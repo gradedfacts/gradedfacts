@@ -10,6 +10,7 @@
     "missing": "Fehlend",
     "missing_desc": "unzureichende Beweise, Urteil zurückgehalten",
     "symmetry": "Symmetrieverfolgung aktiv — gleiche Prüfung über das politische Spektrum hinweg.",
+    "symmetry_stats": "Letzte 30 Tage: {{left}} linksorientiert · {{right}} rechtsorientiert · {{none}} ohne politische Ausrichtung",
     "leaning_hint": "Die politische Einordnung aktiviert sich automatisch, sobald mehr Behauptungen analysiert werden."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Urteilshistorie ({{count}})",
     "current": "aktuell",
     "analysis_engine": "Analyse-Engine:",
-    "revised_because": "Überarbeitet, weil:"
+    "revised_because": "Überarbeitet, weil:",
+    "affiliation_disclosure": "Zugehörigkeitsangabe"
   },
   "tier": {
     "primary": "Primär",

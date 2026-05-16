@@ -10,6 +10,7 @@
     "missing": "Hiányos",
     "missing_desc": "nem elegendő bizonyíték, az ítélet felfüggesztve",
     "symmetry": "Szimmetria-követés aktív — egyenlő vizsgálat a politikai spektrum egészén.",
+    "symmetry_stats": "Utolsó 30 nap: {{left}} baloldali · {{right}} jobboldali · {{none}} nincs politikai irányultság",
     "leaning_hint": "A politikai besorolás automatikusan aktiválódik, ahogy egyre több állítást elemzünk."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Ítéletek előzményei ({{count}})",
     "current": "aktuális",
     "analysis_engine": "Elemzőmotor:",
-    "revised_because": "Felülvizsgálat oka:"
+    "revised_because": "Felülvizsgálat oka:",
+    "affiliation_disclosure": "Érintettségi nyilatkozat"
   },
   "tier": {
     "primary": "Elsődleges",

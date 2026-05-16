@@ -10,6 +10,7 @@
     "missing": "Otillräckligt",
     "missing_desc": "otillräckliga bevis, omdöme avhållet",
     "symmetry": "Symmetrispårning aktiv — lika granskning över hela det politiska spektrumet.",
+    "symmetry_stats": "Senaste 30 dagarna: {{left}} vänsterorienterade · {{right}} högerorienterade · {{none}} utan politisk orientering",
     "leaning_hint": "Politisk klassificering aktiveras automatiskt i takt med att fler påståenden analyseras."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Omdömeshistorik ({{count}})",
     "current": "nuvarande",
     "analysis_engine": "Analysmotor:",
-    "revised_because": "Reviderades eftersom:"
+    "revised_because": "Reviderades eftersom:",
+    "affiliation_disclosure": "Kopplingsupplysning"
   },
   "tier": {
     "primary": "Primär",

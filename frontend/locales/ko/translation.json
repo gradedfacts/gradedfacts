@@ -10,6 +10,7 @@
     "missing": "불충분",
     "missing_desc": "증거 불충분, 판단 보류",
     "symmetry": "대칭성 추적 활성 — 정치 스펙트럼 전반에 걸쳐 동등한 검토.",
+    "symmetry_stats": "최근 30일: {{left}} 좌파 성향 · {{right}} 우파 성향 · {{none}} 정치적 성향 없음",
     "leaning_hint": "더 많은 주장이 분석될수록 정치적 성향 분류가 자동으로 활성화됩니다."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "판단 기록 ({{count}})",
     "current": "현재",
     "analysis_engine": "분석 엔진:",
-    "revised_because": "수정 이유:"
+    "revised_because": "수정 이유:",
+    "affiliation_disclosure": "제휴 공개"
   },
   "tier": {
     "primary": "1차",

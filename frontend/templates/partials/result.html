@@ -106,7 +106,10 @@
             {% endif %}
 
             {% if not source.is_independent and source.affiliation_note %}
-            <p class="affiliation-note">{{ source.affiliation_note }}</p>
+            <details class="affiliation-details">
+              <summary class="affiliation-summary" data-i18n="result.affiliation_disclosure">Affiliation disclosure</summary>
+              <p class="affiliation-note">{{ source.affiliation_note }}</p>
+            </details>
             {% endif %}
 
           </li>

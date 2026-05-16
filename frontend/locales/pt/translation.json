@@ -10,6 +10,7 @@
     "missing": "Insuficiente",
     "missing_desc": "evidência insuficiente, julgamento suspenso",
     "symmetry": "Acompanhamento de simetria ativo — igual escrutínio em todo o espectro político.",
+    "symmetry_stats": "Últimos 30 dias: {{left}} de esquerda · {{right}} de direita · {{none}} sem orientação política",
     "leaning_hint": "A classificação de tendência política ativa-se automaticamente à medida que mais afirmações são analisadas."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Histórico de julgamentos ({{count}})",
     "current": "atual",
     "analysis_engine": "Motor de análise:",
-    "revised_because": "Revisto porque:"
+    "revised_because": "Revisto porque:",
+    "affiliation_disclosure": "Divulgação de afiliação"
   },
   "tier": {
     "primary": "Primário",

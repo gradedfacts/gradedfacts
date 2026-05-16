@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 from datetime import datetime, timedelta, timezone
 
-from fastapi import BackgroundTasks, Depends, FastAPI, Form, HTTPException, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, Form, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -359,7 +359,12 @@ def ui_analyze(
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
-        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]["text"], "loading_key": _LOADING_MESSAGES[0]["key"]},
+        {
+            "claim_id": claim.id,
+            "lang": lang.strip()[:10] or "en",
+            "loading_message": _LOADING_MESSAGES[0]["text"],
+            "loading_key": _LOADING_MESSAGES[0]["key"],
+        },
     )
 
 
@@ -393,12 +398,22 @@ def ui_analyze_consensus(
     return templates.TemplateResponse(
         request,
         "partials/analyzing.html",
-        {"claim_id": claim.id, "loading_message": _LOADING_MESSAGES[0]["text"], "loading_key": _LOADING_MESSAGES[0]["key"]},
+        {
+            "claim_id": claim.id,
+            "lang": lang.strip()[:10] or "en",
+            "loading_message": _LOADING_MESSAGES[0]["text"],
+            "loading_key": _LOADING_MESSAGES[0]["key"],
+        },
     )
 
 
 @app.get("/ui/claims/{claim_id}/poll", response_class=HTMLResponse)
-def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_session)):
+def ui_poll(
+    claim_id: str,
+    request: Request,
+    lang: str = Query("en"),
+    session: Session = Depends(get_session),
+):
     if claim_id in _analysis_errors:
         code, message = _analysis_errors.pop(claim_id)
         return templates.TemplateResponse(
@@ -456,6 +471,7 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
             "sources": sorted_sources,
             "grouped_sources": _group_sources_by_domain(sorted_sources),
             "judgments": list(judgments),
+            "lang": lang,
         },
     )
 

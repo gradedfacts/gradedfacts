@@ -10,7 +10,7 @@
   phase label without any client-side JS timer.
 -->
 <div id="result"
-     hx-get="/ui/claims/{{ claim_id }}/poll"
+     hx-get="/ui/claims/{{ claim_id }}/poll?lang={{ lang }}"
      hx-trigger="every 2s"
      hx-swap="outerHTML">
   <div class="loading-section">

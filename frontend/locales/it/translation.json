@@ -10,6 +10,7 @@
     "missing": "Mancante",
     "missing_desc": "prove insufficienti, giudizio sospeso",
     "symmetry": "Monitoraggio della simmetria attivo — eguale scrutinio su tutto lo spettro politico.",
+    "symmetry_stats": "Ultimi 30 giorni: {{left}} di sinistra · {{right}} di destra · {{none}} senza orientamento politico",
     "leaning_hint": "La classificazione dell'orientamento politico si attiva automaticamente man mano che vengono analizzate più affermazioni."
   },
   "form": {
@@ -66,7 +67,8 @@
     "history": "Cronologia dei giudizi ({{count}})",
     "current": "attuale",
     "analysis_engine": "Motore di analisi:",
-    "revised_because": "Rivisto perché:"
+    "revised_because": "Rivisto perché:",
+    "affiliation_disclosure": "Dichiarazione di affiliazione"
   },
   "tier": {
     "primary": "Primario",
