@@ -72,5 +72,11 @@
     "primary": "Primário",
     "secondary": "Secundário",
     "tertiary": "Terciário"
+  },
+  "followup": {
+    "heading": "Fazer uma pergunta de acompanhamento",
+    "placeholder": "ex. Por que isso é classificado como especulativo?",
+    "submit": "Perguntar",
+    "answer_heading": "Resposta"
   }
 }

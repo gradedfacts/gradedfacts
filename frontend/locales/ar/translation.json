@@ -72,5 +72,11 @@
     "primary": "أساسي",
     "secondary": "ثانوي",
     "tertiary": "ثالثي"
+  },
+  "followup": {
+    "heading": "اطرح سؤالاً متابعة",
+    "placeholder": "مثلاً: لماذا صُنِّف هذا تخمينياً؟",
+    "submit": "اسأل",
+    "answer_heading": "الإجابة"
   }
 }

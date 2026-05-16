@@ -19,10 +19,10 @@ from sqlalchemy.orm import Session, joinedload
 
 from backend import schemas
 from backend.analysis.consensus import analyze_claim_with_consensus
-from backend.analysis.engine import analyze_claim
+from backend.analysis.engine import analyze_claim, _get_client
 from backend.sources.evaluator import extract_domain
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
-from backend.db.rate_limit import check_and_increment
+from backend.db.rate_limit import check_and_increment, check_followup_rate_limit
 from backend.db.session import SessionLocal, engine, get_session
 
 logger = logging.getLogger(__name__)
@@ -458,3 +458,62 @@ def ui_poll(claim_id: str, request: Request, session: Session = Depends(get_sess
             "judgments": list(judgments),
         },
     )
+
+
+_FOLLOWUP_SYSTEM = (
+    "You are a fact-checking assistant for GradedFacts, a politically independent platform. "
+    "Answer the user's follow-up question about a fact-checked claim clearly and concisely. "
+    "Stay grounded in the provided rating and rationale. Do not exceed three short paragraphs."
+)
+
+
+@app.post("/ui/followup", response_class=HTMLResponse)
+def ui_followup(
+    request: Request,
+    claim_id: str = Form(""),
+    followup_question: str = Form(""),
+    lang: str = Form("en"),
+    session: Session = Depends(get_session),
+):
+    if not check_followup_rate_limit(_client_ip(request), session):
+        return HTMLResponse(
+            '<p class="followup-error">You\'ve used your 1 free follow-up today.</p>'
+        )
+
+    followup_question = followup_question.strip()
+    if len(followup_question) < 5:
+        return HTMLResponse('<p class="followup-error">Please enter a question (at least 5 characters).</p>')
+
+    claim = session.get(Claim, claim_id)
+    if not claim:
+        return HTMLResponse('<p class="followup-error">Claim not found.</p>')
+
+    active_judgment = session.execute(
+        select(Judgment)
+        .where(Judgment.claim_id == claim_id, Judgment.is_active.is_(True))
+        .order_by(Judgment.created_at.desc())
+        .limit(1)
+    ).scalar_one_or_none()
+    if not active_judgment:
+        return HTMLResponse('<p class="followup-error">No judgment found for this claim.</p>')
+
+    try:
+        client = _get_client()
+        user_msg = (
+            f"Claim: {claim.text}\n\n"
+            f"Fact-check rating: {active_judgment.rating.value.upper()}\n\n"
+            f"Rationale: {active_judgment.rationale}\n\n"
+            f"Follow-up question: {followup_question}"
+        )
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=512,
+            system=_FOLLOWUP_SYSTEM,
+            messages=[{"role": "user", "content": user_msg}],
+        )
+        answer = response.content[0].text
+        answer_html = html.escape(answer).replace("\n\n", "<br><br>").replace("\n", "<br>")
+        return HTMLResponse(f'<p class="followup-answer-text">{answer_html}</p>')
+    except Exception as exc:
+        logger.error("Follow-up Claude call failed for claim %s: %s", claim_id, exc, exc_info=True)
+        return HTMLResponse('<p class="followup-error">Analysis service temporarily unavailable.</p>')

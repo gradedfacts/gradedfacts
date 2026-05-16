@@ -72,5 +72,11 @@
     "primary": "1차",
     "secondary": "2차",
     "tertiary": "3차"
+  },
+  "followup": {
+    "heading": "후속 질문하기",
+    "placeholder": "예: 왜 추측적으로 평가되었나요?",
+    "submit": "질문",
+    "answer_heading": "답변"
   }
 }

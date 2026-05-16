@@ -72,5 +72,11 @@
     "primary": "Birincil",
     "secondary": "İkincil",
     "tertiary": "Üçüncül"
+  },
+  "followup": {
+    "heading": "Takip sorusu sorun",
+    "placeholder": "ör. Bu neden spekülatif olarak değerlendirildi?",
+    "submit": "Sor",
+    "answer_heading": "Cevap"
   }
 }

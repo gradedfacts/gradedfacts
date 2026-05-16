@@ -72,5 +72,11 @@
     "primary": "Primär",
     "secondary": "Sekundär",
     "tertiary": "Tertiär"
+  },
+  "followup": {
+    "heading": "Ställ en följdfråga",
+    "placeholder": "t.ex. Varför är detta betygsatt som spekulativt?",
+    "submit": "Fråga",
+    "answer_heading": "Svar"
   }
 }

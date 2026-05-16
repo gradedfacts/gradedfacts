@@ -168,6 +168,29 @@
     </ol>
   </div><!-- /revision-trail -->
 
+  <!-- ── Follow-up question ───────────────────────────────────────────────── -->
+  <div class="card followup-section">
+    <p class="panel-heading" data-i18n="followup.heading">Ask a follow-up question</p>
+    <form hx-post="/ui/followup"
+          hx-target="#followup-answer"
+          hx-swap="innerHTML"
+          hx-disabled-elt="find button">
+      <input type="hidden" name="claim_id" value="{{ judgment.claim_id }}">
+      <textarea
+        class="followup-textarea"
+        name="followup_question"
+        rows="3"
+        data-i18n-placeholder="followup.placeholder"
+        placeholder="e.g. Why is this rated speculative?"
+        maxlength="500"
+      ></textarea>
+      <button type="submit" class="followup-submit" data-i18n="followup.submit">Ask</button>
+    </form>
+    <div id="followup-answer" class="followup-answer" aria-live="polite">
+      <p class="followup-answer-heading" data-i18n="followup.answer_heading" style="display:none">Answer</p>
+    </div>
+  </div><!-- /followup -->
+
 </div><!-- #result -->
 
 <script>

@@ -3,7 +3,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from backend.db.models import Base, RateLimit
-from backend.db.rate_limit import DAILY_LIMIT, _hash_ip, _today_utc, check_and_increment
+from backend.db.rate_limit import (
+    DAILY_LIMIT,
+    FOLLOWUP_DAILY_LIMIT,
+    _hash_ip,
+    _hash_ip_followup,
+    _today_utc,
+    check_and_increment,
+    check_followup_rate_limit,
+)
 
 
 @pytest.fixture
@@ -77,3 +85,49 @@ def test_disabled_flag_allows_beyond_limit(session):
 def test_disabled_flag_writes_no_rows(session):
     check_and_increment("1.2.3.4", session, enabled=False)
     assert session.query(RateLimit).count() == 0
+
+
+# ── Follow-up rate limit ──────────────────────────────────────────────────────
+
+def test_followup_first_request_allowed(session):
+    assert check_followup_rate_limit("1.2.3.4", session, enabled=True) is True
+
+
+def test_followup_over_limit_blocked(session):
+    for _ in range(FOLLOWUP_DAILY_LIMIT):
+        check_followup_rate_limit("1.2.3.4", session, enabled=True)
+    assert check_followup_rate_limit("1.2.3.4", session, enabled=True) is False
+
+
+def test_followup_disabled_always_passes(session):
+    for _ in range(FOLLOWUP_DAILY_LIMIT + 5):
+        assert check_followup_rate_limit("1.2.3.4", session, enabled=False) is True
+
+
+def test_followup_counter_independent_from_main(session):
+    # Exhaust the main analysis limit — follow-up must still be allowed.
+    for _ in range(DAILY_LIMIT):
+        check_and_increment("1.2.3.4", session, enabled=True)
+    assert check_followup_rate_limit("1.2.3.4", session, enabled=True) is True
+
+
+def test_main_counter_independent_from_followup(session):
+    # Exhaust the follow-up limit — main analysis must still be allowed.
+    for _ in range(FOLLOWUP_DAILY_LIMIT):
+        check_followup_rate_limit("1.2.3.4", session, enabled=True)
+    assert check_and_increment("1.2.3.4", session, enabled=True) is True
+
+
+def test_followup_hash_differs_from_main_hash():
+    ip = "1.2.3.4"
+    assert _hash_ip(ip) != _hash_ip_followup(ip)
+
+
+def test_followup_hash_is_64_chars():
+    assert len(_hash_ip_followup("1.2.3.4")) == 64
+
+
+def test_followup_different_ips_are_independent(session):
+    for _ in range(FOLLOWUP_DAILY_LIMIT):
+        check_followup_rate_limit("1.2.3.4", session, enabled=True)
+    assert check_followup_rate_limit("5.6.7.8", session, enabled=True) is True

@@ -72,5 +72,11 @@
     "primary": "Primaire",
     "secondary": "Secondaire",
     "tertiary": "Tertiaire"
+  },
+  "followup": {
+    "heading": "Poser une question de suivi",
+    "placeholder": "ex. Pourquoi est-ce évalué comme spéculatif ?",
+    "submit": "Demander",
+    "answer_heading": "Réponse"
   }
 }

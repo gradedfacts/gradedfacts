@@ -72,5 +72,11 @@
     "primary": "Elsődleges",
     "secondary": "Másodlagos",
     "tertiary": "Harmadlagos"
+  },
+  "followup": {
+    "heading": "Tegyen fel kérdést",
+    "placeholder": "pl. Miért spekulatívként értékelték?",
+    "submit": "Kérdez",
+    "answer_heading": "Válasz"
   }
 }

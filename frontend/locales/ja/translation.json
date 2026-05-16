@@ -72,5 +72,11 @@
     "primary": "一次",
     "secondary": "二次",
     "tertiary": "三次"
+  },
+  "followup": {
+    "heading": "フォローアップの質問をする",
+    "placeholder": "例：なぜ推測的と評価されているのか？",
+    "submit": "質問する",
+    "answer_heading": "回答"
   }
 }

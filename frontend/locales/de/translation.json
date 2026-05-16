@@ -72,5 +72,11 @@
     "primary": "Primär",
     "secondary": "Sekundär",
     "tertiary": "Tertiär"
+  },
+  "followup": {
+    "heading": "Folgefrage stellen",
+    "placeholder": "z.B. Warum wird das als spekulativ eingestuft?",
+    "submit": "Fragen",
+    "answer_heading": "Antwort"
   }
 }

@@ -72,5 +72,11 @@
     "primary": "Primair",
     "secondary": "Secundair",
     "tertiary": "Tertiair"
+  },
+  "followup": {
+    "heading": "Stel een vervolgvraag",
+    "placeholder": "bijv. Waarom is dit speculatief beoordeeld?",
+    "submit": "Vragen",
+    "answer_heading": "Antwoord"
   }
 }

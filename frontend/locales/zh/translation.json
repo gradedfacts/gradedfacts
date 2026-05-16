@@ -72,5 +72,11 @@
     "primary": "主要",
     "secondary": "次要",
     "tertiary": "第三级"
+  },
+  "followup": {
+    "heading": "提问后续问题",
+    "placeholder": "例如：为什么被评为推测性？",
+    "submit": "提问",
+    "answer_heading": "回答"
   }
 }

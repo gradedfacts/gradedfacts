@@ -72,5 +72,11 @@
     "primary": "Podstawowe",
     "secondary": "Wtórne",
     "tertiary": "Trzeciorzędne"
+  },
+  "followup": {
+    "heading": "Zadaj pytanie uzupełniające",
+    "placeholder": "np. Dlaczego to jest oceniane jako spekulatywne?",
+    "submit": "Zapytaj",
+    "answer_heading": "Odpowiedź"
   }
 }

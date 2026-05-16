@@ -72,5 +72,11 @@
     "primary": "Primario",
     "secondary": "Secondario",
     "tertiary": "Terziario"
+  },
+  "followup": {
+    "heading": "Poni una domanda di approfondimento",
+    "placeholder": "es. Perché è classificato come speculativo?",
+    "submit": "Chiedi",
+    "answer_heading": "Risposta"
   }
 }
