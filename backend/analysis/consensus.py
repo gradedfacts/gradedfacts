@@ -150,11 +150,14 @@ def _mistral_phase1_brave_search(claim_text: str) -> str:
         }
         params = {"q": claim_text, "count": 10}
 
+        logger.info("Brave Search query: %r", claim_text)
         with httpx.Client(timeout=30.0) as client:
             resp = client.get(_BRAVE_SEARCH_URL, headers=headers, params=params)
             resp.raise_for_status()
 
+        logger.info("Brave Search HTTP status: %d", resp.status_code)
         results = resp.json().get("web", {}).get("results", [])
+        logger.info("Brave Search results returned: %d", len(results))
         if not results:
             return ""
 
