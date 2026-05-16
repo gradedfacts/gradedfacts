@@ -1,3 +1,4 @@
+import json
 import logging
 
 import anthropic
@@ -49,13 +50,13 @@ def _detect_language(claim_text: str) -> str:
 
 
 def _build_lang_instruction(lang_name: str) -> str:
-    """Return a per-request language instruction string, or '' for English claims."""
+    """Return a per-request language instruction string, or '' for English output."""
     if lang_name == "English":
         return ""
     return (
-        f"IMPORTANT: Respond in the same language as the claim. "
-        f"The claim is in {lang_name}. "
-        f"Write your entire analysis, rationale, and all text in {lang_name}."
+        f"IMPORTANT: The user's interface language is {lang_name}. "
+        f"Write your entire response — rationale, all labels, all text — in {lang_name}, "
+        f"regardless of what language the claim itself is written in."
     )
 
 
@@ -427,9 +428,18 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     # Apply independence registry + quality checks before rating derivation.
     # This overrides Claude's own is_independent assessment for known compromised
     # institutions and caps their relevance_score at COMPROMISED_SCORE_CAP.
+    raw_sources = data.get("sources", [])
+    if isinstance(raw_sources, str):
+        # Guard: model occasionally returns sources as a JSON-encoded string.
+        try:
+            raw_sources = json.loads(raw_sources)
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("claim %s: could not parse sources JSON string; ignoring sources.", claim_id)
+            raw_sources = []
     sources_data: list[dict] = [
         evaluate_source(src)
-        for src in data.get("sources", [])[:MAX_SOURCES]
+        for src in raw_sources[:MAX_SOURCES]
+        if isinstance(src, dict)
     ]
     # Domain deduplication: multiple sources from the same root domain count as one
     # for threshold purposes. All sources remain in sources_data for UI display.

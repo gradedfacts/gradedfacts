@@ -259,6 +259,15 @@ def _process_sources(
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
     """
+    if isinstance(sources_raw, str):
+        # Guard: model occasionally returns sources as a JSON-encoded string instead
+        # of a parsed array, which would cause character-level iteration below.
+        try:
+            sources_raw = json.loads(sources_raw)
+        except (json.JSONDecodeError, ValueError):
+            logger.warning("_process_sources: could not parse sources JSON string; treating as empty.")
+            sources_raw = []
+
     coerced: list[dict] = []
     for s in sources_raw[:MAX_SOURCES]:
         if isinstance(s, dict):
