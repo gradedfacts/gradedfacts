@@ -80,5 +80,11 @@
     "placeholder": "例：なぜ推測的と評価されているのか？",
     "submit": "質問する",
     "answer_heading": "回答"
+  },
+  "examples": {
+    "heading": "主張の例",
+    "claim1": "Donald Trump möchte einen neuen Ballsaal beim Weissen Haus bauen.",
+    "claim2": "Die EU hat die Nutzung von KI in der öffentlichen Verwaltung verboten.",
+    "claim3": "Die Schweiz ist das einzige Land der Welt das keine Hauptstadt hat."
   }
 }
