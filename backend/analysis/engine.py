@@ -2,6 +2,7 @@ import json
 import logging
 
 import anthropic
+import httpx
 
 try:
     from langdetect import detect as _ld_detect, DetectorFactory as _LDFactory
@@ -307,9 +308,10 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str) -> tuple[bo
 
 def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
     """
-    Ask Claude to search for 2-3 sources. Returns the full text of its findings.
-    Falls back silently to an empty string if web search is unavailable.
+    Ask Claude to search for 2-3 sources and, if SEARXNG_URL is configured, also query
+    SearXNG and append those results as additional context. Falls back silently on any error.
     """
+    claude_findings = ""
     try:
         resp = client.messages.create(
             model="claude-sonnet-4-6",
@@ -324,14 +326,47 @@ def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
                 ),
             }],
         )
-        return "\n".join(
+        claude_findings = "\n".join(
             block.text for block in resp.content if hasattr(block, "text") and block.text
         ).strip()
     except anthropic.PermissionDeniedError:
         logger.warning("Web search not available on this API key; skipping phase 1.")
-        return ""
     except Exception as exc:
         logger.warning("Phase 1 web search failed (%s); proceeding without results.", exc)
+
+    searxng_findings = _query_searxng_context(claim_text)
+    if claude_findings and searxng_findings:
+        return f"{claude_findings}\n\nAdditional sources from SearXNG:\n{searxng_findings}"
+    return claude_findings or searxng_findings
+
+
+def _query_searxng_context(claim_text: str) -> str:
+    """
+    Query SearXNG and return formatted context string for Claude's Phase 2.
+    Returns "" immediately if SEARXNG_URL is not configured or the request fails.
+    """
+    if not settings.searxng_url:
+        return ""
+    try:
+        base = settings.searxng_url.rstrip("/")
+        params = {"q": claim_text, "format": "json", "categories": "general"}
+        logger.info("SearXNG context query for Claude: %r", claim_text)
+        with httpx.Client(timeout=30.0) as client:
+            resp = client.get(f"{base}/search", params=params)
+            resp.raise_for_status()
+        results = resp.json().get("results", [])
+        logger.info("SearXNG context results: %d", len(results))
+        if not results:
+            return ""
+        lines = []
+        for i, r in enumerate(results, 1):
+            title = r.get("title", "")
+            url = r.get("url", "")
+            content = r.get("content", "")
+            lines.append(f"Source {i}: {title}\nURL: {url}\nExcerpt: {content}")
+        return "\n\n".join(lines)
+    except Exception as exc:
+        logger.warning("SearXNG context query failed (%s); proceeding without SearXNG results.", exc)
         return ""
 
 

@@ -136,24 +136,12 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     return args
 
 
-# ── Brave Search Phase 1 for Mistral ─────────────────────────────────────────
+# ── Search helpers (Brave + SearXNG) for Mistral's Phase 1 ───────────────────
 
-def _mistral_phase1_brave_search(claim_text: str) -> str:
-    """
-    Query Brave Web Search API and return formatted findings for Mistral's Phase 2.
-
-    Returns an empty string (never raises) when:
-      - BRAVE_API_KEY is not configured
-      - The HTTP request fails for any reason
-      - The response contains no results
-    This keeps Mistral's pipeline fully independent of Claude's: an empty string
-    is passed to _mistral_phase2_judgment, which handles the no-context case.
-    """
-    logger.info("_mistral_phase1_brave_search called, key present: %s", bool(settings.brave_api_key))
-    logger.info("Starting Mistral Brave Search phase")
-    logger.info("BRAVE_API_KEY present: %s", bool(os.getenv("BRAVE_API_KEY")))
+def _query_brave(claim_text: str) -> list[dict]:
+    """Query Brave Web Search; returns raw result dicts. Returns [] on any failure."""
     if not settings.brave_api_key:
-        return ""
+        return []
     try:
         headers = {
             "Accept": "application/json",
@@ -161,29 +149,93 @@ def _mistral_phase1_brave_search(claim_text: str) -> str:
             "X-Subscription-Token": settings.brave_api_key,
         }
         params = {"q": claim_text, "count": 10}
-
         logger.info("Brave Search query: %r", claim_text)
         with httpx.Client(timeout=30.0) as client:
             resp = client.get(_BRAVE_SEARCH_URL, headers=headers, params=params)
             resp.raise_for_status()
-
         logger.info("Brave Search HTTP status: %d", resp.status_code)
         results = resp.json().get("web", {}).get("results", [])
         logger.info("Brave Search results returned: %d", len(results))
-        if not results:
-            return ""
-
-        lines = []
-        for i, r in enumerate(results, 1):
-            title = r.get("title", "")
-            url = r.get("url", "")
-            description = r.get("description", "")
-            lines.append(f"Source {i}: {title}\nURL: {url}\nExcerpt: {description}")
-
-        return "\n\n".join(lines)
+        return results
     except Exception as exc:
-        logger.warning("Brave Search failed (%s); Mistral will proceed without web context.", exc)
+        logger.warning("Brave Search failed (%s); skipping Brave results.", exc)
+        return []
+
+
+def _query_searxng(claim_text: str) -> list[dict]:
+    """
+    Query SearXNG REST API; returns normalised result dicts. Returns [] on any failure.
+    Each dict has keys: title, url, description (matching Brave's field names).
+    """
+    if not settings.searxng_url:
+        return []
+    try:
+        base = settings.searxng_url.rstrip("/")
+        params = {"q": claim_text, "format": "json", "categories": "general"}
+        logger.info("SearXNG query: %r", claim_text)
+        with httpx.Client(timeout=30.0) as client:
+            resp = client.get(f"{base}/search", params=params)
+            resp.raise_for_status()
+        results = resp.json().get("results", [])
+        logger.info("SearXNG results returned: %d", len(results))
+        return [
+            {
+                "title": r.get("title", ""),
+                "url": r.get("url", ""),
+                "description": r.get("content", ""),
+            }
+            for r in results
+        ]
+    except Exception as exc:
+        logger.warning("SearXNG search failed (%s); skipping SearXNG results.", exc)
+        return []
+
+
+def _mistral_phase1_brave_search(claim_text: str) -> str:
+    """
+    Query Brave and/or SearXNG in parallel; merge and deduplicate results by URL.
+
+    Returns formatted findings for Mistral's Phase 2, or "" when no configured
+    source returns results. Never raises — keeps Mistral's pipeline independent
+    of Claude's regardless of search-source availability.
+    """
+    logger.info(
+        "_mistral_phase1_brave_search called, brave key present: %s, searxng configured: %s",
+        bool(settings.brave_api_key), bool(settings.searxng_url),
+    )
+    logger.info("BRAVE_API_KEY present: %s", bool(os.getenv("BRAVE_API_KEY")))
+
+    has_brave = bool(settings.brave_api_key)
+    has_searxng = bool(settings.searxng_url)
+    if not has_brave and not has_searxng:
         return ""
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        brave_future = executor.submit(_query_brave, claim_text)
+        searxng_future = executor.submit(_query_searxng, claim_text)
+        brave_results = brave_future.result()
+        searxng_results = searxng_future.result()
+
+    # Merge and deduplicate by URL; Brave results take precedence for duplicates.
+    seen_urls: set[str] = set()
+    merged: list[dict] = []
+    for r in brave_results + searxng_results:
+        url = r.get("url", "")
+        if url and url not in seen_urls:
+            seen_urls.add(url)
+            merged.append(r)
+
+    if not merged:
+        return ""
+
+    lines = []
+    for i, r in enumerate(merged, 1):
+        title = r.get("title", "")
+        url = r.get("url", "")
+        description = r.get("description", "")
+        lines.append(f"Source {i}: {title}\nURL: {url}\nExcerpt: {description}")
+
+    return "\n\n".join(lines)
 
 
 def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:

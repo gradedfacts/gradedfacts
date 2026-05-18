@@ -334,6 +334,7 @@ def _run_consensus(
 
         mock_settings.mistral_api_key = mistral_key
         mock_settings.brave_api_key = brave_key
+        mock_settings.searxng_url = ""
 
         if mistral_raises is not None:
             patch_target = patch.object(cons, "_mistral_phase2_judgment", side_effect=mistral_raises)
@@ -537,6 +538,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "test-brave-key"
+            s.searxng_url = ""
             output = _mistral_phase1_brave_search("test claim")
 
         assert "Article A" in output
@@ -557,6 +559,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "key"
+            s.searxng_url = ""
             output = _mistral_phase1_brave_search("claim")
 
         assert "Source 1:" in output
@@ -570,6 +573,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client") as mock_client_cls, \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = ""
+            s.searxng_url = ""
             result = _mistral_phase1_brave_search("claim")
 
         assert result == ""
@@ -584,6 +588,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "key"
+            s.searxng_url = ""
             result = _mistral_phase1_brave_search("claim")
 
         assert result == ""
@@ -603,6 +608,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "key"
+            s.searxng_url = ""
             result = _mistral_phase1_brave_search("claim")
 
         assert result == ""
@@ -620,6 +626,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "key"
+            s.searxng_url = ""
             result = _mistral_phase1_brave_search("claim")
 
         assert result == ""
@@ -633,6 +640,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "my-key"
+            s.searxng_url = ""
             _mistral_phase1_brave_search("Joe Biden said X")
 
         call_kwargs = mock_http.get.call_args
@@ -647,6 +655,7 @@ class TestBraveSearch:
         with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
              patch("backend.analysis.consensus.settings") as s:
             s.brave_api_key = "my-secret"
+            s.searxng_url = ""
             _mistral_phase1_brave_search("claim text")
 
         call_kwargs = mock_http.get.call_args
@@ -792,3 +801,328 @@ class TestBraveIntegration:
 
         assert j.models_agree is True
         assert j.consensus_rating == EpistemicRating.VERIFIED
+
+
+# ── SearXNG helpers: _query_searxng ──────────────────────────────────────────
+
+def _make_searxng_http_mock(results: list[dict]):
+    """Return a mock httpx.Client whose GET response contains the given SearXNG results."""
+    mock_response = MagicMock()
+    mock_response.raise_for_status.return_value = None
+    mock_response.json.return_value = {"results": results}
+
+    mock_http = MagicMock()
+    mock_http.__enter__ = MagicMock(return_value=mock_http)
+    mock_http.__exit__ = MagicMock(return_value=False)
+    mock_http.get.return_value = mock_response
+    return mock_http
+
+
+class TestQuerySearxng:
+
+    def test_returns_normalised_results(self):
+        from backend.analysis.consensus import _query_searxng
+
+        raw = [
+            {"title": "SearX Result 1", "url": "https://sx.example/1", "content": "SearXNG content 1."},
+            {"title": "SearX Result 2", "url": "https://sx.example/2", "content": "SearXNG content 2."},
+        ]
+        mock_http = _make_searxng_http_mock(raw)
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            results = _query_searxng("test claim")
+
+        assert len(results) == 2
+        assert results[0]["title"] == "SearX Result 1"
+        assert results[0]["url"] == "https://sx.example/1"
+        assert results[0]["description"] == "SearXNG content 1."
+
+    def test_returns_empty_list_when_url_not_configured(self):
+        from backend.analysis.consensus import _query_searxng
+
+        with patch("backend.analysis.consensus.httpx.Client") as mock_client_cls, \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = ""
+            result = _query_searxng("claim")
+
+        assert result == []
+        mock_client_cls.assert_not_called()
+
+    def test_returns_empty_list_on_http_error(self):
+        import httpx as _httpx
+        from backend.analysis.consensus import _query_searxng
+
+        mock_http = MagicMock()
+        mock_http.__enter__ = MagicMock(return_value=mock_http)
+        mock_http.__exit__ = MagicMock(return_value=False)
+        mock_http.get.return_value.raise_for_status.side_effect = _httpx.HTTPStatusError(
+            "500", request=MagicMock(), response=MagicMock()
+        )
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            result = _query_searxng("claim")
+
+        assert result == []
+
+    def test_returns_empty_list_on_connection_error(self):
+        import httpx as _httpx
+        from backend.analysis.consensus import _query_searxng
+
+        mock_http = MagicMock()
+        mock_http.__enter__ = MagicMock(return_value=mock_http)
+        mock_http.__exit__ = MagicMock(return_value=False)
+        mock_http.get.side_effect = _httpx.ConnectError("refused")
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            result = _query_searxng("claim")
+
+        assert result == []
+
+    def test_sends_correct_query_params(self):
+        from backend.analysis.consensus import _query_searxng
+
+        mock_http = _make_searxng_http_mock([
+            {"title": "T", "url": "https://t.example/", "content": "C"}
+        ])
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            _query_searxng("specific claim text")
+
+        call_kwargs = mock_http.get.call_args
+        assert call_kwargs.kwargs["params"]["q"] == "specific claim text"
+        assert call_kwargs.kwargs["params"]["format"] == "json"
+        assert call_kwargs.kwargs["params"]["categories"] == "general"
+
+    def test_strips_trailing_slash_from_url(self):
+        from backend.analysis.consensus import _query_searxng
+
+        mock_http = _make_searxng_http_mock([])
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.searxng_url = "https://searx.example.com/"
+            _query_searxng("claim")
+
+        called_url = mock_http.get.call_args.args[0]
+        assert called_url == "https://searx.example.com/search"
+
+
+class TestSearxngInMistralPhase1:
+
+    def test_searxng_results_included_when_configured(self):
+        """When SEARXNG_URL is set and Brave is absent, SearXNG results are returned."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        raw = [{"title": "SX Title", "url": "https://sx.example/1", "content": "SX content."}]
+        mock_http = _make_searxng_http_mock(raw)
+
+        with patch("backend.analysis.consensus.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = ""
+            s.searxng_url = "https://searx.example.com"
+            output = _mistral_phase1_brave_search("test claim")
+
+        assert "SX Title" in output
+        assert "https://sx.example/1" in output
+        assert "SX content." in output
+
+    def test_deduplicates_by_url_when_both_sources_return_same_url(self):
+        """URLs present in both Brave and SearXNG results appear only once."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        shared_url = "https://shared.example/article"
+        brave_results = [
+            {"title": "Brave Version", "url": shared_url, "description": "Brave excerpt."},
+        ]
+        searxng_results = [
+            {"title": "SearXNG Version", "url": shared_url, "content": "SearXNG excerpt."},
+            {"title": "SearXNG Unique", "url": "https://unique.example/", "content": "Unique."},
+        ]
+
+        with patch("backend.analysis.consensus._query_brave", return_value=brave_results), \
+             patch("backend.analysis.consensus._query_searxng", return_value=[
+                 {"title": "SearXNG Version", "url": shared_url, "description": "SearXNG excerpt."},
+                 {"title": "SearXNG Unique", "url": "https://unique.example/", "description": "Unique."},
+             ]), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = "brave-key"
+            s.searxng_url = "https://searx.example.com"
+            output = _mistral_phase1_brave_search("claim")
+
+        # shared URL appears exactly once
+        assert output.count(shared_url) == 1
+        # unique SearXNG URL is also present
+        assert "https://unique.example/" in output
+
+    def test_merges_brave_and_searxng_results(self):
+        """When both sources are configured, results from both are present."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        brave_results = [
+            {"title": "Brave Article", "url": "https://brave.example/1", "description": "Brave desc."},
+        ]
+        searxng_results = [
+            {"title": "SearXNG Article", "url": "https://searxng.example/1", "description": "SearX desc."},
+        ]
+
+        with patch("backend.analysis.consensus._query_brave", return_value=brave_results), \
+             patch("backend.analysis.consensus._query_searxng", return_value=searxng_results), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = "brave-key"
+            s.searxng_url = "https://searx.example.com"
+            output = _mistral_phase1_brave_search("claim")
+
+        assert "Brave Article" in output
+        assert "https://brave.example/1" in output
+        assert "SearXNG Article" in output
+        assert "https://searxng.example/1" in output
+
+    def test_returns_empty_string_when_both_unconfigured(self):
+        """No HTTP call when neither Brave key nor SearXNG URL is set."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        with patch("backend.analysis.consensus.httpx.Client") as mock_client_cls, \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = ""
+            s.searxng_url = ""
+            result = _mistral_phase1_brave_search("claim")
+
+        assert result == ""
+        mock_client_cls.assert_not_called()
+
+    def test_searxng_failure_still_returns_brave_results(self):
+        """If SearXNG fails, Brave results are still returned (graceful degradation)."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        brave_results = [
+            {"title": "Brave OK", "url": "https://brave.example/1", "description": "Brave desc."},
+        ]
+
+        with patch("backend.analysis.consensus._query_brave", return_value=brave_results), \
+             patch("backend.analysis.consensus._query_searxng", return_value=[]), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = "brave-key"
+            s.searxng_url = "https://searx.example.com"
+            output = _mistral_phase1_brave_search("claim")
+
+        assert "Brave OK" in output
+
+    def test_brave_failure_still_returns_searxng_results(self):
+        """If Brave fails, SearXNG results are still returned (graceful degradation)."""
+        from backend.analysis.consensus import _mistral_phase1_brave_search
+
+        searxng_results = [
+            {"title": "SearX OK", "url": "https://searxng.example/1", "description": "SearX desc."},
+        ]
+
+        with patch("backend.analysis.consensus._query_brave", return_value=[]), \
+             patch("backend.analysis.consensus._query_searxng", return_value=searxng_results), \
+             patch("backend.analysis.consensus.settings") as s:
+            s.brave_api_key = "brave-key"
+            s.searxng_url = "https://searx.example.com"
+            output = _mistral_phase1_brave_search("claim")
+
+        assert "SearX OK" in output
+
+
+# ── SearXNG integration in Claude's search phase (engine.py) ─────────────────
+
+class TestSearxngInClaudeSearch:
+
+    def test_searxng_appended_to_claude_findings(self):
+        """When SEARXNG_URL is set, SearXNG context is appended to Claude's findings."""
+        from backend.analysis import engine as eng
+
+        with patch.object(eng, "_query_searxng_context", return_value="SearXNG context here"), \
+             patch("backend.analysis.engine.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+
+            mock_client = MagicMock()
+            mock_resp = MagicMock()
+            mock_block = MagicMock()
+            mock_block.text = "Claude findings"
+            mock_resp.content = [mock_block]
+            mock_client.messages.create.return_value = mock_resp
+
+            result = eng._phase1_search(mock_client, "test claim")
+
+        assert "Claude findings" in result
+        assert "SearXNG context here" in result
+
+    def test_searxng_not_queried_when_url_empty(self):
+        """When SEARXNG_URL is empty, _query_searxng_context returns "" without HTTP call."""
+        from backend.analysis import engine as eng
+
+        with patch("backend.analysis.engine.httpx.Client") as mock_client_cls, \
+             patch("backend.analysis.engine.settings") as s:
+            s.searxng_url = ""
+            result = eng._query_searxng_context("claim text")
+
+        assert result == ""
+        mock_client_cls.assert_not_called()
+
+    def test_searxng_context_returns_formatted_results(self):
+        """_query_searxng_context formats results with title, URL and excerpt."""
+        from backend.analysis import engine as eng
+
+        raw = [
+            {"title": "Engine Source", "url": "https://eng.example/1", "content": "Engine excerpt."},
+        ]
+        mock_http = MagicMock()
+        mock_http.__enter__ = MagicMock(return_value=mock_http)
+        mock_http.__exit__ = MagicMock(return_value=False)
+        mock_response = MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {"results": raw}
+        mock_http.get.return_value = mock_response
+
+        with patch("backend.analysis.engine.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.engine.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            result = eng._query_searxng_context("test claim")
+
+        assert "Engine Source" in result
+        assert "https://eng.example/1" in result
+        assert "Engine excerpt." in result
+
+    def test_searxng_context_returns_empty_on_http_error(self):
+        """_query_searxng_context returns "" gracefully on HTTP failure."""
+        import httpx as _httpx
+        from backend.analysis import engine as eng
+
+        mock_http = MagicMock()
+        mock_http.__enter__ = MagicMock(return_value=mock_http)
+        mock_http.__exit__ = MagicMock(return_value=False)
+        mock_http.get.return_value.raise_for_status.side_effect = _httpx.HTTPStatusError(
+            "503", request=MagicMock(), response=MagicMock()
+        )
+
+        with patch("backend.analysis.engine.httpx.Client", return_value=mock_http), \
+             patch("backend.analysis.engine.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+            result = eng._query_searxng_context("claim")
+
+        assert result == ""
+
+    def test_phase1_search_returns_searxng_only_when_claude_search_fails(self):
+        """When Claude's web search is unavailable, SearXNG results are returned."""
+        from backend.analysis import engine as eng
+
+        with patch.object(eng, "_query_searxng_context", return_value="SearXNG only results"), \
+             patch("backend.analysis.engine.settings") as s:
+            s.searxng_url = "https://searx.example.com"
+
+            mock_client = MagicMock()
+            mock_client.messages.create.side_effect = Exception("network error")
+
+            result = eng._phase1_search(mock_client, "test claim")
+
+        assert result == "SearXNG only results"
