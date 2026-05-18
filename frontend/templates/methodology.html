@@ -62,18 +62,20 @@
     </li>
     <li>
       <strong>Web search.</strong>
-      The engine searches for relevant sources using <strong>Brave Search</strong>, targeting
-      primary and independent sources that directly address the claim. The two parallel analysis
-      pipelines (Claude and Mistral) each run their own independent Brave Search queries, so
-      neither pipeline&rsquo;s findings influence the other. The search phase intentionally
-      allows some variation in query construction so that different runs may surface different
-      evidence, improving coverage across multiple analyses of the same claim.
+      Both models use two independent search sources in parallel: <strong>Brave Search API</strong>
+      and a self-hosted <strong>SearXNG</strong> instance (hosted in Switzerland). Results are
+      merged and deduplicated. This ensures broader source coverage and reduces the risk of missing
+      evidence when one source returns insufficient results.
+      The two parallel analysis pipelines (Claude and Mistral) each run their own independent
+      search queries, so neither pipeline&rsquo;s findings influence the other. The search phase
+      intentionally allows some variation in query construction so that different runs may surface
+      different evidence, improving coverage across multiple analyses of the same claim.
     </li>
     <li>
       <strong>Structured judgment.</strong>
       Two models evaluate the evidence in parallel and independently.
       <strong>Claude</strong> (Anthropic) acts as the primary pipeline; <strong>Mistral</strong>
-      acts as the secondary pipeline, using its own Brave Search results.
+      acts as the secondary pipeline, using its own Brave Search + SearXNG results.
       Each produces a structured verdict: a rating, a rationale, and a scored, tiered source list.
       Both pipelines run at <strong>temperature&nbsp;0</strong> &mdash; given the same claim and
       the same evidence, each engine always produces the same output.
@@ -82,6 +84,15 @@
       Mistral is optional: if unavailable, the system falls back gracefully to the Claude-only result.
     </li>
   </ol>
+</div>
+
+<div class="card prose">
+  <h2 class="section-heading">Follow-up Questions</h2>
+  <p>
+    Follow-up questions are answered by Claude (Sonnet) alone, using the original claim and
+    judgment as context. No new source search is performed &mdash; follow-ups are contextual
+    clarifications, not new fact-checks.
+  </p>
 </div>
 
 <div class="card prose">
