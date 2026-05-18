@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "フォローアップの質問をする",
-    "placeholder": "例：なぜ推測的と評価されているのか？",
+    "placeholder": "例：なぜこの評価ですか？",
     "submit": "質問する",
     "answer_heading": "回答"
   },

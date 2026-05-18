@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Ask a follow-up question",
-    "placeholder": "e.g. Why is this rated speculative?",
+    "placeholder": "e.g. Why was this rated this way?",
     "submit": "Ask",
     "answer_heading": "Answer"
   },

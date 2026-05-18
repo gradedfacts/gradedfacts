@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Takip sorusu sorun",
-    "placeholder": "ör. Bu neden spekülatif olarak değerlendirildi?",
+    "placeholder": "örn. Bu değerlendirme neden?",
     "submit": "Sor",
     "answer_heading": "Cevap"
   },

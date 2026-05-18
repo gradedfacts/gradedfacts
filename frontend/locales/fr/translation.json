@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Poser une question de suivi",
-    "placeholder": "ex. Pourquoi est-ce évalué comme spéculatif ?",
+    "placeholder": "p.ex. Pourquoi cette évaluation ?",
     "submit": "Demander",
     "answer_heading": "Réponse"
   },

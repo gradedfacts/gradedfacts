@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Fazer uma pergunta de acompanhamento",
-    "placeholder": "ex. Por que isso é classificado como especulativo?",
+    "placeholder": "p.ex. Por que esta avaliação?",
     "submit": "Perguntar",
     "answer_heading": "Resposta"
   },

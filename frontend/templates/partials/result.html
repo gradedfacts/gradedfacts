@@ -24,7 +24,7 @@
       <span class="board-verdict" data-i18n="rating_label.{{ judgment.rating.value }}">{{ judgment.rating | rating_label }}</span>
     </div>
 
-    <p class="board-rationale">{{ judgment.rationale | render_model_badges | safe }}</p>
+    <p class="board-rationale">{{ judgment.rationale | render_model_badges(lang) | safe }}</p>
 
     {% if sources %}
     <p class="board-tiles-label" data-i18n="result.evidence_pieces" data-i18n-options='{"count": {{ sources | length }}}'>Evidence pieces ({{ sources | length }})</p>
@@ -156,7 +156,7 @@
             <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
           </summary>
           <div class="judgment-body">
-            <p class="judgment-rationale">{{ j.rationale | render_model_badges | safe }}</p>
+            <p class="judgment-rationale">{{ j.rationale | render_model_badges(lang) | safe }}</p>
             <p class="judgment-analyst"><span data-i18n="result.analysis_engine">Analysis engine:</span> {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
             {% if j.revision %}
             <div class="judgment-trigger">

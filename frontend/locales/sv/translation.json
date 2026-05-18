@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Ställ en följdfråga",
-    "placeholder": "t.ex. Varför är detta betygsatt som spekulativt?",
+    "placeholder": "t.ex. Varför denna bedömning?",
     "submit": "Fråga",
     "answer_heading": "Svar"
   },

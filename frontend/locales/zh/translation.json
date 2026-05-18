@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "提问后续问题",
-    "placeholder": "例如：为什么被评为推测性？",
+    "placeholder": "例如：为何如此评级？",
     "submit": "提问",
     "answer_heading": "回答"
   },

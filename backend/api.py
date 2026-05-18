@@ -52,19 +52,46 @@ def _rating_label(rating) -> str:
 
 _BADGE_RE = re.compile(r'\[([A-Za-z]+): ([A-Z]+)\]')
 
+# Translated display labels for rating words inside [Model: RATING] badges.
+# CSS classes always use the English lowercase value; only the visible label is translated.
+_RATING_TRANSLATIONS: dict[str, dict[str, str]] = {
+    "de": {"verified": "Bestätigt",    "speculative": "Spekulativ",   "debunked": "Widerlegt",   "missing": "Fehlend"},
+    "fr": {"verified": "Vérifié",      "speculative": "Spéculatif",   "debunked": "Réfuté",      "missing": "Insuffisant"},
+    "es": {"verified": "Verificado",   "speculative": "Especulativo", "debunked": "Refutado",    "missing": "Insuficiente"},
+    "it": {"verified": "Verificato",   "speculative": "Speculativo",  "debunked": "Confutato",   "missing": "Mancante"},
+    "pt": {"verified": "Verificado",   "speculative": "Especulativo", "debunked": "Refutado",    "missing": "Insuficiente"},
+    "nl": {"verified": "Geverifieerd", "speculative": "Speculatief",  "debunked": "Ontkracht",   "missing": "Onvoldoende"},
+    "pl": {"verified": "Zweryfikowany","speculative": "Spekulatywny", "debunked": "Obalony",     "missing": "Niewystarczający"},
+    "sv": {"verified": "Verifierat",   "speculative": "Spekulativt",  "debunked": "Motbevisat",  "missing": "Otillräckligt"},
+    "ru": {"verified": "Подтверждено", "speculative": "Умозрительно", "debunked": "Опровергнуто","missing": "Недостаточно"},
+    "uk": {"verified": "Підтверджено", "speculative": "Спекулятивний","debunked": "Спростовано", "missing": "Недостатньо"},
+    "tr": {"verified": "Doğrulandı",   "speculative": "Spekülatif",   "debunked": "Çürütüldü",   "missing": "Yetersiz"},
+    "ar": {"verified": "موثق",         "speculative": "تخميني",       "debunked": "مدحوض",       "missing": "غير كافٍ"},
+    "zh": {"verified": "已核实",        "speculative": "推测性",        "debunked": "已驳斥",       "missing": "证据不足"},
+    "ja": {"verified": "確認済み",      "speculative": "推測的",        "debunked": "否定済み",     "missing": "不十分"},
+    "ko": {"verified": "확인됨",        "speculative": "추정적",        "debunked": "반증됨",       "missing": "불충분"},
+    "hu": {"verified": "Igazolt",      "speculative": "Spekulatív",   "debunked": "Megcáfolt",   "missing": "Hiányos"},
+}
 
-def _render_model_badges(text: str) -> str:
-    """Replace [Model: RATING] tags with styled rating-badge spans. Returns safe HTML."""
+
+def _render_model_badges(text: str, lang: str = "en") -> str:
+    """Replace [Model: RATING] tags with styled rating-badge spans. Returns safe HTML.
+
+    Rating words are translated to `lang` when a translation is available;
+    CSS classes always use the English lowercase value so styling is unaffected.
+    """
     escaped = html.escape(text)
+    translations = _RATING_TRANSLATIONS.get(lang, {})
 
     def _badge(m: re.Match) -> str:
         model = m.group(1)
         rating_upper = m.group(2)
         rating_lower = rating_upper.lower()
+        label = translations.get(rating_lower, rating_upper)
         return (
             f'<span class="rating-badge {rating_lower}" style="vertical-align:middle;margin-right:0.35em">'
             f'<span class="rating-dot"></span>'
-            f'{model}: {rating_upper}'
+            f'{model}: {label}'
             f'</span>'
         )
 

@@ -77,7 +77,7 @@
   },
   "followup": {
     "heading": "Zadaj pytanie uzupełniające",
-    "placeholder": "np. Dlaczego to jest oceniane jako spekulatywne?",
+    "placeholder": "np. Dlaczego taka ocena?",
     "submit": "Zapytaj",
     "answer_heading": "Odpowiedź"
   },
