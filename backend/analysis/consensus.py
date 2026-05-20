@@ -411,8 +411,15 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
 
     claude_client = _get_client()
 
+    # Resolve claim language first — gates need lang_name for localized messages.
+    from backend.analysis.engine import _resolve_ui_language, _check_off_topic
+    if user_language:
+        lang_name = _resolve_ui_language(user_language)
+    else:
+        lang_name = _detect_language(claim.text)
+
     # ── Pre-flight specificity gate ───────────────────────────────────────────
-    is_specific, vague_rationale = _check_specificity(claude_client, claim.text)
+    is_specific, vague_rationale = _check_specificity(claude_client, claim.text, lang_name)
     if not is_specific:
         judgment = Judgment(
             claim_id=claim_id,
@@ -426,12 +433,20 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         session.refresh(judgment)
         return judgment
 
-    # Resolve claim language: use caller-supplied UI language if provided, otherwise detect.
-    if user_language:
-        from backend.analysis.engine import _resolve_ui_language
-        lang_name = _resolve_ui_language(user_language)
-    else:
-        lang_name = _detect_language(claim.text)
+    # ── Pre-flight off-topic gate ─────────────────────────────────────────────
+    is_on_topic, off_topic_rationale = _check_off_topic(claude_client, claim.text, lang_name)
+    if not is_on_topic:
+        judgment = Judgment(
+            claim_id=claim_id,
+            rating=EpistemicRating.MISSING,
+            rationale=off_topic_rationale,
+            analyst=_CLAUDE_MODEL,
+            is_active=True,
+        )
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
     lang_instruction = _build_lang_instruction(lang_name)
     if lang_instruction:
         logger.debug("Claim language: %s.", lang_name)
