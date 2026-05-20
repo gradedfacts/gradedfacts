@@ -554,6 +554,12 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         logger.debug("Claim language: %s.", lang_name)
 
     # Pre-flight gate 1: reject claims that are too vague to fact-check meaningfully.
+    logger.info(
+        "specificity gate: user_language=%r  resolved=%r  lang_name=%r",
+        user_language,
+        _resolve_ui_language(user_language) if user_language else None,
+        lang_name,
+    )
     is_specific, vague_rationale = _check_specificity(client, claim.text, lang_name)
     if not is_specific:
         judgment = Judgment(
