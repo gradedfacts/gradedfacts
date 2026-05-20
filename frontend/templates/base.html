@@ -112,8 +112,18 @@
       }, function (err) {
         if (err) console.error('i18next:', err);
         applyTranslations();
+        // i18next is now authoritative: use the base tag it resolved to (after
+        // supportedLngs validation and fallback), not the raw navigator.language value.
+        var resolvedLang = i18next.language.split('-')[0];
+        // Persist so future page loads and the inline script agree.
+        if (!localStorage.getItem('lang')) {
+          localStorage.setItem('lang', resolvedLang);
+        }
         var sel = document.getElementById('lang-select');
-        if (sel) sel.value = i18next.language;
+        if (sel) sel.value = resolvedLang;
+        // Overwrite the early value set by the inline script with the authoritative one.
+        var hidden = document.getElementById('lang-hidden');
+        if (hidden) hidden.value = resolvedLang;
       });
 
     function switchLanguage(lng) {

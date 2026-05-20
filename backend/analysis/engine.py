@@ -363,7 +363,9 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str, lang_name: 
     if verdict != "VAGUE":
         return True, ""
 
-    return False, _get_specificity_message(lang_name)
+    rationale = _get_specificity_message(lang_name)
+    logger.info("Specificity gate rejection: lang_name=%r  rationale=%r", lang_name, rationale)
+    return False, rationale
 
 
 _OFF_TOPIC_PROMPT = """\
