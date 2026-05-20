@@ -378,7 +378,7 @@ def ui_analyze(
             {"code": 400, "message": "Please enter at least 10 characters."},
         )
     user_language = lang.strip()[:10] or None
-    logger.info("analyze endpoint: lang=%r  user_language=%r", lang, user_language)
+    logger.warning("analyze endpoint: lang=%r  user_language=%r", lang, user_language)
     claim = Claim(text=text[:2000])
     session.add(claim)
     session.commit()
@@ -404,6 +404,7 @@ def ui_analyze_consensus(
     lang: str = Form("en"),
     session: Session = Depends(get_session),
 ):
+    logger.warning("consensus endpoint received lang=%r", lang)
     if not check_and_increment(_client_ip(request), session):
         return templates.TemplateResponse(
             request,
@@ -418,7 +419,7 @@ def ui_analyze_consensus(
             {"code": 400, "message": "Please enter at least 10 characters."},
         )
     user_language = lang.strip()[:10] or None
-    logger.info("consensus endpoint: lang=%r  user_language=%r", lang, user_language)
+    logger.warning("consensus endpoint: lang=%r  user_language=%r", lang, user_language)
     claim = Claim(text=text[:2000])
     session.add(claim)
     session.commit()
