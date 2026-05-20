@@ -106,8 +106,11 @@
     };
 
     function getAnalyzingText() {
-      var lang = localStorage.getItem('lang') || navigator.language.split('-')[0] || 'en';
-      return _analyzingTexts[lang] || _analyzingTexts['en'];
+      var lang = (i18next.isInitialized ? i18next.language : null)
+               || localStorage.getItem('lang')
+               || (navigator.language || '').split('-')[0]
+               || 'en';
+      return _analyzingTexts[lang.split('-')[0]] || _analyzingTexts['en'];
     }
 
     function disableButton() {
@@ -126,8 +129,30 @@
       btn.textContent = _originalText;
     }
 
-    // Disable the moment the form fires its request.
-    form.addEventListener('htmx:beforeRequest', disableButton);
+    // Inject the authoritative resolved language into every request at submission
+    // time, bypassing whatever #lang-hidden currently holds.
+    form.addEventListener('htmx:configRequest', function(evt) {
+      var lang = (i18next.isInitialized ? i18next.language : null)
+               || localStorage.getItem('lang')
+               || (navigator.language || '').split('-')[0]
+               || 'en';
+      evt.detail.parameters['lang'] = lang.split('-')[0];
+    });
+
+    // Block submission until i18next has initialized and #lang-hidden reflects
+    // the correct language. i18next typically initializes within ~50 ms, so in
+    // practice the user cannot type and submit faster than this.
+    form.addEventListener('htmx:beforeRequest', function(evt) {
+      if (!i18next.isInitialized) {
+        evt.preventDefault();
+        i18next.on('initialized', function onReady() {
+          i18next.off('initialized', onReady);
+          if (!_isAnalyzing) form.dispatchEvent(new Event('submit', { bubbles: true }));
+        });
+        return;
+      }
+      disableButton();
+    });
 
     // Re-enable only when the analysis is fully done.
     //

@@ -105,7 +105,7 @@
       .use(i18nextHttpBackend)
       .init({
         lng: localStorage.getItem('lang') || navigator.language.split('-')[0],
-        fallbackLng: 'en',
+        fallbackLng: false,
         supportedLngs: ['en', 'de', 'fr', 'it', 'es', 'pt', 'nl', 'pl', 'sv', 'ru', 'uk', 'tr', 'ar', 'zh', 'ja', 'ko', 'hu'],
         backend: { loadPath: '{% raw %}/static/locales/{{lng}}/translation.json{% endraw %}' },
         interpolation: { escapeValue: false }
