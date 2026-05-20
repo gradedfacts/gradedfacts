@@ -80,5 +80,6 @@
     "placeholder": "pl. Miért ez az értékelés?",
     "submit": "Kérdez",
     "answer_heading": "Válasz"
-  }
+  },
+  "off_topic_message": "A GradedFacts Politics politikai és ténybeli állításokat ellenőriz. Kérjük, fogalmazzon meg egy konkrét, ellenőrizhető állítást."
 }

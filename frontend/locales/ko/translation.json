@@ -80,5 +80,6 @@
     "placeholder": "예: 왜 이렇게 평가되었나요?",
     "submit": "질문",
     "answer_heading": "답변"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics는 정치적·사실적 주장을 검증합니다. 구체적이고 검증 가능한 주장을 입력해 주세요."
 }

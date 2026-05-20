@@ -80,5 +80,6 @@
     "placeholder": "np. Dlaczego taka ocena?",
     "submit": "Zapytaj",
     "answer_heading": "Odpowiedź"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics weryfikuje twierdzenia polityczne i faktyczne. Proszę sformułować konkretne, weryfikowalne twierdzenie."
 }

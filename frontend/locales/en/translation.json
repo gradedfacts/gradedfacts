@@ -80,5 +80,6 @@
     "placeholder": "e.g. Why was this rated this way?",
     "submit": "Ask",
     "answer_heading": "Answer"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics checks political and factual claims. Please formulate a concrete, verifiable claim."
 }

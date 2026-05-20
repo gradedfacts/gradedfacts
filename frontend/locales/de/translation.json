@@ -80,5 +80,6 @@
     "placeholder": "z.B. Warum wurde dies so eingestuft?",
     "submit": "Fragen",
     "answer_heading": "Antwort"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics prüft politische und sachliche Behauptungen. Bitte formuliere einen konkreten, überprüfbaren Claim."
 }

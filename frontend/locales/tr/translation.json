@@ -80,5 +80,6 @@
     "placeholder": "örn. Bu değerlendirme neden?",
     "submit": "Sor",
     "answer_heading": "Cevap"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics siyasi ve olgusal iddiaları doğrular. Lütfen somut, doğrulanabilir bir iddia formüle edin."
 }

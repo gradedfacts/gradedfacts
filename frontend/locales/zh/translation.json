@@ -80,5 +80,6 @@
     "placeholder": "例如：为何如此评级？",
     "submit": "提问",
     "answer_heading": "回答"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics 核查政治和事实性声明。请提出一个具体的、可验证的声明。"
 }

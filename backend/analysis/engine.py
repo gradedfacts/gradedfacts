@@ -1,5 +1,6 @@
 import json
 import logging
+from pathlib import Path
 
 import anthropic
 import httpx
@@ -37,6 +38,39 @@ _LANG_NAMES: dict[str, str] = {
     "vi": "Vietnamese", "zh-cn": "Chinese", "zh-tw": "Chinese (Traditional)",
     "zh": "Chinese",
 }
+
+
+# ── Off-topic message i18n ────────────────────────────────────────────────────
+
+_LOCALE_DIR = Path(__file__).parents[2] / "frontend" / "locales"
+
+# Maps language display names (returned by _detect_language) to locale directory codes.
+_LANG_NAME_TO_LOCALE: dict[str, str] = {
+    "English": "en", "German": "de", "French": "fr", "Spanish": "es",
+    "Italian": "it", "Portuguese": "pt", "Dutch": "nl", "Russian": "ru",
+    "Chinese": "zh", "Chinese (Traditional)": "zh", "Japanese": "ja",
+    "Korean": "ko", "Arabic": "ar", "Ukrainian": "uk", "Polish": "pl",
+    "Swedish": "sv", "Turkish": "tr", "Hungarian": "hu",
+}
+
+_OFF_TOPIC_FALLBACK = (
+    "GradedFacts Politics checks political and factual claims. "
+    "Please formulate a concrete, verifiable claim."
+)
+
+
+def _get_off_topic_message(lang_name: str) -> str:
+    """Return the localized off-topic rejection message from the frontend locale file."""
+    locale_code = _LANG_NAME_TO_LOCALE.get(lang_name, "en")
+    for code in (locale_code, "en"):
+        try:
+            data = json.loads((_LOCALE_DIR / code / "translation.json").read_text(encoding="utf-8"))
+            msg = data.get("off_topic_message", "")
+            if msg:
+                return msg
+        except Exception:
+            pass
+    return _OFF_TOPIC_FALLBACK
 
 
 def _detect_language(claim_text: str) -> str:
@@ -306,6 +340,55 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str) -> tuple[bo
     return False, rationale
 
 
+_OFF_TOPIC_PROMPT = """\
+You are a topic gate for GradedFacts Politics, a political and factual fact-checking tool.
+
+Decide whether the input is a factual claim that can be checked against evidence.
+
+REJECT only if the input is clearly one of these:
+- Personal request or task ("What should I cook?", "Help me write code", "Write me a poem")
+- Entertainment or fiction request ("Tell me a joke", "Write a story", "Play a game")
+- Pure definition request ("What is inflation?", "What does democracy mean?")
+- Pure normative opinion with no factual component ("Is capitalism good?", "Which religion is best?")
+
+PASS everything else — political, historical, scientific, institutional claims, and borderline cases.
+When in doubt → PASS. Never reject something that could be a real-world factual claim.
+
+Respond with exactly one line: PASS or REJECT\
+"""
+
+
+def _check_off_topic(client: anthropic.Anthropic, claim_text: str, lang_name: str) -> tuple[bool, str]:
+    """
+    Second pre-flight gate: reject clearly off-topic requests (Haiku only).
+
+    Returns (is_on_topic, rationale).
+    - is_on_topic=True  → proceed; rationale is empty.
+    - is_on_topic=False → off-topic; rationale is the localized rejection message.
+    """
+    try:
+        resp = client.messages.create(
+            model=_SPECIFICITY_MODEL,
+            max_tokens=16,
+            messages=[{
+                "role": "user",
+                "content": f"{_OFF_TOPIC_PROMPT}\n\nInput: {claim_text}",
+            }],
+        )
+        text = next(
+            (b.text for b in resp.content if hasattr(b, "text") and b.text),
+            "",
+        ).strip().upper()
+    except Exception as exc:
+        logger.warning("Off-topic check failed (%s); treating claim as on-topic.", exc)
+        return True, ""
+
+    if "REJECT" not in text:
+        return True, ""
+
+    return False, _get_off_topic_message(lang_name)
+
+
 def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
     """
     Ask Claude to search for 2-3 sources and, if SEARXNG_URL is configured, also query
@@ -430,7 +513,16 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
 
     client = _get_client()
 
-    # Pre-flight: reject claims that are too vague to fact-check meaningfully.
+    # Resolve claim language early so both pre-flight gates can use it.
+    if user_language:
+        lang_name = _LANG_NAMES.get(user_language, "English")
+    else:
+        lang_name = _detect_language(claim.text)
+    lang_instruction = _build_lang_instruction(lang_name)
+    if lang_instruction:
+        logger.debug("Claim language: %s.", lang_name)
+
+    # Pre-flight gate 1: reject claims that are too vague to fact-check meaningfully.
     is_specific, vague_rationale = _check_specificity(client, claim.text)
     if not is_specific:
         judgment = Judgment(
@@ -445,14 +537,20 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         session.refresh(judgment)
         return judgment
 
-    # Resolve claim language: use caller-supplied UI language if provided, otherwise detect.
-    if user_language:
-        lang_name = _LANG_NAMES.get(user_language, "English")
-    else:
-        lang_name = _detect_language(claim.text)
-    lang_instruction = _build_lang_instruction(lang_name)
-    if lang_instruction:
-        logger.debug("Claim language: %s.", lang_name)
+    # Pre-flight gate 2: reject clearly off-topic requests.
+    is_on_topic, off_topic_rationale = _check_off_topic(client, claim.text, lang_name)
+    if not is_on_topic:
+        judgment = Judgment(
+            claim_id=claim_id,
+            rating=EpistemicRating.MISSING,
+            rationale=off_topic_rationale,
+            analyst=analyst,
+            is_active=True,
+        )
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
 
     # Phase 1: gather evidence via web search (best-effort)
     search_findings = _phase1_search(client, claim.text)

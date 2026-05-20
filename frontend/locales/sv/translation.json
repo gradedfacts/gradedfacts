@@ -80,5 +80,6 @@
     "placeholder": "t.ex. Varför denna bedömning?",
     "submit": "Fråga",
     "answer_heading": "Svar"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics kontrollerar politiska och faktapåståenden. Formulera ett konkret, verifierbart påstående."
 }

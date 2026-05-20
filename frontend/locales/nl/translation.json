@@ -80,5 +80,6 @@
     "placeholder": "bijv. Waarom deze beoordeling?",
     "submit": "Vragen",
     "answer_heading": "Antwoord"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics controleert politieke en feitelijke beweringen. Formuleer een concrete, verifieerbare bewering."
 }

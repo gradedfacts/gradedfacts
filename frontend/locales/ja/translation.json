@@ -80,5 +80,6 @@
     "placeholder": "例：なぜこの評価ですか？",
     "submit": "質問する",
     "answer_heading": "回答"
-  }
+  },
+  "off_topic_message": "GradedFacts Politicsは政治的・事実に基づく主張を検証します。具体的で検証可能な主張を入力してください。"
 }

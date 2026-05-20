@@ -80,5 +80,6 @@
     "placeholder": "p.es. Perché questa valutazione?",
     "submit": "Chiedi",
     "answer_heading": "Risposta"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics verifica affermazioni politiche e fattuali. Formulare un'affermazione concreta e verificabile."
 }

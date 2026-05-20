@@ -80,5 +80,6 @@
     "placeholder": "مثلاً: لماذا هذا التقييم؟",
     "submit": "اسأل",
     "answer_heading": "الإجابة"
-  }
+  },
+  "off_topic_message": "GradedFacts Politics يتحقق من الادعاءات السياسية والواقعية. يرجى صياغة ادعاء محدد وقابل للتحقق."
 }
