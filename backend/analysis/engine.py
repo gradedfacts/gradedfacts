@@ -327,11 +327,7 @@ A claim is VAGUE (and must be rejected) only if it is entirely content-free:
 When in doubt, mark SPECIFIC — it is better to analyse a borderline claim \
 than to silently reject a historically significant one.
 
-Respond with exactly two lines:
-Line 1: SPECIFIC or VAGUE
-Line 2: If VAGUE, one sentence explaining what specific information (who, what, \
-when, which documents or actions) would make the claim analyzable. \
-If SPECIFIC, write OK.\
+Respond with exactly one line: SPECIFIC or VAGUE\
 """
 
 
@@ -347,7 +343,7 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str, lang_name: 
     try:
         resp = client.messages.create(
             model=_SPECIFICITY_MODEL,
-            max_tokens=256,
+            max_tokens=16,
             messages=[{
                 "role": "user",
                 "content": f"{_SPECIFICITY_PROMPT}\n\nClaim: {claim_text}",
