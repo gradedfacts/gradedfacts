@@ -53,6 +53,31 @@ _LANG_NAME_TO_LOCALE: dict[str, str] = {
     "Swedish": "sv", "Turkish": "tr", "Hungarian": "hu",
 }
 
+# Explicit mapping for the 17 supported UI language codes (BCP-47 base tags).
+# Separate from _LANG_NAMES (which is for langdetect output normalisation) so
+# that UI language selection is not coupled to the langdetect code table.
+# Also handles region-qualified tags (e.g. "pt-BR", "zh-CN") via prefix lookup.
+_UI_LANGUAGE_CODES: dict[str, str] = {
+    "en": "English", "de": "German", "fr": "French", "it": "Italian",
+    "es": "Spanish", "pt": "Portuguese", "nl": "Dutch", "pl": "Polish",
+    "sv": "Swedish", "ru": "Russian", "uk": "Ukrainian", "tr": "Turkish",
+    "ar": "Arabic", "zh": "Chinese", "ja": "Japanese", "ko": "Korean",
+    "hu": "Hungarian",
+}
+
+
+def _resolve_ui_language(user_language: str) -> str:
+    """Map a BCP-47 UI language code to the language name used by _get_locale_message().
+
+    Tries the full tag first ("pt-BR"), then the base tag ("pt"), then falls back
+    to English so pre-flight gates always produce a usable message.
+    """
+    lang = user_language.strip()
+    if lang in _UI_LANGUAGE_CODES:
+        return _UI_LANGUAGE_CODES[lang]
+    base = lang.split("-")[0].split("_")[0].lower()
+    return _UI_LANGUAGE_CODES.get(base, "English")
+
 _OFF_TOPIC_FALLBACK = (
     "GradedFacts Politics checks political and factual claims. "
     "Please formulate a politically or factually relevant claim."
@@ -318,6 +343,7 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str, lang_name: 
     - is_specific=True  → proceed to full analysis; rationale is empty.
     - is_specific=False → claim is too vague; rationale is the localized MISSING message.
     """
+    logger.debug("Specificity gate: lang_name=%r", lang_name)
     try:
         resp = client.messages.create(
             model=_SPECIFICITY_MODEL,
@@ -519,7 +545,8 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
 
     # Resolve claim language early so both pre-flight gates can use it.
     if user_language:
-        lang_name = _LANG_NAMES.get(user_language, "English")
+        lang_name = _resolve_ui_language(user_language)
+        logger.debug("UI language resolved: %r → %r", user_language, lang_name)
     else:
         lang_name = _detect_language(claim.text)
     lang_instruction = _build_lang_instruction(lang_name)
