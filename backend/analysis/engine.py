@@ -74,9 +74,13 @@ def _resolve_ui_language(user_language: str) -> str:
     """
     lang = user_language.strip()
     if lang in _UI_LANGUAGE_CODES:
-        return _UI_LANGUAGE_CODES[lang]
+        result = _UI_LANGUAGE_CODES[lang]
+        logger.warning("_resolve_ui_language: %r → %r", user_language, result)
+        return result
     base = lang.split("-")[0].split("_")[0].lower()
-    return _UI_LANGUAGE_CODES.get(base, "English")
+    result = _UI_LANGUAGE_CODES.get(base, "English")
+    logger.warning("_resolve_ui_language: %r (base=%r) → %r", user_language, base, result)
+    return result
 
 _OFF_TOPIC_FALLBACK = (
     "GradedFacts Politics checks political and factual claims. "

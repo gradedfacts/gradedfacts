@@ -428,8 +428,8 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
 
     # Resolve claim language: use caller-supplied UI language if provided, otherwise detect.
     if user_language:
-        from backend.analysis.engine import _LANG_NAMES
-        lang_name = _LANG_NAMES.get(user_language, "English")
+        from backend.analysis.engine import _resolve_ui_language
+        lang_name = _resolve_ui_language(user_language)
     else:
         lang_name = _detect_language(claim.text)
     lang_instruction = _build_lang_instruction(lang_name)
