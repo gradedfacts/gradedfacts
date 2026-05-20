@@ -143,6 +143,18 @@
     // the correct language. i18next typically initializes within ~50 ms, so in
     // practice the user cannot type and submit faster than this.
     form.addEventListener('htmx:beforeRequest', function(evt) {
+      // Sync #lang-hidden to the current language before HTMX collects form data.
+      // Prefer i18next.language (authoritative after init), then localStorage, then
+      // navigator.language — ensuring a correct value even during the init window.
+      var langEl = document.getElementById('lang-hidden');
+      if (langEl) {
+        var lang = (i18next.isInitialized ? i18next.language : null)
+                 || localStorage.getItem('lang')
+                 || (navigator.language || '').split('-')[0]
+                 || 'en';
+        langEl.value = lang.split('-')[0];
+      }
+
       if (!i18next.isInitialized) {
         evt.preventDefault();
         i18next.on('initialized', function onReady() {
