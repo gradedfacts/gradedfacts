@@ -55,22 +55,34 @@ _LANG_NAME_TO_LOCALE: dict[str, str] = {
 
 _OFF_TOPIC_FALLBACK = (
     "GradedFacts Politics checks political and factual claims. "
-    "Please formulate a concrete, verifiable claim."
+    "Please formulate a politically or factually relevant claim."
+)
+_SPECIFICITY_FALLBACK = (
+    "This claim is too vague to fact-check. "
+    "Please refine it with specific names, dates, actions, or allegations."
 )
 
 
-def _get_off_topic_message(lang_name: str) -> str:
-    """Return the localized off-topic rejection message from the frontend locale file."""
+def _get_locale_message(lang_name: str, key: str, fallback: str) -> str:
+    """Load a keyed message from the frontend locale file for the given language."""
     locale_code = _LANG_NAME_TO_LOCALE.get(lang_name, "en")
     for code in (locale_code, "en"):
         try:
             data = json.loads((_LOCALE_DIR / code / "translation.json").read_text(encoding="utf-8"))
-            msg = data.get("off_topic_message", "")
+            msg = data.get(key, "")
             if msg:
                 return msg
         except Exception:
             pass
-    return _OFF_TOPIC_FALLBACK
+    return fallback
+
+
+def _get_off_topic_message(lang_name: str) -> str:
+    return _get_locale_message(lang_name, "off_topic_message", _OFF_TOPIC_FALLBACK)
+
+
+def _get_specificity_message(lang_name: str) -> str:
+    return _get_locale_message(lang_name, "specificity_message", _SPECIFICITY_FALLBACK)
 
 
 def _detect_language(claim_text: str) -> str:
@@ -298,14 +310,13 @@ If SPECIFIC, write OK.\
 """
 
 
-def _check_specificity(client: anthropic.Anthropic, claim_text: str) -> tuple[bool, str]:
+def _check_specificity(client: anthropic.Anthropic, claim_text: str, lang_name: str = "English") -> tuple[bool, str]:
     """
     Fast pre-flight gate using a cheap model.
 
     Returns (is_specific, rationale).
     - is_specific=True  → proceed to full analysis; rationale is empty.
-    - is_specific=False → claim is too vague; rationale is a human-readable
-                          MISSING explanation ready to store on the Judgment.
+    - is_specific=False → claim is too vague; rationale is the localized MISSING message.
     """
     try:
         resp = client.messages.create(
@@ -330,14 +341,7 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str) -> tuple[bo
     if verdict != "VAGUE":
         return True, ""
 
-    guidance = lines[1] if len(lines) > 1 else "Please provide a more specific claim."
-    rationale = (
-        "This claim is too vague to fact-check meaningfully. "
-        f"{guidance} "
-        "Please refine the claim with specific names, dates, actions, or "
-        "allegations and resubmit."
-    )
-    return False, rationale
+    return False, _get_specificity_message(lang_name)
 
 
 _OFF_TOPIC_PROMPT = """\
@@ -523,7 +527,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         logger.debug("Claim language: %s.", lang_name)
 
     # Pre-flight gate 1: reject claims that are too vague to fact-check meaningfully.
-    is_specific, vague_rationale = _check_specificity(client, claim.text)
+    is_specific, vague_rationale = _check_specificity(client, claim.text, lang_name)
     if not is_specific:
         judgment = Judgment(
             claim_id=claim_id,

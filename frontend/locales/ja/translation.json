@@ -81,5 +81,6 @@
     "submit": "質問する",
     "answer_heading": "回答"
   },
-  "off_topic_message": "GradedFacts Politicsは政治的・事実に基づく主張を検証します。具体的で検証可能な主張を入力してください。"
+  "off_topic_message": "GradedFacts Politicsは政治的・事実に基づく主張を検証します。政治的または事実的に関連する主張を入力してください。",
+  "specificity_message": "この主張は事実確認するには曖昧すぎます。具体的な人名、日付、行動、または申し立てで補完してください。"
 }

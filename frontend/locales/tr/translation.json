@@ -81,5 +81,6 @@
     "submit": "Sor",
     "answer_heading": "Cevap"
   },
-  "off_topic_message": "GradedFacts Politics siyasi ve olgusal iddiaları doğrular. Lütfen somut, doğrulanabilir bir iddia formüle edin."
+  "off_topic_message": "GradedFacts Politics siyasi ve olgusal iddiaları doğrular. Lütfen siyasi veya olgusal olarak ilgili bir iddia formüle edin.",
+  "specificity_message": "Bu iddia doğrulama için çok belirsiz. Lütfen onu belirli isimler, tarihler, eylemler veya iddialarla netleştirin."
 }

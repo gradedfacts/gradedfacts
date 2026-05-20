@@ -81,5 +81,6 @@
     "submit": "Ask",
     "answer_heading": "Answer"
   },
-  "off_topic_message": "GradedFacts Politics checks political and factual claims. Please formulate a concrete, verifiable claim."
+  "off_topic_message": "GradedFacts Politics checks political and factual claims. Please formulate a politically or factually relevant claim.",
+  "specificity_message": "This claim is too vague to fact-check. Please refine it with specific names, dates, actions, or allegations."
 }

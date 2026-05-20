@@ -39,7 +39,6 @@ def test_vague_verdict_returns_false_with_rationale():
 
     assert is_specific is False
     assert "vague" in rationale.lower() or "specific" in rationale.lower()
-    assert "Please name the specific individual and the document set." in rationale
 
 
 def test_specific_verdict_returns_true():

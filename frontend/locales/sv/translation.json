@@ -81,5 +81,6 @@
     "submit": "Fråga",
     "answer_heading": "Svar"
   },
-  "off_topic_message": "GradedFacts Politics kontrollerar politiska och faktapåståenden. Formulera ett konkret, verifierbart påstående."
+  "off_topic_message": "GradedFacts Politics kontrollerar politiska och faktapåståenden. Formulera ett politiskt eller faktabaserat relevant påstående.",
+  "specificity_message": "Detta påstående är för vagt för faktakontroll. Förfina det med specifika namn, datum, handlingar eller anklagelser."
 }

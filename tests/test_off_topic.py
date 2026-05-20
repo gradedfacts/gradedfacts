@@ -156,7 +156,7 @@ def test_get_off_topic_message_french():
 
     msg = _get_off_topic_message("French")
     assert "GradedFacts" in msg
-    assert "vérifiable" in msg
+    assert "pertinente" in msg
 
 
 def test_get_off_topic_message_unknown_falls_back_to_english():
