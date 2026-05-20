@@ -119,6 +119,8 @@
     function switchLanguage(lng) {
       localStorage.setItem('lang', lng);
       i18next.changeLanguage(lng, function () { applyTranslations(); });
+      var el = document.getElementById('lang-hidden');
+      if (el) el.value = lng;
     }
 
     function _applyThemeIcons(dark) {

@@ -417,6 +417,7 @@ def ui_analyze_consensus(
             {"code": 400, "message": "Please enter at least 10 characters."},
         )
     user_language = lang.strip()[:10] or None
+    logger.info("consensus endpoint: lang=%r  user_language=%r", lang, user_language)
     claim = Claim(text=text[:2000])
     session.add(claim)
     session.commit()
