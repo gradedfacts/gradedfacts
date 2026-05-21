@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics vérifie les affirmations politiques et factuelles. Veuillez formuler une affirmation politiquement ou factuellement pertinente.",
   "specificity_message": "Cette affirmation est trop vague pour être vérifiée. Veuillez la préciser avec des noms, des dates, des actions ou des allégations spécifiques.",
   "about": {
-    "association_pending": "en cours de constitution"
+    "association_pending": "en cours de constitution",
+    "title": "À propos de GradedFacts",
+    "tagline": "Un outil automatisé de vérification des faits qui évalue les affirmations politiques à partir de sources publiques — de manière indépendante, transparente et sans soutien politique.",
+    "section_what": "Ce qu'est GradedFacts",
+    "section_how": "Comment nous travaillons",
+    "section_independence": "Indépendance et financement",
+    "section_limitations": "Limites",
+    "section_contact": "Contact et corrections"
   }
 }

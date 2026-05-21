@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics يتحقق من الادعاءات السياسية والواقعية. يرجى صياغة ادعاء ذي صلة سياسياً أو واقعياً.",
   "specificity_message": "هذا الادعاء مبهم للغاية لإجراء تحقق منه. يرجى تحديده بأسماء وتواريخ وأفعال أو اتهامات محددة.",
   "about": {
-    "association_pending": "قيد التأسيس"
+    "association_pending": "قيد التأسيس",
+    "title": "حول GradedFacts",
+    "tagline": "أداة آلية للتحقق من الحقائق تقيّم الادعاءات السياسية باستخدام مصادر متاحة للعموم — بشكل مستقل وشفاف وبدون دعم سياسي.",
+    "section_what": "ما هو GradedFacts",
+    "section_how": "كيف نعمل",
+    "section_independence": "الاستقلالية والتمويل",
+    "section_limitations": "القيود",
+    "section_contact": "التواصل والتصحيحات"
   }
 }

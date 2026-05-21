@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics 核查政治和事实性声明。请提出一个与政治或事实相关的声明。",
   "specificity_message": "此声明过于模糊，无法进行事实核查。请补充具体的姓名、日期、行动或指控。",
   "about": {
-    "association_pending": "筹建中"
+    "association_pending": "筹建中",
+    "title": "关于 GradedFacts",
+    "tagline": "一款自动化事实核查工具，使用公开来源评估政治声明 — 独立、透明，不受政治资助。",
+    "section_what": "GradedFacts 是什么",
+    "section_how": "我们如何工作",
+    "section_independence": "独立性与资金来源",
+    "section_limitations": "局限性",
+    "section_contact": "联系与更正"
   }
 }

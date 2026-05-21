@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics checks political and factual claims. Please formulate a politically or factually relevant claim.",
   "specificity_message": "This claim is too vague to fact-check. Please refine it with specific names, dates, actions, or allegations.",
   "about": {
-    "association_pending": "in formation"
+    "association_pending": "in formation",
+    "title": "About GradedFacts",
+    "tagline": "An automated fact-checking tool that evaluates political claims using publicly available sources — independently, transparently, and without political backing.",
+    "section_what": "What GradedFacts is",
+    "section_how": "How we work",
+    "section_independence": "Independence and funding",
+    "section_limitations": "Limitations",
+    "section_contact": "Contact and corrections"
   }
 }

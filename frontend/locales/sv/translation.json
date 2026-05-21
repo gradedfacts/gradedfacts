@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics kontrollerar politiska och faktapåståenden. Formulera ett politiskt eller faktabaserat relevant påstående.",
   "specificity_message": "Detta påstående är för vagt för faktakontroll. Förfina det med specifika namn, datum, handlingar eller anklagelser.",
   "about": {
-    "association_pending": "under bildande"
+    "association_pending": "under bildande",
+    "title": "Om GradedFacts",
+    "tagline": "Ett automatiserat faktakontrollverktyg som utvärderar politiska påståenden med hjälp av offentligt tillgängliga källor — oberoende, transparent och utan politiskt stöd.",
+    "section_what": "Vad GradedFacts är",
+    "section_how": "Hur vi arbetar",
+    "section_independence": "Oberoende och finansiering",
+    "section_limitations": "Begränsningar",
+    "section_contact": "Kontakt och korrigeringar"
   }
 }

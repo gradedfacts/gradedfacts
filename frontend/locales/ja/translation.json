@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politicsは政治的・事実に基づく主張を検証します。政治的または事実的に関連する主張を入力してください。",
   "specificity_message": "この主張は事実確認するには曖昧すぎます。具体的な人名、日付、行動、または申し立てで補完してください。",
   "about": {
-    "association_pending": "設立準備中"
+    "association_pending": "設立準備中",
+    "title": "GradedFacts について",
+    "tagline": "公開されている情報源を使用して政治的主張を評価する自動ファクトチェックツール — 独立して、透明に、政治的支援なしに。",
+    "section_what": "GradedFacts とは",
+    "section_how": "私たちの取り組み方",
+    "section_independence": "独立性と資金調達",
+    "section_limitations": "制限事項",
+    "section_contact": "お問い合わせと修正"
   }
 }

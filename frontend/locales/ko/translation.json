@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics는 정치적·사실적 주장을 검증합니다. 정치적 또는 사실적으로 관련된 주장을 입력해 주세요.",
   "specificity_message": "이 주장은 사실 확인하기에 너무 모호합니다. 구체적인 이름, 날짜, 행동 또는 주장으로 보완해 주세요.",
   "about": {
-    "association_pending": "설립 준비 중"
+    "association_pending": "설립 준비 중",
+    "title": "GradedFacts 소개",
+    "tagline": "공개적으로 이용 가능한 출처를 사용하여 정치적 주장을 평가하는 자동화된 팩트체크 도구 — 독립적으로, 투명하게, 정치적 지원 없이.",
+    "section_what": "GradedFacts란 무엇인가",
+    "section_how": "우리의 작업 방식",
+    "section_independence": "독립성과 재정",
+    "section_limitations": "한계",
+    "section_contact": "연락처 및 수정"
   }
 }

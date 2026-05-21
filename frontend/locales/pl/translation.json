@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics weryfikuje twierdzenia polityczne i faktyczne. Proszę sformułować twierdzenie istotne politycznie lub faktycznie.",
   "specificity_message": "To twierdzenie jest zbyt ogólne, aby je zweryfikować. Proszę doprecyzować je konkretnymi nazwiskami, datami, działaniami lub zarzutami.",
   "about": {
-    "association_pending": "w trakcie zakładania"
+    "association_pending": "w trakcie zakładania",
+    "title": "O GradedFacts",
+    "tagline": "Zautomatyzowane narzędzie do weryfikacji faktów, które ocenia twierdzenia polityczne na podstawie publicznie dostępnych źródeł — niezależnie, przejrzyście i bez politycznego wsparcia.",
+    "section_what": "Czym jest GradedFacts",
+    "section_how": "Jak pracujemy",
+    "section_independence": "Niezależność i finansowanie",
+    "section_limitations": "Ograniczenia",
+    "section_contact": "Kontakt i korekty"
   }
 }

@@ -84,6 +84,13 @@
   "off_topic_message": "A GradedFacts Politics politikai és ténybeli állításokat ellenőriz. Kérjük, fogalmazzon meg egy politikailag vagy tényszerűen releváns állítást.",
   "specificity_message": "Ez az állítás túl homályos a tényellenőrzéshez. Kérjük, pontosítsa konkrét nevekkel, dátumokkal, cselekvésekkel vagy vádakkal.",
   "about": {
-    "association_pending": "alapítás alatt"
+    "association_pending": "alapítás alatt",
+    "title": "A GradedFacts-ről",
+    "tagline": "Egy automatizált tényellenőrző eszköz, amely politikai állításokat értékel nyilvánosan elérhető források alapján — függetlenül, átláthatóan és politikai támogatás nélkül.",
+    "section_what": "Mi a GradedFacts",
+    "section_how": "Hogyan dolgozunk",
+    "section_independence": "Függetlenség és finanszírozás",
+    "section_limitations": "Korlátok",
+    "section_contact": "Kapcsolat és javítások"
   }
 }

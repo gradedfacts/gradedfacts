@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics controleert politieke en feitelijke beweringen. Formuleer een politiek of feitelijk relevante bewering.",
   "specificity_message": "Deze bewering is te vaag om te controleren. Verfijn hem met specifieke namen, datums, acties of beschuldigingen.",
   "about": {
-    "association_pending": "in oprichting"
+    "association_pending": "in oprichting",
+    "title": "Over GradedFacts",
+    "tagline": "Een geautomatiseerde fact-checktool die politieke beweringen beoordeelt aan de hand van openbaar beschikbare bronnen — onafhankelijk, transparant en zonder politieke steun.",
+    "section_what": "Wat GradedFacts is",
+    "section_how": "Hoe we werken",
+    "section_independence": "Onafhankelijkheid en financiering",
+    "section_limitations": "Beperkingen",
+    "section_contact": "Contact en correcties"
   }
 }

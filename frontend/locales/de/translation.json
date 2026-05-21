@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics prüft politische und sachliche Behauptungen. Bitte formuliere einen politisch oder sachlich relevanten Claim.",
   "specificity_message": "Diese Behauptung ist zu vage für einen Faktencheck. Bitte präzisiere sie mit konkreten Namen, Daten, Handlungen oder Vorwürfen.",
   "about": {
-    "association_pending": "in Gründung"
+    "association_pending": "in Gründung",
+    "title": "Über GradedFacts",
+    "tagline": "Ein automatisiertes Faktencheck-Tool, das politische Behauptungen anhand öffentlich zugänglicher Quellen bewertet — unabhängig, transparent und ohne politische Unterstützung.",
+    "section_what": "Was GradedFacts ist",
+    "section_how": "Wie wir arbeiten",
+    "section_independence": "Unabhängigkeit und Finanzierung",
+    "section_limitations": "Einschränkungen",
+    "section_contact": "Kontakt und Korrekturen"
   }
 }

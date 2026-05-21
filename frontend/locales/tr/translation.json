@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics siyasi ve olgusal iddiaları doğrular. Lütfen siyasi veya olgusal olarak ilgili bir iddia formüle edin.",
   "specificity_message": "Bu iddia doğrulama için çok belirsiz. Lütfen onu belirli isimler, tarihler, eylemler veya iddialarla netleştirin.",
   "about": {
-    "association_pending": "kuruluş aşamasında"
+    "association_pending": "kuruluş aşamasında",
+    "title": "GradedFacts Hakkında",
+    "tagline": "Kamuya açık kaynakları kullanarak siyasi iddiaları değerlendiren otomatik bir doğrulama aracı — bağımsız, şeffaf ve siyasi desteksiz.",
+    "section_what": "GradedFacts Nedir",
+    "section_how": "Nasıl Çalışırız",
+    "section_independence": "Bağımsızlık ve Finansman",
+    "section_limitations": "Sınırlamalar",
+    "section_contact": "İletişim ve Düzeltmeler"
   }
 }

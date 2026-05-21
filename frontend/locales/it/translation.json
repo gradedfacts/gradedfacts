@@ -84,6 +84,13 @@
   "off_topic_message": "GradedFacts Politics verifica affermazioni politiche e fattuali. Formulare un'affermazione politicamente o fattualmente rilevante.",
   "specificity_message": "Questa affermazione è troppo vaga per essere verificata. Si prega di specificarla con nomi, date, azioni o allegazioni concrete.",
   "about": {
-    "association_pending": "in fase di costituzione"
+    "association_pending": "in fase di costituzione",
+    "title": "Informazioni su GradedFacts",
+    "tagline": "Uno strumento automatizzato di fact-checking che valuta le affermazioni politiche utilizzando fonti pubblicamente disponibili — in modo indipendente, trasparente e senza sostegno politico.",
+    "section_what": "Cos'è GradedFacts",
+    "section_how": "Come lavoriamo",
+    "section_independence": "Indipendenza e finanziamento",
+    "section_limitations": "Limitazioni",
+    "section_contact": "Contatto e correzioni"
   }
 }
