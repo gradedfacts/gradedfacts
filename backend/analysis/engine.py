@@ -368,7 +368,7 @@ def _check_specificity(client: anthropic.Anthropic, claim_text: str, lang_name: 
         return True, ""
 
     rationale = _get_specificity_message(lang_name)
-    logger.warning("Specificity gate rejection: lang_name=%r  rationale=%r", lang_name, rationale)
+    logger.debug("Specificity gate rejection: lang_name=%r  rationale=%r", lang_name, rationale)
     return False, rationale
 
 
@@ -548,15 +548,15 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     # Resolve claim language early so both pre-flight gates can use it.
     if user_language:
         lang_name = _resolve_ui_language(user_language)
-        logger.warning("UI language resolved: %r → %r", user_language, lang_name)
+        logger.debug("UI language resolved: %r → %r", user_language, lang_name)
     else:
         lang_name = _detect_language(claim.text)
     lang_instruction = _build_lang_instruction(lang_name)
     if lang_instruction:
-        logger.warning("Claim language: %s.", lang_name)
+        logger.debug("Claim language: %s.", lang_name)
 
     # Pre-flight gate 1: reject claims that are too vague to fact-check meaningfully.
-    logger.warning(
+    logger.debug(
         "specificity gate: user_language=%r  resolved=%r  lang_name=%r",
         user_language,
         _resolve_ui_language(user_language) if user_language else None,
