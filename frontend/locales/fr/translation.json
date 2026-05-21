@@ -82,5 +82,8 @@
     "answer_heading": "Réponse"
   },
   "off_topic_message": "GradedFacts Politics vérifie les affirmations politiques et factuelles. Veuillez formuler une affirmation politiquement ou factuellement pertinente.",
-  "specificity_message": "Cette affirmation est trop vague pour être vérifiée. Veuillez la préciser avec des noms, des dates, des actions ou des allégations spécifiques."
+  "specificity_message": "Cette affirmation est trop vague pour être vérifiée. Veuillez la préciser avec des noms, des dates, des actions ou des allégations spécifiques.",
+  "about": {
+    "association_pending": "en cours de constitution"
+  }
 }

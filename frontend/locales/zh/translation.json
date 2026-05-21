@@ -82,5 +82,8 @@
     "answer_heading": "回答"
   },
   "off_topic_message": "GradedFacts Politics 核查政治和事实性声明。请提出一个与政治或事实相关的声明。",
-  "specificity_message": "此声明过于模糊，无法进行事实核查。请补充具体的姓名、日期、行动或指控。"
+  "specificity_message": "此声明过于模糊，无法进行事实核查。请补充具体的姓名、日期、行动或指控。",
+  "about": {
+    "association_pending": "筹建中"
+  }
 }

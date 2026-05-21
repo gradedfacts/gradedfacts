@@ -82,5 +82,8 @@
     "answer_heading": "Válasz"
   },
   "off_topic_message": "A GradedFacts Politics politikai és ténybeli állításokat ellenőriz. Kérjük, fogalmazzon meg egy politikailag vagy tényszerűen releváns állítást.",
-  "specificity_message": "Ez az állítás túl homályos a tényellenőrzéshez. Kérjük, pontosítsa konkrét nevekkel, dátumokkal, cselekvésekkel vagy vádakkal."
+  "specificity_message": "Ez az állítás túl homályos a tényellenőrzéshez. Kérjük, pontosítsa konkrét nevekkel, dátumokkal, cselekvésekkel vagy vádakkal.",
+  "about": {
+    "association_pending": "alapítás alatt"
+  }
 }

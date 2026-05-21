@@ -82,5 +82,8 @@
     "answer_heading": "답변"
   },
   "off_topic_message": "GradedFacts Politics는 정치적·사실적 주장을 검증합니다. 정치적 또는 사실적으로 관련된 주장을 입력해 주세요.",
-  "specificity_message": "이 주장은 사실 확인하기에 너무 모호합니다. 구체적인 이름, 날짜, 행동 또는 주장으로 보완해 주세요."
+  "specificity_message": "이 주장은 사실 확인하기에 너무 모호합니다. 구체적인 이름, 날짜, 행동 또는 주장으로 보완해 주세요.",
+  "about": {
+    "association_pending": "설립 준비 중"
+  }
 }

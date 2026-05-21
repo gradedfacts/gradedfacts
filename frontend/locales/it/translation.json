@@ -82,5 +82,8 @@
     "answer_heading": "Risposta"
   },
   "off_topic_message": "GradedFacts Politics verifica affermazioni politiche e fattuali. Formulare un'affermazione politicamente o fattualmente rilevante.",
-  "specificity_message": "Questa affermazione è troppo vaga per essere verificata. Si prega di specificarla con nomi, date, azioni o allegazioni concrete."
+  "specificity_message": "Questa affermazione è troppo vaga per essere verificata. Si prega di specificarla con nomi, date, azioni o allegazioni concrete.",
+  "about": {
+    "association_pending": "in fase di costituzione"
+  }
 }

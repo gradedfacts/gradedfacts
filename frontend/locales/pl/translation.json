@@ -82,5 +82,8 @@
     "answer_heading": "Odpowiedź"
   },
   "off_topic_message": "GradedFacts Politics weryfikuje twierdzenia polityczne i faktyczne. Proszę sformułować twierdzenie istotne politycznie lub faktycznie.",
-  "specificity_message": "To twierdzenie jest zbyt ogólne, aby je zweryfikować. Proszę doprecyzować je konkretnymi nazwiskami, datami, działaniami lub zarzutami."
+  "specificity_message": "To twierdzenie jest zbyt ogólne, aby je zweryfikować. Proszę doprecyzować je konkretnymi nazwiskami, datami, działaniami lub zarzutami.",
+  "about": {
+    "association_pending": "w trakcie zakładania"
+  }
 }
