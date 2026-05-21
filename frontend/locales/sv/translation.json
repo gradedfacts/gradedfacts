@@ -91,6 +91,20 @@
     "section_how": "Hur vi arbetar",
     "section_independence": "Oberoende och finansiering",
     "section_limitations": "Begränsningar",
-    "section_contact": "Kontakt och korrigeringar"
+    "section_contact": "Kontakt och korrigeringar",
+    "what_p1": "GradedFacts är ett automatiserat faktakontrollverktyg som utvärderar politiska påståenden mot offentligt tillgängliga källor. Det är inte en nyhetsorganisation, en politisk vakthund eller en påverkansgrupp. Det är ett epistemiskt verktyg: dess mål är att redogöra för vad de tillgängliga bevisen visar och att vara tydlig med vad bevisen ännu inte löser.",
+    "what_p2": "Vår metod skiljer sig från andra verktyg i en viktig aspekt: <strong>institutionellt oberoende har företräde framför institutionell status.</strong> En officiell källa är inte automatiskt en tillförlitlig källa — det beror på om den verkar oberoende av politiska intressen. En statlig myndighet vars ledning utnämndes utifrån lojalitetskriterier är inte oberoende, oavsett dess officiella titel. Vi bedömer varje källa på båda dimensionerna separat.",
+    "what_p3": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt korrekt analys tar 1–2 minuter.",
+    "how_intro": "Vår metodik är offentligt dokumenterad. Varje steg i analysflödet — från källhämtning och nivåklassificering till oberoendebedömning och betygsderivering — följer explicita, offentligt tillgängliga regler.",
+    "how_li1": "<strong>Källbedömningar är transparenta.</strong> Varje källa som används i ett omdöme listas med sin nivå, oberoendes status, relevanspoäng och — där tillämpligt — en förklaring till varför den märktes som icke-oberoende.",
+    "how_li2": "<strong>Resultat är reproducerbara.</strong> Analysmotorn körs vid temperatur 0: givet samma påstående och samma bevis producerar den alltid samma resultat.",
+    "how_li3": "<strong>Revisioner arkiveras, aldrig tysta.</strong> När nya bevis förändrar ett omdöme bevaras det tidigare betyget med en tidsstämpel och en anledning till ändringen.",
+    "how_li4": "<strong>Osäkerhet är explicit.</strong> När bevis är otillräckliga för att nå en slutsats är resultatet \"Saknas\" — inte ett tvingat omdöme.",
+    "how_methodology": "Den fullständiga metodiken finns på <a href=\"/methodology\">Öppen källkods-metodik</a>.",
+    "independence_p1": "GradedFacts grundades i Schweiz och är hostat under schweizisk jurisdiktion. Vi omfattas inte av amerikansk Cloud Act-jurisdiktion.",
+    "independence_p2": "Vi accepterar inte finansiering från politiska partier, PAC:er, statliga organ eller medieorganisationer med politiska kopplingar. Alla finansieringskällor redovisas i sin helhet. Vi tillämpar samma oberoendekriterie på vår egen finansiering som vi tillämpar på de källor vi utvärderar.",
+    "limitations_p1": "GradedFacts är ett automatiserat verktyg. Det har inneboende begränsningar: det kan missa sammanhang som en mänsklig expert skulle fånga upp, det är beroende av kvaliteten på de källor det hittar och det kan inte utvärdera påståenden som kräver domänexpertis bortom vad offentliga källor kan lösa. För mycket komplexa, omtvistade eller senaste nyheter rekommenderar vi att behandla vårt resultat som en utgångspunkt för ytterligare mänsklig expertgranskning, inte som ett slutgiltigt omdöme.",
+    "limitations_p2": "Fas 1 täcker <strong>USA och Europa</strong>. Global täckning planeras till fas 2.",
+    "contact_p": "Om du tror att ett betyg är felaktigt, en källa har felkategoriserats eller vår oberoendebedömning är fel vill vi veta det. Metodiken är öppen källkod — du kan läsa de exakta reglerna som analysmotorn följer, skicka in en korrigering eller föreslå en förbättring via vårt <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub-förråd</a>."
   }
 }

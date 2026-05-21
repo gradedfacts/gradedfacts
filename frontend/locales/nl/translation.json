@@ -91,6 +91,20 @@
     "section_how": "Hoe we werken",
     "section_independence": "Onafhankelijkheid en financiering",
     "section_limitations": "Beperkingen",
-    "section_contact": "Contact en correcties"
+    "section_contact": "Contact en correcties",
+    "what_p1": "GradedFacts is een geautomatiseerde fact-checktool die politieke beweringen beoordeelt aan de hand van openbaar beschikbare bronnen. Het is geen nieuwsorganisatie, een politieke waakhond of een belangengroep. Het is een epistemisch hulpmiddel: het doel is te laten zien wat het beschikbare bewijs aantoont en expliciet te zijn over wat het bewijs nog niet oplost.",
+    "what_p2": "Onze aanpak verschilt op één belangrijk punt van andere tools: <strong>institutionele onafhankelijkheid heeft voorrang op institutionele status.</strong> Een officiële bron is niet automatisch een betrouwbare bron — dat hangt ervan af of ze onafhankelijk van politieke belangen opereert. Een overheidsinstantie waarvan de leiding op loyaliteitscriteria is benoemd, is niet onafhankelijk, ongeacht haar officiële titel. We beoordelen elke bron op beide dimensies afzonderlijk.",
+    "what_p3": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch correcte analyse duurt 1-2 minuten.",
+    "how_intro": "Onze methodologie is openbaar gedocumenteerd. Elke stap van de analysepijplijn — van het ophalen van bronnen en niveauclassificatie tot onafhankelijkheidsbeoordeling en ratingafleiding — volgt expliciete, openbaar beschikbare regels.",
+    "how_li1": "<strong>Bronbeoordelingen zijn transparant.</strong> Elke bron die in een oordeel wordt gebruikt, wordt vermeld met zijn niveau, onafhankelijkheidsstatus, relevantiesscore en — indien van toepassing — een uitleg waarom het als niet-onafhankelijk is gemarkeerd.",
+    "how_li2": "<strong>Resultaten zijn reproduceerbaar.</strong> De analyse-engine werkt op temperatuur 0: gegeven dezelfde bewering en hetzelfde bewijs produceert het altijd dezelfde output.",
+    "how_li3": "<strong>Revisies worden gearchiveerd, nooit stilzwijgend.</strong> Wanneer nieuw bewijs een oordeel verandert, wordt de vorige beoordeling bewaard met een tijdstempel en een reden voor de wijziging.",
+    "how_li4": "<strong>Onzekerheid is expliciet.</strong> Wanneer bewijs onvoldoende is om een conclusie te trekken, is het resultaat 'Ontbrekend' — geen gedwongen oordeel.",
+    "how_methodology": "De volledige methodologie is beschikbaar op <a href=\"/methodology\">Open Source Methodologie</a>.",
+    "independence_p1": "GradedFacts is opgericht in Zwitserland en gehost onder Zwitserse jurisdictie. We zijn niet onderworpen aan de Amerikaanse Cloud Act-jurisdictie.",
+    "independence_p2": "We accepteren geen financiering van politieke partijen, PAC's, overheidsinstanties of mediaorganisaties met politieke banden. Alle financieringsbronnen worden volledig bekendgemaakt. We passen dezelfde onafhankelijkheidscriteria toe op onze eigen financiering als op de bronnen die we beoordelen.",
+    "limitations_p1": "GradedFacts is een geautomatiseerde tool. Het heeft inherente beperkingen: het kan context missen die een menselijke expert wel zou zien, het is afhankelijk van de kwaliteit van de gevonden bronnen, en het kan geen beweringen beoordelen waarvoor domeinexpertise nodig is die publieke bronnen niet kunnen bieden. Voor zeer complexe, betwiste of breaking-newsbeweringen raden we aan onze output te behandelen als startpunt voor verdere menselijke expertbeoordeling, niet als eindoordeel.",
+    "limitations_p2": "Fase 1 omvat <strong>de Verenigde Staten en Europa</strong>. Wereldwijde dekking is gepland voor fase 2.",
+    "contact_p": "Als u denkt dat een beoordeling onjuist is, een bron verkeerd is gecategoriseerd of onze onafhankelijkheidsbeoordeling fout is, willen we dat weten. De methodologie is open source — u kunt de exacte regels van de analyse-engine lezen, een correctie indienen of een verbetering voorstellen via ons <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub-repository</a>."
   }
 }

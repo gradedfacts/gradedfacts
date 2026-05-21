@@ -91,6 +91,20 @@
     "section_how": "Come lavoriamo",
     "section_independence": "Indipendenza e finanziamento",
     "section_limitations": "Limitazioni",
-    "section_contact": "Contatto e correzioni"
+    "section_contact": "Contatto e correzioni",
+    "what_p1": "GradedFacts è uno strumento automatizzato di fact-checking che valuta le affermazioni politiche rispetto a fonti pubblicamente disponibili. Non è un'organizzazione di notizie, un osservatorio politico o un gruppo di advocacy. È uno strumento epistemico: il suo obiettivo è esporre ciò che le prove disponibili mostrano ed essere esplicito su ciò che le prove non risolvono ancora.",
+    "what_p2": "Il nostro approccio differisce dagli altri strumenti in un aspetto chiave: <strong>l'indipendenza istituzionale ha la precedenza sullo status istituzionale.</strong> Una fonte ufficiale non è automaticamente una fonte affidabile — dipende dal fatto che operi indipendentemente dagli interessi politici. Un'agenzia governativa la cui leadership è stata nominata in base a criteri di lealtà non è indipendente, indipendentemente dal suo titolo ufficiale. Valutiamo ogni fonte su entrambe le dimensioni separatamente.",
+    "what_p3": "Analisi in diretta — ricerca e valutazione delle fonti in tempo reale. Un'analisi epistemicamente corretta richiede 1-2 minuti.",
+    "how_intro": "La nostra metodologia è documentata pubblicamente. Ogni fase della pipeline di analisi — dal recupero delle fonti e la classificazione per livelli alla valutazione dell'indipendenza e alla derivazione del rating — segue regole esplicite e pubblicamente disponibili.",
+    "how_li1": "<strong>Le valutazioni delle fonti sono trasparenti.</strong> Ogni fonte utilizzata in un giudizio è elencata con il suo livello, lo stato di indipendenza, il punteggio di rilevanza e — dove applicabile — una spiegazione del motivo per cui è stata contrassegnata come non indipendente.",
+    "how_li2": "<strong>I risultati sono riproducibili.</strong> Il motore di analisi funziona a temperatura 0: data la stessa affermazione e le stesse prove, produce sempre lo stesso output.",
+    "how_li3": "<strong>Le revisioni sono archiviate, mai silenziose.</strong> Quando nuove prove cambiano un giudizio, la valutazione precedente viene conservata con un timestamp e una motivazione del cambiamento.",
+    "how_li4": "<strong>L'incertezza è esplicita.</strong> Quando le prove sono insufficienti per raggiungere una conclusione, il risultato è «Mancante» — non un verdetto forzato.",
+    "how_methodology": "La metodologia completa è disponibile su <a href=\"/methodology\">Metodologia Open Source</a>.",
+    "independence_p1": "GradedFacts è stata fondata in Svizzera ed è ospitata sotto la giurisdizione svizzera. Non siamo soggetti alla giurisdizione del Cloud Act statunitense.",
+    "independence_p2": "Non accettiamo finanziamenti da partiti politici, PAC, enti governativi o organizzazioni mediatrici con affiliazioni politiche. Tutte le fonti di finanziamento sono divulgate integralmente. Applichiamo gli stessi criteri di indipendenza al nostro finanziamento che applichiamo alle fonti che valutiamo.",
+    "limitations_p1": "GradedFacts è uno strumento automatizzato. Ha limiti intrinseci: può perdere contesto che un esperto umano coglierebbe, dipende dalla qualità delle fonti che trova e non può valutare affermazioni che richiedono competenza di dominio oltre ciò che le fonti pubbliche possono risolvere. Per affermazioni altamente complesse, contestate o di ultima ora, raccomandiamo di trattare il nostro output come punto di partenza per un'ulteriore revisione da parte di esperti umani, non come verdetto finale.",
+    "limitations_p2": "La fase 1 copre <strong>gli Stati Uniti e l'Europa</strong>. La copertura globale è prevista per la fase 2.",
+    "contact_p": "Se ritieni che una valutazione sia errata, una fonte sia stata classificata in modo errato o la nostra valutazione dell'indipendenza sia sbagliata, vogliamo saperlo. La metodologia è open source — puoi leggere le regole esatte del motore di analisi, inviare una correzione o proporre un miglioramento tramite il nostro <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">repository GitHub</a>."
   }
 }

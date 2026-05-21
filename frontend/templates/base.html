@@ -95,6 +95,8 @@
         var result = i18next.t(key, opts);
         if (el.getAttribute('data-i18n-target') === 'placeholder') {
           el.placeholder = result;
+        } else if (el.getAttribute('data-i18n-target') === 'html') {
+          el.innerHTML = result;
         } else {
           el.textContent = result;
         }

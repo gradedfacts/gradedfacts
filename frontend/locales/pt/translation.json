@@ -91,6 +91,20 @@
     "section_how": "Como trabalhamos",
     "section_independence": "Independência e financiamento",
     "section_limitations": "Limitações",
-    "section_contact": "Contacto e correções"
+    "section_contact": "Contacto e correções",
+    "what_p1": "GradedFacts é uma ferramenta automatizada de verificação de factos que avalia afirmações políticas com base em fontes publicamente disponíveis. Não é uma organização de notícias, um observatório político nem um grupo de defesa. É uma ferramenta epistémica: o seu objetivo é expor o que as evidências disponíveis mostram e ser explícito sobre o que as evidências ainda não resolvem.",
+    "what_p2": "A nossa abordagem difere de outras ferramentas num aspeto fundamental: <strong>a independência institucional prevalece sobre o estatuto institucional.</strong> Uma fonte oficial não é automaticamente uma fonte fiável — depende de operar de forma independente de interesses políticos. Uma agência governamental cuja liderança foi nomeada com base em critérios de lealdade não é independente, independentemente do seu título oficial. Avaliamos cada fonte em ambas as dimensões separadamente.",
+    "what_p3": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente correta demora 1-2 minutos.",
+    "how_intro": "A nossa metodologia está documentada publicamente. Cada etapa do processo de análise — desde a recuperação de fontes e classificação por nível até à avaliação da independência e derivação de classificações — segue regras explícitas e publicamente disponíveis.",
+    "how_li1": "<strong>As avaliações de fontes são transparentes.</strong> Cada fonte utilizada num julgamento é listada com o seu nível, estado de independência, pontuação de relevância e — quando aplicável — uma explicação de por que foi marcada como não independente.",
+    "how_li2": "<strong>Os resultados são reprodutíveis.</strong> O motor de análise funciona a temperatura 0: dada a mesma afirmação e as mesmas evidências, produz sempre o mesmo resultado.",
+    "how_li3": "<strong>As revisões são arquivadas, nunca silenciosas.</strong> Quando novas evidências alteram um julgamento, a classificação anterior é preservada com um carimbo de data/hora e uma razão para a alteração.",
+    "how_li4": "<strong>A incerteza é explícita.</strong> Quando as evidências são insuficientes para chegar a uma conclusão, o resultado é «Em falta» — não um veredicto forçado.",
+    "how_methodology": "A metodologia completa está disponível em <a href=\"/methodology\">Metodologia Open Source</a>.",
+    "independence_p1": "GradedFacts foi fundado na Suíça e alojado sob jurisdição suíça. Não estamos sujeitos à jurisdição da Lei Cloud dos EUA.",
+    "independence_p2": "Não aceitamos financiamento de partidos políticos, PAC, organismos governamentais ou organizações de media com afiliações políticas. Todas as fontes de financiamento são divulgadas na íntegra. Aplicamos os mesmos critérios de independência ao nosso próprio financiamento que aplicamos às fontes que avaliamos.",
+    "limitations_p1": "GradedFacts é uma ferramenta automatizada. Tem limites inerentes: pode perder contexto que um especialista humano captaria, depende da qualidade das fontes que encontra e não pode avaliar afirmações que requerem conhecimento de domínio além do que as fontes públicas podem resolver. Para afirmações altamente complexas, contestadas ou de última hora, recomendamos tratar o nosso resultado como ponto de partida para revisão humana especializada adicional, não como um veredicto final.",
+    "limitations_p2": "A fase 1 abrange <strong>os Estados Unidos e a Europa</strong>. A cobertura global está prevista para a fase 2.",
+    "contact_p": "Se acredita que uma classificação está incorreta, uma fonte foi categorizada erradamente ou a nossa avaliação de independência está errada, queremos saber. A metodologia é open source — pode ler as regras exatas do motor de análise, submeter uma correção ou propor uma melhoria através do nosso <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">repositório GitHub</a>."
   }
 }

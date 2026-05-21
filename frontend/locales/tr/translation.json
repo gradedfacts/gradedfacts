@@ -91,6 +91,20 @@
     "section_how": "Nasıl Çalışırız",
     "section_independence": "Bağımsızlık ve Finansman",
     "section_limitations": "Sınırlamalar",
-    "section_contact": "İletişim ve Düzeltmeler"
+    "section_contact": "İletişim ve Düzeltmeler",
+    "what_p1": "GradedFacts, siyasi iddiaları kamuya açık kaynaklara karşı değerlendiren otomatik bir doğrulama aracıdır. Bir haber kuruluşu, siyasi bir denetim organı veya bir savunuculuk grubu değildir. Epistemik bir araçtır: amacı mevcut kanıtların ne gösterdiğini ortaya koymak ve kanıtların henüz neyi çözmediği konusunda açık olmaktır.",
+    "what_p2": "Yaklaşımımız diğer araçlardan tek temel konuda farklılık gösterir: <strong>kurumsal bağımsızlık kurumsal statünün önüne geçer.</strong> Resmi bir kaynak otomatik olarak güvenilir bir kaynak değildir — bu, kaynağın siyasi çıkarlardan bağımsız faaliyet gösterip göstermediğine bağlıdır. Liderliği sadakat kriterlerine göre atanmış bir devlet kurumu, resmi unvanından bağımsız olarak bağımsız değildir. Her kaynağı her iki boyutta ayrı ayrı değerlendiriyoruz.",
+    "what_p3": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan doğru bir analiz 1-2 dakika sürer.",
+    "how_intro": "Metodolojimiz kamuya açık biçimde belgelenmiştir. Analiz sürecinin her adımı — kaynak alımı ve katman sınıflandırmasından bağımsızlık değerlendirmesi ve derecelendirme türetmeye kadar — açık ve kamuya açık kurallara uyar.",
+    "how_li1": "<strong>Kaynak değerlendirmeleri şeffaftır.</strong> Bir yargıda kullanılan her kaynak; katmanı, bağımsızlık durumu, alaka puanı ve — uygun olduğunda — neden bağımsız değil olarak işaretlendiğinin açıklamasıyla listelenir.",
+    "how_li2": "<strong>Sonuçlar yeniden üretilebilir.</strong> Analiz motoru sıcaklık 0'da çalışır: aynı iddia ve aynı kanıt verildiğinde her zaman aynı çıktıyı üretir.",
+    "how_li3": "<strong>Revizyonlar arşivlenir, asla sessizce yapılmaz.</strong> Yeni kanıtlar bir yargıyı değiştirdiğinde, önceki derecelendirme zaman damgası ve değişiklik nedeniyle birlikte korunur.",
+    "how_li4": "<strong>Belirsizlik açıktır.</strong> Kanıtlar bir sonuca ulaşmak için yetersiz olduğunda, sonuç 'Eksik' olur — zorla verilmiş bir karar değil.",
+    "how_methodology": "Tam metodoloji <a href=\"/methodology\">Açık Kaynak Metodolojisi</a> sayfasında mevcuttur.",
+    "independence_p1": "GradedFacts İsviçre'de kurulmuş ve İsviçre yargı yetkisi altında barındırılmaktadır. ABD Cloud Act yargı yetkisine tabi değiliz.",
+    "independence_p2": "Siyasi partilerden, PAC'lerden, devlet kurumlarından veya siyasi bağlantılı medya kuruluşlarından finansman kabul etmiyoruz. Tüm finansman kaynakları tam olarak açıklanmaktadır. Değerlendirdiğimiz kaynaklara uyguladığımız bağımsızlık kriterlerinin aynısını kendi finansmanımıza da uyguluyoruz.",
+    "limitations_p1": "GradedFacts otomatik bir araçtır. Doğal sınırları vardır: insan uzmanının yakalayacağı bağlamı gözden kaçırabilir, bulduğu kaynakların kalitesine bağlıdır ve kamuya açık kaynakların çözemeyeceği alan uzmanlığı gerektiren iddiaları değerlendiremez. Son derece karmaşık, tartışmalı veya son dakika haberi niteliğindeki iddialar için, çıktımızı nihai bir karar olarak değil, daha fazla uzman incelemesi için bir başlangıç noktası olarak değerlendirmenizi öneririz.",
+    "limitations_p2": "Faz 1, <strong>Amerika Birleşik Devletleri ve Avrupa'yı</strong> kapsamaktadır. Küresel kapsam Faz 2 için planlanmaktadır.",
+    "contact_p": "Bir derecelendirmenin yanlış olduğunu, bir kaynağın hatalı kategorize edildiğini veya bağımsızlık değerlendirmemizin hatalı olduğunu düşünüyorsanız bunu öğrenmek istiyoruz. Metodoloji açık kaynaktır — analiz motorunun izlediği tam kuralları okuyabilir, düzeltme gönderebilir veya <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub depomuzu</a> aracılığıyla bir iyileştirme önerebilirsiniz."
   }
 }

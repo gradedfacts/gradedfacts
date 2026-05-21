@@ -91,6 +91,20 @@
     "section_how": "Hogyan dolgozunk",
     "section_independence": "Függetlenség és finanszírozás",
     "section_limitations": "Korlátok",
-    "section_contact": "Kapcsolat és javítások"
+    "section_contact": "Kapcsolat és javítások",
+    "what_p1": "A GradedFacts egy automatizált tényellenőrző eszköz, amely politikai állításokat értékel nyilvánosan elérhető források alapján. Nem hírszervezet, politikai felügyeleti szerv vagy érdekképviseleti csoport. Ismeretelméleti eszköz: célja annak bemutatása, hogy a rendelkezésre álló bizonyítékok mit mutatnak, és egyértelműen jelezni, hogy a bizonyítékok mit nem oldanak meg még.",
+    "what_p2": "Megközelítésünk egy lényeges szempontból tér el a többi eszköztől: <strong>az intézményi függetlenség elsőbbséget élvez az intézményi státusszal szemben.</strong> Egy hivatalos forrás nem automatikusan megbízható forrás — ez attól függ, hogy politikai érdekektől függetlenül működik-e. Egy olyan kormányzati ügynökség, amelynek vezetését lojalitási kritériumok alapján nevezték ki, nem független, hivatalos megnevezésétől függetlenül. Minden forrást külön-külön értékelünk mindkét dimenzióban.",
+    "what_p3": "Élő elemzés fut — valós idejű forráskeresés és -értékelés. Egy ismeretelméleti szempontból helyes elemzés 1–2 percet vesz igénybe.",
+    "how_intro": "Módszertanunk nyilvánosan dokumentált. Az elemzési folyamat minden lépése — a forráslekéréstől és szintbesorolástól a függetlenségi értékelésig és az értékelés levezetéséig — egyértelmű, nyilvánosan elérhető szabályokat követ.",
+    "how_li1": "<strong>A forrásértékelések átláthatók.</strong> Az ítéletben használt minden forrás fel van sorolva szintjével, függetlenségi státuszával, relevanciapont-számával és — ahol alkalmazható — annak magyarázatával, miért jelölték nem függetlenként.",
+    "how_li2": "<strong>Az eredmények reprodukálhatók.</strong> Az elemző motor 0 hőmérsékleten fut: ugyanazon állítás és ugyanazon bizonyítékok esetén mindig ugyanazt a kimenetet adja.",
+    "how_li3": "<strong>A felülvizsgálatokat archiváljuk, soha nem csendben végezzük.</strong> Amikor új bizonyítékok megváltoztatnak egy ítéletet, az előző értékelés időbélyeggel és a változás okával együtt megőrzésre kerül.",
+    "how_li4": "<strong>A bizonytalanság egyértelmű.</strong> Ha a bizonyítékok nem elegendők következtetés levonásához, az eredmény „Hiányzó“ — nem kényszerített ítélet.",
+    "how_methodology": "A teljes módszertan elérhető a <a href=\"/methodology\">Nyílt forráskódú módszertan</a> oldalon.",
+    "independence_p1": "A GradedFacts Svájcban alapult, és svájci joghatóság alatt üzemel. Nem vagyunk az amerikai Cloud Act joghatósága alá rendelve.",
+    "independence_p2": "Nem fogadunk el finanszírozást politikai pártoktól, PAC-ktől, kormányzati szervektől vagy politikai kötődésű médiaorganizációktól. Minden finanszírozási forrás teljes körűen nyilvánosságra kerül. Saját finanszírozásunkra ugyanazokat a függetlenségi kritériumokat alkalmazzuk, mint az általunk értékelt forrásokra.",
+    "limitations_p1": "A GradedFacts automatizált eszköz. Velejáró korlátai vannak: kihagyhat olyan kontextust, amelyet egy emberi szakértő észrevenne, függ a talált források minőségétől, és nem tud értékelni olyan állításokat, amelyek a nyilvánosan elérhető forrásokat meghaladó szaktudást igényelnek. Rendkívül összetett, vitatott vagy friss hírekre vonatkozó állítások esetén javasoljuk, hogy kimeneti eredményünket ne végső ítéletként, hanem további emberi szakértői felülvizsgálat kiindulópontjaként kezelje.",
+    "limitations_p2": "Az 1. fázis az <strong>Egyesült Államokat és Európát</strong> fedi le. A globális lefedettség a 2. fázisra van tervezve.",
+    "contact_p": "Ha úgy véli, hogy egy értékelés helytelen, egy forrás helytelenül van kategorizálva, vagy a függetlenségi értékelésünk téves, szeretnénk tudni róla. A módszertan nyílt forráskódú — elolvashatja az elemző motor által követett pontos szabályokat, benyújthat javítást, vagy fejlesztést javasolhat a <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub adattárunkon</a> keresztül."
   }
 }

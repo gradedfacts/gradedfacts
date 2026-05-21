@@ -91,6 +91,20 @@
     "section_how": "Comment nous travaillons",
     "section_independence": "Indépendance et financement",
     "section_limitations": "Limites",
-    "section_contact": "Contact et corrections"
+    "section_contact": "Contact et corrections",
+    "what_p1": "GradedFacts est un outil automatisé de vérification des faits qui évalue les affirmations politiques à partir de sources publiquement disponibles. Ce n'est pas une organisation de presse, un observatoire politique ni un groupe de défense. C'est un outil épistémique : son objectif est d'exposer ce que les preuves disponibles montrent et d'être explicite sur ce que les preuves ne résolvent pas encore.",
+    "what_p2": "Notre approche diffère des autres outils sur un point essentiel : <strong>l'indépendance institutionnelle prime sur le statut institutionnel.</strong> Une source officielle n'est pas automatiquement une source fiable — cela dépend de si elle opère indépendamment des intérêts politiques. Une agence gouvernementale dont la direction a été nommée selon des critères de loyauté n'est pas indépendante, quel que soit son titre officiel. Nous évaluons chaque source sur ces deux dimensions séparément.",
+    "what_p3": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement correcte prend 1 à 2 minutes.",
+    "how_intro": "Notre méthodologie est documentée publiquement. Chaque étape du pipeline d'analyse — de la récupération des sources et la classification par niveau à l'évaluation de l'indépendance et la dérivation de la notation — suit des règles explicites et publiquement disponibles.",
+    "how_li1": "<strong>Les évaluations des sources sont transparentes.</strong> Chaque source utilisée dans un jugement est listée avec son niveau, son statut d'indépendance, son score de pertinence et — le cas échéant — une explication de la raison pour laquelle elle a été marquée comme non indépendante.",
+    "how_li2": "<strong>Les résultats sont reproductibles.</strong> Le moteur d'analyse fonctionne à température 0 : pour la même affirmation et les mêmes preuves, il produit toujours le même résultat.",
+    "how_li3": "<strong>Les révisions sont archivées, jamais silencieuses.</strong> Lorsque de nouvelles preuves modifient un jugement, la notation précédente est conservée avec un horodatage et une raison du changement.",
+    "how_li4": "<strong>L'incertitude est explicite.</strong> Lorsque les preuves sont insuffisantes pour parvenir à une conclusion, le résultat est « Manquant » — pas un verdict forcé.",
+    "how_methodology": "La méthodologie complète est disponible sur <a href=\"/methodology\">Méthodologie Open Source</a>.",
+    "independence_p1": "GradedFacts a été fondé en Suisse et est hébergé sous juridiction suisse. Nous ne sommes pas soumis à la juridiction du Cloud Act américain.",
+    "independence_p2": "Nous n'acceptons pas de financement de partis politiques, de PAC, d'organismes gouvernementaux ou d'organisations médiatiques ayant des affiliations politiques. Toutes les sources de financement sont divulguées intégralement. Nous appliquons les mêmes critères d'indépendance à notre propre financement que ceux que nous appliquons aux sources que nous évaluons.",
+    "limitations_p1": "GradedFacts est un outil automatisé. Il a des limites inhérentes : il peut manquer un contexte qu'un expert humain aurait repéré, il dépend de la qualité des sources qu'il trouve, et il ne peut pas évaluer des affirmations nécessitant une expertise de domaine au-delà de ce que les sources publiques peuvent résoudre. Pour les affirmations très complexes, contestées ou d'actualité brûlante, nous recommandons de traiter notre résultat comme un point de départ pour une révision humaine experte, et non comme un verdict final.",
+    "limitations_p2": "La phase 1 couvre <strong>les États-Unis et l'Europe</strong>. La couverture mondiale est prévue pour la phase 2.",
+    "contact_p": "Si vous pensez qu'une notation est incorrecte, qu'une source a été mal catégorisée ou que notre évaluation d'indépendance est erronée, nous voulons le savoir. La méthodologie est open source — vous pouvez lire les règles exactes du moteur d'analyse, soumettre une correction ou proposer une amélioration via notre <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">dépôt GitHub</a>."
   }
 }

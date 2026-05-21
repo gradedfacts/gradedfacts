@@ -91,6 +91,20 @@
     "section_how": "How we work",
     "section_independence": "Independence and funding",
     "section_limitations": "Limitations",
-    "section_contact": "Contact and corrections"
+    "section_contact": "Contact and corrections",
+    "what_p1": "GradedFacts is an automated fact-checking tool that evaluates political claims against publicly available sources. It is not a news organisation, a political watchdog, or an advocacy group. It is an epistemic tool: its goal is to state what the available evidence shows, and to be explicit about what the evidence does not yet resolve.",
+    "what_p2": "Our approach differs from other tools in one key respect: <strong>institutional independence takes precedence over institutional status.</strong> An official source is not automatically a reliable source — that depends on whether it operates independently of political interests. A government agency whose leadership was appointed on loyalty criteria is not independent, regardless of its official title. We assess each source on both dimensions separately.",
+    "what_p3": "Live analysis running — live source search and evaluation. An epistemically correct analysis takes 1–2 minutes.",
+    "how_intro": "Our methodology is publicly documented. Every step of the analysis pipeline — from source retrieval and tier classification to independence assessment and rating derivation — follows explicit, publicly available rules.",
+    "how_li1": "<strong>Source assessments are transparent.</strong> Every source used in a judgment is listed with its tier, independence status, relevance score, and — where applicable — an explanation of why it was marked non-independent.",
+    "how_li2": "<strong>Results are reproducible.</strong> The analysis engine runs at temperature 0: given the same claim and the same evidence, it always produces the same output.",
+    "how_li3": "<strong>Revisions are archived, never silent.</strong> When new evidence changes a judgment, the prior rating is preserved with a timestamp and a reason for the change.",
+    "how_li4": "<strong>Uncertainty is explicit.</strong> When evidence is insufficient to reach a conclusion, the result is “Missing” — not a forced verdict.",
+    "how_methodology": "The full methodology is available at <a href=\"/methodology\">Open Source Methodology</a>.",
+    "independence_p1": "GradedFacts is founded in Switzerland and hosted under Swiss jurisdiction. We are not subject to US Cloud Act jurisdiction.",
+    "independence_p2": "We do not accept funding from political parties, PACs, government bodies, or media organisations with political affiliations. All funding sources are disclosed in full. We apply the same independence criteria to our own funding that we apply to the sources we evaluate.",
+    "limitations_p1": "GradedFacts is an automated tool. It has inherent limits: it can miss context that a human expert would catch, it depends on the quality of the sources it finds, and it cannot evaluate claims that require domain expertise beyond what publicly available sources can resolve. For highly complex, contested, or breaking-news claims, we recommend treating our output as a starting point for further human expert review, not a final verdict.",
+    "limitations_p2": "Phase 1 covers <strong>the United States and Europe</strong>. Global coverage is planned for Phase 2.",
+    "contact_p": "If you believe a rating is incorrect, a source has been miscategorised, or our independence assessment is wrong, we want to know. The methodology is open source — you can read the exact rules the analysis engine follows, submit a correction, or propose an improvement via our <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub repository</a>."
   }
 }

@@ -91,6 +91,20 @@
     "section_how": "Jak pracujemy",
     "section_independence": "Niezależność i finansowanie",
     "section_limitations": "Ograniczenia",
-    "section_contact": "Kontakt i korekty"
+    "section_contact": "Kontakt i korekty",
+    "what_p1": "GradedFacts to zautomatyzowane narzędzie do weryfikacji faktów, które ocenia twierdzenia polityczne na podstawie publicznie dostępnych źródeł. Nie jest organizacją prasową, politycznym obserwatorem ani grupą rzeczniczą. Jest narzędziem epistemicznym: jego celem jest przedstawienie tego, co pokazują dostępne dowody, oraz jasne wskazanie tego, czego dowody jeszcze nie rozstrzygają.",
+    "what_p2": "Nasze podejście różni się od innych narzędzi pod jednym kluczowym względem: <strong>niezależność instytucjonalna ma pierwszeństwo przed statusem instytucjonalnym.</strong> Oficjalne źródło nie jest automatycznie wiarygodnym źródłem — zależy to od tego, czy działa niezależnie od interesów politycznych. Agencja rządowa, której kierownictwo zostało mianowane według kryteriów lojalności, nie jest niezależna, niezależnie od jej oficjalnego tytułu. Oceniamy każde źródło osobno pod obiema względami.",
+    "what_p3": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie poprawna analiza zajmuje 1–2 minuty.",
+    "how_intro": "Nasza metodologia jest publicznie udokumentowana. Każdy etap potoku analiz — od pobierania źródeł i klasyfikacji poziomów po ocenę niezależności i wyprowadzanie ocen — podlega jawnym, publicznie dostępnym zasadom.",
+    "how_li1": "<strong>Oceny źródeł są przejrzyste.</strong> Każde źródło użyte w ocenie jest wymienione z jego poziomem, statusem niezależności, wynikiem trafności i — tam gdzie ma zastosowanie — wyjaśnieniem, dlaczego zostało oznaczone jako niesamodzielne.",
+    "how_li2": "<strong>Wyniki są odtwarzalne.</strong> Silnik analityczny działa w temperaturze 0: dla tego samego twierdzenia i tych samych dowodów zawsze produkuje ten sam wynik.",
+    "how_li3": "<strong>Rewizje są archiwizowane, nigdy ciche.</strong> Gdy nowe dowody zmieniają ocenę, poprzednia ocena jest zachowywana ze znacznikiem czasu i uzasadnieniem zmiany.",
+    "how_li4": "<strong>Niepewność jest jawna.</strong> Gdy dowody są niewystarczające do wyciągnięcia wniosków, wynik to „Brakujące“ — nie wymuszone orzeczenie.",
+    "how_methodology": "Pełna metodologia jest dostępna na stronie <a href=\"/methodology\">Metodologia Open Source</a>.",
+    "independence_p1": "GradedFacts zostało założone w Szwajcarii i jest hostowane pod jurysdykcją szwajcarską. Nie podlegamy jurysdykcji amerykańskiej ustawy Cloud Act.",
+    "independence_p2": "Nie przyjmujemy finansowania od partii politycznych, PAC, organów rządowych ani organizacji medialnych z politycznymi powiązaniami. Wszystkie źródła finansowania są w pełni ujawniane. Stosujemy te same kryteria niezależności do naszego własnego finansowania, co do ocenianych przez nas źródeł.",
+    "limitations_p1": "GradedFacts to narzędzie automatyczne. Ma nieodłączne ograniczenia: może przeoczyć kontekst, który dostrzegłby ludzki ekspert, zależy od jakości znalezionych źródeł i nie może oceniać twierdzeń wymagających wiedzy specjalistycznej wykraczającej poza to, co można znaleźć w publicznych źródłach. W przypadku bardzo złożonych, spornych lub przełomowych twierdzeń zalecamy traktowanie naszego wyniku jako punktu wyjścia do dalszej weryfikacji przez ekspertów, a nie jako ostateczny werdykt.",
+    "limitations_p2": "Faza 1 obejmuje <strong>Stany Zjednoczone i Europę</strong>. Globalne pokrycie jest planowane na fazę 2.",
+    "contact_p": "Jeśli uważasz, że ocena jest nieprawidłowa, źródło zostało błędnie skategoryzowane lub nasza ocena niezależności jest błędna, chcemy o tym wiedzieć. Metodologia jest open source — możesz przeczytać dokładne zasady silnika analitycznego, przesłać korektę lub zaproponować ulepszenie za pośrednictwem naszego <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">repozytorium GitHub</a>."
   }
 }
