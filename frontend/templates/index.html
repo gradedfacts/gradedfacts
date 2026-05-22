@@ -23,18 +23,22 @@
 
 <script>
 (function () {
-  fetch('/ui/symmetry-stats')
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      var el = document.getElementById('symmetry-stats');
-      var opts = {left: d.left, right: d.right, none: d.none};
-      el.setAttribute('data-i18n-options', JSON.stringify(opts));
-      el.textContent = i18next.isInitialized
-        ? i18next.t('trust.symmetry_stats', opts)
-        : 'Last 30 days: ' + d.left + ' left-leaning · ' + d.right + ' right-leaning · ' + d.none + ' no political leaning';
-      el.style.display = '';
-    })
-    .catch(function () {});
+  function refreshSymmetryStats() {
+    fetch('/ui/symmetry-stats')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var el = document.getElementById('symmetry-stats');
+        var opts = {left: d.left, right: d.right, none: d.none};
+        el.setAttribute('data-i18n-options', JSON.stringify(opts));
+        el.textContent = i18next.isInitialized
+          ? i18next.t('trust.symmetry_stats', opts)
+          : 'Last 30 days: ' + d.left + ' left-leaning · ' + d.right + ' right-leaning · ' + d.none + ' no political leaning';
+        el.style.display = '';
+      })
+      .catch(function () {});
+  }
+  refreshSymmetryStats();
+  setInterval(refreshSymmetryStats, 30000);
 })();
 </script>
 
