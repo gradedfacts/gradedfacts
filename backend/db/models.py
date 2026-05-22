@@ -83,6 +83,9 @@ class Judgment(Base):
     created_at: Mapped[datetime] = mapped_column(default=_now)
     # True for the current active judgment; False once superseded by a Revision
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # Political framing of the claim: "left", "right", or "none". Solely for symmetry
+    # measurement; never affects the rating. Null until the engine populates it.
+    political_leaning: Mapped[str | None] = mapped_column(String(10), nullable=True)
 
     claim: Mapped[Claim] = relationship(back_populates="judgments")
     # One-to-one: a judgment is superseded by at most one revision

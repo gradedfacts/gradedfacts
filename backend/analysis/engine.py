@@ -211,7 +211,83 @@ HARD RULES — never violate:
      no exceptions, regardless of the quality of the specific article. Wikipedia
      is a crowd-edited aggregation of secondary and tertiary material; it is not
      a primary or secondary source. Wikipedia can point to primary sources: those
-     primary sources count and should be cited directly. Wikipedia itself does not.\
+     primary sources count and should be cited directly. Wikipedia itself does not.
+
+POLITICAL_LEANING CLASSIFICATION:
+
+Purpose: Measure whether GradedFacts applies identical standards across the political
+spectrum. This value NEVER affects the truth score or rating.
+
+Classify the framing of the CLAIM ITSELF. Submit exactly one value:
+  "left"  — claim framing is explicitly left-oriented
+  "right" — claim framing is explicitly right-oriented
+  "none"  — default; use for everything else
+
+ALWAYS output "none" — no exceptions — for:
+- Scientific facts and established consensus (climate science, vaccines, evolution,
+  medicine, physics)
+- Raw empirical data and statistics (unemployment rates, GDP, inflation, crime
+  statistics, demographic data)
+- Historical facts stated without political framing ("The Berlin Wall fell in 1989",
+  "Hitler died in 1945")
+- Court decisions and legal rulings stated neutrally
+- Deaths, election results, appointments stated neutrally
+- Future predictions and prognoses of any kind
+- Natural events (earthquakes, pandemics, weather)
+- Economic policy claims where expert consensus is genuinely contested across the
+  political spectrum
+- Claims where the political framing depends heavily on cultural or national context
+- Claims that could plausibly be made by both left-wing AND right-wing actors
+- ANY case where you are not fully certain → "none"
+- DEFAULT: "none". "none" is always correct when uncertain.
+
+Use "left" only when ALL THREE conditions are simultaneously true:
+  1. The claim's framing EXPLICITLY promotes, defends, or is consistent with
+     left-wing political positions
+  2. The framing would be recognized as left-oriented by a politically neutral
+     observer from any country
+  3. A right-wing actor would NOT make this claim in this framing
+
+Clear "left" examples (framing matters, not just topic):
+- "Trickle-down economics has devastated the working class and only enriched the wealthy"
+- "Conservative immigration restrictions are cruel, racist, and economically harmful"
+- "Right-wing austerity policies destroyed public healthcare"
+- "The capitalist system is the root cause of poverty and inequality"
+
+Use "right" only when ALL THREE conditions are simultaneously true:
+  1. The claim's framing EXPLICITLY promotes, defends, or is consistent with
+     right-wing political positions
+  2. The framing would be recognized as right-oriented by a politically neutral
+     observer from any country
+  3. A left-wing actor would NOT make this claim in this framing
+
+Clear "right" examples (framing matters, not just topic):
+- "Open-border immigration policies are destroying national security and cultural identity"
+- "Socialist policies inevitably lead to economic collapse and loss of freedom"
+- "Left-wing activists and globalists are undermining law, order, and national sovereignty"
+- "The mainstream media is systematically suppressing conservative voices"
+
+CRITICAL DISTINCTION — framing vs. topic:
+- "Immigration increased by 15% in 2023" → none (neutral fact)
+- "Mass immigration is destroying our culture" → right (political framing)
+- "Anti-immigration policies are rooted in racism" → left (political framing)
+- "GDP grew 2.3% last year" → none (neutral fact)
+- "Bidenomics destroyed the middle class" → right (political attack framing)
+- "Republican tax cuts only benefited billionaires" → left (political attack framing)
+- "CO₂ levels reached 420ppm" → none (scientific fact)
+- "Climate alarmists are using fake science to destroy the economy" → right
+- "Oil companies are deliberately destroying the planet for profit" → left
+- "Trump increased the national debt by $7.8 trillion" → none (neutral fact)
+- "Trump recklessly exploded the debt to pay off his billionaire donors" → left
+- "Trump was the greatest president for economic growth in history" → right
+- "Biden's border policies caused record illegal crossings" → right (attack framing)
+- "Biden restored American dignity and alliances after Trump's chaos" → left
+
+SYMMETRY REQUIREMENT: The bar for "left" and "right" must be IDENTICAL. If you would
+classify a left-attacking claim as "right", apply the same threshold to right-attacking
+claims as "left". Any asymmetry is a systematic error.
+
+On any uncertainty → "none". On any parsing failure → "none" silently.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────
@@ -226,8 +302,17 @@ _JUDGMENT_TOOL = {
     ),
     "input_schema": {
         "type": "object",
-        "required": ["rationale", "sources", "rating"],
+        "required": ["rationale", "sources", "rating", "political_leaning"],
         "properties": {
+            "political_leaning": {
+                "type": "string",
+                "enum": ["left", "right", "none"],
+                "description": (
+                    "Political framing of the CLAIM ITSELF — not its truth, not its sources. "
+                    "Solely for symmetry measurement; never affects the rating. "
+                    "Default: 'none'. Use 'none' whenever uncertain."
+                ),
+            },
             "rating": {
                 "type": "string",
                 "enum": ["verified", "speculative", "debunked", "missing"],
@@ -683,12 +768,16 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         if src.get("url") or src.get("title")
     ]
 
+    raw_leaning = data.get("political_leaning", "none")
+    political_leaning = raw_leaning if raw_leaning in ("left", "right", "none") else "none"
+
     judgment = Judgment(
         claim_id=claim_id,
         rating=rating,
         rationale=data["rationale"],
         analyst=analyst,
         is_active=True,
+        political_leaning=political_leaning,
     )
 
     session.add_all(evaluated_sources)
