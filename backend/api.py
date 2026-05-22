@@ -345,9 +345,9 @@ def about(request: Request):
 def ui_symmetry_stats(session: Session = Depends(get_session)):
     cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     rows = session.execute(
-        select(Claim.political_leaning, func.count(Claim.id))
-        .where(Claim.submitted_at >= cutoff)
-        .group_by(Claim.political_leaning)
+        select(Judgment.political_leaning, func.count(Judgment.id))
+        .where(Judgment.created_at >= cutoff)
+        .group_by(Judgment.political_leaning)
     ).all()
     counts: dict[str, int] = {"left": 0, "right": 0, "none": 0}
     for leaning, count in rows:
