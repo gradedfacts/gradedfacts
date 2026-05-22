@@ -579,6 +579,24 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         if src.get("url") or src.get("title")
     ]
 
+    # Use the winning model's political_leaning, mirroring the rating resolution:
+    # - Mistral absent or both agreed → Claude's leaning (primary)
+    # - Mistral won via source-quality tiebreaker → Mistral's leaning
+    # - SPECULATIVE fallback (no clear winner) → Claude's leaning (default)
+    _VALID_LEANINGS = {"left", "right", "none"}
+    def _safe_leaning(data: dict) -> str:
+        raw = data.get("political_leaning", "none") if data else "none"
+        return raw if raw in _VALID_LEANINGS else "none"
+
+    mistral_won = (
+        models_agree is False
+        and mistral_data is not None
+        and mistral_rating is not None
+        and consensus_rating == mistral_rating
+        and consensus_rating != claude_rating
+    )
+    political_leaning = _safe_leaning(mistral_data) if mistral_won else _safe_leaning(claude_data)
+
     judgment = Judgment(
         claim_id=claim_id,
         rating=consensus_rating,
@@ -588,6 +606,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         consensus_rating=consensus_rating,
         models_agree=models_agree,
         is_active=True,
+        political_leaning=political_leaning,
     )
 
     session.add_all(evaluated_sources)
