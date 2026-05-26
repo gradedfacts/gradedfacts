@@ -18,8 +18,10 @@
       "domain": "bfs.admin.ch",
       "tier": "primary",
       "is_independent": true,
+      "counts_for_threshold": true,
       "country": "CH",
-      "region": "Europe"
+      "region": "Europe",
+      "independence_note": "Switzerland's principal federal statistical agency, established under the Federal Statistics Act (BStatG). The Act mandates that BFS produce and publish official statistics independently of political direction; results may not be withheld or altered by the Federal Council or individual departments. Hosted under the admin.ch domain but operationally distinct from departmental communications: statistical outputs are subject to peer review and methodological audit, not Federal Council editorial approval. Equivalent in independence design to national statistical offices such as the U.S. Bureau of Labor Statistics or Eurostat member offices."
     },
     {
       "name": "Federal Chancellery (Bundeskanzlei / Chancellerie fédérale)",
@@ -35,6 +37,16 @@
       "domain": "bger.ch",
       "tier": "primary",
       "is_independent": true,
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Swiss Federal Administration (admin.ch)",
+      "domain": "admin.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "affiliation_note": "admin.ch is the official web portal of the Swiss federal administration and serves as an umbrella domain for all federal departments and agencies. Content is produced directly by Federal Council departments and reflects current government policy. Individual agencies hosted under admin.ch — such as the Federal Statistical Office (bfs.admin.ch) and the Federal Chancellery (bk.admin.ch) — may have differing independence assessments; those are registered separately. The admin.ch root domain itself is not independent of the executive.",
+      "counts_for_threshold": true,
       "country": "CH",
       "region": "Europe"
     },

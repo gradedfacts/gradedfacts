@@ -316,6 +316,33 @@
       "counts_for_threshold": false,
       "category": "data_portal",
       "independence_note": "Commercial statistics and market data aggregator (founded 2007, Hamburg). Aggregates and repackages data from primary sources (government statistics, industry reports, surveys) behind a subscription paywall. Does not produce original primary research. No documented political editorial bias, but commercial business model creates incentives to present data attractively for clients. Data provenance requires verification against the cited primary source. Classified tertiary: Statista is a secondary aggregator of others' data, not a primary producer."
+    },
+    {
+      "name": "U.S. Energy Information Administration (EIA)",
+      "domain": "eia.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "Principal federal agency for energy statistics and analysis, operating within the U.S. Department of Energy. Established by the Department of Energy Organization Act (1977) with a statutory mandate to collect, analyse, and disseminate independent and impartial energy information. EIA's enabling legislation explicitly provides for independence of its data and analyses from DOE policy positions. Publishes energy supply, demand, price, and forecast data used by government, academia, and industry. No documented political editorial interference with statistical outputs."
+    },
+    {
+      "name": "U.S. National Archives and Records Administration (NARA)",
+      "domain": "archives.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "Independent federal agency responsible for preserving and providing access to the official records of the U.S. government, including congressional records, presidential papers, federal agency records, and the Federal Register. Operates independently of the executive departments whose records it holds. The Archivist of the United States is appointed by the President and confirmed by the Senate but serves in an independent role. Primary source for official federal documents, treaties, legislation, executive orders, and historical government records."
+    },
+    {
+      "name": "CNBC",
+      "domain": "cnbc.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "broadcaster",
+      "independence_note": "American business news television network and website, owned by NBCUniversal (a subsidiary of Comcast). Primary focus on financial markets, business news, and economic reporting. No documented political party funding or systematic editorial bias on economic and policy reporting; coverage follows standard journalistic practices. Ownership by a large media conglomerate (Comcast/NBCUniversal) introduces corporate-interest considerations, but no documented pattern of editorial interference with factual economic or political reporting. Widely cited for market data, earnings reporting, and policy analysis."
     }
   ]
 }
