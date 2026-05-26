@@ -180,6 +180,21 @@ _CLAIM_ADDCOLS = [
     ("political_leaning", "VARCHAR(10)"),
 ]
 
+_EVALUATED_SOURCE_ADDCOLS = [
+    ("independence_label", "VARCHAR(20)"),
+]
+
+
+def _migrate_evaluated_sources() -> None:
+    """Add columns introduced after initial schema creation to the evaluated_sources table."""
+    with engine.connect() as conn:
+        existing = {col["name"] for col in inspect(engine).get_columns("evaluated_sources")}
+        for col, col_type in _EVALUATED_SOURCE_ADDCOLS:
+            if col not in existing:
+                conn.execute(text(f"ALTER TABLE evaluated_sources ADD COLUMN {col} {col_type}"))
+                logger.info("DB migration: added evaluated_sources.%s", col)
+        conn.commit()
+
 
 def _migrate_judgments() -> None:
     """Add columns introduced by the ConsensusEngine to pre-existing databases."""
@@ -208,6 +223,7 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     _migrate_judgments()
     _migrate_claims()
+    _migrate_evaluated_sources()
     yield
 
 

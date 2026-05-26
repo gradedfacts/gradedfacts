@@ -61,6 +61,7 @@
     "relevance": "Alaka düzeyi",
     "independent": "Bağımsız",
     "not_independent": "Bağımsız değil",
+    "neutral": "Tarafsız",
     "symmetry_heading": "Simetri kontrolü",
     "symmetry_confirmed": "Simetri onaylandı — karşı iddia için eşdeğer bir analiz mevcuttur.",
     "symmetry_guaranteed": "Simetri garantilendi — siyasi yönden bağımsız olarak aynı standartlar uygulandı.",

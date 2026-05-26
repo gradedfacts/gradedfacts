@@ -61,6 +61,7 @@
     "relevance": "Rilevanza",
     "independent": "Indipendente",
     "not_independent": "Non indipendente",
+    "neutral": "Neutrale",
     "symmetry_heading": "Controllo simmetria",
     "symmetry_confirmed": "Simmetria confermata — esiste un'analisi equivalente per l'affermazione opposta.",
     "symmetry_guaranteed": "Simmetria garantita — standard identici applicati indipendentemente dalla direzione politica.",

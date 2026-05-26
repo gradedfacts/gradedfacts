@@ -68,6 +68,10 @@ class SourceOut(BaseModel):
     url: str
     tier: SourceTier
     is_independent: bool
+    # Three-state label for display: "independent" | "neutral" | "not_independent".
+    # Null for rows written before the column was added; template falls back to
+    # deriving the label from is_independent when this is None.
+    independence_label: str | None = None
     affiliation_note: str | None
     relevance_score: float
     excerpt: str | None

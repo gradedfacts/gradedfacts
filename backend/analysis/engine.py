@@ -136,6 +136,40 @@ def _build_lang_instruction(lang_name: str) -> str:
     )
 
 
+# ── Independence helpers ──────────────────────────────────────────────────────
+
+def independence_bool(val) -> bool:
+    """
+    Convert the three-state is_independent value from evaluate_source() to a
+    boolean suitable for DB storage and rating-derivation logic.
+
+      True              → True   (independently verified)
+      False             → False  (confirmed not-independent / compromised)
+      "not_independent" → False  (tertiary confirmed not-independent)
+      "neutral"         → True   (unregistered; not confirmed compromised)
+      anything else     → True   (safe default: don't downgrade unknown sources)
+    """
+    if val is False or val == "not_independent":
+        return False
+    return True
+
+
+def independence_label(val) -> str:
+    """
+    Return the three-state display label for is_independent.
+
+      True / anything truthy except known strings → "independent"
+      False                                        → "not_independent"
+      "neutral"                                    → "neutral"
+      "not_independent"                            → "not_independent"
+    """
+    if val == "neutral":
+        return "neutral"
+    if val is False or val == "not_independent":
+        return "not_independent"
+    return "independent"
+
+
 # ── Source thresholds ─────────────────────────────────────────────────────────
 
 # Hard cap on sources collected per claim.
@@ -725,7 +759,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         # Non-independent primary sources are treated as secondary for rating purposes:
         # a captured official institution cannot substitute for an independent primary
         # source when establishing VERIFIED.
-        if not src.get("is_independent", True) and tier is SourceTier.PRIMARY:
+        if not independence_bool(src.get("is_independent", True)) and tier is SourceTier.PRIMARY:
             tier = SourceTier.SECONDARY
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
@@ -759,7 +793,8 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             claim_id=claim_id,
             url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
-            is_independent=bool(src.get("is_independent", True)),
+            is_independent=independence_bool(src.get("is_independent", True)),
+            independence_label=independence_label(src.get("is_independent", True)),
             affiliation_note=src.get("affiliation_note"),
             relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),

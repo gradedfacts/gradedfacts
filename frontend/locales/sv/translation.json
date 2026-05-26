@@ -61,6 +61,7 @@
     "relevance": "Relevans",
     "independent": "Oberoende",
     "not_independent": "Inte oberoende",
+    "neutral": "Neutral",
     "symmetry_heading": "Symmetrikontroll",
     "symmetry_confirmed": "Symmetri bekräftad — en likvärdig analys finns för det motsatta påståendet.",
     "symmetry_guaranteed": "Symmetri garanterad — identiska standarder tillämpas oavsett politisk riktning.",

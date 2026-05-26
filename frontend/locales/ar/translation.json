@@ -61,6 +61,7 @@
     "relevance": "الصلة",
     "independent": "مستقل",
     "not_independent": "غير مستقل",
+    "neutral": "محايد",
     "symmetry_heading": "فحص التماثل",
     "symmetry_confirmed": "التماثل مؤكد — يوجد تحليل مكافئ للادعاء المعاكس.",
     "symmetry_guaranteed": "التماثل مضمون — معايير متطابقة تُطبق بغض النظر عن الاتجاه السياسي.",

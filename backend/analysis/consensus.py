@@ -41,6 +41,7 @@ from backend.analysis.engine import (
     _phase2_judgment,
 )
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
+from backend.analysis.engine import independence_bool, independence_label
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source, extract_domain
@@ -256,7 +257,7 @@ def _has_primary_independent(sources: list[dict]) -> bool:
     """Return True if any source is Primary tier, independent, and meets minimum relevance."""
     return any(
         src.get("tier") == "primary"
-        and bool(src.get("is_independent", True))
+        and independence_bool(src.get("is_independent", True))
         and float(src.get("relevance_score", 0.0)) >= MIN_RELEVANCE_SCORE
         for src in sources
     )
@@ -351,7 +352,7 @@ def _process_sources(
             tier = SourceTier(src["tier"])
         except (KeyError, ValueError):
             tier = SourceTier.TERTIARY
-        if not src.get("is_independent", True) and tier is SourceTier.PRIMARY:
+        if not independence_bool(src.get("is_independent", True)) and tier is SourceTier.PRIMARY:
             tier = SourceTier.SECONDARY
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
@@ -570,7 +571,8 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             claim_id=claim_id,
             url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
-            is_independent=bool(src.get("is_independent", True)),
+            is_independent=independence_bool(src.get("is_independent", True)),
+            independence_label=independence_label(src.get("is_independent", True)),
             affiliation_note=src.get("affiliation_note"),
             relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),

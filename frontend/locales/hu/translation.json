@@ -61,6 +61,7 @@
     "relevance": "Relevancia",
     "independent": "Független",
     "not_independent": "Nem független",
+    "neutral": "Semleges",
     "symmetry_heading": "Szimmetria-ellenőrzés",
     "symmetry_confirmed": "Szimmetria megerősítve — az ellentétes állításra vonatkozó egyenértékű elemzés létezik.",
     "symmetry_guaranteed": "Szimmetria garantált — azonos mércék alkalmazva a politikai iránytól függetlenül.",

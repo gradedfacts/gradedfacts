@@ -46,6 +46,10 @@ class EvaluatedSource(Base):
     url: Mapped[str] = mapped_column(Text, nullable=False)
     tier: Mapped[SourceTier] = mapped_column(SAEnum(SourceTier), nullable=False)
     is_independent: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    # Three-state display label: "independent" | "neutral" | "not_independent"
+    # Null for rows written before this column was added (pre-migration rows fall back
+    # to deriving the label from the boolean at read time).
+    independence_label: Mapped[str | None] = mapped_column(String(20), nullable=True)
     # Populated when is_independent is False
     affiliation_note: Mapped[str | None] = mapped_column(Text, nullable=True)
     # 0.0–1.0: how directly this source addresses the specific claim

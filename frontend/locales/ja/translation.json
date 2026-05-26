@@ -61,6 +61,7 @@
     "relevance": "関連性",
     "independent": "独立",
     "not_independent": "非独立",
+    "neutral": "中立",
     "symmetry_heading": "対称性チェック",
     "symmetry_confirmed": "対称性確認済み — 反対の主張に対する同等の分析が存在します。",
     "symmetry_guaranteed": "対称性保証済み — 政治的方向に関わらず同一の基準を適用。",

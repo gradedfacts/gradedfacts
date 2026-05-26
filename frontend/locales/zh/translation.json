@@ -61,6 +61,7 @@
     "relevance": "相关性",
     "independent": "独立",
     "not_independent": "非独立",
+    "neutral": "中立",
     "symmetry_heading": "对称性检查",
     "symmetry_confirmed": "对称性已确认 — 对立主张存在等效分析。",
     "symmetry_guaranteed": "对称性已保证 — 无论政治方向，均适用相同标准。",

@@ -61,6 +61,7 @@
     "relevance": "Relevance",
     "independent": "Independent",
     "not_independent": "Not independent",
+    "neutral": "Neutral",
     "symmetry_heading": "Symmetry check",
     "symmetry_confirmed": "Symmetry confirmed — an equivalent analysis exists for the opposing claim.",
     "symmetry_guaranteed": "Symmetry guaranteed — identical standards applied regardless of political direction.",

@@ -61,6 +61,7 @@
     "relevance": "관련성",
     "independent": "독립",
     "not_independent": "비독립",
+    "neutral": "중립",
     "symmetry_heading": "대칭성 확인",
     "symmetry_confirmed": "대칭성 확인됨 — 반대 주장에 대한 동등한 분석이 존재합니다.",
     "symmetry_guaranteed": "대칭성 보장됨 — 정치적 방향에 관계없이 동일한 기준 적용.",

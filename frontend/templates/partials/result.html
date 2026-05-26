@@ -42,11 +42,13 @@
         {% else %}
           {% set tile_cls = 'tile-missing' %}
         {% endif %}
+        {# Resolve three-state label; fall back for pre-migration rows that have no independence_label #}
+        {% set indep_label = source.independence_label if source.independence_label else ('independent' if source.is_independent else 'not_independent') %}
         <button
           class="puzzle-tile {{ tile_cls }}"
           type="button"
           data-source-id="{{ source.id }}"
-          title="{{ source.url | domain }} · {{ source.tier.value | capitalize }} · {{ (source.relevance_score * 100) | int }}% relevance · {% if source.is_independent %}Independent{% else %}Not independent{% endif %}"
+          title="{{ source.url | domain }} · {{ source.tier.value | capitalize }} · {{ (source.relevance_score * 100) | int }}% relevance · {% if indep_label == 'neutral' %}Neutral{% elif indep_label == 'not_independent' %}Not independent{% else %}Independent{% endif %}"
         ></button>
       {% endfor %}
     </div>
@@ -76,6 +78,8 @@
           </li>
           {% endif %}
           {% for source in group.sources %}
+          {# Resolve three-state label; fall back for pre-migration rows that have no independence_label #}
+          {% set indep_label = source.independence_label if source.independence_label else ('independent' if source.is_independent else 'not_independent') %}
           <li class="source-item{% if group.is_multi %} source-item-grouped{% endif %}{% if not source.is_independent %} not-independent{% endif %}"
               id="source-{{ source.id }}">
 
@@ -86,10 +90,12 @@
                  rel="noopener noreferrer"
                  title="{{ source.url }}">{{ source.url | domain }}</a>
               <span class="badge badge-{{ source.tier.value }}" data-i18n="tier.{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
-              {% if source.is_independent %}
-                <span class="badge badge-indep" data-i18n="result.independent">Independent</span>
-              {% else %}
+              {% if indep_label == 'neutral' %}
+                <span class="badge badge-neutral" data-i18n="result.neutral">Neutral</span>
+              {% elif indep_label == 'not_independent' %}
                 <span class="badge badge-not-indep" data-i18n="result.not_independent">Not independent</span>
+              {% else %}
+                <span class="badge badge-indep" data-i18n="result.independent">Independent</span>
               {% endif %}
             </div>
 
