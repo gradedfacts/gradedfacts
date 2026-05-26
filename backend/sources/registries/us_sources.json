@@ -2,12 +2,12 @@
   "_meta": {
     "description": "GradedFacts US Source Registry — public, versioned registry of core US sources with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-04-28",
+    "last_updated": "2026-05-26",
     "methodology": "Tier reflects document type: primary = original data or official records produced by the institution itself; secondary = journalism that cites and attributes primary sources; tertiary = aggregation, opinion, or commentary without independent verification. Independence is assessed on ownership, funding, and documented editorial control — being an official government body does NOT imply independence. The same evidentiary standard is applied symmetrically across all political directions.",
     "schema": {
       "tier": "primary | secondary | tertiary",
       "is_independent": "true when no documented editorial control by political parties, PACs, governments with a direct stake in the outcome, or politically-aligned major funders",
-      "category": "government | news_agency | newspaper | broadcaster | academic | fact_checker | nonprofit | social_media"
+      "category": "government | news_agency | newspaper | broadcaster | academic | fact_checker | nonprofit | social_media | data_portal"
     }
   },
   "sources": [
@@ -282,6 +282,24 @@
       "independence_note": "Owned and operated by the Poynter Institute for Media Studies, a nonprofit journalism school and research organization (since 2018; previously a Tampa Bay Times project). Pulitzer Prize recipient (2009). Applies a structured six-point rating methodology (True / Mostly True / Half True / Mostly False / False / Pants on Fire) consistently to claims from all political directions. Member of IFCN. No political party funding."
     },
     {
+      "name": "Pew Research Center",
+      "domain": "pewresearch.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "nonprofit",
+      "independence_note": "Nonpartisan American research organization (founded 2004, spun off from The Pew Charitable Trusts). Produces public opinion polling, demographic research, media content analysis, and social trend reporting. Funded primarily by The Pew Charitable Trusts, a public charity with no documented political party affiliation. Explicit nonpartisan policy — does not take positions on policy questions. Polling methodology (sampling, weighting, question wording) is published in full and independently auditable. Widely cited across the full political spectrum."
+    },
+    {
+      "name": "Our World in Data",
+      "domain": "ourworldindata.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "nonprofit",
+      "independence_note": "Research publication of the Global Change Data Lab, a nonprofit registered in the UK, operated by researchers at the University of Oxford. Presents and analyses data drawn from primary sources (WHO, World Bank, national statistics offices, peer-reviewed research). Funded by the Bill & Melinda Gates Foundation, Wellcome Trust, and other major foundations with no documented political party affiliation. Data and methodology are fully open-source and published on GitHub for independent verification. No documented interference with editorial decisions by funders."
+    },
+    {
       "name": "PubMed / National Library of Medicine",
       "domain": "pubmed.ncbi.nlm.nih.gov",
       "tier": "tertiary",
@@ -289,6 +307,15 @@
       "counts_for_threshold": false,
       "category": "academic",
       "independence_note": "National Library of Medicine database (NIH / HHS) indexing peer-reviewed biomedical and life-sciences literature. The database itself is a neutral aggregator of published research — it does not produce original findings. Individual studies should be evaluated for methodology, sample size, replication status, funding source, and conflicts of interest. NIH is an executive branch agency, but published research is subject to peer review independent of NIH editorial control. Reclassified tertiary (Rule 2): PubMed is an aggregator, not an original data producer; the primary sources are the individual peer-reviewed papers it indexes."
+    },
+    {
+      "name": "Statista",
+      "domain": "statista.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "category": "data_portal",
+      "independence_note": "Commercial statistics and market data aggregator (founded 2007, Hamburg). Aggregates and repackages data from primary sources (government statistics, industry reports, surveys) behind a subscription paywall. Does not produce original primary research. No documented political editorial bias, but commercial business model creates incentives to present data attractively for clients. Data provenance requires verification against the cited primary source. Classified tertiary: Statista is a secondary aggregator of others' data, not a primary producer."
     }
   ]
 }

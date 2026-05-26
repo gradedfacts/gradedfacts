@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts CH Source Registry — Swiss federal institutions, public broadcasters, and leading newspapers with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-04",
+    "last_updated": "2026-05-26",
     "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -77,6 +77,16 @@
       "is_independent": true,
       "country": "CH",
       "region": "Europe"
+    },
+    {
+      "name": "FORS — Swiss Centre of Expertise in the Social Sciences",
+      "domain": "forscenter.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Swiss Centre of Expertise in the Social Sciences, hosted at the University of Lausanne and jointly funded by the Swiss National Science Foundation (SNSF) and the universities of Basel, Berne, Geneva, Lausanne, and Zurich. No commercial ownership; no documented political party funding or editorial interference. Manages Swiss Electoral Studies (Selects), the Swiss Household Panel (SHP), and other nationally representative longitudinal surveys. Widely cited in academic social science research on Switzerland."
     }
   ]
 }

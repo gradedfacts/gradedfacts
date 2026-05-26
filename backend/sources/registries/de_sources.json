@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts DE Source Registry — German federal statistical bodies, parliament, constitutional court, public broadcasting, and leading news outlets with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-04",
+    "last_updated": "2026-05-26",
     "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -60,6 +60,46 @@
       "is_independent": true,
       "country": "DE",
       "region": "Europe"
+    },
+    {
+      "name": "Bundesinstitut für Bevölkerungsforschung (BiB)",
+      "domain": "bib.bund.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Federal scientific research institute under the Federal Ministry of the Interior (BMI), established 1973. Operates as a peer-review research institution following established demographic and social-science methodology. No documented interference with research output or publication decisions. Research is internationally benchmarked and peer-reviewed. Structural separation between policy ministry and scientific publication is maintained in practice; independence assessed as upheld."
+    },
+    {
+      "name": "Robert Koch Institut (RKI)",
+      "domain": "rki.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Federal agency under the German Federal Ministry of Health (BMG). Employs career scientists and follows established epidemiological methodology. Internal communications released via transparency lawsuit (2024) documented instances of external political pressure on public pandemic communications during 2020–2022. Reliable as a primary source for epidemiological surveillance data, disease statistics, and laboratory reference data; independence of public communications from the executive is not fully established.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Sozialpolitik Aktuell",
+      "domain": "sozialpolitik-aktuell.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Academic social policy data portal maintained by the Institute for Work, Skills and Training (IAQ), University of Duisburg-Essen. Curates and presents primary statistical data on German social policy drawn from official sources (BMAS, Destatis, Bundesagentur für Arbeit). No commercial ownership; no documented political party funding or editorial interference. Widely cited in academic and policy research on German welfare state indicators."
+    },
+    {
+      "name": "Bundeszentrale für politische Bildung (bpb)",
+      "domain": "bpb.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Federal agency under the Federal Ministry of the Interior, established 1952 with a statutory mandate for non-partisan civic education. A cross-party parliamentary advisory board (Kuratorium) is legally required to oversee programming and ensure political balance — no single party can direct editorial content. No documented case of BpB content being directed to favor a specific political party. The non-partisan mandate is structurally enforced through the advisory board composition and the public law foundation charter."
     }
   ]
 }

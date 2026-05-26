@@ -308,9 +308,20 @@ class TestDESources:
             src = _get(sources, domain)
             assert src["tier"] == "secondary", f"{domain} should be secondary"
 
-    def test_all_are_independent(self, sources):
-        for src in sources:
-            assert src["is_independent"] is True, f"{src['name']} should be independent"
+    def test_core_sources_are_independent(self, sources):
+        for domain in ("destatis.de", "bundestag.de", "bundesverfassungsgericht.de",
+                       "ard.de", "spiegel.de", "zeit.de"):
+            src = _get(sources, domain)
+            if src:
+                assert src["is_independent"] is True, f"{domain} should be independent"
+
+    def test_rki_is_not_independent(self, sources):
+        src = _get(sources, "rki.de")
+        assert src is not None, "rki.de must be present in DE registry"
+        assert src["is_independent"] is False, (
+            "RKI is a Federal Ministry of Health agency — not editorially independent"
+        )
+        assert src.get("affiliation_note"), "Non-independent source must have affiliation_note"
 
     def test_all_have_de_country(self, sources):
         for src in sources:

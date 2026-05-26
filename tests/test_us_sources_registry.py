@@ -17,6 +17,7 @@ _VALID_TIERS = {"primary", "secondary", "tertiary"}
 _VALID_CATEGORIES = {
     "government", "news_agency", "newspaper", "broadcaster",
     "academic", "fact_checker", "nonprofit", "social_media",
+    "data_portal",  # commercial or institutional statistics aggregators (e.g. Statista)
 }
 
 
