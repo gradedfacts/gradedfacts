@@ -100,13 +100,16 @@ class TestEvaluateSourceWikipediaRule:
         _ = evaluate_source(src)
         assert src["tier"] == original_tier
 
-    def test_wikipedia_rule_preserves_other_fields(self):
+    def test_wikipedia_rule_preserves_non_classification_fields(self):
         src = self._wikipedia_src(tier="secondary")
         result = evaluate_source(src)
         assert result["url"] == src["url"]
-        assert result["is_independent"] == src["is_independent"]
         assert result["relevance_score"] == src["relevance_score"]
         assert result["supports_claim"] == src["supports_claim"]
+        # Wikipedia is never in any registry → gets conservative defaults
+        assert result["tier"] == "tertiary"
+        assert result["is_independent"] == "neutral"
+        assert result["counts_for_threshold"] is False
 
     @pytest.mark.parametrize("lang_subdomain", ["en", "de", "fr", "es", "ja", "zh"])
     def test_all_language_subdomains_are_tertiary(self, lang_subdomain):

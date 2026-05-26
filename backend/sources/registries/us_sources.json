@@ -249,7 +249,8 @@
       "name": "Breitbart News",
       "domain": "breitbart.com",
       "tier": "tertiary",
-      "is_independent": false,
+      "is_independent": "not_independent",
+      "counts_for_threshold": false,
       "category": "newspaper",
       "affiliation_note": "Documented major investment by the Mercer family (Robert Mercer, Renaissance Technologies co-CEO and major Republican donor) beginning ~2012. Former executive chairman Steve Bannon served as CEO of the 2016 Trump presidential campaign and subsequently as White House Chief Strategist. Content systematically promotes far-right political positions. Multiple IFCN-member fact-checking organizations have documented a sustained pattern of false or misleading articles. Editorial output reflects direct ownership political alignment.",
       "independence_note": "Received documented major investment from the Mercer family (Robert Mercer, conservative megadonor and co-CEO of hedge fund Renaissance Technologies) starting approximately 2012. Former executive chairman Steve Bannon served as CEO of the 2016 Trump presidential campaign and subsequently as Trump White House Chief Strategist. Content systematically promotes far-right political positions. Multiple fact-checking organizations have documented a pattern of false or misleading articles. Not independent under any reasonable editorial standard."
@@ -258,7 +259,8 @@
       "name": "Truth Social",
       "domain": "truthsocial.com",
       "tier": "tertiary",
-      "is_independent": false,
+      "is_independent": "not_independent",
+      "counts_for_threshold": false,
       "category": "social_media",
       "affiliation_note": "Owned by Trump Media & Technology Group (TMTG, NASDAQ: DJT); former President Donald Trump holds majority equity stake as of 2025. Platform was created specifically as Trump's primary social media outlet following his removal from Twitter/X. Content moderation policies enforce a conservative viewpoint per the company's stated mission. Posts by Trump are primary sources for his own statements but cannot be treated as independent information about claims involving Trump or his political interests.",
       "independence_note": "Owned by Trump Media & Technology Group (TMTG, NASDAQ: DJT). As of 2025, former President Donald Trump holds a majority equity stake. The platform was created specifically to serve as Trump's primary social media outlet after his removal from Twitter/X. Platform content moderation policies enforce a conservative viewpoint per the company's stated mission. Statements from this platform are primary sources for Trump's own positions but cannot be treated as independent information about claims involving Trump."
@@ -282,10 +284,11 @@
     {
       "name": "PubMed / National Library of Medicine",
       "domain": "pubmed.ncbi.nlm.nih.gov",
-      "tier": "primary",
-      "is_independent": true,
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
       "category": "academic",
-      "independence_note": "National Library of Medicine database (NIH / HHS) indexing peer-reviewed biomedical and life-sciences literature. The database itself is a neutral aggregator of published research — it does not produce original findings. Individual studies should be evaluated for methodology, sample size, replication status, funding source, and conflicts of interest. NIH is an executive branch agency, but published research is subject to peer review independent of NIH editorial control. Primary source for scientific and medical claims; does not apply to social science or political claims."
+      "independence_note": "National Library of Medicine database (NIH / HHS) indexing peer-reviewed biomedical and life-sciences literature. The database itself is a neutral aggregator of published research — it does not produce original findings. Individual studies should be evaluated for methodology, sample size, replication status, funding source, and conflicts of interest. NIH is an executive branch agency, but published research is subject to peer review independent of NIH editorial control. Reclassified tertiary (Rule 2): PubMed is an aggregator, not an original data producer; the primary sources are the individual peer-reviewed papers it indexes."
     }
   ]
 }

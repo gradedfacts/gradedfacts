@@ -67,7 +67,9 @@ def evaluate_source(src: dict) -> dict:
     src = apply_independence_override(src)
 
     # Step 3: guarantee non-independent sources carry an explanation
-    if not src.get("is_independent", True) and not src.get("affiliation_note"):
+    _indep = src.get("is_independent", True)
+    _is_not_independent = _indep is False or _indep == "not_independent"
+    if _is_not_independent and not src.get("affiliation_note"):
         src = dict(src)
         src["affiliation_note"] = _GENERIC_AFFILIATION_NOTE
 

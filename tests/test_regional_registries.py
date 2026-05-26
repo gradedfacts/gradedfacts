@@ -498,7 +498,7 @@ class TestApplyRegistryOverride:
         assert result["is_independent"] is True
         assert "affiliation_note" not in result
 
-    def test_unknown_source_returned_unchanged(self):
+    def test_unknown_source_gets_conservative_defaults(self):
         from backend.sources.registries import apply_registry_override
         src = {
             "url": "https://unknownoutlet.example.com/article",
@@ -507,7 +507,12 @@ class TestApplyRegistryOverride:
             "relevance_score": 0.7,
         }
         result = apply_registry_override(src)
-        assert result is src  # identity preserved
+        # Unregistered sources must be conservatively downgraded — Claude's judgment
+        # cannot be trusted for sources absent from the curated registry.
+        assert result["tier"] == "tertiary"
+        assert result["is_independent"] == "neutral"
+        assert result["counts_for_threshold"] is False
+        assert result is not src  # a new dict is returned
 
     def test_does_not_mutate_input_dict(self):
         from backend.sources.registries import apply_registry_override

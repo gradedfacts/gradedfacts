@@ -53,9 +53,11 @@ class TestEvaluateSource:
         result = evaluate_source(src)
         assert result.get("affiliation_note")
 
-    # ── Generic non-independent fallback ──────────────────────────────────────
+    # ── Unregistered source defaults ──────────────────────────────────────────
 
-    def test_non_independent_without_affiliation_note_gets_generic_note(self):
+    def test_unregistered_source_gets_conservative_defaults(self):
+        # Claude said secondary/independent, but the source is not in any registry.
+        # The pipeline must override to tertiary/neutral — unknown ≠ verified.
         src = {
             "url": "https://some-partisan-outlet.example/article",
             "tier": "secondary",
@@ -64,9 +66,14 @@ class TestEvaluateSource:
             "supports_claim": True,
         }
         result = evaluate_source(src)
-        assert result.get("affiliation_note")
+        assert result["tier"] == "tertiary"
+        assert result["is_independent"] == "neutral"
+        assert result["counts_for_threshold"] is False
+        assert result.get("affiliation_note") is None
 
-    def test_non_independent_with_existing_affiliation_note_preserved(self):
+    def test_unregistered_source_affiliation_note_cleared(self):
+        # An unregistered source that Claude annotated with an affiliation_note
+        # should have that note cleared — we cannot verify Claude's assessment.
         src = {
             "url": "https://some-partisan-outlet.example/article",
             "tier": "secondary",
@@ -76,7 +83,22 @@ class TestEvaluateSource:
             "supports_claim": True,
         }
         result = evaluate_source(src)
-        assert result["affiliation_note"] == "Known partisan funding source"
+        assert result["is_independent"] == "neutral"
+        assert result.get("affiliation_note") is None
+
+    def test_registered_non_independent_affiliation_note_from_registry(self):
+        # A registered non-independent source (MSNBC) must carry the registry's
+        # affiliation_note, not any note Claude may have added.
+        src = {
+            "url": "https://www.msnbc.com/article/example",
+            "tier": "secondary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        }
+        result = evaluate_source(src)
+        assert result["is_independent"] is False
+        assert result.get("affiliation_note"), "Registered non-independent source must have affiliation_note"
 
     # ── Relevance score clamping ───────────────────────────────────────────────
 

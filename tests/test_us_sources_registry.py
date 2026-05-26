@@ -65,11 +65,24 @@ class TestSchema:
                 f"{src['name']} has invalid category: {src['category']!r}"
             )
 
-    def test_is_independent_is_boolean(self, sources):
+    def test_is_independent_has_valid_value(self, sources):
+        """
+        Primary/secondary sources use JSON booleans.
+        Tertiary sources use "neutral" or "not_independent" (Rule 1).
+        """
+        _TERTIARY_VALUES = {"neutral", "not_independent"}
         for src in sources:
-            assert isinstance(src["is_independent"], bool), (
-                f"{src['name']}: is_independent must be a JSON boolean, not {type(src['is_independent'])}"
-            )
+            val = src["is_independent"]
+            if src["tier"] == "tertiary":
+                assert val in _TERTIARY_VALUES, (
+                    f"{src['name']}: tertiary is_independent must be 'neutral' or "
+                    f"'not_independent', got {val!r}"
+                )
+            else:
+                assert isinstance(val, bool), (
+                    f"{src['name']}: primary/secondary is_independent must be a "
+                    f"JSON boolean, got {type(val)}"
+                )
 
     def test_no_duplicate_domains(self, sources):
         domains = [src["domain"] for src in sources]
@@ -83,7 +96,9 @@ class TestSchema:
 
     def test_non_independent_sources_have_substantive_notes(self, sources):
         for src in sources:
-            if not src["is_independent"]:
+            val = src["is_independent"]
+            is_not_independent = (val is False) or (val == "not_independent")
+            if is_not_independent:
                 note = src["independence_note"]
                 assert len(note) > 80, (
                     f"{src['name']}: independence_note for non-independent source is too brief"
@@ -154,12 +169,16 @@ class TestIndependenceSymmetry:
     def test_breitbart_is_not_independent(self, sources):
         src = self._get(sources, "breitbart.com")
         assert src is not None
-        assert src["is_independent"] is False
+        assert src["is_independent"] == "not_independent", (
+            "Breitbart is tertiary — must use 'not_independent' per Rule 1"
+        )
 
     def test_truth_social_is_not_independent(self, sources):
         src = self._get(sources, "truthsocial.com")
         assert src is not None
-        assert src["is_independent"] is False
+        assert src["is_independent"] == "not_independent", (
+            "Truth Social is tertiary — must use 'not_independent' per Rule 1"
+        )
 
     def test_wire_services_are_independent(self, sources):
         for domain in ("apnews.com", "reuters.com", "afp.com"):
@@ -179,7 +198,7 @@ class TestIndependenceSymmetry:
         the not-independent list.  A registry that flags only one political
         direction would violate the symmetry principle.
         """
-        not_indep = [s for s in sources if not s["is_independent"]]
+        not_indep = [s for s in sources if s["is_independent"] is not True and s["is_independent"] != "neutral"]
         notes = " ".join(s["independence_note"].lower() for s in not_indep)
         # At minimum we need documentation of both directions
         assert "republican" in notes or "trump" in notes or "right" in notes, (
