@@ -93,6 +93,11 @@
         var optStr = el.getAttribute('data-i18n-options');
         var opts = optStr ? JSON.parse(optStr) : {};
         var result = i18next.t(key, opts);
+        // When i18next cannot resolve a key it returns the key string itself.
+        // Skip the overwrite in that case so the server-provided fallback text
+        // (e.g. "Neutral" on the badge) is preserved rather than replaced with
+        // the raw key (e.g. "result.neutral").
+        if (result === key) return;
         if (el.getAttribute('data-i18n-target') === 'placeholder') {
           el.placeholder = result;
         } else if (el.getAttribute('data-i18n-target') === 'html') {

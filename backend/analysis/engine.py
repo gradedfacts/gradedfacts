@@ -248,7 +248,10 @@ HARD RULES — never violate:
      primary sources count and should be cited directly. Wikipedia itself does not.
 
 SOURCE QUALITY REQUIREMENT:
-  - VERIFIED requires at least 1 Primary source OR at least 2 independent Secondary sources
+  - VERIFIED requires at least 1 INDEPENDENT Primary source OR at least 2 INDEPENDENT Secondary sources.
+    Not-independent Primary sources (government agencies, state-controlled institutions) do NOT count
+    toward the VERIFIED threshold alone. If only not-independent Primary sources and Tertiary sources
+    are available → maximum rating is SPECULATIVE.
   - DEBUNKED requires at least 2 Primary or independent Secondary sources with direct counter-evidence
   - Tertiary sources (aggregators, Wikipedia, commercial portals, industry associations)
     may appear in the sources list for context but do NOT count toward the rating threshold
