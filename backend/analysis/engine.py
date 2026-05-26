@@ -247,6 +247,18 @@ HARD RULES — never violate:
      a primary or secondary source. Wikipedia can point to primary sources: those
      primary sources count and should be cited directly. Wikipedia itself does not.
 
+SOURCE QUALITY REQUIREMENT:
+  - VERIFIED requires at least 1 Primary source OR at least 2 independent Secondary sources
+  - DEBUNKED requires at least 2 Primary or independent Secondary sources with direct counter-evidence
+  - Tertiary sources (aggregators, Wikipedia, commercial portals, industry associations)
+    may appear in the sources list for context but do NOT count toward the rating threshold
+  - If only Tertiary sources are available → maximum rating is SPECULATIVE, never VERIFIED or DEBUNKED
+  - Actively seek Primary sources first: official statistics, government data,
+    peer-reviewed research, court decisions
+  - Then seek Secondary sources: reputable journalism, academic analysis,
+    established research institutes
+  - Tertiary sources may be listed but must be clearly labeled and never used as sole evidence basis
+
 POLITICAL_LEANING CLASSIFICATION:
 
 Purpose: Measure whether GradedFacts applies identical standards across the political
@@ -561,8 +573,15 @@ def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
             messages=[{
                 "role": "user",
                 "content": (
-                    f"Search for evidence about this claim and summarise what you find, "
-                    f"including the URLs of the sources:\n\n{claim_text}"
+                    f"Search for evidence about this claim. "
+                    f"PRIORITY ORDER: (1) Primary sources first — official statistics, "
+                    f"government databases, peer-reviewed research, court records, "
+                    f"official institution websites. "
+                    f"(2) Secondary sources next — established journalism and academic "
+                    f"analysis that cites primary sources with full attribution. "
+                    f"(3) Do NOT use Wikipedia, Statista, commercial portals, or "
+                    f"aggregator sites as evidence. "
+                    f"Summarise what you find and include the URLs of all sources:\n\n{claim_text}"
                 ),
             }],
         )

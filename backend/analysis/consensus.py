@@ -99,12 +99,16 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
             "Only return an empty sources array if you genuinely cannot name any source for this claim."
         )
     user_content += (
-        "\n\nRating guidance: If you have ≥3 independent secondary sources (e.g. established news media, "
-        "academic institutions) that consistently confirm the claim without contradiction, rate VERIFIED. "
-        "Do not downgrade to SPECULATIVE merely because a primary source document is not directly in your "
-        "search results — secondary sources citing primary sources are sufficient. "
-        "Keep existing conservative rules: rate DEBUNKED only when counter-evidence is clear and direct; "
-        "rate MISSING when evidence is genuinely absent or contradictory."
+        "\n\nSOURCE PRIORITY: Search for and use (1) Primary sources first — official statistics, "
+        "government data, peer-reviewed research, court decisions, official institution websites; "
+        "(2) Secondary sources next — reputable journalism and academic analysis citing primary sources. "
+        "Do NOT use Wikipedia, Statista, commercial portals, aggregators, or industry lobby sites as evidence. "
+        "If only Tertiary sources are available, rate MISSING.\n\n"
+        "Rating guidance: If you have ≥3 independent Primary or Secondary sources that consistently confirm "
+        "the claim without contradiction, rate VERIFIED. Secondary sources citing primary sources are "
+        "sufficient — do not downgrade to SPECULATIVE merely because a primary document is not directly "
+        "in your search results. Keep conservative rules: rate DEBUNKED only when counter-evidence is "
+        "clear and direct; rate MISSING when evidence is genuinely absent or contradictory."
     )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
