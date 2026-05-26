@@ -80,6 +80,121 @@ def test_four_primary_sources_returns_verified():
     )) == EpistemicRating.VERIFIED
 
 
+# ── Hard quality gate: no independent qualifying source ───────────────────────
+
+def test_no_qualifying_source_caps_verified_to_speculative():
+    """VERIFIED is impossible when has_independent_qualifying_source=False."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.PRIMARY, SourceTier.SECONDARY, SourceTier.SECONDARY],
+        has_independent_qualifying_source=False,
+    )) == EpistemicRating.SPECULATIVE
+
+
+def test_no_qualifying_source_caps_debunked_to_speculative():
+    """DEBUNKED is impossible when has_independent_qualifying_source=False."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.TERTIARY, SourceTier.TERTIARY],
+        debunking_tiers=[SourceTier.PRIMARY],
+        has_independent_qualifying_source=False,
+    )) == EpistemicRating.SPECULATIVE
+
+
+def test_qualifying_source_present_allows_verified():
+    """VERIFIED is reachable when has_independent_qualifying_source=True (explicit)."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.PRIMARY, SourceTier.SECONDARY, SourceTier.SECONDARY],
+        has_independent_qualifying_source=True,
+    )) == EpistemicRating.VERIFIED
+
+
+def test_qualifying_source_present_allows_debunked():
+    """DEBUNKED is reachable when has_independent_qualifying_source=True (explicit)."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.TERTIARY, SourceTier.TERTIARY],
+        debunking_tiers=[SourceTier.PRIMARY],
+        has_independent_qualifying_source=True,
+    )) == EpistemicRating.DEBUNKED
+
+
+def test_missing_unaffected_by_quality_gate():
+    """MISSING is not capped by the quality gate — too-few-sources still returns MISSING."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.PRIMARY],
+        has_independent_qualifying_source=False,
+    )) == EpistemicRating.MISSING
+
+
+def test_speculative_unaffected_by_quality_gate():
+    """SPECULATIVE outcome is unchanged by quality gate (gate only caps stronger ratings)."""
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.SECONDARY, SourceTier.SECONDARY, SourceTier.TERTIARY],
+        has_independent_qualifying_source=False,
+    )) == EpistemicRating.SPECULATIVE
+
+
+def test_model_cannot_override_quality_gate_to_verified():
+    """
+    Even when the model explicitly returns 'verified', the hard quality gate must
+    override it to SPECULATIVE if no independent primary/secondary source is present.
+    Uses only tertiary sources so has_independent_qualifying_source=False.
+    """
+    from unittest.mock import MagicMock, patch
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    sources = [
+        {"url": f"https://example{i}.com/page", "tier": "tertiary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True}
+        for i in range(3)
+    ]
+    judgment_data = {"rationale": "test", "sources": sources, "rating": "verified"}
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+    captured: dict = {}
+    mock_session.add.side_effect = lambda obj: captured.update({"judgment": obj}) if isinstance(obj, Judgment) else None
+    mock_session.add_all.side_effect = lambda objs: None
+
+    with patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+        eng.analyze_claim("claim-1", mock_session)
+
+    assert captured["judgment"].rating == EpistemicRating.SPECULATIVE
+
+
+def test_model_cannot_override_quality_gate_to_debunked():
+    """
+    Even when the model explicitly returns 'debunked', the hard quality gate must
+    override it to SPECULATIVE if no independent primary/secondary source is present.
+    """
+    from unittest.mock import MagicMock, patch
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    sources = [
+        {"url": f"https://example{i}.com/page", "tier": "tertiary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": False}
+        for i in range(3)
+    ]
+    judgment_data = {"rationale": "test", "sources": sources, "rating": "debunked"}
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+    captured: dict = {}
+    mock_session.add.side_effect = lambda obj: captured.update({"judgment": obj}) if isinstance(obj, Judgment) else None
+    mock_session.add_all.side_effect = lambda objs: None
+
+    with patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+        eng.analyze_claim("claim-1", mock_session)
+
+    assert captured["judgment"].rating == EpistemicRating.SPECULATIVE
+
+
 # ── Relevance filtering (engine responsibility, rating sees pre-filtered) ──────
 
 def test_engine_filters_low_relevance_sources():

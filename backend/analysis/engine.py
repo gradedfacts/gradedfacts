@@ -765,6 +765,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
+    has_independent_qualifying = False
 
     for src in sources_data:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
@@ -778,16 +779,22 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             tier = SourceTier(src["tier"])
         except ValueError:
             tier = SourceTier.TERTIARY
+        is_indep = independence_bool(src.get("is_independent", True))
         # Non-independent primary sources are treated as secondary for rating purposes:
         # a captured official institution cannot substitute for an independent primary
         # source when establishing VERIFIED.
-        if not independence_bool(src.get("is_independent", True)) and tier is SourceTier.PRIMARY:
+        if not is_indep and tier is SourceTier.PRIMARY:
             tier = SourceTier.SECONDARY
+        # Track whether any qualifying independent source exists (independent primary
+        # or independent secondary). Required for VERIFIED and DEBUNKED.
+        if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
+            has_independent_qualifying = True
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
     derived_rating = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
         debunking_tiers=debunking_tiers,
+        has_independent_qualifying_source=has_independent_qualifying,
     ))
 
     # Model's explicit rating always takes precedence; derive_rating() is fallback only.
@@ -803,6 +810,16 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             rating = derived_rating
     else:
         rating = derived_rating
+
+    # Hard quality gate — cannot be overridden by model judgment.
+    # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
+    if not has_independent_qualifying and rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+        logger.warning(
+            "claim %s: hard quality gate — no independent qualifying source; "
+            "rating %s overridden to SPECULATIVE.",
+            claim_id, rating,
+        )
+        rating = EpistemicRating.SPECULATIVE
 
     # Atomic write: sources + judgment committed together
     no_url = sum(1 for s in sources_data if not s.get("url"))

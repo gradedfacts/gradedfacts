@@ -307,7 +307,7 @@ def _resolve_consensus(
 
 def _process_sources(
     sources_raw: list[dict],
-) -> tuple[list[dict], EpistemicRating]:
+) -> tuple[list[dict], EpistemicRating, bool]:
     """
     Apply evaluate_source(), filter by relevance, downgrade non-independent primaries,
     and derive an algorithmic rating from the resulting tiers.
@@ -315,6 +315,10 @@ def _process_sources(
     Domain deduplication: multiple sources from the same root domain count as one
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
+
+    Returns (sources_data, derived_rating, has_independent_qualifying_source).
+    The third value is True when at least one independent primary or secondary source
+    meets the relevance threshold — required for VERIFIED and DEBUNKED.
     """
     if isinstance(sources_raw, str):
         # Guard: model occasionally returns sources as a JSON-encoded string instead
@@ -343,6 +347,7 @@ def _process_sources(
     seen_domains: set[str] = set()
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
+    has_independent_qualifying = False
 
     for src in sources_data:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
@@ -356,15 +361,19 @@ def _process_sources(
             tier = SourceTier(src["tier"])
         except (KeyError, ValueError):
             tier = SourceTier.TERTIARY
-        if not independence_bool(src.get("is_independent", True)) and tier is SourceTier.PRIMARY:
+        is_indep = independence_bool(src.get("is_independent", True))
+        if not is_indep and tier is SourceTier.PRIMARY:
             tier = SourceTier.SECONDARY
+        if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
+            has_independent_qualifying = True
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
 
     derived = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
         debunking_tiers=debunking_tiers,
+        has_independent_qualifying_source=has_independent_qualifying,
     ))
-    return sources_data, derived
+    return sources_data, derived, has_independent_qualifying
 
 
 def _rating_from_data(data: dict, derived: EpistemicRating, claim_id: str) -> EpistemicRating:
@@ -504,8 +513,16 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         claude_data = _phase2_judgment(claude_client, claim.text, search_findings, lang_instruction)
 
     # ── Process Claude's sources and derive its rating ────────────────────────
-    claude_sources, claude_derived = _process_sources(claude_data.get("sources", []))
+    claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources", []))
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
+    # Hard quality gate — cannot be overridden by model judgment.
+    if not claude_has_qualifying and claude_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+        logger.warning(
+            "claim %s: hard quality gate (Claude) — no independent qualifying source; "
+            "rating %s overridden to SPECULATIVE.",
+            claim_id, claude_rating,
+        )
+        claude_rating = EpistemicRating.SPECULATIVE
     claude_has_primary = _has_primary_independent(claude_sources)
 
     # ── Extract Mistral's explicit rating and assess source quality ───────────
@@ -529,12 +546,22 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         ]
         mistral_has_primary = _has_primary_independent(mistral_sources_eval)
 
-    # ── Consensus resolution ──────────────────────────────────────────────────
+    # ── Consensus resolution ─────────────────────────────────────────────────
     consensus_rating, models_agree = _resolve_consensus(
         claude_rating, mistral_rating,
         claude_has_primary_independent=claude_has_primary,
         mistral_has_primary_independent=mistral_has_primary,
     )
+
+    # Hard quality gate on consensus — applied after resolution so neither model
+    # nor the consensus logic can produce VERIFIED/DEBUNKED without an independent source.
+    if not claude_has_qualifying and consensus_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+        logger.warning(
+            "claim %s: hard quality gate (consensus) — no independent qualifying source; "
+            "consensus rating %s overridden to SPECULATIVE.",
+            claim_id, consensus_rating,
+        )
+        consensus_rating = EpistemicRating.SPECULATIVE
 
     # Build a combined rationale that surfaces both verdicts when models disagree
     if models_agree is False:

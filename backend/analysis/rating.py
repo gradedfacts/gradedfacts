@@ -42,6 +42,10 @@ class EvidenceSummary:
     """Aggregated source tiers passed to derive_rating."""
     verifying_tiers: list[SourceTier] = field(default_factory=list)
     debunking_tiers: list[SourceTier] = field(default_factory=list)
+    # Hard quality gate: True when at least one qualifying source passes
+    # (tier PRIMARY and is_independent=True) OR (tier SECONDARY and is_independent=True).
+    # Defaults to True for backward compatibility; engines must set it explicitly.
+    has_independent_qualifying_source: bool = True
 
 
 def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
@@ -54,20 +58,24 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
 
     Rules applied in priority order:
       1. Fewer than MIN_EVIDENCE_SOURCES relevant sources → MISSING.
-      2. Any primary or secondary debunking source → DEBUNKED.
-      3. No verifying sources → MISSING.
-      4. Fewer than MIN_VERIFIED_SOURCES relevant sources → SPECULATIVE
+      2. Hard quality gate: no independent primary/secondary source present
+         → VERIFIED and DEBUNKED are impossible; cap at SPECULATIVE.
+      3. Any primary or secondary debunking source → DEBUNKED.
+      4. No verifying sources → MISSING.
+      5. Fewer than MIN_VERIFIED_SOURCES relevant sources → SPECULATIVE
          (primary source present but threshold not met).
-      5. At least one primary verifying source → VERIFIED.
-      6. Only secondary or tertiary verifying sources → SPECULATIVE (capped).
+      6. At least one primary verifying source → VERIFIED.
+      7. Only secondary or tertiary verifying sources → SPECULATIVE (capped).
     """
     total = len(evidence.verifying_tiers) + len(evidence.debunking_tiers)
     if total < MIN_EVIDENCE_SOURCES:
         return EpistemicRating.MISSING
 
+    _qualifying = evidence.has_independent_qualifying_source
+
     strong_debunk = {SourceTier.PRIMARY, SourceTier.SECONDARY}
     if any(t in strong_debunk for t in evidence.debunking_tiers):
-        return EpistemicRating.DEBUNKED
+        return EpistemicRating.DEBUNKED if _qualifying else EpistemicRating.SPECULATIVE
 
     if not evidence.verifying_tiers:
         return EpistemicRating.MISSING
@@ -76,6 +84,6 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
         return EpistemicRating.SPECULATIVE
 
     if any(t is SourceTier.PRIMARY for t in evidence.verifying_tiers):
-        return EpistemicRating.VERIFIED
+        return EpistemicRating.VERIFIED if _qualifying else EpistemicRating.SPECULATIVE
 
     return EpistemicRating.SPECULATIVE
