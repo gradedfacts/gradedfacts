@@ -262,6 +262,20 @@ SOURCE QUALITY REQUIREMENT:
     established research institutes
   - Tertiary sources may be listed but must be clearly labeled and never used as sole evidence basis
 
+SEARCH STRATEGY — execute in this order:
+1. FIRST: Search Brave Search and SearXNG for Primary sources using targeted queries:
+   - Official government statistics (e.g. 'site:destatis.de', 'site:bfe.admin.ch', 'site:bls.gov', 'site:eurostat.ec.europa.eu')
+   - Peer-reviewed research and court decisions
+   - Official institution websites
+2. SECOND: Search for Secondary sources:
+   - Established journalism (e.g. SRF, BBC, Reuters, NZZ, Tagesschau)
+   - Academic research institutes (e.g. pewresearch.org, ourworldindata.org)
+3. ONLY IF Primary and Secondary sources are insufficient after steps 1 and 2:
+   - Use Tertiary sources for context only
+   - Never use Tertiary sources alone as basis for VERIFIED or DEBUNKED
+
+IMPORTANT: Actively prefer sources already in the registry as Primary/Independent.
+
 POLITICAL_LEANING CLASSIFICATION:
 
 Purpose: Measure whether GradedFacts applies identical standards across the political
