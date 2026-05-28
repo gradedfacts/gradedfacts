@@ -61,6 +61,16 @@
       "affiliation_note": "Gov.uk is the official UK government website, publishing policy documents, guidance, and official statistics across all departments. Content represents current government policy and communications and is not independent of the executive. Useful as an authoritative primary source for official government decisions, legislation, and announcements; not a source of independent analysis.",
       "country": "GB",
       "region": "Europe"
+    },
+    {
+      "name": "Imperial War Museum (IWM)",
+      "domain": "iwm.org.uk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The Imperial War Museum is a UK national museum and independent heritage organisation, incorporated by Act of Parliament. It holds one of the world's largest collections of material relating to modern conflict since 1914, including original documents, photographs, oral history testimonies, and artefacts. Governed by an independent board of trustees; no editorial control by the UK government over archival content or historical interpretation. Widely cited as a primary source for First and Second World War documentation and 20th-century military history."
     }
   ]
 }

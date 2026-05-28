@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "description": "GradedFacts International Source Registry — authoritative international and intergovernmental organisations, historical archives, and humanitarian bodies with independence and quality assessments.",
+    "version": "1.0.0",
+    "last_updated": "2026-05-28",
+    "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
+    "schema": {
+      "tier": "primary | secondary | tertiary",
+      "is_independent": "true when no documented editorial control by political actors with a direct stake in outcomes",
+      "affiliation_note": "required when is_independent is false; explains the documented dependency",
+      "country": "ISO 3166-1 alpha-2, or INT for international bodies",
+      "region": "geographic region"
+    }
+  },
+  "sources": [
+    {
+      "name": "Yad Vashem — World Holocaust Remembrance Center",
+      "domain": "yadvashem.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Middle East",
+      "independence_note": "Yad Vashem is Israel's official memorial to the victims of the Holocaust, established by the Knesset in 1953 under the Yad Vashem Law. It is the world's leading Holocaust research and documentation institution, holding the world's largest repository of Holocaust-related documentation: approximately 280 million pages of documents, 500,000 photographs, tens of thousands of testimonies, and over 2.7 million names in the Central Database of Shoah Victims' Names. Its research and documentation activities are conducted by scholars following academic standards and are independent of Israeli government editorial direction. The institution is governed by a chairman appointed by the government but operates under an independent council with an international academic mandate. Universally recognised as the authoritative primary source for Holocaust history, victim data, and perpetrator documentation."
+    },
+    {
+      "name": "United States Holocaust Memorial Museum (USHMM)",
+      "domain": "ushmm.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "The United States Holocaust Memorial Museum is a federally chartered independent institution established by an Act of Congress in 1980. It is the official US memorial to Holocaust victims and the world's leading Holocaust educational and documentation institution. While funded in part by federal appropriations, it operates under an independent United States Holocaust Memorial Council appointed by the President — its research and documentation are conducted by scholars under academic independence principles, with no documented political direction of historical content. Holds extensive primary source collections including documents, testimonies, photographs, and artefacts. Widely cited alongside Yad Vashem as a co-authoritative primary source for Holocaust history and documentation."
+    },
+    {
+      "name": "International Committee of the Red Cross (ICRC)",
+      "domain": "icrc.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The International Committee of the Red Cross is an independent humanitarian organisation founded in 1863 and headquartered in Geneva, Switzerland. It is the founding body of the International Red Cross and Red Crescent Movement and the guardian of the Geneva Conventions. The ICRC operates under a mandate from the international community (States party to the Geneva Conventions) but is institutionally independent: governed by an Assembly of Swiss citizens elected from within the organisation, with no state or government holding editorial or operational control. Widely recognised as a primary source for international humanitarian law, armed conflict documentation, prisoner of war records, and humanitarian operations data. ICRC records and reports are cited in international courts, academic research, and official government assessments."
+    }
+  ]
+}

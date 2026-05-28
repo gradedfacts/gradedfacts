@@ -92,6 +92,16 @@
       "independence_note": "Academic social policy data portal maintained by the Institute for Work, Skills and Training (IAQ), University of Duisburg-Essen. Curates and presents primary statistical data on German social policy drawn from official sources (BMAS, Destatis, Bundesagentur für Arbeit). No commercial ownership; no documented political party funding or editorial interference. Widely cited in academic and policy research on German welfare state indicators."
     },
     {
+      "name": "Bundesarchiv (German Federal Archives)",
+      "domain": "bundesarchiv.de",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The Bundesarchiv is the national archive authority of the Federal Republic of Germany, established under the Federal Archives Act (Bundesarchivgesetz). It is an independent supreme federal authority (oberste Bundesbehörde) under the Federal Commissioner for Culture and the Media, with a statutory mandate to collect, preserve, and provide access to official records independently of the producing government bodies. Archival decisions — including access rights and appraisal — are governed by archival science principles, not current political direction. Widely cited as the authoritative primary source for German federal records, Nazi-era documentation, and postwar history."
+    },
+    {
       "name": "Bundeszentrale für politische Bildung (bpb)",
       "domain": "bpb.de",
       "tier": "secondary",

@@ -111,6 +111,16 @@
       "country": "CH",
       "region": "Europe",
       "independence_note": "Swiss Centre of Expertise in the Social Sciences, hosted at the University of Lausanne and jointly funded by the Swiss National Science Foundation (SNSF) and the universities of Basel, Berne, Geneva, Lausanne, and Zurich. No commercial ownership; no documented political party funding or editorial interference. Manages Swiss Electoral Studies (Selects), the Swiss Household Panel (SHP), and other nationally representative longitudinal surveys. Widely cited in academic social science research on Switzerland."
+    },
+    {
+      "name": "opendata.swiss (Swiss Government Open Data Portal)",
+      "domain": "opendata.swiss",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "opendata.swiss is the official central open government data portal of the Swiss Confederation, operated by the Federal Archives (Bundesarchiv) on behalf of all Swiss federal agencies, cantons, and communes. Content is produced directly by federal and cantonal government bodies and reflects official government datasets. Reliable as an authoritative primary source for official Swiss government data; not independent of the executive, as all datasets originate from government institutions with a stake in the information they publish.",
+      "country": "CH",
+      "region": "Europe"
     }
   ]
 }

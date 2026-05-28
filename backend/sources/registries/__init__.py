@@ -18,6 +18,7 @@ _ALL_REGISTRIES: tuple[str, ...] = (
     "uk_sources.json",
     "de_sources.json",
     "fr_sources.json",
+    "international_sources.json",
 )
 
 
