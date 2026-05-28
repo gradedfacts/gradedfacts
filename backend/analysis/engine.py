@@ -531,12 +531,22 @@ ALWAYS PASS — never reject — any of the following:
 - Future political predictions: elections, candidates, governments, wars, treaties
 - Claims that a historical figure could, will, or would hold a future political role
 - Any claim involving a real person in a political or historical context
+- Political advocacy claims that contain a specific factual assertion about a real institution,
+  policy, or social group — even if phrased as "X should be abolished", "X is oppressive",
+  "X systematically discriminates". The factual assertion (does X do Y?) can be checked.
+  Examples that MUST PASS:
+    "The American police is a systematic instrument of oppression of Black people and must be abolished"
+    "The EU migration policy is inhumane and must be reformed"
+    "The death penalty disproportionately targets minorities and should be banned"
 
 REJECT only if the input is clearly one of these:
 - Personal request or task ("What should I cook?", "Help me write code", "Write me a poem")
 - Entertainment or fiction request ("Tell me a joke", "Write a story", "Play a game")
 - Pure definition request ("What is inflation?", "What does democracy mean?")
-- Pure normative opinion with no factual component ("Is capitalism good?", "Which religion is best?")
+- Pure normative opinion with NO specific factual assertion about any real-world entity
+  ("Is capitalism good?", "Which religion is best?", "Is democracy the best system?")
+  NOTE: A claim is only a "pure normative opinion" if it contains NO verifiable assertion
+  about what a specific institution, person, or group actually does or has done.
 
 When in doubt → PASS. Never reject something that could be a real-world factual or political claim.
 

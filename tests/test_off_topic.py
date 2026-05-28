@@ -175,6 +175,12 @@ def test_get_off_topic_message_unknown_falls_back_to_english():
     "Global average temperatures have risen 1.1°C since pre-industrial times",
     "The US national debt exceeded $30 trillion in 2022",
     "Is democracy declining globally?",
+    # Regression: political advocacy claims with a specific factual assertion must pass.
+    # The factual core ("systematic oppression") is empirically checkable even though
+    # the claim also includes a normative demand ("must be abolished").
+    "Die amerikanische Polizei ist ein systematisches Instrument der Unterdrückung schwarzer Menschen und muss vollständig abgeschafft werden.",
+    "The EU migration policy is inhumane and must be reformed",
+    "The death penalty disproportionately targets minorities and should be banned",
 ])
 def test_political_and_factual_claims_pass(claim):
     from backend.analysis import engine as eng
@@ -187,6 +193,26 @@ def test_political_and_factual_claims_pass(claim):
 
     assert is_on_topic is True, f"Expected PASS for: {claim!r}"
     assert rationale == ""
+
+
+def test_off_topic_prompt_contains_advocacy_guidance():
+    """
+    Regression guard: _OFF_TOPIC_PROMPT must explicitly instruct the model to pass
+    political advocacy claims that contain a specific factual assertion.
+    Without this, claims like "X is oppressive and must be abolished" are incorrectly
+    classified as pure normative opinion and rejected.
+    """
+    from backend.analysis.engine import _OFF_TOPIC_PROMPT
+
+    prompt_lower = _OFF_TOPIC_PROMPT.lower()
+    assert "advocacy" in prompt_lower or "abolished" in prompt_lower, (
+        "_OFF_TOPIC_PROMPT must contain explicit guidance that advocacy claims "
+        "with a factual assertion pass (e.g. 'should be abolished', 'must be reformed')"
+    )
+    assert "factual assertion" in prompt_lower or "factual component" in prompt_lower, (
+        "_OFF_TOPIC_PROMPT must distinguish 'pure normative opinion' "
+        "(no factual assertion) from advocacy claims that DO contain one"
+    )
 
 
 @pytest.mark.parametrize("claim", [
