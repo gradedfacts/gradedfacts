@@ -811,17 +811,8 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     else:
         rating = derived_rating
 
-    # Hard quality gate — cannot be overridden by model judgment.
-    # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
-    if not has_independent_qualifying and rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
-        logger.warning(
-            "claim %s: hard quality gate — no independent qualifying source; "
-            "rating %s overridden to SPECULATIVE.",
-            claim_id, rating,
-        )
-        rating = EpistemicRating.SPECULATIVE
-
-    # Atomic write: sources + judgment committed together
+    # Build and persist EvaluatedSource objects BEFORE the Hard Rule may change
+    # the rating — sources must be saved regardless of the final rating value.
     no_url = sum(1 for s in sources_data if not s.get("url"))
     if no_url:
         logger.warning(
@@ -841,6 +832,17 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         for src in sources_data
         if src.get("url") or src.get("title")
     ]
+    session.add_all(evaluated_sources)
+
+    # Hard quality gate — cannot be overridden by model judgment.
+    # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
+    if not has_independent_qualifying and rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+        logger.warning(
+            "claim %s: hard quality gate — no independent qualifying source; "
+            "rating %s overridden to SPECULATIVE.",
+            claim_id, rating,
+        )
+        rating = EpistemicRating.SPECULATIVE
 
     raw_leaning = data.get("political_leaning", "none")
     political_leaning = raw_leaning if raw_leaning in ("left", "right", "none") else "none"
@@ -854,7 +856,6 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         political_leaning=political_leaning,
     )
 
-    session.add_all(evaluated_sources)
     session.add(judgment)
     session.commit()
     session.refresh(judgment)

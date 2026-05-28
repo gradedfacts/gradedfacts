@@ -306,7 +306,7 @@ def _run_consensus(
 ):
     """
     Run analyze_claim_with_consensus with fully mocked I/O.
-    Returns the Judgment captured by session.add().
+    Returns (judgment, evaluated_sources) captured from session.add() / session.add_all().
 
     brave_key defaults to "" so Brave Search is bypassed and _mistral_phase2_judgment
     (which is mocked here) receives Claude's findings — matching pre-Brave behaviour.
@@ -314,17 +314,20 @@ def _run_consensus(
     _mistral_phase1_brave_search at the call site.
     """
     from backend.analysis import consensus as cons
-    from backend.db.models import Judgment
+    from backend.db.models import EvaluatedSource, Judgment
 
     mock_session = _make_mock_session(claim_text)
-    captured: dict = {}
+    captured: dict = {"sources": []}
 
     def fake_add(obj):
         if isinstance(obj, Judgment):
             captured["judgment"] = obj
 
+    def fake_add_all(objs):
+        captured["sources"].extend(o for o in objs if isinstance(o, EvaluatedSource))
+
     mock_session.add.side_effect = fake_add
-    mock_session.add_all.side_effect = lambda objs: None
+    mock_session.add_all.side_effect = fake_add_all
 
     with patch.object(cons, "_check_specificity", return_value=(True, "")), \
          patch.object(cons, "_phase1_search", return_value="search findings"), \
@@ -346,7 +349,7 @@ def _run_consensus(
         with patch_target:
             cons.analyze_claim_with_consensus("claim-1", mock_session)
 
-    return captured.get("judgment")
+    return captured.get("judgment"), captured["sources"]
 
 
 # ── analyze_claim_with_consensus — integration tests ─────────────────────────
@@ -357,7 +360,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral agrees.", "sources": [], "rating": "verified"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.rating == EpistemicRating.VERIFIED
         assert j.consensus_rating == EpistemicRating.VERIFIED
@@ -369,7 +372,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude rationale.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral rationale.", "sources": [], "rating": "verified"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.rationale == "Claude rationale."
 
@@ -378,7 +381,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.rating == EpistemicRating.VERIFIED
         assert j.consensus_rating == EpistemicRating.VERIFIED
@@ -389,7 +392,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.rating == EpistemicRating.SPECULATIVE
         assert j.consensus_rating == EpistemicRating.SPECULATIVE
@@ -399,7 +402,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert "VERIFIED" in j.rationale
         assert "DEBUNKED" in j.rationale
@@ -409,14 +412,14 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert "Consensus downgraded to SPECULATIVE" in j.rationale
 
     def test_mistral_phase2_raises_falls_back_to_claude(self):
         claude_j = {"rationale": "Claude only.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
 
-        j = _run_consensus(claude_j, None, mistral_raises=RuntimeError("API timeout"))
+        j, _ = _run_consensus(claude_j, None, mistral_raises=RuntimeError("API timeout"))
 
         assert j.rating == EpistemicRating.VERIFIED
         assert j.models_agree is None
@@ -426,7 +429,7 @@ class TestAnalyzeClaimWithConsensus:
     def test_no_mistral_key_falls_back_to_claude(self):
         claude_j = {"rationale": "Claude only.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "speculative"}
 
-        j = _run_consensus(claude_j, None, mistral_key="")
+        j, _ = _run_consensus(claude_j, None, mistral_key="")
 
         assert j.rating == EpistemicRating.SPECULATIVE
         assert j.models_agree is None
@@ -437,7 +440,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Weird.", "sources": [], "rating": "not-a-real-rating"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         # Mistral rating was invalid → mistral_rating=None → pass-through
         assert j.rating == EpistemicRating.VERIFIED
@@ -487,7 +490,7 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "No evidence.", "sources": [], "rating": "missing"}
         mistral_j = {"rationale": "No evidence.", "sources": [], "rating": "missing"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.rating == EpistemicRating.MISSING
         assert j.models_agree is True
@@ -496,7 +499,7 @@ class TestAnalyzeClaimWithConsensus:
         """analyst_secondary must be null when Mistral was not used."""
         claude_j = {"rationale": "Claude.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
 
-        j = _run_consensus(claude_j, None, mistral_key="")
+        j, _ = _run_consensus(claude_j, None, mistral_key="")
 
         assert j.analyst_secondary is None
 
@@ -504,9 +507,79 @@ class TestAnalyzeClaimWithConsensus:
         claude_j = {"rationale": "Claude.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral.", "sources": [], "rating": "verified"}
 
-        j = _run_consensus(claude_j, mistral_j)
+        j, _ = _run_consensus(claude_j, mistral_j)
 
         assert j.analyst_secondary == "mistral-large-latest"
+
+    def test_evaluated_sources_persisted_when_claude_hard_rule_fires(self):
+        """
+        EvaluatedSource objects must be added to the session even when the Claude
+        Hard Rule downgrades the rating from VERIFIED to SPECULATIVE (no independent
+        qualifying source present).
+        """
+        from backend.db.models import EvaluatedSource
+
+        # Claude claims VERIFIED but provides only a tertiary, non-qualifying source
+        # so the Hard Rule will fire and downgrade to SPECULATIVE.
+        non_qualifying_source = {
+            "url": "https://example.com/tertiary",
+            "title": "Tertiary Source",
+            "tier": "tertiary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        }
+        claude_j = {
+            "rationale": "Claude says verified.",
+            "sources": [non_qualifying_source],
+            "rating": "verified",
+        }
+        mistral_j = {"rationale": "Mistral agrees.", "sources": [], "rating": "verified"}
+
+        j, sources = _run_consensus(claude_j, mistral_j)
+
+        # Hard Rule should have downgraded the rating
+        assert j.rating == EpistemicRating.SPECULATIVE
+        # Sources must still be persisted despite the downgrade
+        assert len(sources) == 1
+        assert all(isinstance(s, EvaluatedSource) for s in sources)
+        assert sources[0].url == "https://example.com/tertiary"
+
+    def test_evaluated_sources_persisted_when_consensus_hard_rule_fires(self):
+        """
+        EvaluatedSource objects must be added to the session even when the consensus
+        Hard Rule downgrades the consensus rating from VERIFIED to SPECULATIVE.
+        Both models agree on VERIFIED but Claude has no independent qualifying source,
+        so the consensus Hard Rule fires.
+        """
+        from backend.db.models import EvaluatedSource
+
+        # Both models say VERIFIED, but Claude's source is tertiary (non-qualifying),
+        # which means claude_has_qualifying=False and the consensus Hard Rule fires.
+        non_qualifying_source = {
+            "url": "https://wiki.example.com/page",
+            "title": "Wikipedia Page",
+            "tier": "tertiary",
+            "is_independent": True,
+            "relevance_score": 0.75,
+            "supports_claim": True,
+        }
+        claude_j = {
+            "rationale": "Claude says verified.",
+            "sources": [non_qualifying_source],
+            "rating": "verified",
+        }
+        mistral_j = {"rationale": "Mistral agrees.", "sources": [], "rating": "verified"}
+
+        j, sources = _run_consensus(claude_j, mistral_j)
+
+        # Consensus Hard Rule should have downgraded to SPECULATIVE
+        assert j.rating == EpistemicRating.SPECULATIVE
+        assert j.consensus_rating == EpistemicRating.SPECULATIVE
+        # Sources must be persisted in all cases
+        assert len(sources) == 1
+        assert isinstance(sources[0], EvaluatedSource)
+        assert sources[0].url == "https://wiki.example.com/page"
 
 
 # ── _mistral_phase1_brave_search ──────────────────────────────────────────────
@@ -797,7 +870,7 @@ class TestBraveIntegration:
         claude_j = {"rationale": "Claude verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral verified.", "sources": [], "rating": "verified"}
 
-        j = _run_consensus(claude_j, mistral_j)  # brave_key="" by default
+        j, _ = _run_consensus(claude_j, mistral_j)  # brave_key="" by default
 
         assert j.models_agree is True
         assert j.consensus_rating == EpistemicRating.VERIFIED

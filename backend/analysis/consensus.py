@@ -515,6 +515,31 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     # ── Process Claude's sources and derive its rating ────────────────────────
     claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources", []))
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
+
+    # Build and persist EvaluatedSource objects BEFORE either Hard Rule may change
+    # the rating — sources must be saved regardless of the final rating value.
+    no_url = sum(1 for s in claude_sources if not s.get("url"))
+    if no_url:
+        logger.warning(
+            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
+        )
+    logger.debug("claim %s: storing %d evaluated sources", claim_id, len(claude_sources))
+    evaluated_sources = [
+        EvaluatedSource(
+            claim_id=claim_id,
+            url=src.get("url") or src.get("title") or "",
+            tier=SourceTier(src.get("tier", "tertiary")),
+            is_independent=independence_bool(src.get("is_independent", True)),
+            independence_label=independence_label(src.get("is_independent", True)),
+            affiliation_note=src.get("affiliation_note"),
+            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
+            excerpt=src.get("excerpt"),
+        )
+        for src in claude_sources
+        if src.get("url") or src.get("title")
+    ]
+    session.add_all(evaluated_sources)
+
     # Hard quality gate — cannot be overridden by model judgment.
     if not claude_has_qualifying and claude_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
         logger.warning(
@@ -590,27 +615,9 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     else:
         rationale = claude_data["rationale"]
 
-    # ── Atomic write: sources + consensus judgment ────────────────────────────
-    no_url = sum(1 for s in claude_sources if not s.get("url"))
-    if no_url:
-        logger.warning(
-            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
-        )
-    logger.debug("claim %s: storing %d evaluated sources", claim_id, len(claude_sources))
-    evaluated_sources = [
-        EvaluatedSource(
-            claim_id=claim_id,
-            url=src.get("url") or src.get("title") or "",
-            tier=SourceTier(src.get("tier", "tertiary")),
-            is_independent=independence_bool(src.get("is_independent", True)),
-            independence_label=independence_label(src.get("is_independent", True)),
-            affiliation_note=src.get("affiliation_note"),
-            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
-            excerpt=src.get("excerpt"),
-        )
-        for src in claude_sources
-        if src.get("url") or src.get("title")
-    ]
+    # ── Write consensus judgment ──────────────────────────────────────────────
+    # (EvaluatedSource objects were already added to the session above, before
+    # the Hard Rules — they are committed together with the judgment below.)
 
     # Use the winning model's political_leaning, mirroring the rating resolution:
     # - Mistral absent or both agreed → Claude's leaning (primary)
@@ -642,7 +649,6 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         political_leaning=political_leaning,
     )
 
-    session.add_all(evaluated_sources)
     session.add(judgment)
     session.commit()
     session.refresh(judgment)
