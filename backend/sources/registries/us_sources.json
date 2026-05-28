@@ -343,6 +343,27 @@
       "counts_for_threshold": true,
       "category": "broadcaster",
       "independence_note": "American business news television network and website, owned by NBCUniversal (a subsidiary of Comcast). Primary focus on financial markets, business news, and economic reporting. No documented political party funding or systematic editorial bias on economic and policy reporting; coverage follows standard journalistic practices. Ownership by a large media conglomerate (Comcast/NBCUniversal) introduces corporate-interest considerations, but no documented pattern of editorial interference with factual economic or political reporting. Widely cited for market data, earnings reporting, and policy analysis."
+    },
+    {
+      "name": "International Energy Agency (IEA)",
+      "domain": "iea.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "Intergovernmental organisation established in 1974 within the OECD framework, comprising 31 member countries. Produces authoritative primary energy statistics (World Energy Outlook, Energy Balances, CO2 Emissions from Fuel Combustion) based on direct data collection from member governments. Governed by a Governing Board of member-country energy ministers and operates independently of any single government's policy direction. Methodology is publicly documented, internationally peer-reviewed, and widely cited by national governments, central banks, and academic research. No commercial ownership; funded by member-country contributions with no documented political interference in statistical outputs."
+    },
+    {
+      "name": "Eurostat — Statistical Office of the European Union",
+      "domain": "eurostat.ec.europa.eu",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "independence_note": "Eurostat is a Directorate-General of the European Commission and thus structurally part of the EU executive. While it follows the European Statistics Code of Practice and professional statistical standards, it operates under the authority of the European Commission and its statistical outputs can, in principle, be influenced by EU institutional priorities. Comparable to a national statistical office embedded within a government ministry rather than an arm's-length agency. Reliable as an authoritative record of official EU-wide statistics; not fully independent of EU policy direction.",
+      "affiliation_note": "Eurostat is a Directorate-General of the European Commission and thus structurally part of the EU executive. While it follows the European Statistics Code of Practice and professional statistical standards, it operates under the authority of the European Commission and its statistical outputs can, in principle, be influenced by EU institutional priorities. Comparable to a national statistical office embedded within a government ministry rather than an arm's-length agency. Reliable as an authoritative record of official EU-wide statistics; not fully independent of EU policy direction.",
+      "category": "government",
+      "country": "EU",
+      "region": "Europe"
     }
   ]
 }

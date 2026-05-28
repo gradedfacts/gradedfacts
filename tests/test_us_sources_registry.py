@@ -47,7 +47,7 @@ class TestSchema:
         assert isinstance(sources, list)
 
     def test_source_count_in_range(self, sources):
-        assert 30 <= len(sources) <= 40, f"Expected 30–40 sources, got {len(sources)}"
+        assert 30 <= len(sources) <= 50, f"Expected 30–50 sources, got {len(sources)}"
 
     def test_all_required_fields_present(self, sources):
         for src in sources:

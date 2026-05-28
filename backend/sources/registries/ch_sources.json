@@ -51,12 +51,14 @@
       "region": "Europe"
     },
     {
-      "name": "swissinfo.ch",
+      "name": "SWI swissinfo.ch",
       "domain": "swissinfo.ch",
       "tier": "secondary",
       "is_independent": true,
+      "counts_for_threshold": true,
       "country": "CH",
-      "region": "Europe"
+      "region": "Europe",
+      "independence_note": "International service of the Swiss Broadcasting Corporation (SRG SSR), Switzerland's public media group. Mandated by the Swiss Federal Council to provide independent international news coverage about Switzerland in ten languages. SRG SSR operates under the Federal Act on Radio and Television (RTVG), which guarantees editorial independence from the Federal Council and political parties. Swissinfo.ch is not a government press office; it follows standard journalistic practices and has a separate editorial charter from SRG SSR's domestic services."
     },
     {
       "name": "Neue Zürcher Zeitung (NZZ)",
@@ -89,6 +91,16 @@
       "is_independent": true,
       "country": "CH",
       "region": "Europe"
+    },
+    {
+      "name": "Energeiaplus (SFOE/BFE Energy Blog)",
+      "domain": "energeiaplus.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Official blog of the Swiss Federal Office of Energy (SFOE / Bundesamt für Energie, BFE). Articles are written and reviewed by SFOE specialists and scientists using primary BFE data, statistics, and research — making this a peer-reviewed secondary source anchored in primary institutional data. While published by a federal agency, the editorial content is technical and data-driven rather than political communications, and BFE operates at arm's length from the Federal Council on matters of energy statistics and engineering analysis."
     },
     {
       "name": "FORS — Swiss Centre of Expertise in the Social Sciences",

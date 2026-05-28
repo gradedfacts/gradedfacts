@@ -131,9 +131,9 @@ class TestEUSources:
     def test_required_source_present(self, sources, domain):
         assert _get(sources, domain) is not None, f"Required EU source '{domain}' missing"
 
-    def test_eurostat_is_independent_and_primary(self, sources):
+    def test_eurostat_is_not_independent_and_primary(self, sources):
         src = _get(sources, "eurostat.ec.europa.eu")
-        assert src["is_independent"] is True
+        assert src["is_independent"] is False
         assert src["tier"] == "primary"
 
     def test_ecb_is_independent_and_primary(self, sources):
@@ -437,22 +437,22 @@ class TestLookupSourceAllRegistries:
         result = lookup_source_all_registries("https://eurostat.ec.europa.eu/")
         assert result is not None
         assert result["domain"] == "eurostat.ec.europa.eu"
-        assert result["is_independent"] is True
+        assert result["is_independent"] is False
 
 
 # ── apply_registry_override() ─────────────────────────────────────────────────
 
 class TestApplyRegistryOverride:
-    def test_eurostat_url_sets_is_independent_true(self):
+    def test_eurostat_url_sets_is_independent_false(self):
         from backend.sources.registries import apply_registry_override
         src = {
             "url": "https://eurostat.ec.europa.eu/databrowser/view/",
             "tier": "secondary",
-            "is_independent": False,
+            "is_independent": True,
             "relevance_score": 0.8,
         }
         result = apply_registry_override(src)
-        assert result["is_independent"] is True
+        assert result["is_independent"] is False
 
     def test_eurostat_url_sets_tier_to_primary(self):
         from backend.sources.registries import apply_registry_override
@@ -541,16 +541,16 @@ class TestApplyRegistryOverride:
 # ── evaluate_source() integration with regional registries ────────────────────
 
 class TestEvaluatorWithRegionalRegistries:
-    def test_eurostat_source_evaluated_as_independent(self):
+    def test_eurostat_source_evaluated_as_not_independent(self):
         from backend.sources.evaluator import evaluate_source
         src = {
             "url": "https://eurostat.ec.europa.eu/databrowser/",
             "tier": "secondary",
-            "is_independent": False,
+            "is_independent": True,
             "relevance_score": 0.8,
         }
         result = evaluate_source(src)
-        assert result["is_independent"] is True
+        assert result["is_independent"] is False
         assert result["tier"] == "primary"
 
     def test_ec_source_evaluated_as_not_independent_with_note(self):

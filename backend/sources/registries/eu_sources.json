@@ -14,10 +14,12 @@
   },
   "sources": [
     {
-      "name": "Eurostat",
+      "name": "Eurostat — Statistical Office of the European Union",
       "domain": "eurostat.ec.europa.eu",
       "tier": "primary",
-      "is_independent": true,
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Eurostat is a Directorate-General of the European Commission and thus structurally part of the EU executive. While it follows the European Statistics Code of Practice and professional statistical standards, it operates under the authority of the European Commission and its statistical outputs can, in principle, be influenced by EU institutional priorities. Comparable to a national statistical office embedded within a government ministry rather than an arm's-length agency. Reliable as an authoritative record of official EU-wide statistics; not fully independent of EU policy direction.",
       "country": "EU",
       "region": "Europe"
     },
