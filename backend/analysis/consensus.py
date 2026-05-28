@@ -514,16 +514,15 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
 
     # ── Process Claude's sources and derive its rating ────────────────────────
     claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources", []))
-    claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
 
-    # Build and persist EvaluatedSource objects BEFORE either Hard Rule may change
-    # the rating — sources must be saved regardless of the final rating value.
+    # Persist EvaluatedSource objects IMMEDIATELY after _process_sources() returns —
+    # before _rating_from_data(), before the Claude Hard Rule, before the consensus
+    # Hard Rule, before any other logic that could raise and skip session.commit().
     no_url = sum(1 for s in claude_sources if not s.get("url"))
     if no_url:
         logger.warning(
             "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
         )
-    logger.debug("claim %s: storing %d evaluated sources", claim_id, len(claude_sources))
     evaluated_sources = [
         EvaluatedSource(
             claim_id=claim_id,
@@ -538,7 +537,14 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         for src in claude_sources
         if src.get("url") or src.get("title")
     ]
+    logger.warning(
+        "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
+        "[consensus.py — before _rating_from_data(), Claude Hard Rule, and consensus Hard Rule]",
+        claim_id, len(evaluated_sources),
+    )
     session.add_all(evaluated_sources)
+
+    claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
 
     # Hard quality gate — cannot be overridden by model judgment.
     if not claude_has_qualifying and claude_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):

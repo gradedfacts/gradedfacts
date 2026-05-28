@@ -774,6 +774,36 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         for src in raw_sources[:MAX_SOURCES]
         if isinstance(src, dict)
     ]
+
+    # Persist EvaluatedSource objects IMMEDIATELY after sources_data is available —
+    # before the rating derivation loop, before any Hard Rule, before any other logic
+    # that could raise and prevent session.commit() from being reached.
+    no_url = sum(1 for s in sources_data if not s.get("url"))
+    if no_url:
+        logger.warning(
+            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
+        )
+    evaluated_sources = [
+        EvaluatedSource(
+            claim_id=claim_id,
+            url=src.get("url") or src.get("title") or "",
+            tier=SourceTier(src.get("tier", "tertiary")),
+            is_independent=independence_bool(src.get("is_independent", True)),
+            independence_label=independence_label(src.get("is_independent", True)),
+            affiliation_note=src.get("affiliation_note"),
+            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
+            excerpt=src.get("excerpt"),
+        )
+        for src in sources_data
+        if src.get("url") or src.get("title")
+    ]
+    logger.warning(
+        "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
+        "[engine.py — before rating derivation and Hard Rule]",
+        claim_id, len(evaluated_sources),
+    )
+    session.add_all(evaluated_sources)
+
     # Domain deduplication: multiple sources from the same root domain count as one
     # for threshold purposes. All sources remain in sources_data for UI display.
     seen_domains: set[str] = set()
@@ -824,29 +854,6 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             rating = derived_rating
     else:
         rating = derived_rating
-
-    # Build and persist EvaluatedSource objects BEFORE the Hard Rule may change
-    # the rating — sources must be saved regardless of the final rating value.
-    no_url = sum(1 for s in sources_data if not s.get("url"))
-    if no_url:
-        logger.warning(
-            "claim %s: %d source(s) have no URL and will use title as fallback", claim_id, no_url
-        )
-    evaluated_sources = [
-        EvaluatedSource(
-            claim_id=claim_id,
-            url=src.get("url") or src.get("title") or "",
-            tier=SourceTier(src.get("tier", "tertiary")),
-            is_independent=independence_bool(src.get("is_independent", True)),
-            independence_label=independence_label(src.get("is_independent", True)),
-            affiliation_note=src.get("affiliation_note"),
-            relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
-            excerpt=src.get("excerpt"),
-        )
-        for src in sources_data
-        if src.get("url") or src.get("title")
-    ]
-    session.add_all(evaluated_sources)
 
     # Hard quality gate — cannot be overridden by model judgment.
     # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
