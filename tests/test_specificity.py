@@ -135,6 +135,12 @@ def test_specificity_check_uses_cheap_model():
     "Oswald did not act alone in the JFK assassination",
     "Jeffrey Epstein did not kill himself",
     "The NSA spied on American citizens without warrants",
+    # Regression: systemic/structural claims about named institutions + named groups
+    # must pass even when phrased as political advocacy.
+    "Die amerikanische Polizei ist ein systematisches Instrument der Unterdrückung schwarzer Menschen und muss vollständig abgeschafft werden.",
+    "The American police is a systematic instrument of oppression of Black people and must be abolished",
+    "The Catholic Church systematically covered up child abuse for decades",
+    "The EU migration policy discriminates against non-European asylum seekers",
 ])
 def test_named_event_or_figure_claims_are_marked_specific(claim):
     """
@@ -153,6 +159,29 @@ def test_named_event_or_figure_claims_are_marked_specific(claim):
 
     assert is_specific is True, f"Expected SPECIFIC for: {claim!r}"
     assert rationale == ""
+
+
+def test_specificity_prompt_covers_systemic_institutional_claims():
+    """
+    Regression guard: _SPECIFICITY_PROMPT must explicitly instruct the model to pass
+    systemic/structural claims about named institutions — even broad ones like
+    "the American police". Without this, advocacy-phrased systemic claims are
+    incorrectly rejected as vague generalisations.
+    """
+    from backend.analysis.engine import _SPECIFICITY_PROMPT
+
+    prompt_lower = _SPECIFICITY_PROMPT.lower()
+    assert "american police" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must include 'American police' as an explicit example "
+        "of a named institution that passes the specificity gate"
+    )
+    assert "systemic" in prompt_lower or "structural" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must contain explicit guidance for systemic/structural "
+        "claims about named institutions"
+    )
+    assert "named group" in prompt_lower or "named institution" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must reference named groups or institutions explicitly"
+    )
 
 
 @pytest.mark.parametrize("claim", [

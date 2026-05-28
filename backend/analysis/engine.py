@@ -468,13 +468,22 @@ A claim is SPECIFIC (and must pass) if ANY of the following are true:
 - It names a real public figure (politician, official, executive, celebrity, etc.)
 - It names a real historical or current event (JFK assassination, 9/11, a named war, \
 a named policy, a named scandal, etc.)
-- It names a specific organisation, institution, law, document, or place
+- It names a specific organisation, institution, law, document, or place — \
+even broad institutions count: "the American police", "the US government", \
+"the Catholic Church", "the EU", "the FBI"
+- It makes a systemic or structural claim about a named institution or named group \
+with a specific allegation (e.g. oppression, discrimination, corruption, abuse) — \
+ALWAYS PASS these, regardless of whether the claim is phrased as advocacy or normative. \
+Example: "The American police is a systematic instrument of oppression of Black people \
+and must be abolished" — SPECIFIC, because it names a real institution (American police), \
+a real group (Black people), and a specific allegation (systematic oppression). \
+The full analysis will evaluate the evidence.
 - The alleged actor is vague ("the Deep State", "the CIA", "elites") but the event \
 or subject is a named real-world thing — pass it; full analysis will evaluate the evidence
 
 A claim is VAGUE (and must be rejected) only if it is entirely content-free:
-- No named person, event, organisation, or concrete action whatsoever
-- Pure generalisations: "politicians lie", "the government is bad", \
+- No named person, event, organisation, group, or concrete allegation whatsoever
+- Pure generalisations with no specific subject: "politicians lie", "the government is bad", \
 "something fishy happened", "they are hiding the truth"
 
 When in doubt, mark SPECIFIC — it is better to analyse a borderline claim \
