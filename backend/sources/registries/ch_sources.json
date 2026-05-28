@@ -24,6 +24,26 @@
       "independence_note": "Switzerland's principal federal statistical agency, established under the Federal Statistics Act (BStatG). The Act mandates that BFS produce and publish official statistics independently of political direction; results may not be withheld or altered by the Federal Council or individual departments. Hosted under the admin.ch domain but operationally distinct from departmental communications: statistical outputs are subject to peer review and methodological audit, not Federal Council editorial approval. Equivalent in independence design to national statistical offices such as the U.S. Bureau of Labor Statistics or Eurostat member offices."
     },
     {
+      "name": "Swiss Parliament (Parlament.ch)",
+      "domain": "parlament.ch",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "parlament.ch is the official website of the Swiss Federal Assembly (Bundesversammlung / Assemblée fédérale / Assemblea federale), comprising the National Council (Nationalrat) and the Council of States (Ständerat). It publishes the official legislative record: parliamentary debates, committee reports, official votes, parliamentary initiatives, and the text of federal laws and resolutions. Content represents the proceedings of the legislative branch, which is constitutionally independent of the executive Federal Council. Primary source for Swiss federal legislation, parliamentary debates, and official legislative history."
+    },
+    {
+      "name": "Swiss Federal Supreme Court — bundesgericht.ch",
+      "domain": "bundesgericht.ch",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "bundesgericht.ch is an alternate domain for the Swiss Federal Supreme Court (Bundesgericht / Tribunal fédéral / Tribunale federale), the highest court in Switzerland and the court of last resort for civil, criminal, and public law matters. The primary domain bger.ch is also registered separately. Swiss federal judges are elected by the Federal Assembly for six-year terms; the court operates with full judicial independence under Article 188 of the Swiss Federal Constitution. Its decisions are the authoritative primary source for Swiss federal jurisprudence."
+    },
+    {
       "name": "Federal Chancellery (Bundeskanzlei / Chancellerie fédérale)",
       "domain": "bk.admin.ch",
       "tier": "primary",

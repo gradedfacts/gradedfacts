@@ -63,6 +63,16 @@
       "region": "Europe"
     },
     {
+      "name": "The National Archives (UK)",
+      "domain": "nationalarchives.gov.uk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The National Archives is the official archive and publisher for the UK government and is one of the world's largest archival institutions. It is a non-ministerial government department and an executive agency of the Cabinet Office, holding the historical records of the UK central government and courts of law from the Domesday Book to the present day. As an archive, it operates under a statutory duty under the Public Records Act 1958 (as amended) to preserve and make publicly accessible the official records of government, independent of the current political executive's editorial direction. Primary source for official UK government records, parliamentary papers, census records, court records, and historical documentation."
+    },
+    {
       "name": "Imperial War Museum (IWM)",
       "domain": "iwm.org.uk",
       "tier": "primary",

@@ -364,6 +364,51 @@
       "category": "government",
       "country": "EU",
       "region": "Europe"
+    },
+    {
+      "name": "Congress.gov — US Congressional Records",
+      "domain": "congress.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "Congress.gov is the official website of the United States Congress, operated by the Library of Congress. It is the authoritative public repository for US federal legislation, congressional records, bill tracking, committee reports, and the Congressional Record. Content represents the official legislative record of the US Congress — the legislative branch, which is constitutionally independent of the executive. No editorial control by the executive branch; records are the verbatim official proceedings of the Senate and House of Representatives. Primary source for US federal laws, legislative history, and congressional testimony."
+    },
+    {
+      "name": "Federal Reserve",
+      "domain": "federalreserve.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "The Federal Reserve System is the central bank of the United States. The Board of Governors is an independent federal agency; governors serve staggered 14-year terms designed to insulate monetary policy from short-term political pressure, and the Fed Chair is removable only for cause. The Fed's monetary policy decisions, economic research, and statistical publications (including the H.4.1, Z.1, and G.19 statistical releases) are produced by career economists following established central bank practices without executive direction. The Federal Reserve's independence from the executive on monetary policy has been upheld by Congress and the courts. Primary source for US monetary policy decisions, interest rate data, and macroeconomic statistical releases."
+    },
+    {
+      "name": "US Supreme Court",
+      "domain": "supremecourt.gov",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "government",
+      "independence_note": "The Supreme Court of the United States is the highest federal court and the final arbiter of US constitutional and federal law. Justices serve lifetime appointments under Article III of the Constitution, designed to ensure independence from executive and legislative pressure. Supreme Court opinions, orders, and rules are primary legal sources of the highest authority in the US legal system. While the Court has faced institutional independence questions in specific contexts, its decisions represent the independent judgment of the judicial branch and are the authoritative primary source for US constitutional interpretation and federal law."
+    },
+    {
+      "name": "RAND Corporation",
+      "domain": "rand.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "academic",
+      "independence_note": "The RAND Corporation is a nonprofit, nonpartisan American global policy think tank originally formed to provide research and analysis to the US Armed Forces. It is currently funded by a diverse mix of US government contracts, foundation grants, and corporate clients. RAND research follows peer-reviewed academic standards and is published with methodological transparency; no single funder holds editorial direction over research conclusions. RAND researchers have documented policy positions that conflict with those of their government funders on multiple occasions. Widely cited in security studies, defence policy, health economics, and education research as a high-quality secondary source. Independence from party-political direction is well-established."
+    },
+    {
+      "name": "Deutsche Welle (DW)",
+      "domain": "dw.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "category": "broadcaster",
+      "independence_note": "Deutsche Welle is Germany's international public broadcaster, established by federal law (Deutsche Welle Act) and funded by the German federal government. The Deutsche Welle Act guarantees editorial independence: DW's editorial staff operate under a journalistic code of conduct and an independent editorial charter, without direction from the Federal Government on individual editorial decisions. DW is Germany's equivalent of the BBC World Service, with a mandate to provide independent international news in more than 30 languages. No documented pattern of editorial interference with factual political or international reporting. Widely cited as an independent secondary source for international news, particularly on German and European affairs."
     }
   ]
 }

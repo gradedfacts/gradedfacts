@@ -42,6 +42,106 @@
       "country": "INT",
       "region": "Europe",
       "independence_note": "The International Committee of the Red Cross is an independent humanitarian organisation founded in 1863 and headquartered in Geneva, Switzerland. It is the founding body of the International Red Cross and Red Crescent Movement and the guardian of the Geneva Conventions. The ICRC operates under a mandate from the international community (States party to the Geneva Conventions) but is institutionally independent: governed by an Assembly of Swiss citizens elected from within the organisation, with no state or government holding editorial or operational control. Widely recognised as a primary source for international humanitarian law, armed conflict documentation, prisoner of war records, and humanitarian operations data. ICRC records and reports are cited in international courts, academic research, and official government assessments."
+    },
+    {
+      "name": "NATO (North Atlantic Treaty Organization)",
+      "domain": "nato.int",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "NATO is a collective defence military alliance of 32 member states, headquartered in Brussels. Its communications, press releases, and official statements represent the consensus position of member governments — including major powers with direct stakes in the outcomes of the events and conflicts NATO comments on. Not institutionally independent: editorial control rests with the North Atlantic Council, composed of member-state ambassadors under the influence of their respective governments. Reliable as an authoritative primary source for official NATO decisions, declarations, and policy positions; not independent of the political interests of its member states.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "OSCE — Organization for Security and Co-operation in Europe",
+      "domain": "osce.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The OSCE is the world's largest regional security-oriented intergovernmental organisation, comprising 57 participating states across North America, Europe, and Central Asia. Its election observation missions (ODIHR), human rights monitoring, and arms control verification activities are conducted by career international civil servants and independent experts following established methodological standards, without editorial direction from any single participating state. OSCE field missions and election observation reports are widely cited as primary sources for electoral integrity assessments, human rights documentation, and security monitoring in the OSCE region. While consensus-based governance limits its political independence, its operational and reporting independence at the field level is well-established."
+    },
+    {
+      "name": "Council of Europe",
+      "domain": "coe.int",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The Council of Europe is a 46-member international organisation founded in 1949, headquartered in Strasbourg. It is entirely separate from the European Union. The Council of Europe is the parent body of the European Convention on Human Rights (ECHR) and the European Court of Human Rights (also at coe.int). Its treaty bodies — including the Committee of Ministers, the Parliamentary Assembly (PACE), and the Venice Commission — operate under established rules of procedure that protect their independence from individual member-state direction. The Council of Europe's monitoring bodies (GRETA, MONEYVAL, CPT) follow independent professional standards. Authoritative primary source for European human rights law, treaty documentation, and democratic governance standards."
+    },
+    {
+      "name": "UNHCR — UN Refugee Agency",
+      "domain": "unhcr.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "UNHCR (Office of the United Nations High Commissioner for Refugees) is a UN agency mandated by the General Assembly to protect refugees, forcibly displaced communities, and stateless people worldwide. It operates under a High Commissioner who reports to the UN General Assembly and ECOSOC. While part of the UN system, UNHCR field operations and statistical reporting (Global Trends, displacement data) are conducted by career international civil servants following established professional standards and are not subject to the editorial direction of any individual member state. Its refugee and displacement statistics are the internationally recognised primary source on forced displacement, regularly cited by governments, courts, and academic research."
+    },
+    {
+      "name": "WFP — World Food Programme",
+      "domain": "wfp.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "The World Food Programme is the UN's food assistance agency and the world's largest humanitarian organisation addressing food insecurity. It operates under an Executive Director appointed jointly by the UN Secretary-General and the FAO Director-General and governed by an Executive Board of 36 member states. WFP's operational data, food security assessments, and hunger statistics (including its Integrated Food Security Phase Classification contributions) are produced by technical experts following established methodological standards, without editorial direction from any single donor government. WFP received the Nobel Peace Prize in 2020. Its food security and hunger data are the authoritative international primary source in this domain."
+    },
+    {
+      "name": "IAEA — International Atomic Energy Agency",
+      "domain": "iaea.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The International Atomic Energy Agency is an intergovernmental organisation within the United Nations system, headquartered in Vienna. It is the world's central intergovernmental forum for scientific and technical cooperation in the nuclear field, serving as the international inspectorate for nuclear safeguards verification under the Nuclear Non-Proliferation Treaty (NPT). IAEA inspectors and safeguards reports operate under a mandate of independence: the Agency's Director General reports to both the Board of Governors and the General Conference, with operational independence from individual member states on safeguards and verification activities. Its safeguards reports, nuclear material accounting, and verification findings are the authoritative primary source for international nuclear non-proliferation assessments and are cited in UN Security Council proceedings."
+    },
+    {
+      "name": "OECD Statistics (stats.oecd.org)",
+      "domain": "stats.oecd.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The OECD Statistics portal publishes primary statistical data collected and harmonised by the Organisation for Economic Co-operation and Development across its 38 member countries. The OECD Statistics Directorate operates under established international statistical standards (System of National Accounts, OECD Health Statistics, PISA, PIAAC, etc.) and its data are produced by career statisticians following peer-reviewed methodologies. The OECD is an intergovernmental organisation funded by member-country contributions, but no individual member government holds editorial control over its statistical outputs. OECD statistics are cited by central banks, finance ministries, academic researchers, and international courts as authoritative cross-national primary data."
+    },
+    {
+      "name": "Arolsen Archives — International Center on Nazi Persecution",
+      "domain": "arolsen-archives.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "The Arolsen Archives (formerly the International Tracing Service, ITS) is the world's most comprehensive archive on the victims and survivors of National Socialist persecution. Located in Bad Arolsen, Germany, it holds approximately 30 million documents documenting the fates of more than 17.5 million victims of Nazi persecution — including concentration camp records, forced labour documents, and post-war tracing correspondence. The Archives are governed by an International Commission of 11 states (including the US, France, UK, Germany, Israel, Poland, and others) and operate as an independent international institution under international treaty. Its holdings are the definitive primary source for individual victim documentation and perpetrator records of the Nazi regime."
+    },
+    {
+      "name": "Chatham House — Royal Institute of International Affairs",
+      "domain": "chathamhouse.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "Chatham House (the Royal Institute of International Affairs) is a leading independent international affairs think tank and policy institute, founded in London in 1920. It operates as a registered charity with a diverse funding base from governments, corporations, foundations, and individual donors; no single funder holds editorial control. Research outputs — including its peer-reviewed International Affairs journal — follow academic standards with independent expert review. Chatham House is the originator of the Chatham House Rule and is widely cited as a secondary source for international relations analysis, geopolitics, and foreign policy research. Its independence from any single government or political party is well-established."
+    },
+    {
+      "name": "IISS — International Institute for Strategic Studies",
+      "domain": "iiss.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The International Institute for Strategic Studies is a leading independent research institute for conflict, security, and international politics, founded in London in 1958. It publishes The Military Balance (the standard annual reference for global military capabilities), Survival journal, and Strategic Comments. Funded by a mix of government grants, corporate membership, and foundation support with no single funder holding editorial control. IISS analysis is cited by governments, defence ministries, and academic researchers worldwide. Its independence from any single state's editorial direction is well-established; researchers follow academic peer-review standards."
     }
   ]
 }

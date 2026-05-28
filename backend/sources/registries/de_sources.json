@@ -92,6 +92,16 @@
       "independence_note": "Academic social policy data portal maintained by the Institute for Work, Skills and Training (IAQ), University of Duisburg-Essen. Curates and presents primary statistical data on German social policy drawn from official sources (BMAS, Destatis, Bundesagentur für Arbeit). No commercial ownership; no documented political party funding or editorial interference. Widely cited in academic and policy research on German welfare state indicators."
     },
     {
+      "name": "Bundesregierung (German Federal Government)",
+      "domain": "bundesregierung.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "bundesregierung.de is the official website of the German Federal Government (Bundesregierung), operated by the Federal Press Office (Bundespresseamt). Content is produced directly by the Federal Government and its departments and reflects current government policy, press releases, and official statements. Reliable as an authoritative primary source for official German federal government positions, policy announcements, and decisions; not independent of the executive, as content is editorial communications of the governing coalition.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
       "name": "Bundesarchiv (German Federal Archives)",
       "domain": "bundesarchiv.de",
       "tier": "primary",

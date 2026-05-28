@@ -88,6 +88,16 @@
       "affiliation_note": "The EEAS is the EU's diplomatic service. It operates under the direct political authority of the High Representative of the Union for Foreign Affairs and Security Policy, who simultaneously serves as a Vice-President of the European Commission. EEAS publications represent official EU foreign policy positions, not independent analysis of international events.",
       "country": "EU",
       "region": "Europe"
+    },
+    {
+      "name": "Council of the European Union (consilium.europa.eu)",
+      "domain": "consilium.europa.eu",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Council of the European Union (Council of the EU) is one of the two main legislative bodies of the EU, representing the governments of EU member states. It is a directly political institution: its content represents the negotiated positions of member-state governments and the EU executive machinery. Not independent of EU policy direction — its conclusions, regulations, and directives are the product of member-state government negotiations. Reliable as an authoritative primary source for official EU Council decisions, adopted legislation, Council conclusions, and treaty amendments; not independent of the executive and legislative interests of EU member-state governments.",
+      "country": "EU",
+      "region": "Europe"
     }
   ]
 }
