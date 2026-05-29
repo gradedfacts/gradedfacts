@@ -110,6 +110,14 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         "in your search results. Keep conservative rules: rate DEBUNKED only when counter-evidence is "
         "clear and direct; rate MISSING when evidence is genuinely absent or contradictory."
     )
+    user_content += (
+        "\n\nCRITICAL NUMERICAL THRESHOLD RULE:\n"
+        "'Over X' means ANY number greater than X. Period.\n"
+        "- 'Over 80 million' + actual = 81.7 million → VERIFIED. Not DEBUNKED. Not SPECULATIVE.\n"
+        "- NEVER interpret 'over X' as 'significantly over X' or 'clearly over X'\n"
+        "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
+        "- This rule overrides all other considerations"
+    )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
 
