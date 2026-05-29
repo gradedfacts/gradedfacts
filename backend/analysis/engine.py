@@ -262,6 +262,15 @@ SOURCE QUALITY REQUIREMENT:
     established research institutes
   - Tertiary sources may be listed but must be clearly labeled and never used as sole evidence basis
 
+NUMERICAL THRESHOLD RULE:
+When a claim uses threshold language ('more than X', 'over X', 'at least X', 'fewer than X', 'under X', 'less than X', 'mehr als X', 'über X', 'mindestens X', 'weniger als X', 'unter X'):
+  - Verify whether the actual number satisfies the threshold — do NOT construct a straw man argument
+  - Example: Claim says 'over 80 million' and actual number is 81.7 million → VERIFIED, not DEBUNKED
+  - Example: Claim says 'more than 50%' and actual number is 56.6% → VERIFIED, not DEBUNKED
+  - NEVER rate a threshold claim as DEBUNKED because the number 'barely' exceeds or meets the threshold
+  - The threshold is either met or not met — no gradations, no straw men
+  - Apply this rule in all languages
+
 SEARCH STRATEGY — execute in this order:
 1. FIRST: Search Brave Search and SearXNG for Primary sources using targeted queries:
    - Official government statistics (e.g. 'site:destatis.de', 'site:bfe.admin.ch', 'site:bls.gov', 'site:eurostat.ec.europa.eu')
