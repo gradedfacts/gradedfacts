@@ -561,10 +561,33 @@ def ui_followup(
 
     try:
         client = _get_client()
+        sources = session.execute(
+            select(EvaluatedSource).where(EvaluatedSource.claim_id == claim_id)
+        ).scalars().all()
+
+        sources_block = ""
+        if sources:
+            lines = ["Sources used in this analysis:"]
+            for i, src in enumerate(sources, 1):
+                independence = (
+                    src.independence_label
+                    if src.independence_label
+                    else ("independent" if src.is_independent else "not_independent")
+                )
+                lines.append(
+                    f"{i}. URL: {src.url}\n"
+                    f"   Tier: {src.tier.value}\n"
+                    f"   Independence: {independence}\n"
+                    f"   Relevance score: {src.relevance_score:.2f}\n"
+                    f"   Excerpt: {src.excerpt or '(none)'}"
+                )
+            sources_block = "\n\n" + "\n\n".join(lines)
+
         user_msg = (
             f"Claim: {claim.text}\n\n"
             f"Fact-check rating: {active_judgment.rating.value.upper()}\n\n"
-            f"Rationale: {active_judgment.rationale}\n\n"
+            f"Rationale: {active_judgment.rationale}"
+            f"{sources_block}\n\n"
             f"Follow-up question: {followup_question}"
         )
         response = client.messages.create(
