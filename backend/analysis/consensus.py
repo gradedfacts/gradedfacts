@@ -328,6 +328,8 @@ def _process_sources(
     The third value is True when at least one independent primary or secondary source
     meets the relevance threshold — required for VERIFIED and DEBUNKED.
     """
+    if sources_raw is None:
+        sources_raw = []
     if isinstance(sources_raw, str):
         # Guard: model occasionally returns sources as a JSON-encoded string instead
         # of a parsed array, which would cause character-level iteration below.
@@ -521,7 +523,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         claude_data = _phase2_judgment(claude_client, claim.text, search_findings, lang_instruction)
 
     # ── Process Claude's sources and derive its rating ────────────────────────
-    claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources", []))
+    claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources") or [])
 
     # Persist EvaluatedSource objects IMMEDIATELY after _process_sources() returns —
     # before _rating_from_data(), before the Claude Hard Rule, before the consensus

@@ -789,7 +789,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     # Apply independence registry + quality checks before rating derivation.
     # This overrides Claude's own is_independent assessment for known compromised
     # institutions and caps their relevance_score at COMPROMISED_SCORE_CAP.
-    raw_sources = data.get("sources", [])
+    raw_sources = data.get("sources") or []
     if isinstance(raw_sources, str):
         # Guard: model occasionally returns sources as a JSON-encoded string.
         try:
@@ -840,28 +840,49 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     has_independent_qualifying = False
 
     for src in sources_data:
-        if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
-            continue
-        domain = extract_domain(src.get("url", ""))
-        if domain:
-            if domain in seen_domains:
-                continue
-            seen_domains.add(domain)
+        relevance = float(src.get("relevance_score", 0.0))
+        url = src.get("url", "")
+        domain = extract_domain(url)
+        raw_tier = src.get("tier", "tertiary")
+        is_indep_raw = src.get("is_independent", True)
+        is_indep = independence_bool(is_indep_raw)
         try:
-            tier = SourceTier(src["tier"])
+            tier = SourceTier(raw_tier)
         except ValueError:
             tier = SourceTier.TERTIARY
-        is_indep = independence_bool(src.get("is_independent", True))
-        # Non-independent primary sources are treated as secondary for rating purposes:
-        # a captured official institution cannot substitute for an independent primary
-        # source when establishing VERIFIED.
-        if not is_indep and tier is SourceTier.PRIMARY:
-            tier = SourceTier.SECONDARY
-        # Track whether any qualifying independent source exists (independent primary
-        # or independent secondary). Required for VERIFIED and DEBUNKED.
+        effective_tier = SourceTier.SECONDARY if (not is_indep and tier is SourceTier.PRIMARY) else tier
+
+        skip_reason = None
+        if relevance < MIN_RELEVANCE_SCORE:
+            skip_reason = f"relevance {relevance:.2f} < {MIN_RELEVANCE_SCORE}"
+        elif domain and domain in seen_domains:
+            skip_reason = f"domain '{domain}' already counted"
+
+        logger.warning(
+            "claim %s [source eval] url=%r domain=%r tier=%s→%s is_independent=%r(%s) "
+            "relevance=%.2f supports=%s %s",
+            claim_id, url, domain, raw_tier, effective_tier.value,
+            is_indep_raw, "indep" if is_indep else "NOT-indep",
+            relevance, src.get("supports_claim", True),
+            f"SKIPPED({skip_reason})" if skip_reason else "COUNTED",
+        )
+
+        if skip_reason:
+            continue
+        if domain:
+            seen_domains.add(domain)
+        tier = effective_tier
         if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
             has_independent_qualifying = True
         (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
+
+    logger.warning(
+        "claim %s [hard rule pre-check] has_independent_qualifying=%s "
+        "verifying_tiers=%s debunking_tiers=%s",
+        claim_id, has_independent_qualifying,
+        [t.value for t in verifying_tiers],
+        [t.value for t in debunking_tiers],
+    )
 
     derived_rating = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
@@ -887,9 +908,11 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
     if not has_independent_qualifying and rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
         logger.warning(
-            "claim %s: hard quality gate — no independent qualifying source; "
-            "rating %s overridden to SPECULATIVE.",
+            "claim %s: hard quality gate FIRED — model said %s but "
+            "has_independent_qualifying=False → overriding to SPECULATIVE. "
+            "Sources seen: %s",
             claim_id, rating,
+            [s.get("url", "") for s in sources_data],
         )
         rating = EpistemicRating.SPECULATIVE
 

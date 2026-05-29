@@ -402,6 +402,16 @@
       "independence_note": "The RAND Corporation is a nonprofit, nonpartisan American global policy think tank originally formed to provide research and analysis to the US Armed Forces. It is currently funded by a diverse mix of US government contracts, foundation grants, and corporate clients. RAND research follows peer-reviewed academic standards and is published with methodological transparency; no single funder holds editorial direction over research conclusions. RAND researchers have documented policy positions that conflict with those of their government funders on multiple occasions. Widely cited in security studies, defence policy, health economics, and education research as a high-quality secondary source. Independence from party-political direction is well-established."
     },
     {
+      "name": "US Department of State",
+      "domain": "state.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "category": "government",
+      "affiliation_note": "US Department of State is a cabinet-level executive agency under the direct authority of the President of the United States. The Secretary of State is a presidential appointee serving at the President's pleasure. Foreign policy positions, official statements, and treaty interpretations reflect the current administration's political direction. Factual records (treaties, diplomatic communications, official government positions) are primary sources, but their framing and selection reflect executive branch interests.",
+      "independence_note": "Cabinet-level executive department under direct presidential direction. Not independent: Secretary of State is appointed by and serves at the pleasure of the President. Official documents (treaties, State Department reports, Foreign Affairs records) are authoritative primary sources for US foreign policy, but their framing reflects the current administration's foreign policy agenda."
+    },
+    {
       "name": "Deutsche Welle (DW)",
       "domain": "dw.com",
       "tier": "secondary",
