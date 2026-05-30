@@ -63,6 +63,7 @@ _UI_LANGUAGE_CODES: dict[str, str] = {
     "sv": "Swedish", "ru": "Russian", "uk": "Ukrainian", "tr": "Turkish",
     "ar": "Arabic", "zh": "Chinese", "ja": "Japanese", "ko": "Korean",
     "hu": "Hungarian",
+    "da": "Danish", "fi": "Finnish", "cs": "Czech", "ro": "Romanian", "el": "Greek",
 }
 
 

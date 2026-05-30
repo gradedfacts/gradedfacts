@@ -64,6 +64,11 @@
           <option value="ja">JA</option>
           <option value="ko">KO</option>
           <option value="hu">HU</option>
+          <option value="da">DA</option>
+          <option value="fi">FI</option>
+          <option value="cs">CS</option>
+          <option value="ro">RO</option>
+          <option value="el">EL</option>
         </select>
       </div>
       <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode" onclick="toggleDarkMode()">
@@ -113,7 +118,7 @@
       .init({
         lng: localStorage.getItem('lang') || navigator.language.split('-')[0],
         fallbackLng: false,
-        supportedLngs: ['en', 'de', 'fr', 'it', 'es', 'pt', 'nl', 'pl', 'sv', 'ru', 'uk', 'tr', 'ar', 'zh', 'ja', 'ko', 'hu'],
+        supportedLngs: ['en', 'de', 'fr', 'it', 'es', 'pt', 'nl', 'pl', 'sv', 'ru', 'uk', 'tr', 'ar', 'zh', 'ja', 'ko', 'hu', 'da', 'fi', 'cs', 'ro', 'el'],
         backend: { loadPath: '{% raw %}/static/locales/{{lng}}/translation.json{% endraw %}' },
         interpolation: { escapeValue: false }
       }, function (err) {
