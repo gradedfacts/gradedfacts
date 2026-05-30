@@ -34,7 +34,7 @@
     "searching": "Quellen werden durchsucht…",
     "evaluating": "Unabhängigkeit wird bewertet…",
     "deriving": "Bewertung wird abgeleitet…",
-    "note": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch korrekte Analyse dauert 1–2 Minuten."
+    "note": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch präzise Analyse dauert 1–2 Minuten."
   },
   "rating": {
     "verified": "bestätigt",
@@ -93,7 +93,7 @@
     "what_p3": "Wir sind politisch unabhängig. Wir akzeptieren keine Finanzierung von politischen Parteien, PACs oder ideologisch abhängigen Medien. Unsere Analyse wendet die gleiche Prüfung auf Behauptungen aus jedem Bereich des politischen Spektrums an.",
     "what_p4": "Neue Beweise können jedes Urteil ändern. In diesem Fall wird das frühere Urteil mit einem Zeitstempel und dem Revisionsgrund archiviert — es wird nie still überschrieben. Transparenz über Unsicherheit und Revision ist Teil der Methodik, keine Schwäche.",
     "section_live": "Live-Analyse",
-    "live_p": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch korrekte Analyse dauert 1–2 Minuten.",
+    "live_p": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch präzise Analyse dauert 1–2 Minuten.",
     "section_pipeline": "Analyse-Pipeline",
     "pipeline_intro": "Jede eingereichte Behauptung durchläuft drei aufeinanderfolgende Schritte, bevor eine Bewertung abgegeben wird. Jeder Schritt wird protokolliert und ist prüfbar.",
     "pipeline_li1": "<strong>Spezifizitäts-Vorprüfung.</strong> Bevor eine Web-Suche oder ein Urteil versucht wird, stellt eine schnelle Vorprüfung fest, ob die Behauptung spezifisch genug ist, um sie sinnvoll zu analysieren. Behauptungen, die eine reale Person, ein Ereignis, eine Organisation, ein Dokument oder eine konkrete Handlung benennen, werden immer zur vollständigen Analyse weitergeleitet — auch wenn der angebliche Akteur vage ist. Nur vollständig inhaltsleere Behauptungen werden sofort mit der Bewertung „Fehlend“ zurückgegeben. Im Zweifelsfall lässt das Gate die Behauptung durch und lässt die Beweise sprechen.",
@@ -172,7 +172,7 @@
     "section_contact": "Kontakt und Korrekturen",
     "what_p1": "GradedFacts ist ein automatisiertes Faktencheck-Tool, das politische Behauptungen anhand öffentlich zugänglicher Quellen bewertet. Es ist keine Nachrichtenorganisation, keine politische Kontrollinstanz und keine Interessenvertretung. Es ist ein epistemisches Werkzeug: Sein Ziel ist es, darzulegen, was die verfügbaren Beweise zeigen, und explizit zu machen, was die Beweise noch nicht auflösen.",
     "what_p2": "Unser Ansatz unterscheidet sich von anderen Tools in einem wesentlichen Punkt: <strong>Institutionelle Unabhängigkeit hat Vorrang vor institutionellem Status.</strong> Eine offizielle Quelle ist nicht automatisch eine zuverlässige Quelle — das hängt davon ab, ob sie unabhängig von politischen Interessen agiert. Eine Behörde, deren Führung nach Loyalitätskriterien ernannt wurde, ist unabhängig von ihrem offiziellen Titel nicht unabhängig. Wir beurteilen jede Quelle auf beiden Dimensionen separat.",
-    "what_p3": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch korrekte Analyse dauert 1–2 Minuten.",
+    "what_p3": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch präzise Analyse dauert 1–2 Minuten.",
     "how_intro": "Unsere Methodik ist öffentlich dokumentiert. Jeder Schritt der Analysepipeline — von der Quellenrecherche und Tier-Klassifizierung bis zur Unabhängigkeitsbewertung und Bewertungsableitung — folgt expliziten, öffentlich verfügbaren Regeln.",
     "how_li1": "<strong>Quellenbeurteilungen sind transparent.</strong> Jede in einem Urteil verwendete Quelle wird mit Tier, Unabhängigkeitsstatus, Relevanzscore und — wo zutreffend — einer Erklärung aufgelistet, warum sie als nicht unabhängig eingestuft wurde.",
     "how_li2": "<strong>Ergebnisse sind reproduzierbar.</strong> Die Analyse-Engine läuft bei Temperatur 0: Bei gleicher Behauptung und gleichen Beweisen produziert sie immer dasselbe Ergebnis.",

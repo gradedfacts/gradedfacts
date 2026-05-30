@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts International Source Registry — authoritative international and intergovernmental organisations, historical archives, and humanitarian bodies with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-28",
+    "last_updated": "2026-05-30",
     "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -142,6 +142,376 @@
       "country": "GB",
       "region": "Europe",
       "independence_note": "The International Institute for Strategic Studies is a leading independent research institute for conflict, security, and international politics, founded in London in 1958. It publishes The Military Balance (the standard annual reference for global military capabilities), Survival journal, and Strategic Comments. Funded by a mix of government grants, corporate membership, and foundation support with no single funder holding editorial control. IISS analysis is cited by governments, defence ministries, and academic researchers worldwide. Its independence from any single state's editorial direction is well-established; researchers follow academic peer-review standards."
+    },
+    {
+      "name": "ILO — International Labour Organization",
+      "domain": "ilo.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The International Labour Organization is a UN specialised agency and the only tripartite UN agency, bringing together governments, employers, and workers from 187 member states. It is the global standard-setting body for labour rights, employment, and social protection. The ILO's statistical outputs — including the World Employment and Social Outlook, ILOSTAT database, and labour force surveys — are produced by career technical staff following established international statistical standards without editorial direction from any single member state. The ILO's tripartite governance structure is unique in the UN system and provides an additional structural check against capture by any single national government's interest. Its labour market data, decent work indicators, and international labour standards are authoritative primary sources."
+    },
+    {
+      "name": "FAO — Food and Agriculture Organization of the United Nations",
+      "domain": "fao.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The Food and Agriculture Organization is a UN specialised agency headquartered in Rome, leading international efforts to defeat hunger and improve nutrition and food security worldwide. The FAO's statistical database (FAOSTAT) is the world's most comprehensive source of food and agricultural statistics, covering 245 countries and territories from 1961 onward. Statistical outputs are produced by career technical staff following internationally validated methodologies without editorial direction from any single member state. The FAO is governed by a Conference of all member states and an elected Council; no single government controls its statistical or analytical outputs. Its data on food production, hunger, agricultural commodities, and land use are the authoritative international primary source in these domains."
+    },
+    {
+      "name": "UNESCO — United Nations Educational, Scientific and Cultural Organization",
+      "domain": "unesco.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "UNESCO is a UN specialised agency established in 1945, headquartered in Paris, with a mandate covering education, science, culture, and communication. Its statistical outputs — including the UNESCO Institute for Statistics (UIS) data on education, literacy, science, and cultural participation — are produced by career technical staff following internationally validated methodologies. UNESCO's research and data activities are operationally independent from the political positions of any individual member state. While UNESCO's governance has been subject to geopolitical tensions (US withdrawal and re-entry, Israeli site designations), its technical statistical work has maintained methodological independence. Its education and literacy data are the authoritative international primary source."
+    },
+    {
+      "name": "OECD — Organisation for Economic Co-operation and Development",
+      "domain": "oecd.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The Organisation for Economic Co-operation and Development is an intergovernmental organisation of 38 member countries, founded in 1961 and headquartered in Paris. This entry covers the main OECD website (oecd.org), including policy analysis, country surveys, economic outlooks, and governance reports — as distinct from the statistical data portal at stats.oecd.org which is separately registered. The OECD's analytical outputs are produced by career economists and policy analysts following academic standards; no single member government holds editorial direction over OECD research conclusions. OECD country surveys, policy recommendations, and governance assessments are widely cited authoritative sources for comparative policy analysis. The OECD has documented policy positions that conflict with those of major member governments on multiple occasions, supporting its operational independence."
+    },
+    {
+      "name": "OPCW — Organisation for the Prohibition of Chemical Weapons",
+      "domain": "opcw.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The Organisation for the Prohibition of Chemical Weapons is an intergovernmental organisation and the implementing body for the Chemical Weapons Convention, headquartered in The Hague. It is the international authority for chemical weapons verification, investigation, and attribution. OPCW fact-finding missions and investigation teams operate under a mandate of technical independence: inspectors follow established verification protocols and chain-of-custody procedures, with findings reported to the Conference of States Parties. The OPCW received the Nobel Peace Prize in 2013. Its investigation reports on chemical weapons use — including in Syria — are the authoritative international primary source for chemical weapons attribution findings and are cited in UN Security Council proceedings."
+    },
+    {
+      "name": "CTBTO — Comprehensive Nuclear-Test-Ban Treaty Organization",
+      "domain": "ctbto.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The Comprehensive Nuclear-Test-Ban Treaty Organization is an international organisation headquartered in Vienna that operates the International Monitoring System (IMS), a global network of over 300 monitoring stations detecting nuclear explosions through seismic, hydroacoustic, infrasound, and radionuclide methods. The CTBTO's technical data — seismic event data, radionuclide detections, and explosion characterisation — are produced by a career technical staff following established geophysical and radiological measurement standards. Detection data are objective instrumental measurements, not political assessments. Its monitoring outputs are the authoritative international primary source for nuclear test detection and have been cited in UN Security Council resolutions regarding DPRK nuclear tests. The CTBTO operates with technical independence from any single member state."
+    },
+    {
+      "name": "OHCHR — Office of the UN High Commissioner for Human Rights",
+      "domain": "ohchr.org",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Office of the High Commissioner for Human Rights is part of the UN Secretariat and thus structurally subordinate to the UN Secretary-General. While it operates with significant professional independence in practice, it is not fully independent of UN political processes. The High Commissioner is appointed by the Secretary-General with confirmation by the General Assembly, creating exposure to member-state political pressure. OHCHR investigations and reports follow professional standards and have demonstrated a willingness to criticise powerful member states, but its structural embeddedness in the UN political system means it cannot be classified as fully independent. Its reports are authoritative primary sources for UN human rights findings but should be read with awareness of the political constraints under which the office operates.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "INTERPOL — International Criminal Police Organization",
+      "domain": "interpol.int",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "INTERPOL is an intergovernmental organisation whose governing bodies are composed of member states' national police representatives. Its notices and data are subject to political influence from member states, including documented cases of misuse by authoritarian governments for political persecution. The Commission for the Control of INTERPOL's Files (CCF) has repeatedly ruled that Red Notices issued by Russia, Turkey, China, and other states against political opponents and dissidents were non-compliant with INTERPOL's rules, demonstrating the system's vulnerability to politicised misuse. INTERPOL data — particularly Red Notices and Diffusions — should not be treated as independent findings of fact; they represent requests or assessments made by national police forces whose independence from their own governments varies widely.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "PubMed / NCBI — National Center for Biotechnology Information (NIH)",
+      "domain": "ncbi.nlm.nih.gov",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "The National Center for Biotechnology Information is a division of the US National Library of Medicine, part of the National Institutes of Health (NIH). NCBI operates PubMed, the world's largest index of biomedical literature, indexing over 35 million citations from peer-reviewed journals. The database itself is a neutral indexing service — it does not produce original research, but provides access to peer-reviewed publications whose content is determined by journal editors and peer reviewers independent of NCBI. Individual studies indexed in PubMed should be evaluated on their own methodological merits, funding sources, replication status, and journal quality. NIH is an executive branch agency, but the peer-review process governing indexed research is independent of government editorial direction. Classified secondary: NCBI is a high-quality access layer to primary peer-reviewed research, not itself a primary data producer."
+    },
+    {
+      "name": "Nature (Springer Nature)",
+      "domain": "nature.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Nature is the world's leading multidisciplinary scientific journal, published by Springer Nature since 1869. It employs rigorous double-blind peer review and is universally recognised as one of the highest-impact scientific journals across all disciplines. Springer Nature is a privately owned academic publisher (majority-owned by Holtzbrinck Publishing Group); no government or political actor holds editorial control. Nature's editorial decisions are made by career scientists and editors following established academic standards, independent of commercial interests. Research published in Nature is among the most rigorously screened in academic literature, though all peer-reviewed publications require evaluation of individual study methodology, sample size, and replication. Primary for the peer-reviewed content it publishes; classified secondary because it curates and publishes others' research rather than producing primary institutional data."
+    },
+    {
+      "name": "Science (AAAS — American Association for the Advancement of Science)",
+      "domain": "science.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Science is the peer-reviewed journal of the American Association for the Advancement of Science, one of the world's oldest and largest general scientific societies, founded in 1848. It is among the world's most prestigious scientific journals, employing rigorous peer review across all scientific disciplines. The AAAS is a nonprofit membership organisation with no political party funding; editorial decisions are made by career scientists independent of commercial or governmental direction. Science and Nature together are regarded as the two highest-impact general scientific journals in the world. Individual studies should be evaluated on methodology, sample size, and replication, but publication in Science represents significant independent peer scrutiny."
+    },
+    {
+      "name": "The Lancet (Elsevier)",
+      "domain": "thelancet.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The Lancet is one of the world's oldest and most prestigious medical journals, founded in 1823 and published by Elsevier (part of RELX Group, a publicly traded Anglo-Dutch information company). It employs rigorous peer review and is consistently among the highest-impact medical journals globally. Elsevier is a commercial academic publisher, but The Lancet's editorial independence from its publisher is well-established; editors make decisions based on scientific merit, not commercial interests. The Lancet has published landmark studies on global disease burden, health policy, and pandemic response. Individual studies require evaluation of methodology, funding sources, and replication status as with any peer-reviewed journal."
+    },
+    {
+      "name": "arXiv (Cornell University)",
+      "domain": "arxiv.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "arXiv is an open-access preprint server hosted and operated by Cornell University, launched in 1991. It is the primary preprint repository for physics, mathematics, computer science, quantitative biology, statistics, and economics. Cornell University is a private research university with no documented political editorial direction over arXiv content. arXiv papers are not peer-reviewed and should not be treated as established scientific findings; they represent work in progress, work under review, or work awaiting publication. Moderation on arXiv is minimal, covering scope and basic plausibility rather than methodological peer review. When citing arXiv preprints, this non-peer-reviewed status must be clearly noted; a preprint alone does not constitute established scientific consensus."
+    },
+    {
+      "name": "World Bank Open Knowledge Repository",
+      "domain": "openknowledge.worldbank.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The World Bank Open Knowledge Repository is the institutional open-access repository of the World Bank Group, providing access to World Bank research, working papers, policy reports, and data publications. The World Bank is an international financial institution governed by 189 member countries. Its research outputs — produced by career economists and policy researchers — follow academic standards and are published under an open access policy. While the World Bank's operational lending and policy advice reflect member-country priorities, its research division has documented independence from individual member-state editorial direction and has published analyses critical of member government policies on multiple occasions. Its research is widely cited in academic and policy contexts as a high-quality secondary source for development economics and global poverty data."
+    },
+    {
+      "name": "SSRN — Social Science Research Network",
+      "domain": "ssrn.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "SSRN is owned by Elsevier (part of RELX Group) and hosts preprints and working papers primarily in social sciences, economics, and law. Papers on SSRN are not peer-reviewed and have not been subject to independent scientific review. Content quality varies widely — SSRN hosts both highly regarded working papers from leading researchers and low-quality or methodologically flawed work. Elsevier's ownership introduces a commercial interest in the platform's scale that is not aligned with quality control. SSRN should be treated as a repository of unreviewed preliminary research: useful for tracking emerging work, but not citable as established findings without independent confirmation of the underlying methodology.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "JSTOR",
+      "domain": "jstor.org",
+      "tier": "tertiary",
+      "is_independent": true,
+      "counts_for_threshold": false,
+      "affiliation_note": "JSTOR is a digital archive of academic journals, books, and primary sources, operated by ITHAKA, a US nonprofit organisation. It is an aggregator and does not produce original research; it provides access to existing peer-reviewed material published in the journals it archives. JSTOR's value is as an access layer to peer-reviewed academic literature — the quality and independence of any given content depends on the journal or publisher whose work it archives, not on JSTOR itself. Classified tertiary because it is an aggregator; the underlying peer-reviewed sources it provides access to may be primary or secondary in their own right.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Google Scholar",
+      "domain": "scholar.google.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "affiliation_note": "Google Scholar is a commercial academic search engine operated by Alphabet Inc. (Google). It is an aggregator and does not produce or vet research; it indexes academic papers, theses, books, preprints, and court opinions from across the web. Coverage is broad but metadata accuracy is variable — citation counts, author attributions, and journal designations are sometimes erroneous. Google Scholar's indexing is automated and does not apply quality filters distinguishing peer-reviewed from non-peer-reviewed content. Useful as a discovery tool for academic literature; content quality must be assessed by examining the underlying source, not by virtue of appearing in Google Scholar's index.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Médecins Sans Frontières (MSF) — Doctors Without Borders",
+      "domain": "msf.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Médecins Sans Frontières (MSF) is an independent international humanitarian medical organisation founded in France in 1971 and headquartered in Geneva. MSF is approximately 98% privately funded through individual donor contributions, with no structural dependency on government donors, allowing it to maintain operational independence in politically sensitive contexts. It operates under a strict independence charter (Charte de MSF) and has a documented history of publicly criticising governments, UN agencies, and international bodies — including donor countries — regardless of political direction. MSF field reports on health emergencies, conflict casualties, and humanitarian conditions are primary operational data collected directly from field operations. It received the Nobel Peace Prize in 1999. Its reports are widely cited in academic research and international legal proceedings as independent humanitarian evidence."
+    },
+    {
+      "name": "IFRC — International Federation of Red Cross and Red Crescent Societies",
+      "domain": "ifrc.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The International Federation of Red Cross and Red Crescent Societies is the world's largest humanitarian network, coordinating 191 National Red Cross and Red Crescent Societies. It is the coordinating body of the International Red Cross and Red Crescent Movement (alongside the ICRC, which covers conflict zones). The IFRC operates under the Fundamental Principles of the Movement — including neutrality, impartiality, and independence — which are binding on all member societies. Governed by a General Assembly of member National Societies and a governing board, with no single government holding editorial or operational control. Its disaster response data, emergency appeals, and humanitarian situation reports are widely cited as authoritative secondary sources for natural disasters, epidemics, and civilian humanitarian conditions."
+    },
+    {
+      "name": "Oxfam International",
+      "domain": "oxfam.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Oxfam International is a confederation of 21 independent nonprofit organisations headquartered in Nairobi, Kenya, focused on poverty, inequality, and humanitarian response. It is funded primarily through private fundraising, grants from foundations, and government development aid contracts; no single government holds editorial direction over Oxfam's research and advocacy outputs. Oxfam's research reports and campaign materials are produced by career policy researchers and advocacy staff following documented methodologies. Oxfam has published research critical of government development policies across the political spectrum. While its advocacy orientation means its reports should be read as policy argument rather than neutral analysis, the underlying data it presents is methodologically documented and citable as a secondary source on global inequality and poverty."
+    },
+    {
+      "name": "International Crisis Group (ICG)",
+      "domain": "crisisgroup.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "The International Crisis Group is an independent non-profit, non-governmental organisation committed to preventing and resolving deadly conflict, founded in 1995. It is headquartered in Brussels with offices in conflict-affected regions worldwide. ICG is funded by a diverse international base including foundations (Ford Foundation, Open Society Foundations, Carnegie Corporation), governments (including the UK, EU, Norway, Australia, and others), and private donors; no single government holds editorial direction over its research. ICG has a documented record of publishing analyses critical of governments across the political spectrum — including donor governments. Its conflict analysis and situation reports are widely cited by governments, the UN, and academic researchers as high-quality independent secondary sources."
+    },
+    {
+      "name": "RSF — Reporters Without Borders (Reporters Sans Frontières)",
+      "domain": "rsf.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Reporters Without Borders (RSF) is an international non-governmental organisation founded in Paris in 1985 and headquartered in Paris, dedicated to defending press freedom and the safety of journalists. It is funded primarily by foundations, institutional donors, and individual contributions; it has no documented structural dependency on any government. RSF's annual World Press Freedom Index is the most widely cited international comparative measure of press freedom, covering 180 countries and territories using a documented methodology combining expert assessments and statistical analysis. RSF has consistently rated press freedom in authoritarian and democratic countries using the same methodology, demonstrating no documented political bias toward any particular government. Its findings are cited in academic research, UN reports, and government assessments."
+    },
+    {
+      "name": "V-Dem Institute (Varieties of Democracy — University of Gothenburg)",
+      "domain": "vdeminstitute.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe",
+      "independence_note": "The V-Dem (Varieties of Democracy) Institute is a research institute at the University of Gothenburg, Sweden, producing the world's most comprehensive dataset on democracy, covering over 200 countries and 500 indicators from 1789 to the present. V-Dem data are collected through a structured expert survey methodology involving approximately 3,500 country experts worldwide, with systematic controls for coder bias. The institute is funded by Scandinavian research councils and foundations with no documented political editorial direction. Its Democracy Report and country-level democracy indices are widely cited in academic research and comparative politics as high-quality independent secondary sources. V-Dem data are published with full methodological documentation and are independently reproducible."
+    },
+    {
+      "name": "International IDEA — Institute for Democracy and Electoral Assistance",
+      "domain": "idea.int",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "International IDEA is an intergovernmental organisation with 35 member states, founded in 1995 and headquartered in Stockholm. Its mandate explicitly requires impartiality in supporting democracy worldwide without advocating for any particular democratic model or political system. IDEA's Global State of Democracy reports, electoral data, and constitutional databases are produced by career technical staff and independent experts following documented methodological standards. No single member state holds editorial direction over IDEA's analytical outputs; the organisation has published assessments critical of democratic backsliding in member and non-member states alike. Its electoral data and democratic governance indicators are widely cited in academic research and international policy as authoritative secondary sources."
+    },
+    {
+      "name": "Freedom House",
+      "domain": "freedomhouse.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Freedom House receives approximately 66% of its funding from the US government (primarily USAID and the State Department). While its Freedom in the World methodology is academically respected and widely cited, its structural financial dependency on US government funding creates a material conflict of interest when assessing countries or situations relevant to US foreign policy interests. Multiple academic studies have documented systematic scoring patterns in Freedom House ratings that correlate with US geopolitical interests, independent of the countries' actual democratic performance. Freedom House data should be used with awareness of this structural bias — particularly in regions where US foreign policy is actively engaged — and cross-referenced with independent sources such as V-Dem and IDEA where possible.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "University of Cambridge",
+      "domain": "cam.ac.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The University of Cambridge is one of the world's leading research universities, founded in 1209 and headquartered in Cambridge, United Kingdom. As an ancient public research university, Cambridge operates under a Royal Charter with constitutional independence from government editorial direction. Research outputs published by Cambridge academics are produced under academic freedom norms and subject to peer review, independent of government or political party direction. Cambridge is consistently ranked among the top five universities globally for research quality. Its research is a high-quality secondary source for academic analysis in its areas of expertise; individual papers should be evaluated on methodology and peer-review status as with any academic institution."
+    },
+    {
+      "name": "University of Oxford",
+      "domain": "ox.ac.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The University of Oxford is one of the world's oldest and most prestigious research universities, founded in the 12th century and headquartered in Oxford, United Kingdom. Oxford operates under a Royal Charter with constitutional independence from government editorial direction. Research published by Oxford academics is conducted under academic freedom norms and subject to peer review, independent of government or commercial editorial direction. Oxford hosts several major research institutes relevant to political analysis, including the Reuters Institute for the Study of Journalism, the Oxford Internet Institute, the Blavatnik School of Government, and the Oxford Martin School. Consistently ranked among the top three universities globally."
+    },
+    {
+      "name": "ETH Zurich (Eidgenössische Technische Hochschule Zürich)",
+      "domain": "ethz.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "ETH Zurich is Switzerland's federal technical university, founded in 1855 and consistently ranked among the world's top research universities in engineering, science, and technology. As a Swiss federal institution, it operates under the Swiss Federal Institutes of Technology Act, which guarantees academic freedom and institutional independence from the Federal Council's editorial direction. Swiss federal institutions operate under a strong rule-of-law tradition with no documented political interference in academic research. ETH Zurich's research outputs — particularly in climate science, energy systems, and computational social science — are widely cited as high-quality secondary sources."
+    },
+    {
+      "name": "London School of Economics and Political Science (LSE)",
+      "domain": "lse.ac.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The London School of Economics and Political Science is a public research university specialising in social sciences, founded in 1895 and located in London. LSE is a constituent college of the University of London and operates under the independence guarantees of the UK higher education system. Research outputs from LSE academics — including from its major research centres in economics, political science, law, and social policy — are produced under academic freedom norms and subject to peer review. LSE's research is highly influential in public policy globally, covering areas including economic inequality, global governance, migration, and political economy. Consistently ranked among the top universities globally for social science research."
+    },
+    {
+      "name": "Sciences Po Paris (Institut d'études politiques de Paris)",
+      "domain": "sciences-po.fr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FR",
+      "region": "Europe",
+      "independence_note": "Sciences Po is a leading French research university and grande école specialising in political science, sociology, law, economics, history, and international relations, founded in 1872. Sciences Po is a public establishment of higher education and research (EPCSCP) under French law, operating with academic independence from government editorial direction. Its research centres — including CEVIPOF (Centre for Political Research), CERI (Centre for International Studies), and OFCE (economic research observatory) — produce high-quality social science research following peer-reviewed academic standards. Sciences Po is consistently ranked among Europe's leading political science and international relations institutions."
+    },
+    {
+      "name": "Hertie School Berlin",
+      "domain": "hertie-school.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The Hertie School is a private, independent university focused on public policy and governance, located in Berlin. Founded in 2003 and accredited by the German Accreditation Council, it is funded primarily by the Hertie Foundation (a private foundation committed to good governance and democracy) and research grants. The Hertie School operates with full academic independence from government or political party direction; the Hertie Foundation's mandate emphasises democratic governance and civic education across the political spectrum. Its research on European governance, public administration, and policy analysis is widely cited in policy and academic contexts."
+    },
+    {
+      "name": "Graduate Institute Geneva (IHEID — Institut de Hautes Études Internationales et du Développement)",
+      "domain": "graduateinstitute.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "The Graduate Institute of International and Development Studies (IHEID) is a leading independent postgraduate research and teaching institution specialising in international relations, development, and global governance, founded in Geneva in 1927. As a Swiss institution of higher education, it operates under Swiss law with academic independence from government editorial direction. Geneva's unique position as headquarters of numerous UN agencies and international organisations gives the Graduate Institute special proximity to primary sources in global governance, international law, and development policy. Its research outputs are produced under academic freedom norms and peer-reviewed standards, independent of political direction."
+    },
+    {
+      "name": "Statistics Canada (Statistique Canada)",
+      "domain": "statcan.gc.ca",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CA",
+      "region": "North America",
+      "independence_note": "Statistics Canada is the national statistical agency of Canada, operating under the Statistics Act. The Chief Statistician reports to Parliament through the Minister of Innovation, Science and Industry, but the Statistics Act provides formal independence guarantees for statistical methodology and outputs. Statistics Canada is widely regarded as one of the world's most professionally independent national statistical offices, consistently ranked highly in international assessments of statistical independence. Its population, economic, labour, and social statistics are the authoritative primary data source for Canada and are fully aligned with international statistical standards (UN System of National Accounts, ILO labour statistics)."
+    },
+    {
+      "name": "Australian Bureau of Statistics (ABS)",
+      "domain": "abs.gov.au",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "AU",
+      "region": "Oceania",
+      "independence_note": "The Australian Bureau of Statistics is Australia's national statistical agency, established under the Australian Bureau of Statistics Act 1975. The Australian Statistician is appointed by the Governor-General and the Act provides formal independence guarantees for statistical methodology and outputs from ministerial direction. The ABS is consistently regarded as one of the world's most professionally independent national statistical offices and fully complies with United Nations Fundamental Principles of Official Statistics. Its population census, national accounts, labour force survey, and other statistical outputs are the authoritative primary data source for Australia."
+    },
+    {
+      "name": "IBGE — Instituto Brasileiro de Geografia e Estatística",
+      "domain": "ibge.gov.br",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "BR",
+      "region": "South America",
+      "independence_note": "The Brazilian Institute of Geography and Statistics (IBGE) is Brazil's national statistical agency, founded in 1936. It operates as a federal public foundation (fundação pública federal) with a degree of institutional autonomy from the executive. IBGE produces Brazil's national population census, national accounts, labour force surveys (PNAD), and geographic data. While its structural independence is somewhat less formalised than arm's-length statistical agencies in Nordic countries, IBGE's technical staff follow professional statistical standards aligned with UN Statistical Commission guidelines, and its outputs are the internationally recognised primary data source for Brazilian population, economic, and social statistics."
+    },
+    {
+      "name": "INDEC — Instituto Nacional de Estadística y Censos (Argentina)",
+      "domain": "indec.gob.ar",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "AR",
+      "region": "South America",
+      "independence_note": "INDEC (Instituto Nacional de Estadística y Censos) is Argentina's national statistical agency. Its independence was severely compromised during 2007–2015 under the Fernández de Kirchner government, when political operatives were installed at INDEC and inflation and poverty statistics were systematically manipulated — a documented case of statistical data falsification recognised by the International Monetary Fund and academics. INDEC was substantially reformed from 2016 onward with a return to independent professional statistical methodology. Current INDEC outputs (from 2016 onward) are regarded as broadly reliable by international statistical bodies, but historical data from 2007–2015 requires supplementation from independent estimates. Users should be aware of this documented history when evaluating Argentine time-series data."
+    },
+    {
+      "name": "Statistics New Zealand (Stats NZ — Tatauranga Aotearoa)",
+      "domain": "stats.govt.nz",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NZ",
+      "region": "Oceania",
+      "independence_note": "Statistics New Zealand (Stats NZ) is New Zealand's national statistical agency, operating under the Statistics Act 1975. The Government Statistician is appointed by the Governor-General, and the Act provides formal independence guarantees for statistical methodology and outputs from ministerial direction on specific outputs. Stats NZ is regarded as one of the world's most professionally independent national statistical offices and fully complies with United Nations Fundamental Principles of Official Statistics. Its population census, national accounts, labour force surveys, and other statistical outputs are the authoritative primary data source for New Zealand."
     }
   ]
 }

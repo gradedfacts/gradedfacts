@@ -34,7 +34,7 @@
     "searching": "Wyszukiwanie źródeł…",
     "evaluating": "Ocena niezależności…",
     "deriving": "Wyznaczanie oceny…",
-    "note": "Analiza na żywo — wyszukiwanie i ocena źródeł na żywo. Epistemicznie poprawna analiza zajmuje 1–2 minuty."
+    "note": "Analiza na żywo — wyszukiwanie i ocena źródeł na żywo. Epistemicznie precyzyjna analiza zajmuje 1–2 minuty."
   },
   "rating": {
     "verified": "zweryfikowany",
@@ -93,7 +93,7 @@
     "what_p3": "Jesteśmy politycznie niezależni. Nie przyjmujemy finansowania od partii politycznych, PAC ani ideologicznie zależnych mediów. Nasza analiza stosuje identyczny poziom weryfikacji do twierdzeń ze wszystkich stron sceny politycznej.",
     "what_p4": "Nowe dowody mogą zmienić każdą ocenę. Gdy tak się stanie, poprzednia ocena jest archiwizowana z znacznikiem czasu i uzasadnieniem rewizji — nigdy nie jest cicho nadpisywana. Przejrzystość w kwestii niepewności i rewizji jest częścią metodologii, a nie jej słabością.",
     "section_live": "Analiza na żywo",
-    "live_p": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie poprawna analiza zajmuje 1–2 minuty.",
+    "live_p": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie precyzyjna analiza zajmuje 1–2 minuty.",
     "section_pipeline": "Potok analityczny",
     "pipeline_intro": "Każde przesłane twierdzenie przechodzi przez trzy kolejne etapy zanim zostanie wydana ocena. Każdy etap jest rejestrowany i możliwy do audytu.",
     "pipeline_li1": "<strong>Wstępna kontrola specyficzności.</strong> Przed jakimkolwiek wyszukiwaniem w Internecie lub oceną szybka wstępna kontrola określa, czy twierdzenie jest wystarczająco szczegółowe, by je sensownie analizować. Twierdzenia wskazujące konkretną osobę, wydarzenie, organizację, dokument lub działanie zawsze przechodzą do pełnej analizy. Tylko twierdzenia całkowicie pozbawione treści są natychmiast zwracane z oceną Brakujące. W razie wątpliwości brama przepuszcza twierdzenie i pozwala przemówić dowodom.",
@@ -172,7 +172,7 @@
     "section_contact": "Kontakt i korekty",
     "what_p1": "GradedFacts to zautomatyzowane narzędzie do weryfikacji faktów, które ocenia twierdzenia polityczne na podstawie publicznie dostępnych źródeł. Nie jest organizacją prasową, politycznym obserwatorem ani grupą rzeczniczą. Jest narzędziem epistemicznym: jego celem jest przedstawienie tego, co pokazują dostępne dowody, oraz jasne wskazanie tego, czego dowody jeszcze nie rozstrzygają.",
     "what_p2": "Nasze podejście różni się od innych narzędzi pod jednym kluczowym względem: <strong>niezależność instytucjonalna ma pierwszeństwo przed statusem instytucjonalnym.</strong> Oficjalne źródło nie jest automatycznie wiarygodnym źródłem — zależy to od tego, czy działa niezależnie od interesów politycznych. Agencja rządowa, której kierownictwo zostało mianowane według kryteriów lojalności, nie jest niezależna, niezależnie od jej oficjalnego tytułu. Oceniamy każde źródło osobno pod obiema względami.",
-    "what_p3": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie poprawna analiza zajmuje 1–2 minuty.",
+    "what_p3": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie precyzyjna analiza zajmuje 1–2 minuty.",
     "how_intro": "Nasza metodologia jest publicznie udokumentowana. Każdy etap potoku analiz — od pobierania źródeł i klasyfikacji poziomów po ocenę niezależności i wyprowadzanie ocen — podlega jawnym, publicznie dostępnym zasadom.",
     "how_li1": "<strong>Oceny źródeł są przejrzyste.</strong> Każde źródło użyte w ocenie jest wymienione z jego poziomem, statusem niezależności, wynikiem trafności i — tam gdzie ma zastosowanie — wyjaśnieniem, dlaczego zostało oznaczone jako niesamodzielne.",
     "how_li2": "<strong>Wyniki są odtwarzalne.</strong> Silnik analityczny działa w temperaturze 0: dla tego samego twierdzenia i tych samych dowodów zawsze produkuje ten sam wynik.",

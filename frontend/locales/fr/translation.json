@@ -34,7 +34,7 @@
     "searching": "Recherche de sources…",
     "evaluating": "Évaluation de l'indépendance…",
     "deriving": "Dérivation de la note…",
-    "note": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement correcte prend 1 à 2 minutes."
+    "note": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement précise prend 1 à 2 minutes."
   },
   "rating": {
     "verified": "vérifié",
@@ -93,7 +93,7 @@
     "what_p3": "Nous sommes politiquement indépendants. Nous n'acceptons pas de financement de partis politiques, de PAC ou de médias idéologiquement dépendants. Notre analyse applique un examen identique aux affirmations de tous les bords du spectre politique.",
     "what_p4": "De nouvelles preuves peuvent modifier tout jugement. Dans ce cas, le jugement précédent est archivé avec un horodatage et la raison de la révision — il n'est jamais écrasé silencieusement. La transparence sur l'incertitude et la révision fait partie de la méthodologie, pas une faiblesse.",
     "section_live": "Analyse en direct",
-    "live_p": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement correcte prend 1 à 2 minutes.",
+    "live_p": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement précise prend 1 à 2 minutes.",
     "section_pipeline": "Processus d'analyse",
     "pipeline_intro": "Chaque affirmation soumise passe par trois étapes séquentielles avant qu'une notation soit émise. Chaque étape est enregistrée et auditable.",
     "pipeline_li1": "<strong>Pré-vol de spécificité.</strong> Avant toute recherche web ou jugement, une vérification préliminaire rapide détermine si l'affirmation est suffisamment spécifique pour être analysée. Les affirmations qui nomment une personne réelle, un événement, une organisation, un document ou une action concrète passent toujours à l'analyse complète. Seules les affirmations entièrement sans contenu sont retournées immédiatement avec une note Manquant. En cas de doute, la vérification laisse passer l'affirmation et laisse les preuves parler.",
@@ -172,7 +172,7 @@
     "section_contact": "Contact et corrections",
     "what_p1": "GradedFacts est un outil automatisé de vérification des faits qui évalue les affirmations politiques à partir de sources publiquement disponibles. Ce n'est pas une organisation de presse, un observatoire politique ni un groupe de défense. C'est un outil épistémique : son objectif est d'exposer ce que les preuves disponibles montrent et d'être explicite sur ce que les preuves ne résolvent pas encore.",
     "what_p2": "Notre approche diffère des autres outils sur un point essentiel : <strong>l'indépendance institutionnelle prime sur le statut institutionnel.</strong> Une source officielle n'est pas automatiquement une source fiable — cela dépend de si elle opère indépendamment des intérêts politiques. Une agence gouvernementale dont la direction a été nommée selon des critères de loyauté n'est pas indépendante, quel que soit son titre officiel. Nous évaluons chaque source sur ces deux dimensions séparément.",
-    "what_p3": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement correcte prend 1 à 2 minutes.",
+    "what_p3": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement précise prend 1 à 2 minutes.",
     "how_intro": "Notre méthodologie est documentée publiquement. Chaque étape du pipeline d'analyse — de la récupération des sources et la classification par niveau à l'évaluation de l'indépendance et la dérivation de la notation — suit des règles explicites et publiquement disponibles.",
     "how_li1": "<strong>Les évaluations des sources sont transparentes.</strong> Chaque source utilisée dans un jugement est listée avec son niveau, son statut d'indépendance, son score de pertinence et — le cas échéant — une explication de la raison pour laquelle elle a été marquée comme non indépendante.",
     "how_li2": "<strong>Les résultats sont reproductibles.</strong> Le moteur d'analyse fonctionne à température 0 : pour la même affirmation et les mêmes preuves, il produit toujours le même résultat.",

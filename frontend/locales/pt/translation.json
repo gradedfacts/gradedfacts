@@ -34,7 +34,7 @@
     "searching": "A pesquisar fontes…",
     "evaluating": "A avaliar independência…",
     "deriving": "A derivar classificação…",
-    "note": "Análise ao vivo — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente correta leva 1–2 minutos."
+    "note": "Análise ao vivo — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente precisa leva 1–2 minutos."
   },
   "rating": {
     "verified": "verificado",
@@ -93,7 +93,7 @@
     "what_p3": "Somos politicamente independentes. Não aceitamos financiamento de partidos políticos, PAC ou meios de comunicação ideologicamente dependentes. A nossa análise aplica o mesmo escrutínio às afirmações de todos os pontos do espectro político.",
     "what_p4": "Novas evidências podem alterar qualquer julgamento. Quando isso acontece, o julgamento anterior é arquivado com um carimbo de data/hora e o motivo da revisão — nunca é substituído silenciosamente. A transparência sobre a incerteza e a revisão faz parte da metodologia, não é uma fraqueza.",
     "section_live": "Análise em direto",
-    "live_p": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente correta demora 1-2 minutos.",
+    "live_p": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente precisa demora 1-2 minutos.",
     "section_pipeline": "Pipeline de análise",
     "pipeline_intro": "Cada afirmação submetida passa por três etapas sequenciais antes de ser emitida uma classificação. Cada etapa é registada e auditável.",
     "pipeline_li1": "<strong>Pré-voo de especificidade.</strong> Antes de qualquer pesquisa web ou julgamento, uma verificação preliminar rápida determina se a afirmação é específica o suficiente para ser analisada. As afirmações que nomeiam uma pessoa real, evento, organização, documento ou ação concreta avançam sempre para análise completa. Apenas as afirmações completamente sem conteúdo são devolvidas imediatamente com uma classificação Em falta. Em caso de dúvida, o controlo deixa passar a afirmação e deixa as evidências falarem.",
@@ -172,7 +172,7 @@
     "section_contact": "Contacto e correções",
     "what_p1": "GradedFacts é uma ferramenta automatizada de verificação de factos que avalia afirmações políticas com base em fontes publicamente disponíveis. Não é uma organização de notícias, um observatório político nem um grupo de defesa. É uma ferramenta epistémica: o seu objetivo é expor o que as evidências disponíveis mostram e ser explícito sobre o que as evidências ainda não resolvem.",
     "what_p2": "A nossa abordagem difere de outras ferramentas num aspeto fundamental: <strong>a independência institucional prevalece sobre o estatuto institucional.</strong> Uma fonte oficial não é automaticamente uma fonte fiável — depende de operar de forma independente de interesses políticos. Uma agência governamental cuja liderança foi nomeada com base em critérios de lealdade não é independente, independentemente do seu título oficial. Avaliamos cada fonte em ambas as dimensões separadamente.",
-    "what_p3": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente correta demora 1-2 minutos.",
+    "what_p3": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente precisa demora 1-2 minutos.",
     "how_intro": "A nossa metodologia está documentada publicamente. Cada etapa do processo de análise — desde a recuperação de fontes e classificação por nível até à avaliação da independência e derivação de classificações — segue regras explícitas e publicamente disponíveis.",
     "how_li1": "<strong>As avaliações de fontes são transparentes.</strong> Cada fonte utilizada num julgamento é listada com o seu nível, estado de independência, pontuação de relevância e — quando aplicável — uma explicação de por que foi marcada como não independente.",
     "how_li2": "<strong>Os resultados são reprodutíveis.</strong> O motor de análise funciona a temperatura 0: dada a mesma afirmação e as mesmas evidências, produz sempre o mesmo resultado.",

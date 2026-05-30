@@ -34,7 +34,7 @@
     "searching": "Bronnen zoeken…",
     "evaluating": "Onafhankelijkheid beoordelen…",
     "deriving": "Beoordeling afleiden…",
-    "note": "Live-analyse loopt — live bronnenzoek en -evaluatie. Een epistemisch correcte analyse duurt 1–2 minuten."
+    "note": "Live-analyse loopt — live bronnenzoek en -evaluatie. Een epistemisch nauwkeurige analyse duurt 1–2 minuten."
   },
   "rating": {
     "verified": "geverifieerd",
@@ -93,7 +93,7 @@
     "what_p3": "We zijn politiek onafhankelijk. We accepteren geen financiering van politieke partijen, PAC's of ideologisch afhankelijke media. Onze analyse past dezelfde nauwkeurigheid toe op beweringen uit elk deel van het politieke spectrum.",
     "what_p4": "Nieuw bewijs kan elk oordeel veranderen. Wanneer dat gebeurt, wordt het vorige oordeel gearchiveerd met een tijdstempel en de reden voor de herziening — het wordt nooit stilzwijgend overschreven. Transparantie over onzekerheid en herziening is onderdeel van de methodologie, geen zwakte.",
     "section_live": "Live analyse",
-    "live_p": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch correcte analyse duurt 1-2 minuten.",
+    "live_p": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch nauwkeurige analyse duurt 1-2 minuten.",
     "section_pipeline": "Analysepijplijn",
     "pipeline_intro": "Elke ingediende bewering doorloopt drie opeenvolgende stappen voordat een beoordeling wordt afgegeven. Elke stap wordt geregistreerd en is auditeerbaar.",
     "pipeline_li1": "<strong>Specificiteits-voorvlucht.</strong> Voordat een webzoekopdracht of oordeel wordt geprobeerd, bepaalt een snelle voorlopige controle of de bewering specifiek genoeg is om zinvol te analyseren. Beweringen die een echte persoon, gebeurtenis, organisatie, document of concrete actie noemen, gaan altijd door naar volledige analyse. Alleen volledig inhoudsloze beweringen worden onmiddellijk teruggestuurd met een Ontbrekend-beoordeling. Bij twijfel laat de controle de bewering door en laat het bewijs spreken.",
@@ -172,7 +172,7 @@
     "section_contact": "Contact en correcties",
     "what_p1": "GradedFacts is een geautomatiseerde fact-checktool die politieke beweringen beoordeelt aan de hand van openbaar beschikbare bronnen. Het is geen nieuwsorganisatie, een politieke waakhond of een belangengroep. Het is een epistemisch hulpmiddel: het doel is te laten zien wat het beschikbare bewijs aantoont en expliciet te zijn over wat het bewijs nog niet oplost.",
     "what_p2": "Onze aanpak verschilt op één belangrijk punt van andere tools: <strong>institutionele onafhankelijkheid heeft voorrang op institutionele status.</strong> Een officiële bron is niet automatisch een betrouwbare bron — dat hangt ervan af of ze onafhankelijk van politieke belangen opereert. Een overheidsinstantie waarvan de leiding op loyaliteitscriteria is benoemd, is niet onafhankelijk, ongeacht haar officiële titel. We beoordelen elke bron op beide dimensies afzonderlijk.",
-    "what_p3": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch correcte analyse duurt 1-2 minuten.",
+    "what_p3": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch nauwkeurige analyse duurt 1-2 minuten.",
     "how_intro": "Onze methodologie is openbaar gedocumenteerd. Elke stap van de analysepijplijn — van het ophalen van bronnen en niveauclassificatie tot onafhankelijkheidsbeoordeling en ratingafleiding — volgt expliciete, openbaar beschikbare regels.",
     "how_li1": "<strong>Bronbeoordelingen zijn transparant.</strong> Elke bron die in een oordeel wordt gebruikt, wordt vermeld met zijn niveau, onafhankelijkheidsstatus, relevantiesscore en — indien van toepassing — een uitleg waarom het als niet-onafhankelijk is gemarkeerd.",
     "how_li2": "<strong>Resultaten zijn reproduceerbaar.</strong> De analyse-engine werkt op temperatuur 0: gegeven dezelfde bewering en hetzelfde bewijs produceert het altijd dezelfde output.",

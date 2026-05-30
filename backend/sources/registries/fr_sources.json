@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts FR Source Registry — French national statistical body, legislature, constitutional council, and leading news outlets with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-04",
+    "last_updated": "2026-05-30",
     "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -51,6 +51,14 @@
       "tier": "secondary",
       "is_independent": false,
       "affiliation_note": "France 24 is owned and funded entirely by France Médias Monde, a public company under French state control. It operates under a public service mission agreement with the French government and receives 100% of its budget through state appropriations. France 24 was established partly to promote French perspectives and influence internationally. While its editorial charter provides some formal independence protections and its journalism is of higher quality than state propaganda outlets, structural independence from the French state cannot be assumed. Official French foreign policy coverage in particular should be cross-referenced with independent sources.",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "Cour de cassation (French Court of Cassation)",
+      "domain": "courdecassation.fr",
+      "tier": "primary",
+      "is_independent": true,
       "country": "FR",
       "region": "Europe"
     }

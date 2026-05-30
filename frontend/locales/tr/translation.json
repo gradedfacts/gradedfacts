@@ -34,7 +34,7 @@
     "searching": "Kaynaklar aranıyor…",
     "evaluating": "Bağımsızlık değerlendiriliyor…",
     "deriving": "Değerlendirme türetiliyor…",
-    "note": "Canlı analiz çalışıyor — canlı kaynak araması ve değerlendirmesi. Epistemik açıdan doğru bir analiz 1–2 dakika sürer."
+    "note": "Canlı analiz çalışıyor — canlı kaynak araması ve değerlendirmesi. Epistemik açıdan kesin bir analiz 1–2 dakika sürer."
   },
   "rating": {
     "verified": "doğrulandı",
@@ -93,7 +93,7 @@
     "what_p3": "Siyasi açıdan bağımsızız. Siyasi partilerden, PAC'lerden veya ideolojik açıdan bağımlı medyadan finansman kabul etmiyoruz. Analizimiz, siyasi yelpazanin her noktasındaki iddialara aynı titizliği uygular.",
     "what_p4": "Yeni kanıtlar herhangi bir yargıyı değiştirebilir. Bunu yaptığında, önceki yargı bir zaman damgası ve revizyon nedeniyle birlikte arşivlenir — hiçbir zaman sessizce üzerine yazılmaz. Belirsizlik ve revizyon konusundaki şeffaflık, metodolojinin bir parçasıdır; bir zayıflık değil.",
     "section_live": "Canlı Analiz",
-    "live_p": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan doğru bir analiz 1-2 dakika sürer.",
+    "live_p": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan kesin bir analiz 1-2 dakika sürer.",
     "section_pipeline": "Analiz Süreci",
     "pipeline_intro": "Gönderilen her iddia, bir derecelendirme verilmeden önce üç sıralı adımdan geçer. Her adım kaydedilir ve denetlenebilir.",
     "pipeline_li1": "<strong>Özgüllük ön kontrolü.</strong> Herhangi bir web araması veya yargı yapılmadan önce, hızlı bir ön kontrol iddianın anlamlı şekilde analiz edilecek kadar spesifik olup olmadığını belirler. Gerçek bir kişi, olay, kuruluş, belge veya somut bir eylem adlandıran iddialar her zaman tam analize geçer. Yalnızca tamamen içeriksiz iddialar hemen Eksik derecelendirmesiyle geri döndürülür. Şüphe durumunda, kontrol iddiayı geçirir ve kanıtların konuşmasına izin verir.",
@@ -172,7 +172,7 @@
     "section_contact": "İletişim ve Düzeltmeler",
     "what_p1": "GradedFacts, siyasi iddiaları kamuya açık kaynaklara karşı değerlendiren otomatik bir doğrulama aracıdır. Bir haber kuruluşu, siyasi bir denetim organı veya bir savunuculuk grubu değildir. Epistemik bir araçtır: amacı mevcut kanıtların ne gösterdiğini ortaya koymak ve kanıtların henüz neyi çözmediği konusunda açık olmaktır.",
     "what_p2": "Yaklaşımımız diğer araçlardan tek temel konuda farklılık gösterir: <strong>kurumsal bağımsızlık kurumsal statünün önüne geçer.</strong> Resmi bir kaynak otomatik olarak güvenilir bir kaynak değildir — bu, kaynağın siyasi çıkarlardan bağımsız faaliyet gösterip göstermediğine bağlıdır. Liderliği sadakat kriterlerine göre atanmış bir devlet kurumu, resmi unvanından bağımsız olarak bağımsız değildir. Her kaynağı her iki boyutta ayrı ayrı değerlendiriyoruz.",
-    "what_p3": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan doğru bir analiz 1-2 dakika sürer.",
+    "what_p3": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan kesin bir analiz 1-2 dakika sürer.",
     "how_intro": "Metodolojimiz kamuya açık biçimde belgelenmiştir. Analiz sürecinin her adımı — kaynak alımı ve katman sınıflandırmasından bağımsızlık değerlendirmesi ve derecelendirme türetmeye kadar — açık ve kamuya açık kurallara uyar.",
     "how_li1": "<strong>Kaynak değerlendirmeleri şeffaftır.</strong> Bir yargıda kullanılan her kaynak; katmanı, bağımsızlık durumu, alaka puanı ve — uygun olduğunda — neden bağımsız değil olarak işaretlendiğinin açıklamasıyla listelenir.",
     "how_li2": "<strong>Sonuçlar yeniden üretilebilir.</strong> Analiz motoru sıcaklık 0'da çalışır: aynı iddia ve aynı kanıt verildiğinde her zaman aynı çıktıyı üretir.",

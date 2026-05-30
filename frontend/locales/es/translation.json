@@ -34,7 +34,7 @@
     "searching": "Buscando fuentes…",
     "evaluating": "Evaluando independencia…",
     "deriving": "Derivando calificación…",
-    "note": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistemicamente correcto tarda 1–2 minutos."
+    "note": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistemicamente preciso tarda 1–2 minutos."
   },
   "rating": {
     "verified": "verificado",
@@ -93,7 +93,7 @@
     "what_p3": "Somos políticamente independientes. No aceptamos financiación de partidos políticos, PAC o medios ideológicamente dependientes. Nuestro análisis aplica el mismo escrutinio a las afirmaciones de todos los puntos del espectro político.",
     "what_p4": "Las nuevas evidencias pueden cambiar cualquier juicio. Cuando lo hacen, el juicio anterior se archiva con una marca de tiempo y el motivo de la revisión — nunca se sobrescribe silenciosamente. La transparencia sobre la incertidumbre y la revisión es parte de la metodología, no una debilidad.",
     "section_live": "Análisis en vivo",
-    "live_p": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistémicamente correcto tarda 1-2 minutos.",
+    "live_p": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistémicamente preciso tarda 1-2 minutos.",
     "section_pipeline": "Proceso de análisis",
     "pipeline_intro": "Cada afirmación enviada pasa por tres pasos secuenciales antes de emitirse una calificación. Cada paso queda registrado y es auditable.",
     "pipeline_li1": "<strong>Control previo de especificidad.</strong> Antes de cualquier búsqueda web o juicio, una comprobación preliminar rápida determina si la afirmación es lo suficientemente específica para analizarla. Las afirmaciones que nombran a una persona real, evento, organización, documento o acción concreta siempre pasan al análisis completo. Solo las afirmaciones completamente vacías de contenido se devuelven inmediatamente con una calificación de Faltante. En caso de duda, el control deja pasar la afirmación y deja que las evidencias hablen.",
@@ -172,7 +172,7 @@
     "section_contact": "Contacto y correcciones",
     "what_p1": "GradedFacts es una herramienta automatizada de verificación de hechos que evalúa afirmaciones políticas frente a fuentes públicamente disponibles. No es una organización de noticias, un observatorio político ni un grupo de defensa. Es una herramienta epistémica: su objetivo es exponer lo que muestra la evidencia disponible y ser explícito sobre lo que la evidencia aún no resuelve.",
     "what_p2": "Nuestro enfoque difiere de otras herramientas en un aspecto clave: <strong>la independencia institucional prevalece sobre el estatus institucional.</strong> Una fuente oficial no es automáticamente una fuente fiable — eso depende de si opera de forma independiente de los intereses políticos. Una agencia gubernamental cuya dirección fue designada por criterios de lealtad no es independiente, independientemente de su título oficial. Evaluamos cada fuente en ambas dimensiones por separado.",
-    "what_p3": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistémicamente correcto tarda 1-2 minutos.",
+    "what_p3": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistémicamente preciso tarda 1-2 minutos.",
     "how_intro": "Nuestra metodología está documentada públicamente. Cada paso del proceso de análisis — desde la recuperación de fuentes y la clasificación por niveles hasta la evaluación de independencia y la derivación de calificaciones — sigue reglas explícitas y públicamente disponibles.",
     "how_li1": "<strong>Las evaluaciones de fuentes son transparentes.</strong> Cada fuente utilizada en un juicio se lista con su nivel, estado de independencia, puntuación de relevancia y — cuando corresponde — una explicación de por qué fue marcada como no independiente.",
     "how_li2": "<strong>Los resultados son reproducibles.</strong> El motor de análisis funciona a temperatura 0: dada la misma afirmación y la misma evidencia, siempre produce el mismo resultado.",

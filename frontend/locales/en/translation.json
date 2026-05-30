@@ -34,7 +34,7 @@
     "searching": "Searching sources…",
     "evaluating": "Evaluating independence…",
     "deriving": "Deriving rating…",
-    "note": "Live analysis running — live source search and evaluation. An epistemically correct analysis takes 1–2 minutes."
+    "note": "Live analysis running — live source search and evaluation. An epistemically precise analysis takes 1–2 minutes."
   },
   "rating": {
     "verified": "verified",
@@ -93,7 +93,7 @@
     "what_p3": "We are politically independent. We do not accept funding from political parties, PACs, or ideologically dependent media. Our analysis applies identical scrutiny to claims from every point on the political spectrum.",
     "what_p4": "New evidence can change any judgment. When it does, the prior judgment is archived with a timestamp and the reason for revision — it is never silently overwritten. Transparency about uncertainty and revision is part of the methodology, not a weakness in it.",
     "section_live": "Live Analysis",
-    "live_p": "Live analysis running — live source search and evaluation. An epistemically correct analysis takes 1–2 minutes.",
+    "live_p": "Live analysis running — live source search and evaluation. An epistemically precise analysis takes 1–2 minutes.",
     "section_pipeline": "Analysis Pipeline",
     "pipeline_intro": "Every submitted claim passes through three sequential steps before a rating is issued. Each step is logged and auditable.",
     "pipeline_li1": "<strong>Specificity pre-flight.</strong> Before any web search or judgment is attempted, a fast preliminary check determines whether the claim is specific enough to analyse meaningfully. Claims that name a real person, event, organisation, document, or concrete action always proceed to full analysis — even when the alleged actor is vague. Only entirely content-free claims are returned immediately with a Missing rating. When in doubt, the gate passes the claim and lets the evidence speak.",
@@ -172,7 +172,7 @@
     "section_contact": "Contact and corrections",
     "what_p1": "GradedFacts is an automated fact-checking tool that evaluates political claims against publicly available sources. It is not a news organisation, a political watchdog, or an advocacy group. It is an epistemic tool: its goal is to state what the available evidence shows, and to be explicit about what the evidence does not yet resolve.",
     "what_p2": "Our approach differs from other tools in one key respect: <strong>institutional independence takes precedence over institutional status.</strong> An official source is not automatically a reliable source — that depends on whether it operates independently of political interests. A government agency whose leadership was appointed on loyalty criteria is not independent, regardless of its official title. We assess each source on both dimensions separately.",
-    "what_p3": "Live analysis running — live source search and evaluation. An epistemically correct analysis takes 1–2 minutes.",
+    "what_p3": "Live analysis running — live source search and evaluation. An epistemically precise analysis takes 1–2 minutes.",
     "how_intro": "Our methodology is publicly documented. Every step of the analysis pipeline — from source retrieval and tier classification to independence assessment and rating derivation — follows explicit, publicly available rules.",
     "how_li1": "<strong>Source assessments are transparent.</strong> Every source used in a judgment is listed with its tier, independence status, relevance score, and — where applicable — an explanation of why it was marked non-independent.",
     "how_li2": "<strong>Results are reproducible.</strong> The analysis engine runs at temperature 0: given the same claim and the same evidence, it always produces the same output.",

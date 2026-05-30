@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts US Source Registry — public, versioned registry of core US sources with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-26",
+    "last_updated": "2026-05-30",
     "methodology": "Tier reflects document type: primary = original data or official records produced by the institution itself; secondary = journalism that cites and attributes primary sources; tertiary = aggregation, opinion, or commentary without independent verification. Independence is assessed on ownership, funding, and documented editorial control — being an official government body does NOT imply independence. The same evidentiary standard is applied symmetrically across all political directions.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -419,6 +419,14 @@
       "counts_for_threshold": true,
       "category": "broadcaster",
       "independence_note": "Deutsche Welle is Germany's international public broadcaster, established by federal law (Deutsche Welle Act) and funded by the German federal government. The Deutsche Welle Act guarantees editorial independence: DW's editorial staff operate under a journalistic code of conduct and an independent editorial charter, without direction from the Federal Government on individual editorial decisions. DW is Germany's equivalent of the BBC World Service, with a mandate to provide independent international news in more than 30 languages. No documented pattern of editorial interference with factual political or international reporting. Widely cited as an independent secondary source for international news, particularly on German and European affairs."
+    },
+    {
+      "name": "SCOTUSblog",
+      "domain": "scotusblog.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "category": "newspaper",
+      "independence_note": "SCOTUSblog is an independent online publication covering the United States Supreme Court, founded in 2002 and operated by Bloomberg Law since 2017. It is widely regarded as the most comprehensive and authoritative non-official source of Supreme Court coverage, tracking every petition, argument, and opinion in real time. Bloomberg Law's ownership introduces a commercial parent, but SCOTUSblog's editorial independence from Bloomberg's commercial or political interests has been maintained; its legal analysis is produced by experienced Supreme Court practitioners and legal journalists following academic and journalistic standards. SCOTUSblog has no documented political editorial bias and covers SCOTUS decisions symmetrically regardless of political valence. It is cited by legal academics, journalists, and practitioners as the leading secondary source for Supreme Court analysis."
     }
   ]
 }

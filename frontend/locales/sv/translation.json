@@ -34,7 +34,7 @@
     "searching": "Söker källor…",
     "evaluating": "Utvärderar oberoende…",
     "deriving": "Härleder betyg…",
-    "note": "Live-analys körs — live källsökning och utvärdering. En epistemiskt korrekt analys tar 1–2 minuter."
+    "note": "Live-analys körs — live källsökning och utvärdering. En epistemiskt precis analys tar 1–2 minuter."
   },
   "rating": {
     "verified": "verifierat",
@@ -93,7 +93,7 @@
     "what_p3": "Vi är politiskt oberoende. Vi accepterar inte finansiering från politiska partier, PAC:er eller ideologiskt beroende medier. Vår analys tillämpar identisk granskning på påståenden från alla delar av det politiska spektrumet.",
     "what_p4": "Nya bevis kan förändra varje bedömning. När det sker arkiveras det tidigare omdömet med en tidsstämpel och skälet för revisionen — det skrivs aldrig över i tysthet. Transparens om osäkerhet och revision är en del av metodiken, inte en svaghet.",
     "section_live": "Live-analys",
-    "live_p": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt korrekt analys tar 1–2 minuter.",
+    "live_p": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt precis analys tar 1–2 minuter.",
     "section_pipeline": "Analysflöde",
     "pipeline_intro": "Varje inlämnat påstående passerar tre sekventiella steg innan ett betyg utfärdas. Varje steg loggas och kan granskas.",
     "pipeline_li1": "<strong>Specificitetskontroll.</strong> Innan en webbsökning eller ett omdöme görs, avgör en snabb preliminär kontroll om påståendet är tillräckligt specifikt för meningsfull analys. Påståenden som namnger en verklig person, händelse, organisation, dokument eller konkret åtgärd går alltid vidare till fullständig analys. Endast helt innehållslösa påståenden returneras omedelbart med betyget Saknas. Vid tvivel låter kontrollen påståendet passera och låter bevisen tala.",
@@ -172,7 +172,7 @@
     "section_contact": "Kontakt och korrigeringar",
     "what_p1": "GradedFacts är ett automatiserat faktakontrollverktyg som utvärderar politiska påståenden mot offentligt tillgängliga källor. Det är inte en nyhetsorganisation, en politisk vakthund eller en påverkansgrupp. Det är ett epistemiskt verktyg: dess mål är att redogöra för vad de tillgängliga bevisen visar och att vara tydlig med vad bevisen ännu inte löser.",
     "what_p2": "Vår metod skiljer sig från andra verktyg i en viktig aspekt: <strong>institutionellt oberoende har företräde framför institutionell status.</strong> En officiell källa är inte automatiskt en tillförlitlig källa — det beror på om den verkar oberoende av politiska intressen. En statlig myndighet vars ledning utnämndes utifrån lojalitetskriterier är inte oberoende, oavsett dess officiella titel. Vi bedömer varje källa på båda dimensionerna separat.",
-    "what_p3": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt korrekt analys tar 1–2 minuter.",
+    "what_p3": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt precis analys tar 1–2 minuter.",
     "how_intro": "Vår metodik är offentligt dokumenterad. Varje steg i analysflödet — från källhämtning och nivåklassificering till oberoendebedömning och betygsderivering — följer explicita, offentligt tillgängliga regler.",
     "how_li1": "<strong>Källbedömningar är transparenta.</strong> Varje källa som används i ett omdöme listas med sin nivå, oberoendes status, relevanspoäng och — där tillämpligt — en förklaring till varför den märktes som icke-oberoende.",
     "how_li2": "<strong>Resultat är reproducerbara.</strong> Analysmotorn körs vid temperatur 0: givet samma påstående och samma bevis producerar den alltid samma resultat.",

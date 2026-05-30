@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts EU Source Registry — EU supranational and Council of Europe institutions with independence and quality assessments.",
     "version": "1.0.0",
-    "last_updated": "2026-05-04",
+    "last_updated": "2026-05-30",
     "methodology": "Same tier and independence criteria as the US registry. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction. The same evidentiary standard is applied symmetrically regardless of the institution's stated mandate.",
     "schema": {
       "tier": "primary | secondary | tertiary",
@@ -97,6 +97,252 @@
       "counts_for_threshold": true,
       "affiliation_note": "The Council of the European Union (Council of the EU) is one of the two main legislative bodies of the EU, representing the governments of EU member states. It is a directly political institution: its content represents the negotiated positions of member-state governments and the EU executive machinery. Not independent of EU policy direction — its conclusions, regulations, and directives are the product of member-state government negotiations. Reliable as an authoritative primary source for official EU Council decisions, adopted legislation, Council conclusions, and treaty amendments; not independent of the executive and legislative interests of EU member-state governments.",
       "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Finland",
+      "domain": "stat.fi",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FI",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Netherlands (CBS — Centraal Bureau voor de Statistiek)",
+      "domain": "cbs.nl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Sweden (SCB — Statistiska centralbyrån)",
+      "domain": "scb.se",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Denmark (Danmarks Statistik)",
+      "domain": "dst.dk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DK",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Norway (SSB — Statistisk sentralbyrå)",
+      "domain": "ssb.no",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NO",
+      "region": "Europe"
+    },
+    {
+      "name": "ISTAT — National Institute of Statistics, Italy (Istituto nazionale di statistica)",
+      "domain": "istat.it",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe"
+    },
+    {
+      "name": "INE — Instituto Nacional de Estadística (Spain)",
+      "domain": "ine.es",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe"
+    },
+    {
+      "name": "Statbel — Belgian Statistical Office (Statistics Belgium)",
+      "domain": "statbel.fgov.be",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Statbel (Statistics Belgium) operates under the Belgian Federal Public Service Economy. Unlike arm's-length national statistical offices, it sits within a ministry, which limits its structural independence from government policy direction. While Statbel's professional statistical staff follow standard European Statistics Code of Practice methodologies and its outputs are broadly reliable, it does not have the institutional autonomy of an independent statistical authority. Its data are authoritative as official Belgian statistics but should be noted as ministry-embedded rather than arm's-length.",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "IFAU — Institute for Evaluation of Labour Market and Education Policy (Sweden)",
+      "domain": "ifau.se",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "Corte Costituzionale — Italian Constitutional Court",
+      "domain": "cortecostituzionale.it",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe"
+    },
+    {
+      "name": "Tribunal Constitucional — Spanish Constitutional Court",
+      "domain": "tribunalconstitucional.es",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe"
+    },
+    {
+      "name": "Rechtspraak — Dutch Courts (De Rechtspraak)",
+      "domain": "rechtspraak.nl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Austria (Statistik Austria)",
+      "domain": "statistik.at",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "INE Portugal — Instituto Nacional de Estatística",
+      "domain": "ine.pt",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PT",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Poland (GUS — Główny Urząd Statystyczny)",
+      "domain": "stat.gov.pl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PL",
+      "region": "Europe"
+    },
+    {
+      "name": "Czech Statistical Office (CZSO — Český statistický úřad)",
+      "domain": "czso.cz",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CZ",
+      "region": "Europe"
+    },
+    {
+      "name": "Hungarian Central Statistical Office (KSH — Központi Statisztikai Hivatal)",
+      "domain": "portal.ksh.hu",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Hungarian Central Statistical Office (KSH) has faced documented concerns about restricted institutional independence under the Orbán government. While KSH continues to produce official statistics that largely conform to Eurostat methodological standards, political influence on institutional appointments and methodological choices has been documented by independent researchers and EU bodies. Its data should be cross-referenced with Eurostat harmonised figures where available, particularly on politically sensitive indicators such as migration, poverty, and fiscal data.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "STATEC — Luxembourg National Statistics (Service central de la statistique et des études économiques)",
+      "domain": "statistiques.public.lu",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "STATEC (Service central de la statistique et des études économiques) is a department within the Luxembourg Ministry of the Economy, not a structurally independent statistical authority. Unlike arm's-length national statistical institutes, STATEC sits inside a government ministry, which limits its formal independence from government policy direction. Its statistical outputs are professionally produced and aligned with Eurostat standards, but the ministry-embedded structure means it lacks the institutional autonomy of an independent statistical office.",
+      "country": "LU",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Estonia (Statistikaamet)",
+      "domain": "stat.ee",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "EE",
+      "region": "Europe"
+    },
+    {
+      "name": "Central Statistical Bureau of Latvia (CSB — Centrālā statistikas pārvalde)",
+      "domain": "stat.gov.lv",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "LV",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Lithuania — Official Statistics Portal (Oficialiosios statistikos portalas)",
+      "domain": "vda.lrv.lt",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "LT",
+      "region": "Europe"
+    },
+    {
+      "name": "Hellenic Statistical Authority — ELSTAT (Ελληνική Στατιστική Αρχή)",
+      "domain": "statistics.gr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GR",
+      "region": "Europe"
+    },
+    {
+      "name": "Central Statistics Office Ireland (CSO)",
+      "domain": "cso.ie",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IE",
+      "region": "Europe"
+    },
+    {
+      "name": "National Institute of Statistics Romania (INSSE — Institutul Național de Statistică)",
+      "domain": "insse.ro",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "RO",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistical Office of Slovakia (ŠÚSR — Štatistický úrad Slovenskej republiky)",
+      "domain": "susr.sk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SK",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistical Office of Slovenia — SURS (Statistični urad Republike Slovenije)",
+      "domain": "stat.si",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SI",
+      "region": "Europe"
+    },
+    {
+      "name": "Statistics Iceland (Hagstofa Íslands)",
+      "domain": "statice.is",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IS",
       "region": "Europe"
     }
   ]

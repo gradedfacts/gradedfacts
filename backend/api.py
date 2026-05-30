@@ -53,25 +53,29 @@ def _rating_label(rating) -> str:
 _BADGE_RE = re.compile(r'\[([A-Za-z]+): ([A-Z]+)\]')
 
 # Translated display labels for rating words inside [Model: RATING] badges.
+# Loaded from locale JSON files (rating.* keys, first character capitalised).
 # CSS classes always use the English lowercase value; only the visible label is translated.
-_RATING_TRANSLATIONS: dict[str, dict[str, str]] = {
-    "de": {"verified": "Bestätigt",    "speculative": "Spekulativ",   "debunked": "Widerlegt",   "missing": "Fehlend"},
-    "fr": {"verified": "Vérifié",      "speculative": "Spéculatif",   "debunked": "Réfuté",      "missing": "Insuffisant"},
-    "es": {"verified": "Verificado",   "speculative": "Especulativo", "debunked": "Refutado",    "missing": "Insuficiente"},
-    "it": {"verified": "Verificato",   "speculative": "Speculativo",  "debunked": "Confutato",   "missing": "Mancante"},
-    "pt": {"verified": "Verificado",   "speculative": "Especulativo", "debunked": "Refutado",    "missing": "Insuficiente"},
-    "nl": {"verified": "Geverifieerd", "speculative": "Speculatief",  "debunked": "Ontkracht",   "missing": "Onvoldoende"},
-    "pl": {"verified": "Zweryfikowany","speculative": "Spekulatywny", "debunked": "Obalony",     "missing": "Niewystarczający"},
-    "sv": {"verified": "Verifierat",   "speculative": "Spekulativt",  "debunked": "Motbevisat",  "missing": "Otillräckligt"},
-    "ru": {"verified": "Подтверждено", "speculative": "Умозрительно", "debunked": "Опровергнуто","missing": "Недостаточно"},
-    "uk": {"verified": "Підтверджено", "speculative": "Спекулятивний","debunked": "Спростовано", "missing": "Недостатньо"},
-    "tr": {"verified": "Doğrulandı",   "speculative": "Spekülatif",   "debunked": "Çürütüldü",   "missing": "Yetersiz"},
-    "ar": {"verified": "موثق",         "speculative": "تخميني",       "debunked": "مدحوض",       "missing": "غير كافٍ"},
-    "zh": {"verified": "已核实",        "speculative": "推测性",        "debunked": "已驳斥",       "missing": "证据不足"},
-    "ja": {"verified": "確認済み",      "speculative": "推測的",        "debunked": "否定済み",     "missing": "不十分"},
-    "ko": {"verified": "확인됨",        "speculative": "추정적",        "debunked": "반증됨",       "missing": "불충분"},
-    "hu": {"verified": "Igazolt",      "speculative": "Spekulatív",   "debunked": "Megcáfolt",   "missing": "Hiányos"},
-}
+def _load_rating_translations() -> dict[str, dict[str, str]]:
+    import json as _json
+    locales_dir = _ROOT / "frontend" / "locales"
+    translations: dict[str, dict[str, str]] = {}
+    for lang_dir in sorted(locales_dir.iterdir()):
+        lang = lang_dir.name
+        if lang == "en":
+            continue
+        translation_file = lang_dir / "translation.json"
+        if not translation_file.exists():
+            continue
+        try:
+            data = _json.loads(translation_file.read_text(encoding="utf-8"))
+            rating = data.get("rating", {})
+            if rating:
+                translations[lang] = {k: v[0].upper() + v[1:] for k, v in rating.items() if v}
+        except Exception:
+            logger.warning("Failed to load rating translations for locale %s", lang)
+    return translations
+
+_RATING_TRANSLATIONS: dict[str, dict[str, str]] = _load_rating_translations()
 
 
 def _render_model_badges(text: str, lang: str = "en") -> str:
