@@ -293,6 +293,35 @@ class TestMistralPhase2:
                 _mistral_phase2_judgment("claim", "findings")
 
 
+# ── _correct_mistral_rating ───────────────────────────────────────────────────
+
+class TestCorrectMistralRating:
+
+    def test_verified_with_debunk_phrase_overridden_to_debunked(self):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "verified",
+            "rationale": "Die Zahlen belegen, dass die Behauptung ist daher falsch.",
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "debunked"
+        # Original dict must not be mutated
+        assert args["rating"] == "verified"
+
+    def test_verified_without_debunk_phrase_unchanged(self):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "verified",
+            "rationale": "Three independent primary sources confirm the claim.",
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "verified"
+
+
 # ── analyze_claim_with_consensus — helpers ────────────────────────────────────
 
 _THREE_INDEPENDENT_PRIMARIES = [

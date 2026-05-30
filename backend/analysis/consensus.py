@@ -63,6 +63,40 @@ _MISTRAL_JUDGMENT_TOOL = {
     },
 }
 
+# ── Mistral rating post-processing ───────────────────────────────────────────
+
+# Phrases in a VERIFIED rationale that reveal the underlying conclusion is actually DEBUNKED.
+# Used to correct the known Mistral bug where the structured rating field contradicts the prose.
+_MISTRAL_DEBUNK_PHRASES: tuple[str, ...] = (
+    "ist daher falsch",
+    "ist falsch",
+    "is therefore false",
+    "is not fulfilled",
+    "nicht erfüllt",
+    "widerlegt",
+    "debunked",
+)
+
+
+def _correct_mistral_rating(args: dict) -> dict:
+    """Override Mistral's 'verified' when the rationale text concludes the claim is false.
+
+    Mistral occasionally emits VERIFIED in the structured rating field while its own
+    rationale prose reaches a debunked conclusion — a known model-level inconsistency.
+    Checking is case-insensitive; the args dict is not mutated (a new dict is returned).
+    """
+    if args.get("rating", "").lower() != "verified":
+        return args
+    rationale_lower = args.get("rationale", "").lower()
+    if any(phrase in rationale_lower for phrase in _MISTRAL_DEBUNK_PHRASES):
+        logger.warning(
+            "Mistral rating corrected: 'verified' → 'debunked' "
+            "(structured rating contradicts rationale prose)"
+        )
+        return {**args, "rating": "debunked"}
+    return args
+
+
 # ── Mistral client (lazy singleton) ──────────────────────────────────────────
 
 _mistral_client: Mistral | None = None
@@ -158,7 +192,7 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         args.get("rating"),
         args.get("rationale", ""),
     )
-    return args
+    return _correct_mistral_rating(args)
 
 
 # ── Search helpers (Brave + SearXNG) for Mistral's Phase 1 ───────────────────
