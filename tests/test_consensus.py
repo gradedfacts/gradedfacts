@@ -137,6 +137,27 @@ class TestResolveConsensus:
         assert rating == EpistemicRating.DEBUNKED
         assert agree is False
 
+    def test_debunked_verified_claude_primary_yields_debunked(self):
+        # Claude=DEBUNKED with Primary/Independent beats Mistral=VERIFIED (Mistral has no primary)
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
+            claude_has_primary_independent=True,
+            mistral_has_primary_independent=False,
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_debunked_verified_claude_primary_beats_both_primary(self):
+        # Claude=DEBUNKED + Primary/Independent wins even when Mistral also has primary sources.
+        # Counter-evidence from the primary pipeline prevails over supporting evidence.
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
+            claude_has_primary_independent=True,
+            mistral_has_primary_independent=True,
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
     def test_real_conflicts_downgrade_to_speculative(self):
         # Pairs that are genuine conflicts (not DEBUNKED+MISSING) → SPECULATIVE
         real_conflicts = [

@@ -153,6 +153,11 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     args = call.function.arguments
     if isinstance(args, str):
         args = json.loads(args)
+    logger.warning(
+        "Mistral raw response — rating: %r | rationale: %.500s",
+        args.get("rating"),
+        args.get("rationale", ""),
+    )
     return args
 
 
@@ -293,12 +298,14 @@ def _resolve_consensus(
     Returns (consensus_rating, models_agree).
 
     Resolution order (first match wins):
-      1. mistral_rating is None           → pass through Claude's rating; models_agree=None.
-      2. Both identical                   → that shared rating; models_agree=True.
-      3. DEBUNKED + MISSING (either order)→ DEBUNKED (stronger signal wins); models_agree=False.
-      4. Source quality tiebreaker        → model with ≥1 Primary/Independent source wins
-                                            when the other has zero; models_agree=False.
-      5. All other conflicts              → SPECULATIVE (conservative floor); models_agree=False.
+      1. mistral_rating is None                → pass through Claude's rating; models_agree=None.
+      2. Both identical                         → that shared rating; models_agree=True.
+      3. DEBUNKED + MISSING (either order)      → DEBUNKED (stronger signal wins); models_agree=False.
+      4. DEBUNKED + VERIFIED, Claude has P/I    → DEBUNKED (counter-evidence with primary sources
+                                                   prevails over supporting evidence); models_agree=False.
+      5. Source quality tiebreaker              → model with ≥1 Primary/Independent source wins
+                                                   when the other has zero; models_agree=False.
+      6. All other conflicts                    → SPECULATIVE (conservative floor); models_agree=False.
     """
     if mistral_rating is None:
         return claude_rating, None
@@ -307,6 +314,15 @@ def _resolve_consensus(
 
     pair = {claude_rating, mistral_rating}
     if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
+        return EpistemicRating.DEBUNKED, False
+
+    # Counter-evidence with primary/independent sources beats supporting evidence.
+    # Claude is the primary pipeline: its DEBUNKED + primary/independent wins over Mistral's VERIFIED.
+    if (
+        pair == {EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED}
+        and claude_rating == EpistemicRating.DEBUNKED
+        and claude_has_primary_independent
+    ):
         return EpistemicRating.DEBUNKED, False
 
     # Source quality tiebreaker: clear advantage → that model's rating wins.
