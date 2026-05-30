@@ -497,6 +497,7 @@ def ui_poll(
                 "claim_id": claim_id,
                 "loading_message": _LOADING_MESSAGES[msg_idx]["text"],
                 "loading_key": _LOADING_MESSAGES[msg_idx]["key"],
+                "lang": lang,
             },
         )
 

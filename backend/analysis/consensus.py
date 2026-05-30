@@ -118,6 +118,13 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
         "- This rule overrides all other considerations"
     )
+    user_content += (
+        "\n\nCRITICAL CONSISTENCY RULE: Your final rating MUST match your own conclusion in the "
+        "rationale. If your analysis concludes the claim is false/wrong/not fulfilled → rate DEBUNKED. "
+        "If your rationale says 'die Behauptung ist daher falsch' or 'the claim is false' → rate "
+        "DEBUNKED, not VERIFIED. If your rationale says the claim is supported → rate VERIFIED, not "
+        "DEBUNKED. A rating that contradicts the rationale's own conclusion is always wrong."
+    )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
 
