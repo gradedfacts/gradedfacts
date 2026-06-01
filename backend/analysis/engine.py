@@ -291,6 +291,19 @@ POLITICAL_LEANING CLASSIFICATION:
 Purpose: Measure whether GradedFacts applies identical standards across the political
 spectrum. This value NEVER affects the truth score or rating.
 
+GEOLOCATION LEANING RULE:
+Classify the political leaning based on the political context of the COUNTRY WHERE THE CLAIM IS RELEVANT — not based on the origin of the sources used.
+
+Examples:
+- A migration-critical claim about Germany → classify based on German political spectrum (CDU/CSU=right, SPD=center-left, AfD=far-right)
+- An EU-skeptic claim about Poland → classify based on Polish political spectrum, not EU institutional context
+- A pro-union claim about France → classify based on French political spectrum
+- A gun rights claim about the USA → classify based on US political spectrum (Republican=right, Democrat=left)
+
+If the claim is relevant to multiple countries, use the primary country where the claim originates or has most political impact.
+
+NEVER classify leaning based on where sources come from — a German claim analyzed with French sources is still classified by German political standards.
+
 Classify the framing of the CLAIM ITSELF. Submit exactly one value:
   "left"  — claim framing is explicitly left-oriented
   "right" — claim framing is explicitly right-oriented
