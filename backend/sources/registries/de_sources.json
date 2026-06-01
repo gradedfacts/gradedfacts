@@ -120,6 +120,36 @@
       "country": "DE",
       "region": "Europe",
       "independence_note": "Federal agency under the Federal Ministry of the Interior, established 1952 with a statutory mandate for non-partisan civic education. A cross-party parliamentary advisory board (Kuratorium) is legally required to oversee programming and ensure political balance — no single party can direct editorial content. No documented case of BpB content being directed to favor a specific political party. The non-partisan mandate is structurally enforced through the advisory board composition and the public law foundation charter."
+    },
+    {
+      "name": "ifo Institut für Wirtschaftsforschung",
+      "domain": "ifo.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The ifo Institute (Leibniz Institute for Economic Research at the University of Munich) is one of Germany's leading independent economic research institutes, founded in 1949. It is a member of the Leibniz Association and affiliated with Ludwig Maximilian University of Munich. Funded through competitive research grants, institutional Leibniz Association support, and project funding from public and private sources; no single government ministry or political party holds editorial direction over research outputs. The ifo Business Climate Index is widely cited as a leading indicator of the German economy. Research follows peer-reviewed academic standards and ifo economists publish regularly in international refereed journals. No documented political editorial interference with research conclusions."
+    },
+    {
+      "name": "Bundeskriminalamt (BKA) — German Federal Criminal Police Office",
+      "domain": "bka.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Bundeskriminalamt is the German federal criminal investigation agency, operating under the authority of the Federal Ministry of the Interior (BMI). As a federal law enforcement body under direct ministerial supervision, it is not institutionally independent of the executive branch. Its annual crime statistics (Polizeiliche Kriminalstatistik, PKS) and situation reports are primary official records produced by career officials following established statistical methodology, but classification decisions, data collection scope, and public communication reflect the policy priorities of the federal interior ministry. Reliable as an authoritative primary source for official German federal crime data and police statistics; not independent of executive direction.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "University of Konstanz",
+      "domain": "uni-konstanz.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The University of Konstanz is a public research university in Baden-Württemberg, Germany, founded in 1966 and consistently ranked among Germany's excellence universities. It operates under the Baden-Württemberg Higher Education Act with statutory academic freedom and independence from government editorial direction on research. Particularly noted for its research in law, political science, economics, social sciences, and natural sciences. Research outputs are produced under peer-reviewed academic standards with no documented political interference. Widely cited in international academic literature."
     }
   ]
 }
