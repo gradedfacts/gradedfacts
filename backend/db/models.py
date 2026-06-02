@@ -90,6 +90,11 @@ class Judgment(Base):
     # Political framing of the claim: "left", "right", or "none". Solely for symmetry
     # measurement; never affects the rating. Null until the engine populates it.
     political_leaning: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    # Model version metadata for reproducibility and audit
+    model_claude: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    model_mistral: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    registry_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    prompt_version: Mapped[str | None] = mapped_column(String(16), nullable=True, default="1.0")
 
     claim: Mapped[Claim] = relationship(back_populates="judgments")
     # One-to-one: a judgment is superseded by at most one revision

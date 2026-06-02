@@ -178,6 +178,10 @@ _JUDGMENT_ADDCOLS = [
     ("analyst_secondary", "VARCHAR(128)"),
     ("consensus_rating",  "VARCHAR(11)"),
     ("models_agree",      "BOOLEAN"),
+    ("model_claude",      "VARCHAR(64)"),
+    ("model_mistral",     "VARCHAR(64)"),
+    ("registry_version",  "VARCHAR(40)"),
+    ("prompt_version",    "VARCHAR(16)"),
 ]
 
 _CLAIM_ADDCOLS = [

@@ -37,6 +37,7 @@ from backend.analysis.engine import (
     _check_specificity,
     _detect_language,
     _get_client,
+    _get_registry_version,
     _phase1_search,
     _phase2_judgment,
 )
@@ -48,7 +49,7 @@ from backend.sources.evaluator import evaluate_source, extract_domain
 
 logger = logging.getLogger(__name__)
 
-_MISTRAL_MODEL = "mistral-large-latest"
+_MISTRAL_MODEL = "mistral-large-2512"
 _CLAUDE_MODEL = "claude-sonnet-4-6"
 _BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
 
@@ -508,6 +509,9 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             rationale=vague_rationale,
             analyst=_CLAUDE_MODEL,
             is_active=True,
+            model_claude=_CLAUDE_MODEL,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
         )
         session.add(judgment)
         session.commit()
@@ -523,6 +527,9 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             rationale=off_topic_rationale,
             analyst=_CLAUDE_MODEL,
             is_active=True,
+            model_claude=_CLAUDE_MODEL,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
         )
         session.add(judgment)
         session.commit()
@@ -720,6 +727,10 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         models_agree=models_agree,
         is_active=True,
         political_leaning=political_leaning,
+        model_claude=_CLAUDE_MODEL,
+        model_mistral=_MISTRAL_MODEL if mistral_data is not None else None,
+        registry_version=_get_registry_version(),
+        prompt_version="1.0",
     )
 
     session.add(judgment)

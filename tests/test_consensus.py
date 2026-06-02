@@ -416,7 +416,7 @@ class TestAnalyzeClaimWithConsensus:
         assert j.consensus_rating == EpistemicRating.VERIFIED
         assert j.models_agree is True
         assert j.analyst == "claude-sonnet-4-6"
-        assert j.analyst_secondary == "mistral-large-latest"
+        assert j.analyst_secondary == "mistral-large-2512"
 
     def test_models_agree_rationale_is_claude_rationale(self):
         claude_j = {"rationale": "Claude rationale.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
@@ -559,7 +559,7 @@ class TestAnalyzeClaimWithConsensus:
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
-        assert j.analyst_secondary == "mistral-large-latest"
+        assert j.analyst_secondary == "mistral-large-2512"
 
     def test_evaluated_sources_persisted_when_claude_hard_rule_fires(self):
         """

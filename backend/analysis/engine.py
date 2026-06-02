@@ -1,5 +1,6 @@
 import json
 import logging
+import subprocess
 from pathlib import Path
 
 import anthropic
@@ -481,6 +482,20 @@ def _cached_system() -> list[dict]:
     return [{"type": "text", "text": _SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}]
 
 
+def _get_registry_version() -> str:
+    """Return the short git hash of the most recent commit touching the source registries."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%h", "backend/sources/registries/"],
+            capture_output=True,
+            text=True,
+            cwd=Path(__file__).parents[2],
+        )
+        return result.stdout.strip() or "unknown"
+    except Exception:
+        return "unknown"
+
+
 # ── Pipeline phases ───────────────────────────────────────────────────────────
 
 _SPECIFICITY_PROMPT = """\
@@ -773,6 +788,9 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             rationale=vague_rationale,
             analyst=analyst,
             is_active=True,
+            model_claude=analyst,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
         )
         session.add(judgment)
         session.commit()
@@ -788,6 +806,9 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             rationale=off_topic_rationale,
             analyst=analyst,
             is_active=True,
+            model_claude=analyst,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
         )
         session.add(judgment)
         session.commit()
@@ -940,6 +961,9 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         analyst=analyst,
         is_active=True,
         political_leaning=political_leaning,
+        model_claude=analyst,
+        registry_version=_get_registry_version(),
+        prompt_version="1.0",
     )
 
     session.add(judgment)
