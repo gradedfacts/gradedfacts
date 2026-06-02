@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts este un instrument automatizat. Are limite inerente: poate rata contextul pe care un expert uman l-ar detecta, depinde de calitatea surselor pe care le găsește și nu poate evalua afirmații care necesită expertiză de domeniu dincolo de ceea ce pot rezolva sursele disponibile public. Pentru afirmații extrem de complexe, contestate sau de știri de ultimă oră, recomandăm tratarea rezultatelor noastre ca punct de plecare pentru o revizuire suplimentară de către experți umani, nu ca un verdict final.",
     "limitations_p2": "Faza 1 acoperă <strong>Statele Unite și Europa</strong>. Acoperirea globală este planificată pentru Faza 2.",
     "contact_p": "Dacă credeți că o evaluare este incorectă, o sursă a fost clasificată greșit sau evaluarea noastră de independență este greșită, vrem să știm. Metodologia este open source — puteți citi regulile exacte pe care le urmează motorul de analiză, puteți trimite o corecție sau puteți propune o îmbunătățire prin intermediul <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">depozitului nostru GitHub</a>."
+  },
+  "symmetry": {
+    "explanation": "Simetria înseamnă standarde procedurale egale, nu rezultate egale.",
+    "last_30_days": "ultimele 30 de zile"
   }
 }

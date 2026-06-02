@@ -365,8 +365,8 @@ def about(request: Request):
     return templates.TemplateResponse(request, "about.html")
 
 
-@app.get("/ui/symmetry-stats")
-def ui_symmetry_stats(session: Session = Depends(get_session)):
+def _get_symmetry_counts(session: Session) -> dict[str, int]:
+    """Return left/right/none judgment counts for the last 30 days."""
     cutoff = datetime.now(timezone.utc) - timedelta(days=30)
     rows = session.execute(
         select(Judgment.political_leaning, func.count(Judgment.id))
@@ -377,7 +377,12 @@ def ui_symmetry_stats(session: Session = Depends(get_session)):
     for leaning, count in rows:
         key = leaning if leaning in counts else "none"
         counts[key] += count
-    return JSONResponse(counts)
+    return counts
+
+
+@app.get("/ui/symmetry-stats")
+def ui_symmetry_stats(session: Session = Depends(get_session)):
+    return JSONResponse(_get_symmetry_counts(session))
 
 
 @app.post("/ui/analyze", response_class=HTMLResponse)
@@ -527,6 +532,7 @@ def ui_poll(
             "grouped_sources": _group_sources_by_domain(sorted_sources),
             "judgments": list(judgments),
             "lang": lang,
+            "symmetry_counts": _get_symmetry_counts(session),
         },
     )
 

@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts er et automatiseret værktøj. Det har iboende begrænsninger: det kan miste kontekst, som en menneskelig ekspert ville opdage, det afhænger af kvaliteten af de fundne kilder, og det kan ikke evaluere påstande, der kræver domæneekspertise ud over, hvad offentligt tilgængelige kilder kan løse. For meget komplekse, omstridte eller breaking news-påstande anbefaler vi at behandle vores output som et udgangspunkt for yderligere menneskelig ekspertgennemgang, ikke en endelig dom.",
     "limitations_p2": "Fase 1 dækker <strong>USA og Europa</strong>. Global dækning er planlagt til fase 2.",
     "contact_p": "Hvis du mener, at en vurdering er forkert, at en kilde er fejlklassificeret, eller at vores uafhængighedsvurdering er forkert, vil vi gerne vide det. Metodikken er open source — du kan læse de præcise regler, analysemotoren følger, indsende en korrektion eller foreslå en forbedring via vores <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub-repository</a>."
+  },
+  "symmetry": {
+    "explanation": "Symmetri betyder ens proceduremæssige standarder, ikke ens resultater.",
+    "last_30_days": "seneste 30 dage"
   }
 }

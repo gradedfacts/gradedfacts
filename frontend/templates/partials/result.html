@@ -135,12 +135,14 @@
         <span class="symmetry-icon">&#10003;</span>
         <span data-i18n="result.symmetry_confirmed">Symmetry confirmed — an equivalent analysis exists for the opposing claim.</span>
       </div>
-      {% else %}
-      <div class="symmetry-banner confirmed">
-        <span class="symmetry-icon">&#10003;</span>
-        <span data-i18n="result.symmetry_guaranteed">Symmetry guaranteed — identical standards applied regardless of political direction.</span>
-      </div>
       {% endif %}
+      <p class="symmetry-stats">
+        <span
+          data-i18n="trust.symmetry_stats"
+          data-i18n-options='{"left": {{ symmetry_counts.left }}, "right": {{ symmetry_counts.right }}, "none": {{ symmetry_counts.none }}}'
+        >{{ symmetry_counts.left }} linksorientiert · {{ symmetry_counts.right }} rechtsorientiert · {{ symmetry_counts.none }} neutral (letzte 30 Tage)</span>
+        — <span data-i18n="symmetry.explanation">Symmetrie bedeutet gleiche Verfahrensstandards, nicht gleiche Resultate.</span>
+      </p>
     </div><!-- /symmetry -->
 
   </div><!-- /result-columns -->

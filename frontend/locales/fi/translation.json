@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts on automatisoitu työkalu. Sillä on luontaisia rajoituksia: se voi jäädä paitsi kontekstista, jonka ihmisasiantuntija havaitsisi, se riippuu löytämiensä lähteiden laadusta, ja se ei pysty arvioimaan väitteitä, jotka vaativat asiantuntemusta julkisesti saatavilla olevien lähteiden ulkopuolelta. Erittäin monimutkaisten, kiisteltyjen tai uutispisteeseen liittyvien väitteiden kohdalla suosittelemme käsittelemään tuotoamme lähtökohtana lisäarviointia varten ihmisasiantuntijalta, ei lopullisena tuomiona.",
     "limitations_p2": "Vaihe 1 kattaa <strong>Yhdysvallat ja Euroopan</strong>. Globaali kattavuus on suunnitteilla vaiheeseen 2.",
     "contact_p": "Jos uskot, että arvosana on väärä, lähde on luokiteltu väärin tai riippumattomuusarviomme on virheellinen, haluamme tietää siitä. Metodologia on avoimen lähdekoodin — voit lukea tarkat säännöt, joita analyysimoottori noudattaa, lähettää korjauksen tai ehdottaa parannusta <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub-repositoriomme</a> kautta."
+  },
+  "symmetry": {
+    "explanation": "Symmetria tarkoittaa yhtäläisiä menettelystandardeja, ei yhtäläisiä tuloksia.",
+    "last_30_days": "viimeiset 30 päivää"
   }
 }

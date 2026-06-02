@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts je automatizovaný nástroj. Má inherentní omezení: může přehlédnout kontext, který by zachytil lidský expert, závisí na kvalitě nalezených zdrojů a nemůže hodnotit tvrzení, která vyžadují odborné znalosti přesahující to, co mohou veřejně dostupné zdroje vyřešit. U vysoce komplexních, sporných nebo tvrzení z okamžitých zpráv doporučujeme zacházet s naším výstupem jako s výchozím bodem pro další přezkoumání lidským expertem, nikoli jako s konečným verdiktem.",
     "limitations_p2": "Fáze 1 pokrývá <strong>Spojené státy a Evropu</strong>. Globální pokrytí je plánováno na fázi 2.",
     "contact_p": "Pokud se domníváte, že hodnocení je nesprávné, zdroj byl nesprávně kategorizován nebo naše hodnocení nezávislosti je chybné, chceme to vědět. Metodologie je open source — můžete číst přesná pravidla, která analytický engine dodržuje, odeslat opravu nebo navrhnout zlepšení prostřednictvím našeho <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub repozitáře</a>."
+  },
+  "symmetry": {
+    "explanation": "Symetrie znamená stejné procesní standardy, ne stejné výsledky.",
+    "last_30_days": "posledních 30 dní"
   }
 }

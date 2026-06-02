@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts to narzędzie automatyczne. Ma nieodłączne ograniczenia: może przeoczyć kontekst, który dostrzegłby ludzki ekspert, zależy od jakości znalezionych źródeł i nie może oceniać twierdzeń wymagających wiedzy specjalistycznej wykraczającej poza to, co można znaleźć w publicznych źródłach. W przypadku bardzo złożonych, spornych lub przełomowych twierdzeń zalecamy traktowanie naszego wyniku jako punktu wyjścia do dalszej weryfikacji przez ekspertów, a nie jako ostateczny werdykt.",
     "limitations_p2": "Faza 1 obejmuje <strong>Stany Zjednoczone i Europę</strong>. Globalne pokrycie jest planowane na fazę 2.",
     "contact_p": "Jeśli uważasz, że ocena jest nieprawidłowa, źródło zostało błędnie skategoryzowane lub nasza ocena niezależności jest błędna, chcemy o tym wiedzieć. Metodologia jest open source — możesz przeczytać dokładne zasady silnika analitycznego, przesłać korektę lub zaproponować ulepszenie za pośrednictwem naszego <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">repozytorium GitHub</a>."
+  },
+  "symmetry": {
+    "explanation": "Symetria oznacza równe standardy proceduralne, a nie równe wyniki.",
+    "last_30_days": "ostatnie 30 dni"
   }
 }

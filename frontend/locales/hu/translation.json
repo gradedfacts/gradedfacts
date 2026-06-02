@@ -184,5 +184,9 @@
     "limitations_p1": "A GradedFacts automatizált eszköz. Velejáró korlátai vannak: kihagyhat olyan kontextust, amelyet egy emberi szakértő észrevenne, függ a talált források minőségétől, és nem tud értékelni olyan állításokat, amelyek a nyilvánosan elérhető forrásokat meghaladó szaktudást igényelnek. Rendkívül összetett, vitatott vagy friss hírekre vonatkozó állítások esetén javasoljuk, hogy kimeneti eredményünket ne végső ítéletként, hanem további emberi szakértői felülvizsgálat kiindulópontjaként kezelje.",
     "limitations_p2": "Az 1. fázis az <strong>Egyesült Államokat és Európát</strong> fedi le. A globális lefedettség a 2. fázisra van tervezve.",
     "contact_p": "Ha úgy véli, hogy egy értékelés helytelen, egy forrás helytelenül van kategorizálva, vagy a függetlenségi értékelésünk téves, szeretnénk tudni róla. A módszertan nyílt forráskódú — elolvashatja az elemző motor által követett pontos szabályokat, benyújthat javítást, vagy fejlesztést javasolhat a <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub adattárunkon</a> keresztül."
+  },
+  "symmetry": {
+    "explanation": "A szimmetria egyenlő eljárási normákat jelent, nem egyenlő eredményeket.",
+    "last_30_days": "utolsó 30 nap"
   }
 }

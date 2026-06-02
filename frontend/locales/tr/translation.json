@@ -184,5 +184,9 @@
     "limitations_p1": "GradedFacts otomatik bir araçtır. Doğal sınırları vardır: insan uzmanının yakalayacağı bağlamı gözden kaçırabilir, bulduğu kaynakların kalitesine bağlıdır ve kamuya açık kaynakların çözemeyeceği alan uzmanlığı gerektiren iddiaları değerlendiremez. Son derece karmaşık, tartışmalı veya son dakika haberi niteliğindeki iddialar için, çıktımızı nihai bir karar olarak değil, daha fazla uzman incelemesi için bir başlangıç noktası olarak değerlendirmenizi öneririz.",
     "limitations_p2": "Faz 1, <strong>Amerika Birleşik Devletleri ve Avrupa'yı</strong> kapsamaktadır. Küresel kapsam Faz 2 için planlanmaktadır.",
     "contact_p": "Bir derecelendirmenin yanlış olduğunu, bir kaynağın hatalı kategorize edildiğini veya bağımsızlık değerlendirmemizin hatalı olduğunu düşünüyorsanız bunu öğrenmek istiyoruz. Metodoloji açık kaynaktır — analiz motorunun izlediği tam kuralları okuyabilir, düzeltme gönderebilir veya <a href=\"https://github.com/gradedfacts/gradedfacts\" target=\"_blank\" rel=\"noopener\">GitHub depomuzu</a> aracılığıyla bir iyileştirme önerebilirsiniz."
+  },
+  "symmetry": {
+    "explanation": "Simetri, eşit prosedürel standartlar anlamına gelir, eşit sonuçlar değil.",
+    "last_30_days": "son 30 gün"
   }
 }
