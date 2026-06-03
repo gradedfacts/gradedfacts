@@ -16,7 +16,7 @@
   "form": {
     "heading": "Verificați o afirmație",
     "placeholder": "Introduceți o afirmație politică pentru verificare — ex. \"Rata șomajului din SUA a scăzut la 3,4% în ianuarie 2023\"",
-    "hint": "O afirmație per verificare · Pro: mai multe afirmații",
+    "hint": "O afirmație per verificare",
     "submit": "Verifică",
     "analyzing": "Se analizează..."
   },

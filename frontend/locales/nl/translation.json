@@ -16,7 +16,7 @@
   "form": {
     "heading": "Een bewering controleren",
     "placeholder": "Voer een politieke bewering in om te verifiëren — bijv. «De Amerikaanse werkloosheid daalde naar 3,4% in januari 2023»",
-    "hint": "Eén bewering per controle · Pro: meerdere beweringen",
+    "hint": "Eén bewering per controle",
     "submit": "Factcheck",
     "analyzing": "Analyseren..."
   },

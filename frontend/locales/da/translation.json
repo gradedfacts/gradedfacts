@@ -16,7 +16,7 @@
   "form": {
     "heading": "Faktjek en påstand",
     "placeholder": "Indtast en politisk påstand for at verificere — f.eks. \"Den amerikanske arbejdsløshed faldt til 3,4 % i januar 2023\"",
-    "hint": "Én påstand pr. tjek · Pro: flere påstande",
+    "hint": "Én påstand pr. tjek",
     "submit": "Faktjek",
     "analyzing": "Analyserer..."
   },

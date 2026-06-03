@@ -16,7 +16,7 @@
   "form": {
     "heading": "Sprawdź twierdzenie",
     "placeholder": "Wprowadź twierdzenie polityczne do weryfikacji — np. «Bezrobocie w USA spadło do 3,4% w styczniu 2023»",
-    "hint": "Jedno twierdzenie na sprawdzenie · Pro: wiele twierdzeń",
+    "hint": "Jedno twierdzenie na sprawdzenie",
     "submit": "Sprawdź fakty",
     "analyzing": "Analizuję..."
   },

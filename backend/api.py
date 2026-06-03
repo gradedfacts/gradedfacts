@@ -351,8 +351,10 @@ def analyze_claim_endpoint(claim_id: str, session: Session = Depends(get_session
 # ── HTML endpoints (HTMX + Jinja2) ───────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse(request, "index.html")
+def home(request: Request, session: Session = Depends(get_session)):
+    return templates.TemplateResponse(request, "index.html", {
+        "symmetry_counts": _get_symmetry_counts(session),
+    })
 
 
 @app.get("/methodology", response_class=HTMLResponse)

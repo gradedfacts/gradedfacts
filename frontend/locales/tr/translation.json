@@ -16,7 +16,7 @@
   "form": {
     "heading": "Bir iddiayı doğrula",
     "placeholder": "Doğrulanacak siyasi bir iddia girin — ör. «ABD işsizlik oranı Ocak 2023'te %3,4'e düştü»",
-    "hint": "Kontrol başına bir iddia · Pro: birden fazla iddia",
+    "hint": "Kontrol başına bir iddia",
     "submit": "Gerçeği doğrula",
     "analyzing": "Analiz ediliyor..."
   },

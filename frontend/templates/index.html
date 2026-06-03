@@ -2,45 +2,20 @@
 {% block content %}
 
 <div class="trust-block">
-  <p class="trust-signal" data-i18n="tagline">
-    Politically independent · No party funding · No ideological agenda
-  </p>
   <ul class="framework-list">
     <li><span class="status-dot verified"></span><strong data-i18n="trust.verified">Verified</strong> — <span data-i18n="trust.verified_desc">factually correct with cited sources</span></li>
     <li><span class="status-dot speculative"></span><strong data-i18n="trust.speculative">Speculative</strong> — <span data-i18n="trust.speculative_desc">plausible but not conclusively provable</span></li>
     <li><span class="status-dot debunked"></span><strong data-i18n="trust.debunked">Debunked</strong> — <span data-i18n="trust.debunked_desc">counter-evidence available</span></li>
     <li><span class="status-dot missing"></span><strong data-i18n="trust.missing">Missing</strong> — <span data-i18n="trust.missing_desc">insufficient evidence, judgment withheld</span></li>
   </ul>
-  <p class="claims-counter" data-i18n="trust.symmetry">Symmetry tracking active — equal scrutiny across the political spectrum.</p>
-  <p class="claims-counter symmetry-stats" id="symmetry-stats"
-     data-i18n="trust.symmetry_stats"
-     data-i18n-options='{"left":0,"right":0,"none":0}'
-     style="display:none">
-    Last 30 days: 0 left-leaning · 0 right-leaning · 0 no political leaning
+  <p class="symmetry-stats">
+    <span
+      data-i18n="trust.symmetry_stats"
+      data-i18n-options='{"left": {{ symmetry_counts.left }}, "right": {{ symmetry_counts.right }}, "none": {{ symmetry_counts.none }}}'
+    >{{ symmetry_counts.left }} linksorientiert · {{ symmetry_counts.right }} rechtsorientiert · {{ symmetry_counts.none }} neutral (letzte 30 Tage)</span>
+    — <span data-i18n="symmetry.explanation">Symmetrie bedeutet gleiche Verfahrensstandards, nicht gleiche Resultate.</span>
   </p>
-  <p class="leaning-hint" data-i18n="trust.leaning_hint">Political leaning classification activates automatically as more claims are analyzed.</p>
 </div>
-
-<script>
-(function () {
-  function refreshSymmetryStats() {
-    fetch('/ui/symmetry-stats')
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var el = document.getElementById('symmetry-stats');
-        var opts = {left: d.left, right: d.right, none: d.none};
-        el.setAttribute('data-i18n-options', JSON.stringify(opts));
-        el.textContent = i18next.isInitialized
-          ? i18next.t('trust.symmetry_stats', opts)
-          : 'Last 30 days: ' + d.left + ' left-leaning · ' + d.right + ' right-leaning · ' + d.none + ' no political leaning';
-        el.style.display = '';
-      })
-      .catch(function () {});
-  }
-  refreshSymmetryStats();
-  setInterval(refreshSymmetryStats, 30000);
-})();
-</script>
 
 <div class="card">
   <p class="claim-form-heading" data-i18n="form.heading">Fact-check a claim</p>
@@ -66,7 +41,7 @@
     ></textarea>
     <input type="hidden" name="lang" id="lang-hidden" value="en">
     <div class="form-footer">
-      <span class="char-count" data-i18n="form.hint">One claim per check · Pro: multiple claims</span>
+      <span class="char-count" data-i18n="form.hint">One claim per check</span>
       <button type="submit" class="btn btn-primary" data-i18n="form.submit">Fact-check</button>
     </div>
   </form>

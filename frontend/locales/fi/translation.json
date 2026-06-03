@@ -16,7 +16,7 @@
   "form": {
     "heading": "Faktatarkista väite",
     "placeholder": "Syötä poliittinen väite tarkistettavaksi — esim. \"Yhdysvaltain työttömyysaste laski 3,4 prosenttiin tammikuussa 2023\"",
-    "hint": "Yksi väite per tarkistus · Pro: useita väitteitä",
+    "hint": "Yksi väite per tarkistus",
     "submit": "Faktatarkista",
     "analyzing": "Analysoidaan..."
   },

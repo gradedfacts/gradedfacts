@@ -16,7 +16,7 @@
   "form": {
     "heading": "Verifica un'affermazione",
     "placeholder": "Inserisci un'affermazione politica da verificare — es. «Il tasso di disoccupazione USA è sceso al 3,4% a gennaio 2023»",
-    "hint": "Un'affermazione per verifica · Pro: affermazioni multiple",
+    "hint": "Un'affermazione per verifica",
     "submit": "Verifica",
     "analyzing": "Analisi..."
   },

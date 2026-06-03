@@ -16,7 +16,7 @@
   "form": {
     "heading": "Állítás ellenőrzése",
     "placeholder": "Adjon meg egy politikai állítást ellenőrzésre — pl. «Az amerikai munkanélküliségi ráta 3,4%-ra csökkent 2023 januárjában»",
-    "hint": "Ellenőrzésenként egy állítás · Pro: több állítás",
+    "hint": "Ellenőrzésenként egy állítás",
     "submit": "Tényellenőrzés",
     "analyzing": "Elemzés..."
   },

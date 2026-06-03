@@ -16,7 +16,7 @@
   "form": {
     "heading": "Vérifier une affirmation",
     "placeholder": "Entrez une affirmation politique à vérifier — ex. « Le taux de chômage américain est passé à 3,4 % en janvier 2023 »",
-    "hint": "Une affirmation par vérification · Pro : plusieurs affirmations",
+    "hint": "Une affirmation par vérification",
     "submit": "Vérifier",
     "analyzing": "Analyse..."
   },

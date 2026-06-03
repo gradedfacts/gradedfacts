@@ -16,7 +16,7 @@
   "form": {
     "heading": "Verificar uma afirmação",
     "placeholder": "Insira uma afirmação política para verificar — ex. «A taxa de desemprego nos EUA caiu para 3,4% em janeiro de 2023»",
-    "hint": "Uma afirmação por verificação · Pro: múltiplas afirmações",
+    "hint": "Uma afirmação por verificação",
     "submit": "Verificar",
     "analyzing": "Analisando..."
   },
