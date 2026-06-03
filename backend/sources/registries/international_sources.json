@@ -512,6 +512,293 @@
       "country": "NZ",
       "region": "Oceania",
       "independence_note": "Statistics New Zealand (Stats NZ) is New Zealand's national statistical agency, operating under the Statistics Act 1975. The Government Statistician is appointed by the Governor-General, and the Act provides formal independence guarantees for statistical methodology and outputs from ministerial direction on specific outputs. Stats NZ is regarded as one of the world's most professionally independent national statistical offices and fully complies with United Nations Fundamental Principles of Official Statistics. Its population census, national accounts, labour force surveys, and other statistical outputs are the authoritative primary data source for New Zealand."
+    },
+    {
+      "name": "Verkhovna Rada — Ukrainian Parliament",
+      "domain": "rada.gov.ua",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "UA",
+      "region": "Europe",
+      "independence_note": "The Verkhovna Rada is Ukraine's unicameral parliament, established under the 1996 Ukrainian Constitution. Its official records — legislative acts, resolutions, committee proceedings, and session minutes — are primary authoritative sources for Ukrainian law and parliamentary decisions. Ukraine has been under martial law since February 2022 following the Russian invasion, with certain parliamentary procedures modified under wartime conditions; this context should be noted when assessing the legislative record. Parliamentary records themselves are not subject to executive editorial control."
+    },
+    {
+      "name": "State Statistics Service of Ukraine (Derzhstat)",
+      "domain": "stat.gov.ua",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The State Statistics Service of Ukraine is Ukraine's national statistical agency, operating under the Cabinet of Ministers. Under normal conditions it follows international statistical standards and its data are broadly reliable for official Ukrainian statistics. Since February 2022, Ukraine has been under martial law and wartime conditions, with full statistical data collection disrupted in occupied territories and conflict zones. Wartime government control over information — including statistical publication — means that population, casualty, displacement, and economic data since 2022 require cross-referencing with international sources (UNHCR, OCHA, World Bank, IMF). The Ukrainian government has a direct strategic interest in how certain wartime data (casualties, territorial control, economic damage) are presented. Reliable as an official source for pre-war statistics and for sectors where wartime distortion is less likely.",
+      "country": "UA",
+      "region": "Europe"
+    },
+    {
+      "name": "National Academy of Sciences of Ukraine (NAN Ukrainy)",
+      "domain": "nas.gov.ua",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "UA",
+      "region": "Europe",
+      "independence_note": "The National Academy of Sciences of Ukraine is Ukraine's primary state research institution, founded in 1918 and operating under Ukrainian public law as a self-governing academic body. Its research direction is governed by elected members following academic standards, with no documented political editorial interference with scholarly outputs. It oversees approximately 100 research institutes. While operating under the substantial constraints of wartime conditions since February 2022, the Academy maintains its scholarly independence mandate. Authoritative primary source for Ukrainian publicly funded research and academic expertise."
+    },
+    {
+      "name": "Hromadske — Громадське телебачення",
+      "domain": "hromadske.ua",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "UA",
+      "region": "Europe",
+      "independence_note": "Hromadske (Громадське) is a Ukrainian independent public interest broadcaster and online news outlet founded in 2013 during the Euromaidan protests. It was established as a non-profit, public interest journalism organisation funded by grants from international foundations and individual donations, without state or oligarchic ownership. Hromadske has maintained editorial independence through the Yanukovych era, the 2014 revolution, and the post-2022 wartime period. It is widely cited as one of Ukraine's most reliable independent news sources. Independence should be noted alongside the context that wartime journalism in Ukraine operates under significant constraints including safety, access, and martial law information controls."
+    },
+    {
+      "name": "Ukrinform — Ukrainian National News Agency",
+      "domain": "ukrinform.ua",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Ukrinform is the official Ukrainian state news agency, founded in 1918 and operating under the authority of the Ukrainian state. It is fully state-owned and funded, and its editorial line represents official Ukrainian government positions. Under wartime conditions since February 2022, Ukrinform functions as a primary vehicle for official Ukrainian government communications, including wartime operational updates, casualty claims, and territorial situation reports. While it provides primary official Ukrainian government information, it is not editorially independent of the Ukrainian executive, and its reporting on the war — particularly on military operations, casualty counts, and territorial control — should be cross-referenced with independent sources.",
+      "country": "UA",
+      "region": "Europe"
+    },
+    {
+      "name": "TÜİK — Türkiye İstatistik Kurumu (Turkish Statistical Institute)",
+      "domain": "turkstat.gov.tr",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "TÜİK (Turkish Statistical Institute) is Turkey's national statistical agency, operating under the Presidency of the Republic of Turkey. Under the Erdoğan government, TÜİK's institutional independence has been severely compromised: methodology changes to the consumer price index (CPI) in 2016 resulted in official inflation figures dramatically diverging from independent estimates (e.g. from the ENAG research group), generating widespread academic and market criticism. The appointment of politically affiliated individuals to key positions and documented instances of methodology revision producing politically convenient outputs mean TÜİK data — particularly on inflation, unemployment, and economic growth — cannot be treated as independent primary statistics. Cross-referencing with IMF Article IV assessments, independent Turkish economists, and international market data is recommended.",
+      "country": "TR",
+      "region": "Middle East"
+    },
+    {
+      "name": "TBMM — Türkiye Büyük Millet Meclisi (Grand National Assembly of Turkey)",
+      "domain": "tbmm.gov.tr",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Grand National Assembly of Turkey is Turkey's unicameral parliament. Under the 2017 constitutional amendments that took effect in 2018, Turkey shifted to a presidential system that substantially weakened parliamentary independence — executive decrees now have legislative force, the President can dissolve parliament, and the ruling AKP/MHP coalition has used parliamentary mechanisms to persecute opposition figures (stripping HDP deputies of immunity, prosecuting elected mayors). The parliament under the Erdoğan presidential system is not institutionally independent of the executive in the sense relevant for GradedFacts assessment. Its official legislative records are primary authoritative sources for Turkish law as formally adopted, but the political context of that legislation is part of its evaluation.",
+      "country": "TR",
+      "region": "Middle East"
+    },
+    {
+      "name": "Cumhuriyet",
+      "domain": "cumhuriyet.com.tr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "TR",
+      "region": "Middle East",
+      "independence_note": "Cumhuriyet (Republic) is Turkey's oldest secular newspaper, founded in 1924. It has maintained an independent, opposition-oriented editorial line throughout the Erdoğan era, facing repeated legal pressure, criminal prosecutions of editors and journalists, and financial harassment. It operates with diminished resources under difficult conditions and is one of the few remaining major independent Turkish newspapers. Independence should be assessed in the context of Turkey's severely constrained press freedom environment (RSF ranked Turkey 158th in 2024); Cumhuriyet represents genuine editorial independence, though its capacity for investigative reporting is limited by the operating environment."
+    },
+    {
+      "name": "Bianet — Bağımsız İletişim Ağı",
+      "domain": "bianet.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "TR",
+      "region": "Middle East",
+      "independence_note": "Bianet (Independent Communication Network) is a Turkish independent online news outlet founded in 2000, funded primarily by international foundations including the European Union and press freedom organisations. It focuses on human rights, press freedom, minority rights, and civil society in Turkey and publishes in Turkish, English, and Kurdish. Bianet is a member of the European Federation of Journalists and operates under rigorous editorial independence standards. It has maintained editorial independence under significant legal and political pressure throughout the Erdoğan era and is widely cited as a reliable independent source for Turkish civil society and human rights reporting."
+    },
+    {
+      "name": "TÜBİTAK — Türkiye Bilimsel ve Teknolojik Araştırma Kurumu",
+      "domain": "tubitak.gov.tr",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "TÜBİTAK is Turkey's national research funding and science agency, operating under the Presidency of Turkey. Under the Erdoğan government, TÜBİTAK's independence was severely compromised following the 2016 coup attempt: hundreds of scientists were dismissed under emergency decrees, politically affiliated appointments replaced independent academic leadership, and research priority decisions have been documented as reflecting government ideological preferences. Academic freedom organisations have documented the erosion of TÜBİTAK's operational independence. Its grant data and official science statistics are primary official records, but its scientific advisory outputs and research direction cannot be treated as independent of government.",
+      "country": "TR",
+      "region": "Middle East"
+    },
+    {
+      "name": "UAE Government Portal",
+      "domain": "uae.gov.ae",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "uae.gov.ae is the official portal of the Government of the United Arab Emirates, operated by the UAE federal government under the authority of the Cabinet and the Federal National Council. The UAE is an absolute monarchy (federal constitutional monarchy) in which political authority is concentrated in the ruling families of the seven emirates, with no democratic accountability and no separation of editorial control between the government and its public communications. Official statistics, policy announcements, and government data published on this portal are primary official records of the UAE government but are not independent of the political direction of the ruling authorities. No opposition political activity or independent media criticism of the ruling families is permitted in the UAE.",
+      "country": "AE",
+      "region": "Middle East"
+    },
+    {
+      "name": "Saudi Arabia Government Portal",
+      "domain": "gov.sa",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "gov.sa is the official portal of the Government of the Kingdom of Saudi Arabia, operated under the authority of the Saudi state. Saudi Arabia is an absolute monarchy with no elected parliament, no independent press, and no formal separation between government authority and the state's editorial control over official communications. Official statistics and policy data published on this portal are primary official records of the Saudi government but are not independent of political direction from the ruling Royal Family and government ministries. Data on politically sensitive topics — including oil production figures, human rights, demographic data, and official financial flows — should be cross-referenced with international sources (OPEC, IMF, UN bodies) where available.",
+      "country": "SA",
+      "region": "Middle East"
+    },
+    {
+      "name": "Al Jazeera",
+      "domain": "aljazeera.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Al Jazeera is a major international news network headquartered in Doha, Qatar, and fully funded by the Qatari state through the Al Jazeera Media Network, which is owned by the Qatar government. While Al Jazeera English has established a reputation for quality international journalism and employs professional journalists, it is structurally not independent of the Qatari state: its budget, senior appointments, and ultimately its editorial priorities are subject to the direction of the Qatari ruling family. Coverage of Qatar's interests, the Gulf Cooperation Council's internal politics, and topics relevant to Qatari foreign policy (Hamas, Muslim Brotherhood, Turkey) has documented systematic bias. Al Jazeera's journalism on non-Qatar-relevant topics is generally of broadcast-quality standard, but its coverage of Gulf politics, Qatari interests, and issues where Qatar has a geopolitical stake must be cross-referenced with independent sources.",
+      "country": "QA",
+      "region": "Middle East"
+    },
+    {
+      "name": "Al Arabiya",
+      "domain": "alarabiya.net",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "Al Arabiya is a major Arabic-language satellite news channel headquartered in Dubai Media City, UAE, owned by MBC Group, which is closely connected to the Saudi Royal Family. Al Arabiya was established in 2003 as a direct counterweight to Al Jazeera, representing Saudi and Gulf Cooperation Council interests. It is not editorially independent of Saudi political direction: its coverage of Saudi policy, the Gulf rivalry with Qatar, the Yemen conflict, and Iran systematically reflects Saudi government positions. Reliable as a primary source for understanding official Saudi and UAE perspectives on regional events; not independent for assessing events where Saudi or UAE interests are directly involved.",
+      "country": "SA",
+      "region": "Middle East"
+    },
+    {
+      "name": "Statistics Bureau of Japan (統計局)",
+      "domain": "stat.go.jp",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia"
+    },
+    {
+      "name": "National Diet Library Japan (国立国会図書館)",
+      "domain": "ndl.go.jp",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia",
+      "independence_note": "The National Diet Library (NDL) is Japan's national library, established by the National Diet Library Act of 1948. It serves as the official archive and research institution for the National Diet (Japan's parliament) and operates with institutional independence from the executive branch under the Diet's authority. Its collections, legislative records, and digital archives are the authoritative primary source for Japanese legislative history, official publications, and documentary heritage. No documented government executive direction over archival or research decisions."
+    },
+    {
+      "name": "House of Representatives Japan (衆議院)",
+      "domain": "shugiin.go.jp",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia"
+    },
+    {
+      "name": "NHK — Japan Broadcasting Corporation (日本放送協会)",
+      "domain": "nhk.or.jp",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia",
+      "independence_note": "NHK (Nippon Hōsō Kyōkai) is Japan's national public broadcaster, established under the Broadcast Act of 1950. It is funded primarily through mandatory licence fees rather than government appropriations, providing some structural financial independence. NHK operates under a Board of Governors with editorial independence provisions, though critics have documented instances of self-censorship on politically sensitive topics under LDP government pressure. It is widely regarded as the most authoritative and reliable broadcast news source in Japan for domestic and international reporting. No documented systematic government direction over general news content, though sensitivity around Japan's wartime history and certain domestic political topics has been noted."
+    },
+    {
+      "name": "Asahi Shimbun (朝日新聞)",
+      "domain": "asahi.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia",
+      "independence_note": "The Asahi Shimbun is one of Japan's largest and most influential national newspapers, founded in 1879. It is published by Asahi Shimbun Company, a privately held media group with no government or political party ownership. The Asahi has a centre-left editorial orientation and is known for investigative journalism and critical coverage of government policy, including Japan's wartime history. It is widely regarded as one of Japan's newspapers of record alongside the Yomiuri Shimbun. No documented political party direction over editorial content."
+    },
+    {
+      "name": "JSPS — Japan Society for the Promotion of Science (日本学術振興会)",
+      "domain": "jsps.go.jp",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "JP",
+      "region": "Asia",
+      "independence_note": "The Japan Society for the Promotion of Science (JSPS) is a quasi-governmental independent administrative institution established under Japanese law, responsible for administering competitive research grants (Grants-in-Aid for Scientific Research / KAKENHI), supporting international scientific exchange, and promoting peer review. Grant allocation decisions are made by peer-review panels following academic standards. JSPS is the authoritative source for Japanese competitive research funding data. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "National Assembly of the Republic of Korea (대한민국 국회)",
+      "domain": "assembly.go.kr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "KR",
+      "region": "Asia"
+    },
+    {
+      "name": "KBS — Korean Broadcasting System (한국방송공사)",
+      "domain": "kbs.co.kr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "KR",
+      "region": "Asia",
+      "independence_note": "KBS (Korean Broadcasting System) is South Korea's national public broadcaster, established under the Korean Broadcasting Act. It is funded through a combination of licence fees and government subsidies. KBS operates under a Board of Directors with editorial independence provisions, though South Korean public broadcasting has historically been subject to political pressure from government appointees. KBS is widely regarded as a reliable mainstream news source for domestic and international reporting, though independence of politically sensitive coverage should be assessed contextually. No documented systematic editorial direction from the current government."
+    },
+    {
+      "name": "Hankyoreh (한겨레)",
+      "domain": "hankyoreh.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "KR",
+      "region": "Asia",
+      "independence_note": "The Hankyoreh is a South Korean national newspaper founded in 1988 by a cooperative of journalists and citizens as an alternative to the government-influenced press of the military era. It is owned by a readers' and workers' cooperative, providing structural independence from chaebol or government ownership. It has a progressive editorial orientation and has maintained editorial independence throughout South Korea's democratic history. No documented political party ownership or direction. Widely cited as one of South Korea's newspapers of record for political and social reporting."
+    },
+    {
+      "name": "NRF — National Research Foundation of Korea (한국연구재단)",
+      "domain": "nrf.re.kr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "KR",
+      "region": "Asia",
+      "independence_note": "The National Research Foundation of Korea is South Korea's primary public research funding agency, established in 2009 through merger of three predecessor agencies. It operates under the Ministry of Science and ICT with grant allocation governed by peer-review panels following international standards. It is the authoritative source for South Korean competitive research funding data. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "Springer (Springer Nature)",
+      "domain": "springer.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Springer is a major academic publisher operating under Springer Nature (majority owned by Holtzbrinck Publishing Group). It publishes thousands of peer-reviewed journals and books across natural sciences, social sciences, and medicine. Springer journals employ editorial peer-review processes governed by independent academic editors; no government or political actor holds editorial direction over individual journal content. Individual papers should be evaluated on their methodology, journal impact factor, and replication status. Springer's peer-reviewed journals are a high-quality secondary source for academic research across disciplines."
+    },
+    {
+      "name": "Wiley",
+      "domain": "wiley.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Wiley (John Wiley & Sons) is a major international academic publisher, founded in 1807 and publicly listed on the NYSE. It publishes thousands of peer-reviewed journals across sciences, social sciences, and humanities, including many flagship society journals. Wiley journal editorial decisions are made by independent academic editors following peer-review standards, with no government or political direction. Individual papers require standard evaluation of methodology and replication. Wiley's peer-reviewed journals are a high-quality secondary source for academic research."
+    },
+    {
+      "name": "Taylor & Francis (Tandfonline)",
+      "domain": "tandfonline.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Taylor & Francis (operating its journal platform as tandfonline.com) is a major academic publisher, part of Informa PLC (a publicly listed UK information company). It publishes thousands of peer-reviewed journals across humanities, social sciences, natural sciences, and technology. Editorial decisions are made by independent academic editors following peer-review standards. No government or political direction over editorial content. Individual papers require standard evaluation of methodology and replication status. Taylor & Francis journals are a high-quality secondary source particularly strong in social sciences and humanities."
+    },
+    {
+      "name": "Financial Times",
+      "domain": "ft.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The Financial Times is one of the world's leading business and financial newspapers, founded in London in 1888. Since 2015 it has been owned by Nikkei Inc., a Japanese media group. The FT operates under an editorial independence charter and has maintained its journalistic standards and editorial direction through the ownership change. It has a pro-market, internationalist editorial orientation and is widely regarded as one of the world's most authoritative sources for economic, financial, and international political news. No documented political party direction over editorial content."
+    },
+    {
+      "name": "The Economist",
+      "domain": "economist.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "The Economist is a leading British weekly news magazine and newspaper, founded in 1843. It is published by The Economist Group, which is partly owned by Pearson plc and partly by members of the Agnelli family (through Exor), with editorial governance structured to protect independence from major shareholders. The Economist has a classical liberal, pro-free-market editorial orientation and consistently applies the same analytical standards across the political spectrum. It publishes rigorous data journalism through The Economist Intelligence Unit and its data team. No documented political party direction over editorial content. Widely cited as a high-quality secondary source for global economics, politics, and international affairs."
     }
   ]
 }

@@ -344,6 +344,485 @@
       "counts_for_threshold": true,
       "country": "IS",
       "region": "Europe"
+    },
+    {
+      "name": "Parlamento Italiano",
+      "domain": "parlamento.it",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe"
+    },
+    {
+      "name": "CNR — Consiglio Nazionale delle Ricerche",
+      "domain": "cnr.it",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe",
+      "independence_note": "The Consiglio Nazionale delle Ricerche is Italy's primary public research institution, founded in 1923. It operates as a national public research body (ente pubblico di ricerca) under the supervision of the Ministry of University and Research, but research direction and publication are governed by elected scientific committees following peer-review standards. Its research covers natural sciences, social sciences, and humanities across over 100 institutes. No documented political interference with research outputs. Authoritative primary source for Italian publicly funded research data and scientific infrastructure."
+    },
+    {
+      "name": "Corriere della Sera",
+      "domain": "corriere.it",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe",
+      "independence_note": "Corriere della Sera is Italy's largest-circulation daily newspaper, founded in 1876 and published by RCS MediaGroup. It has a centre-liberal editorial orientation and operates under standard Italian press freedom protections. RCS MediaGroup is a publicly listed company with no controlling political party ownership. Widely regarded as one of Italy's leading newspapers of record. No documented political party direction over editorial content."
+    },
+    {
+      "name": "La Repubblica",
+      "domain": "repubblica.it",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "IT",
+      "region": "Europe",
+      "independence_note": "La Repubblica is one of Italy's leading national daily newspapers, founded in 1976. Since 2020 it has been owned by GEDI Gruppo Editoriale, controlled by John Elkann's Exor holding company. It has a centre-left editorial orientation and operates under standard Italian press freedom protections. No documented political party ownership or direction over editorial content. Widely cited as one of Italy's newspapers of record."
+    },
+    {
+      "name": "Congreso de los Diputados — Spanish Congress of Deputies",
+      "domain": "congreso.es",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe"
+    },
+    {
+      "name": "CSIC — Consejo Superior de Investigaciones Científicas",
+      "domain": "csic.es",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe",
+      "independence_note": "The Consejo Superior de Investigaciones Científicas is Spain's main public research body, founded in 1939. It is the largest public research institution in Spain and one of the largest in Europe, operating under the Ministry of Science. Research direction and publications are governed by scientific committees following peer-review standards. No documented political interference with research outputs. Authoritative primary source for Spanish publicly funded research."
+    },
+    {
+      "name": "El País",
+      "domain": "elpais.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe",
+      "independence_note": "El País is Spain's leading national newspaper, founded in 1976 and published by PRISA. It has a centre-left editorial orientation and operates under standard Spanish press freedom protections. PRISA is a publicly listed media group. El País is widely regarded as one of Spain's newspapers of record and among the most-read Spanish-language newspapers globally. No documented political party direction over editorial content."
+    },
+    {
+      "name": "El Mundo",
+      "domain": "elmundo.es",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "ES",
+      "region": "Europe",
+      "independence_note": "El Mundo is one of Spain's leading national newspapers, founded in 1989 and published by Unidad Editorial (owned by the Italian RCS MediaGroup). It has a centre-right editorial orientation and operates under standard Spanish press freedom protections. No documented political party direction over editorial content. Widely cited as one of Spain's newspapers of record."
+    },
+    {
+      "name": "Assembleia da República — Portuguese Parliament",
+      "domain": "parlamento.pt",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PT",
+      "region": "Europe"
+    },
+    {
+      "name": "FCT — Fundação para a Ciência e a Tecnologia",
+      "domain": "fct.pt",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PT",
+      "region": "Europe",
+      "independence_note": "The Fundação para a Ciência e a Tecnologia is Portugal's national research funding agency, established in 1997. It operates as a public foundation under the supervision of the Ministry of Science and Technology, with grant allocation governed by peer-review committees following international standards. It is the authoritative source for Portuguese research funding data, funded projects, and scientific infrastructure statistics. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "Público",
+      "domain": "publico.pt",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PT",
+      "region": "Europe",
+      "independence_note": "Público is a Portuguese national daily newspaper, founded in 1990 and owned by Sonaecom (Sonae group). It has a centre-left editorial orientation and operates under standard Portuguese press freedom protections. No documented political party direction over editorial content. Widely cited as one of Portugal's newspapers of record."
+    },
+    {
+      "name": "RTP — Rádio e Televisão de Portugal",
+      "domain": "rtp.pt",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PT",
+      "region": "Europe",
+      "independence_note": "RTP is Portugal's public service broadcaster, established in 1955 and fully owned by the Portuguese state. It operates under a public service contract with an editorial independence guarantee, with a statutory mandate to serve the public interest without political direction. Editorial decisions are governed by professional journalistic standards under the RTP editorial guidelines. While state ownership creates a structural tension, no systematic documentary evidence of government direction over news content has been established. Comparable to other Western European public broadcasters."
+    },
+    {
+      "name": "Tweede Kamer — Dutch House of Representatives",
+      "domain": "tweedekamer.nl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "KNAW — Koninklijke Nederlandse Akademie van Wetenschappen",
+      "domain": "knaw.nl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe",
+      "independence_note": "The Royal Netherlands Academy of Arts and Sciences (KNAW) is the national academy of the Netherlands, founded in 1808. It is a self-governing learned society under Dutch public law, with research direction and advisory opinions governed by elected members following academic standards. It advises the government and parliament on science policy but its advisory outputs are independent of political direction. Authoritative source for Dutch academic research and scientific advisory opinions."
+    },
+    {
+      "name": "NOS — Nederlandse Omroep Stichting",
+      "domain": "nos.nl",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe",
+      "independence_note": "NOS is the main public broadcaster of the Netherlands, established under the Dutch Media Act. It operates under a statutory editorial independence guarantee and its news operations are governed by professional journalistic standards without government direction. NOS is the primary news provider within the Dutch public broadcasting system (NPO) and is widely regarded as a reliable source for Dutch and international news. No documented government direction over news content."
+    },
+    {
+      "name": "NRC Handelsblad",
+      "domain": "nrc.nl",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "NL",
+      "region": "Europe",
+      "independence_note": "NRC Handelsblad is one of the Netherlands' leading quality newspapers, founded in 1970 through merger of Nieuwe Rotterdamsche Courant (1844) and Algemeen Handelsblad (1828). It is published by NRC Media. It has a liberal editorial orientation and operates under standard Dutch press freedom protections. No documented political party direction over editorial content. Widely cited as one of the Netherlands' newspapers of record."
+    },
+    {
+      "name": "VRT — Vlaamse Radio- en Televisieomroeporganisatie",
+      "domain": "vrt.be",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "BE",
+      "region": "Europe",
+      "independence_note": "VRT is the Flemish public broadcaster of Belgium, established under Flemish government authority. It operates under a management contract with an editorial independence clause, with news operations governed by professional journalistic standards. VRT is the primary public broadcaster for the Dutch-speaking community in Belgium. No documented government direction over news content. Comparable to other Western European public broadcasters."
+    },
+    {
+      "name": "Sejm Rzeczypospolitej Polskiej — Polish Sejm",
+      "domain": "sejm.gov.pl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PL",
+      "region": "Europe"
+    },
+    {
+      "name": "PAN — Polska Akademia Nauk",
+      "domain": "pan.pl",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PL",
+      "region": "Europe",
+      "independence_note": "The Polish Academy of Sciences (PAN) is Poland's national academy of sciences, founded in 1952. It is a self-governing scientific institution under Polish public law, with research direction governed by elected members following peer-review standards. It operates a network of research institutes and is the authoritative source for Polish publicly funded academic research. No documented political interference with research outputs since Poland's democratic transition."
+    },
+    {
+      "name": "Gazeta Wyborcza",
+      "domain": "wyborcza.pl",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PL",
+      "region": "Europe",
+      "independence_note": "Gazeta Wyborcza is Poland's leading liberal daily newspaper, founded in 1989 and published by Agora SA. It has a centre-left, pro-European editorial orientation and operated as one of Poland's most prominent independent newspapers throughout the Law and Justice (PiS) government era 2015–2023, resisting state advertising boycotts and legal pressure. No documented political party ownership. Widely cited as a primary source for Polish political and social reporting."
+    },
+    {
+      "name": "TVN24",
+      "domain": "tvn24.pl",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "PL",
+      "region": "Europe",
+      "independence_note": "TVN24 is Poland's leading independent news channel, launched in 2001 by TVN (owned by Warner Bros. Discovery). It maintained editorial independence throughout the Law and Justice (PiS) government era 2015–2023 and was a target of the 2021 media legislation (lex TVN). No documented political party ownership. Widely regarded as the leading independent broadcaster in Poland."
+    },
+    {
+      "name": "Riksdagen — Swedish Parliament",
+      "domain": "riksdagen.se",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "KVA — Kungliga Vetenskapsakademien (Royal Swedish Academy of Sciences)",
+      "domain": "kva.se",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe",
+      "independence_note": "The Royal Swedish Academy of Sciences is an independent, non-governmental learned society founded in 1739. It is responsible for selecting the Nobel Prizes in Physics and Chemistry. It operates as a self-governing academy under Swedish civil law, with scientific decisions made by elected members following academic standards. No government direction over research or prize selection. Authoritative source for Swedish and international scientific advisory opinions."
+    },
+    {
+      "name": "SVT — Sveriges Television",
+      "domain": "svt.se",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe",
+      "independence_note": "SVT is Sweden's public service television broadcaster, operated by Sveriges Television AB, a publicly owned company under the Swedish Broadcasting Act. It operates under a licence agreement with an editorial independence clause and is governed by professional journalistic standards without government direction over news content. SVT is widely regarded as one of Sweden's most reliable news sources. No documented government direction over news content."
+    },
+    {
+      "name": "Dagens Nyheter",
+      "domain": "dn.se",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "SE",
+      "region": "Europe",
+      "independence_note": "Dagens Nyheter is Sweden's largest-circulation morning newspaper, founded in 1864 and published by Bonnier News. It has a liberal editorial orientation and operates under standard Swedish press freedom protections. No documented political party direction over editorial content. Widely cited as one of Sweden's newspapers of record."
+    },
+    {
+      "name": "Folketing — Danish Parliament",
+      "domain": "ft.dk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DK",
+      "region": "Europe"
+    },
+    {
+      "name": "DR — Danmarks Radio",
+      "domain": "dr.dk",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DK",
+      "region": "Europe",
+      "independence_note": "DR (Danmarks Radio) is Denmark's national public broadcaster, established in 1925. It operates under the Danish Broadcasting Act with an editorial independence charter and is governed by a board with no government direction over news content. DR is widely regarded as Denmark's most authoritative news source. No documented government direction over editorial content."
+    },
+    {
+      "name": "Politiken",
+      "domain": "politiken.dk",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DK",
+      "region": "Europe",
+      "independence_note": "Politiken is one of Denmark's leading national newspapers, founded in 1884 and published by JP/Politikens Hus. It has a social-liberal editorial orientation and operates under standard Danish press freedom protections. No documented political party direction over editorial content. Widely cited as one of Denmark's newspapers of record."
+    },
+    {
+      "name": "DFF — Danmarks Frie Forskningsfond (Independent Research Fund Denmark)",
+      "domain": "dff.dk",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DK",
+      "region": "Europe",
+      "independence_note": "Danmarks Frie Forskningsfond (Independent Research Fund Denmark) is Denmark's primary public research funding body for investigator-driven research, established under Danish law. It operates with independent scientific committees making grant allocation decisions through peer review, without political direction over individual funding outcomes. Authoritative primary source for Danish research funding data and grant statistics."
+    },
+    {
+      "name": "Eduskunta — Finnish Parliament",
+      "domain": "eduskunta.fi",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FI",
+      "region": "Europe"
+    },
+    {
+      "name": "Yle — Yleisradio (Finnish Broadcasting Company)",
+      "domain": "yle.fi",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FI",
+      "region": "Europe",
+      "independence_note": "Yle (Yleisradio) is Finland's national public broadcaster, established in 1926. It operates under the Act on Yleisradio Oy with a statutory editorial independence clause and is governed by a board appointed under parliamentary oversight rather than government direction. Yle is widely regarded as Finland's most authoritative news source. No documented government direction over news content."
+    },
+    {
+      "name": "Helsingin Sanomat",
+      "domain": "hs.fi",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FI",
+      "region": "Europe",
+      "independence_note": "Helsingin Sanomat is Finland's largest-circulation newspaper, founded in 1889 and published by Sanoma Media Finland. It has a liberal editorial orientation and operates under standard Finnish press freedom protections. No documented political party direction over editorial content. Widely cited as Finland's newspaper of record."
+    },
+    {
+      "name": "Academy of Finland (Suomen Akatemia)",
+      "domain": "aka.fi",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FI",
+      "region": "Europe",
+      "independence_note": "The Academy of Finland is the primary Finnish public research funding body, operating under the Ministry of Education and Culture but with grant allocation governed by peer-review panels following international standards. It is the authoritative source for Finnish research funding data and scientific infrastructure statistics. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "PSP — Poslanecká sněmovna (Czech Chamber of Deputies)",
+      "domain": "psp.cz",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CZ",
+      "region": "Europe"
+    },
+    {
+      "name": "ČT24 — Czech Television News",
+      "domain": "ct24.cz",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CZ",
+      "region": "Europe",
+      "independence_note": "ČT24 is the 24-hour news channel of Czech Television (Česká televize), the Czech public service broadcaster established under the Czech Television Act. Czech Television operates under a Council of Czech Television with a statutory editorial independence clause. No documented systematic government direction over news content. Widely regarded as a reliable news source in the Czech Republic."
+    },
+    {
+      "name": "iROZHLAS — Czech Radio Online",
+      "domain": "irozhlas.cz",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CZ",
+      "region": "Europe",
+      "independence_note": "iROZHLAS is the online news portal of Czech Radio (Český rozhlas), the Czech public service radio broadcaster established under the Czech Radio Act. Czech Radio operates with a statutory editorial independence clause and a Council of Czech Radio providing oversight. No documented systematic government direction over news content. iROZHLAS is known for investigative journalism and original reporting."
+    },
+    {
+      "name": "AV ČR — Akademie věd České republiky (Czech Academy of Sciences)",
+      "domain": "avcr.cz",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CZ",
+      "region": "Europe",
+      "independence_note": "The Czech Academy of Sciences is the Czech Republic's national academy and leading non-university public research institution, established in 1992 as successor to the Czechoslovak Academy of Sciences. It is a self-governing association of research institutes under Czech public law, with research direction governed by elected members following peer-review standards. No documented political interference with research outputs. Authoritative primary source for Czech publicly funded research."
+    },
+    {
+      "name": "Camera Deputaților — Romanian Chamber of Deputies",
+      "domain": "cdep.ro",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "RO",
+      "region": "Europe"
+    },
+    {
+      "name": "TVR — Televiziunea Română (Romanian Public Television)",
+      "domain": "tvr.ro",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "RO",
+      "region": "Europe",
+      "independence_note": "TVR (Televiziunea Română) is Romania's public service broadcaster, established under Law 41/1994. It operates under parliamentary oversight with a statutory editorial independence clause. While Romanian public media has faced political pressures historically, TVR's formal structure provides editorial independence protections comparable to other Central European public broadcasters. Independence should be assessed on a case-by-case basis for politically sensitive coverage."
+    },
+    {
+      "name": "Digi24",
+      "domain": "digi24.ro",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "RO",
+      "region": "Europe",
+      "independence_note": "Digi24 is a Romanian independent news channel launched in 2012, owned by Digi Communications NV (a publicly listed Romanian telecom group). It has established a reputation as one of Romania's most reliable independent news sources and is widely regarded as the leading quality news broadcaster in Romania. No documented political party ownership or systematic editorial direction."
+    },
+    {
+      "name": "UEFISCDI — Executive Agency for Higher Education, Research, Development and Innovation Funding",
+      "domain": "uefiscdi.gov.ro",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "RO",
+      "region": "Europe",
+      "independence_note": "UEFISCDI is Romania's primary public research funding agency, operating under the Romanian Ministry of Education. Grant allocation is governed by peer-review panels following international standards. It is the authoritative source for Romanian research funding data and scientific program statistics. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "Hellenic Parliament (Βουλή των Ελλήνων)",
+      "domain": "hellenicparliament.gr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GR",
+      "region": "Europe"
+    },
+    {
+      "name": "ERT — Ellinikí Radiofonía Tileórasi (Greek Public Broadcaster)",
+      "domain": "ert.gr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GR",
+      "region": "Europe",
+      "independence_note": "ERT is Greece's public service broadcaster, re-established in 2015 after the Samaras government's controversial shutdown in 2013. It operates under a statutory editorial independence charter. While Greek public media has historically faced political pressures, ERT's formal structure provides editorial independence protections. Independence should be verified on a case-by-case basis for politically sensitive coverage."
+    },
+    {
+      "name": "Kathimerini",
+      "domain": "kathimerini.gr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GR",
+      "region": "Europe",
+      "independence_note": "Kathimerini is one of Greece's leading quality newspapers, founded in 1919. It is published by Kathimerini SA and has a centre-right, pro-European editorial orientation. It operates under standard Greek press freedom protections and publishes an English-language edition (ekathimerini.com). Widely regarded as one of Greece's newspapers of record for politics, economics, and foreign affairs."
+    },
+    {
+      "name": "ELIDEK — Hellenic Foundation for Research and Innovation",
+      "domain": "elidek.gr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "GR",
+      "region": "Europe",
+      "independence_note": "ELIDEK (Hellenic Foundation for Research and Innovation) is Greece's primary public research funding body for basic research, established in 2016. It operates under the Ministry of Education and Religious Affairs but with grant allocation governed by international peer-review panels. Authoritative source for Greek research funding data. No documented political interference with individual grant decisions."
+    },
+    {
+      "name": "Országgyűlés — Hungarian National Assembly",
+      "domain": "parlament.hu",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "HU",
+      "region": "Europe",
+      "independence_note": "The Hungarian National Assembly (Országgyűlés) is Hungary's unicameral parliament. Following the 2026 elections in which the Magyar Péter-led opposition won a parliamentary majority, Hungary has re-entered a period of democratic governance with a parliament no longer under Fidesz supermajority control. Parliamentary records are primary official sources for legislative acts, debates, and official decisions."
+    },
+    {
+      "name": "HVG — Heti Világgazdaság",
+      "domain": "hvg.hu",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "HU",
+      "region": "Europe",
+      "independence_note": "HVG (Heti Világgazdaság) is Hungary's leading independent weekly news and business magazine, founded in 1979. It maintained editorial independence throughout the Orbán government era (2010–2026), resisting state advertising pressure and operating as one of the few remaining independent Hungarian media outlets. Published by HVG Kiadó Zrt with no political party ownership. Widely cited as a reliable source for Hungarian political and economic reporting."
+    },
+    {
+      "name": "Telex",
+      "domain": "telex.hu",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "HU",
+      "region": "Europe",
+      "independence_note": "Telex is a Hungarian independent online news outlet founded in 2020 by former staff of Index.hu following the politically motivated editor-in-chief dismissal that triggered a mass resignation. It was established as a reader-funded, editorially independent publication and became one of Hungary's most important independent news sources during the Orbán era. No political party ownership. Reader-funded model supports editorial independence."
+    },
+    {
+      "name": "MTA — Magyar Tudományos Akadémia (Hungarian Academy of Sciences)",
+      "domain": "mta.hu",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "HU",
+      "region": "Europe",
+      "independence_note": "The Hungarian Academy of Sciences (MTA) is Hungary's national academy of sciences, founded in 1825. In 2019, the Orbán government transferred MTA's research network to a new entity (ELKH, later HUN-REN), reducing the Academy's direct control over research institutes. Despite this, MTA continues to function as a self-governing learned society with elected members following academic standards. Its scientific publications and advisory outputs are produced independently of political direction. The institutional restructuring should be noted as context for assessing its independence from government."
     }
   ]
 }

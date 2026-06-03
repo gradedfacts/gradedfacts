@@ -61,6 +61,26 @@
       "is_independent": true,
       "country": "FR",
       "region": "Europe"
+    },
+    {
+      "name": "CNRS — Centre National de la Recherche Scientifique",
+      "domain": "cnrs.fr",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FR",
+      "region": "Europe",
+      "independence_note": "The CNRS is France's national centre for scientific research, established in 1939 and the largest fundamental research organisation in Europe. It operates as a public establishment of a scientific and technological character (EPST) under joint supervision of the Ministry of Higher Education and Research and the Ministry of Economy, but research direction and publication decisions are governed by elected scientific committees following peer-review standards. No documented political interference with research outputs. Its research units are embedded in universities and grandes écoles across France and it is the primary institutional source for French academic research data, publications, and scientific infrastructure."
+    },
+    {
+      "name": "Libération",
+      "domain": "liberation.fr",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "FR",
+      "region": "Europe",
+      "independence_note": "Libération is a French national daily newspaper founded in 1973 by Jean-Paul Sartre and Serge July. It has a centre-left editorial orientation and operates under standard French press freedom protections. Since 2014 it has been majority owned by Patrick Drahi's Altice group, with an editorial independence charter in place. While the ownership change introduced commercial pressures, no documented political party direction over news content has been established. Widely cited as one of France's leading newspapers of record."
     }
   ]
 }

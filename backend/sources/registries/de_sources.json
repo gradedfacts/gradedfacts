@@ -150,6 +150,96 @@
       "country": "DE",
       "region": "Europe",
       "independence_note": "The University of Konstanz is a public research university in Baden-Württemberg, Germany, founded in 1966 and consistently ranked among Germany's excellence universities. It operates under the Baden-Württemberg Higher Education Act with statutory academic freedom and independence from government editorial direction on research. Particularly noted for its research in law, political science, economics, social sciences, and natural sciences. Research outputs are produced under peer-reviewed academic standards with no documented political interference. Widely cited in international academic literature."
+    },
+    {
+      "name": "Deutsche Forschungsgemeinschaft (DFG)",
+      "domain": "dfg.de",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The Deutsche Forschungsgemeinschaft is Germany's central self-governing research funding organisation, founded in 1920 and re-established in 1951. It is constituted as an association under private law, governed by its member universities and research institutions, and funded jointly by the federal government and Länder under the Joint Science Conference (GWK). Grant allocation decisions are made by peer-review committees of elected scientists with no documented political direction over individual funding decisions. The DFG operates under a statutory independence guarantee and is the primary authoritative source for data on German research funding priorities, funded projects, and grant statistics."
+    },
+    {
+      "name": "Deutsches Historisches Museum (DHM)",
+      "domain": "dhm.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The Deutsches Historisches Museum in Berlin is a federally funded foundation (Stiftung des öffentlichen Rechts) established in 1987, governed by an independent Foundation Council. Its scholarly and curatorial activities operate under academic standards with no documented political direction over research or exhibition content. Widely cited as an authoritative source for German and European historical documentation, primary source collections, and educational materials on modern German history."
+    },
+    {
+      "name": "NS-Dokumentationszentrum München",
+      "domain": "nsdoku.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The NS-Dokumentationszentrum München (Documentation Centre for the History of National Socialism) is an independent documentation centre operated by the City of Munich, opened in 2015. Its research and education activities are conducted by historians following academic standards. The Centre documents the history of National Socialism in Munich and Bavaria and is a recognised source for primary documentation on the origins and development of the Nazi movement. No documented political interference with scholarly content."
+    },
+    {
+      "name": "Deutsche Biographie (Bayerische Akademie der Wissenschaften)",
+      "domain": "deutsche-biographie.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Deutsche Biographie is the authoritative German national biographical reference, published by the Bayerische Akademie der Wissenschaften (Bavarian Academy of Sciences and Humanities) as a joint project with the Berlin-Brandenburgische Akademie der Wissenschaften. It integrates the Neue Deutsche Biographie and Allgemeine Deutsche Biographie and is the standard scholarly reference for German-speaking biographical history. The Bavarian Academy of Sciences operates as a self-governing learned society under Bavarian public law, with editorial decisions made by elected scholars following academic peer-review standards and no documented political direction."
+    },
+    {
+      "name": "LeMO — Lebendiges Museum Online",
+      "domain": "lemo.dhm.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "LeMO (Lebendiges Museum Online) is a joint project of the Deutsches Historisches Museum (DHM), the Haus der Geschichte der Bundesrepublik Deutschland, and the Bundesarchiv. It provides a comprehensive online reference for German history from the mid-19th century to the present, drawing on primary sources held by the cooperating institutions. All three partner institutions operate under independent scholarly mandates. LeMO content is produced by professional historians and archivists with no documented political editorial interference."
+    },
+    {
+      "name": "Umweltbundesamt (UBA) — German Federal Environment Agency",
+      "domain": "umweltbundesamt.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Umweltbundesamt is the German federal agency for environmental protection, operating under the authority of the Federal Ministry for the Environment (BMUV). It employs career scientists and follows established environmental monitoring and assessment methodology, and its emissions, air quality, and climate data are authoritative official records. However, as a federal agency under direct ministerial supervision, its public communications and policy recommendations reflect the priorities of the supervising ministry. Reliable as a primary source for official German environmental statistics, emissions inventories, and monitoring data; not fully independent of the executive.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Agora Energiewende",
+      "domain": "agora-energiewende.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Agora Energiewende is an independent energy policy think tank founded in 2012, funded by the European Climate Foundation and Stiftung Mercator. It focuses on German and European energy transition policy and publishes widely cited analyses of electricity markets, renewables deployment, and emissions data. It operates without party-political funding and has no documented editorial direction from political actors. Its annual Energiewende report is a standard reference for German energy statistics. Independence is maintained through foundation governance rather than government or industry funding."
+    },
+    {
+      "name": "Frankfurter Allgemeine Zeitung (FAZ)",
+      "domain": "faz.net",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "The Frankfurter Allgemeine Zeitung is one of Germany's leading national newspapers, founded in 1949. It is published by FAZIT-Stiftung, an independent non-profit foundation that owns the majority stake, structurally separating editorial operations from commercial or political ownership influence. The FAZ has a centre-right editorial orientation but operates under standard press freedom protections. It is widely regarded as one of Germany's most authoritative newspapers for politics, economics, and culture. No documented political party ownership or editorial direction."
+    },
+    {
+      "name": "Tagesschau (ARD)",
+      "domain": "tagesschau.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Tagesschau is the flagship news programme and digital news portal of ARD (Arbeitsgemeinschaft der öffentlich-rechtlichen Rundfunkanstalten der Bundesrepublik Deutschland), Germany's first public broadcasting consortium. ARD operates under the Interstate Broadcasting Treaty (Rundfunkstaatsvertrag) with statutory editorial independence from federal and state governments. Tagesschau is produced by NDR (Norddeutscher Rundfunk) and is the most-watched news programme in Germany. Editorial decisions are governed by professional journalistic standards under the ARD editorial guidelines. No documented government direction over news content."
     }
   ]
 }
