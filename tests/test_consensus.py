@@ -321,6 +321,70 @@ class TestCorrectMistralRating:
         result = _correct_mistral_rating(args)
         assert result["rating"] == "verified"
 
+    # ── DEBUNKED → VERIFIED corrections ──────────────────────────────────────
+
+    @pytest.mark.parametrize("phrase,rationale_template", [
+        ("verified ist gerechtfertigt",   "Die Quellen belegen die Aussage. Verified ist gerechtfertigt."),
+        ("rating is verified",            "All three sources confirm the claim. Rating is verified."),
+        ("bewertung lautet verified",      "Die Fakten stützen die Behauptung. Bewertung lautet Verified."),
+        ("ist faktisch korrekt",          "Die Behauptung ist faktisch korrekt laut offiziellen Quellen."),
+        ("kann als verified eingestuft werden", "Die Behauptung kann als verified eingestuft werden."),
+        ("einstufung als verified",       "Nach Prüfung der Belege: Einstufung als Verified."),
+        ("the claim is correct",          "The claim is correct according to official statistics."),
+        ("die behauptung ist korrekt",    "Die Behauptung ist korrekt und durch Primärquellen belegt."),
+    ])
+    def test_debunked_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "debunked",
+            "rationale": rationale_template,
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "verified", (
+            f"Expected 'debunked' → 'verified' correction for phrase {phrase!r}"
+        )
+        # Original dict must not be mutated
+        assert args["rating"] == "debunked"
+
+    def test_debunked_without_verified_phrase_unchanged(self):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "debunked",
+            "rationale": "Two primary sources directly contradict the claim.",
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "debunked"
+
+    def test_debunked_correction_is_case_insensitive(self):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "debunked",
+            "rationale": "THE CLAIM IS CORRECT based on official records.",
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "verified"
+
+    def test_other_ratings_not_affected_by_verified_phrases(self):
+        """SPECULATIVE and MISSING ratings must not be changed even if rationale has verified phrases."""
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        for rating in ("speculative", "missing"):
+            args = {
+                "rating": rating,
+                "rationale": "The claim is correct but evidence is thin.",
+                "sources": [],
+            }
+            result = _correct_mistral_rating(args)
+            assert result["rating"] == rating, (
+                f"Rating {rating!r} must not be mutated by verified-phrase correction"
+            )
+
 
 # ── analyze_claim_with_consensus — helpers ────────────────────────────────────
 

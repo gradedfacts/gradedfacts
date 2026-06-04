@@ -78,23 +78,48 @@ _MISTRAL_DEBUNK_PHRASES: tuple[str, ...] = (
     "debunked",
 )
 
+# Phrases in a DEBUNKED rationale that reveal the underlying conclusion is actually VERIFIED.
+# Corrects the inverse Mistral inconsistency: structured field says DEBUNKED, prose says VERIFIED.
+_MISTRAL_VERIFIED_PHRASES: tuple[str, ...] = (
+    "verified ist gerechtfertigt",
+    "rating is verified",
+    "bewertung lautet verified",
+    "ist faktisch korrekt",
+    "kann als verified eingestuft werden",
+    "einstufung als verified",
+    "the claim is correct",
+    "die behauptung ist korrekt",
+)
+
 
 def _correct_mistral_rating(args: dict) -> dict:
-    """Override Mistral's 'verified' when the rationale text concludes the claim is false.
+    """Override Mistral's rating when the rationale prose contradicts the structured field.
 
-    Mistral occasionally emits VERIFIED in the structured rating field while its own
-    rationale prose reaches a debunked conclusion — a known model-level inconsistency.
+    Two known Mistral inconsistencies are corrected here:
+    - 'verified' + debunk prose → override to 'debunked'
+    - 'debunked' + verified prose → override to 'verified'
+
     Checking is case-insensitive; the args dict is not mutated (a new dict is returned).
     """
-    if args.get("rating", "").lower() != "verified":
-        return args
+    rating = args.get("rating", "").lower()
     rationale_lower = args.get("rationale", "").lower()
-    if any(phrase in rationale_lower for phrase in _MISTRAL_DEBUNK_PHRASES):
-        logger.warning(
-            "Mistral rating corrected: 'verified' → 'debunked' "
-            "(structured rating contradicts rationale prose)"
-        )
-        return {**args, "rating": "debunked"}
+
+    if rating == "verified":
+        if any(phrase in rationale_lower for phrase in _MISTRAL_DEBUNK_PHRASES):
+            logger.warning(
+                "Mistral rating corrected: 'verified' → 'debunked' "
+                "(structured rating contradicts rationale prose)"
+            )
+            return {**args, "rating": "debunked"}
+
+    if rating == "debunked":
+        if any(phrase in rationale_lower for phrase in _MISTRAL_VERIFIED_PHRASES):
+            logger.warning(
+                "Mistral rating corrected: 'debunked' → 'verified' "
+                "(structured rating contradicts rationale prose)"
+            )
+            return {**args, "rating": "verified"}
+
     return args
 
 
