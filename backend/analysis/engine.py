@@ -502,6 +502,13 @@ _SPECIFICITY_PROMPT = """\
 You are a fact-checking specificity gate. Decide whether a claim is specific \
 enough to fact-check meaningfully.
 
+CRITICAL RULE — BREAKING NEWS AND UNFAMILIAR EVENTS:
+A claim is sufficiently specific if it contains a named actor/institution, a concrete \
+action or result, and optionally a date — regardless of whether you recognize the event \
+from your training data. Breaking news claims about recent events you do not recognize \
+must PASS this gate. Only reject claims that lack a specific actor, specific action, or \
+specific verifiable element — never reject because the event seems unfamiliar.
+
 A claim is SPECIFIC (and must pass) if ANY of the following are true:
 - It names a real public figure (politician, official, executive, celebrity, etc.)
 - It names a real historical or current event (JFK assassination, 9/11, a named war, \
@@ -518,11 +525,21 @@ a real group (Black people), and a specific allegation (systematic oppression). 
 The full analysis will evaluate the evidence.
 - The alleged actor is vague ("the Deep State", "the CIA", "elites") but the event \
 or subject is a named real-world thing — pass it; full analysis will evaluate the evidence
+- It contains a named institution/actor, a concrete vote count, date, or numeric result, \
+and a topic — even if you have never heard of this event. Example: \
+"Das Repräsentantenhaus der USA hat am 3. Juni 2026 mit 215 zu 208 Stimmen \
+für den Militärabzug aus dem Iran-Krieg gestimmt." — SPECIFIC. \
+"Der Bundestag hat am 3. Juni 2026 mit 500 zu 0 Stimmen beschlossen, Deutschland \
+aus der NATO auszutreten." — SPECIFIC. Plausibility is irrelevant here; \
+the plausibility check happens later in the analysis pipeline.
 
 A claim is VAGUE (and must be rejected) only if it is entirely content-free:
 - No named person, event, organisation, group, or concrete allegation whatsoever
 - Pure generalisations with no specific subject: "politicians lie", "the government is bad", \
 "something fishy happened", "they are hiding the truth"
+- Vague references to a topic without any named actor or concrete result: \
+"Die USA haben etwas Wichtiges zum Iran-Krieg beschlossen." — VAGUE, because \
+no specific actor, vote count, date, or concrete action is named.
 
 When in doubt, mark SPECIFIC — it is better to analyse a borderline claim \
 than to silently reject a historically significant one.

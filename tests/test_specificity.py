@@ -317,6 +317,94 @@ def test_specific_claim_proceeds_to_full_pipeline():
     assert judgment.rating == EpistemicRating.VERIFIED
 
 
+# ── Breaking-news regression tests ───────────────────────────────────────────
+#
+# The gate must NEVER reject a claim just because the event is unknown to the
+# model. Only reject when the claim lacks a specific actor + specific action.
+
+def test_breaking_news_house_vote_iran_passes():
+    """
+    Precise breaking-news claim with date, institution, vote count, and topic
+    must PASS even though the event post-dates training data.
+    """
+    from backend.analysis import engine as eng
+
+    claim = (
+        "Das Repräsentantenhaus der USA hat am 3. Juni 2026 mit 215 zu 208 Stimmen "
+        "für den Militärabzug aus dem Iran-Krieg gestimmt."
+    )
+    fake_resp = _make_text_response("SPECIFIC")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, claim)
+
+    assert is_specific is True, f"Breaking-news claim must PASS specificity gate: {claim!r}"
+    assert rationale == ""
+
+
+def test_vague_iran_war_claim_fails():
+    """
+    A claim about the Iran war with no named actor, date, or concrete result
+    must FAIL the specificity gate.
+    """
+    from backend.analysis import engine as eng
+
+    claim = "Die USA haben etwas Wichtiges zum Iran-Krieg beschlossen."
+    fake_resp = _make_text_response("VAGUE")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, claim)
+
+    assert is_specific is False, f"Vague claim must FAIL specificity gate: {claim!r}"
+    assert len(rationale) > 0
+
+
+def test_breaking_news_bundestag_nato_passes():
+    """
+    Implausible-sounding but fully specific breaking-news claim (named institution,
+    date, vote count, topic) must PASS. Plausibility is checked later in the
+    analysis pipeline, never at the specificity gate.
+    """
+    from backend.analysis import engine as eng
+
+    claim = (
+        "Der Bundestag hat am 3. Juni 2026 mit 500 zu 0 Stimmen beschlossen, "
+        "Deutschland aus der NATO auszutreten."
+    )
+    fake_resp = _make_text_response("SPECIFIC")
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = fake_resp
+
+    is_specific, rationale = eng._check_specificity(mock_client, claim)
+
+    assert is_specific is True, (
+        f"Specific claim must PASS even if implausible — plausibility is not the gate's job: {claim!r}"
+    )
+    assert rationale == ""
+
+
+def test_specificity_prompt_covers_breaking_news_rule():
+    """
+    Regression guard: _SPECIFICITY_PROMPT must explicitly state that breaking-news
+    claims about unfamiliar events must pass, and must never reject based on
+    event familiarity.
+    """
+    from backend.analysis.engine import _SPECIFICITY_PROMPT
+
+    prompt_lower = _SPECIFICITY_PROMPT.lower()
+    assert "breaking news" in prompt_lower or "breaking-news" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must mention breaking news claims"
+    )
+    assert "training data" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must state that unfamiliarity from training data is not a rejection reason"
+    )
+    assert "plausibility" in prompt_lower or "plausible" in prompt_lower, (
+        "_SPECIFICITY_PROMPT must clarify that plausibility is checked elsewhere, not here"
+    )
+
+
 def test_specific_claim_uses_model_rating():
     """When the claim is specific, the model's explicit rating is honoured."""
     sources = [
