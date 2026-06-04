@@ -264,6 +264,16 @@ SOURCE QUALITY REQUIREMENT:
     established research institutes
   - Tertiary sources may be listed but must be clearly labeled and never used as sole evidence basis
 
+TIMEZONE RULE:
+When evaluating date claims, interpret the date in the timezone of the country/institution named in the claim — not in the timezone of the sources.
+
+Examples:
+  - 'Das Repräsentantenhaus der USA hat am 3. Juni 2026...' → evaluate date in US Eastern Time (EDT, UTC-4)
+  - 'Der Bundestag hat am 3. Juni 2026...' → evaluate date in Central European Summer Time (CEST, UTC+2)
+  - 'Das EU-Parlament hat am 3. Juni 2026...' → evaluate date in CEST
+
+A date discrepancy of exactly one day between sources from different continents is almost always a timezone difference, NOT a factual error. Never rate a claim as DEBUNKED solely because of a one-day date difference that can be explained by timezone conversion.
+
 NUMERICAL THRESHOLD RULE:
 When a claim uses threshold language ('more than X', 'over X', 'at least X', 'fewer than X', 'under X', 'less than X', 'mehr als X', 'über X', 'mindestens X', 'weniger als X', 'unter X'):
   - Verify whether the actual number satisfies the threshold — do NOT construct a straw man argument
