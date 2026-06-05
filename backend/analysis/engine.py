@@ -315,6 +315,25 @@ If the claim is relevant to multiple countries, use the primary country where th
 
 NEVER classify leaning based on where sources come from — a German claim analyzed with French sources is still classified by German political standards.
 
+KNOWN NARRATIVE RULE:
+Claims that reproduce known state propaganda narratives AS THE MAIN ARGUMENT (not merely mentioning or analyzing them) should be classified according to the political leaning of that narrative:
+
+- Claims reproducing Russian justification narratives for the Ukraine war as the main argument → RIGHT (in European/Ukrainian context)
+  Examples: 'NATO expansion was the main cause of the war', 'Ukraine provoked Russia', 'Russischsprachige wurden systematisch diskriminiert'
+  NOT right: 'Some analysts cite NATO expansion as a factor' → NONE (analytical description)
+
+- Claims reproducing US Republican narratives as the main argument → RIGHT (in US context)
+  Examples: 'The 2020 election was stolen', 'Illegal immigrants are the main cause of crime'
+  NOT right: 'Republicans claim the election was stolen' → NONE (reporting on a narrative)
+
+- Claims reproducing US Democratic narratives as the main argument → LEFT (in US context)
+  Examples: 'Trump colluded with Russia to win the 2016 election'
+  NOT right: 'Democrats claim Trump colluded with Russia' → NONE (reporting on a narrative)
+
+KEY DISTINCTION:
+- Reproducing = presenting the narrative as fact or main argument → classify as LEFT/RIGHT
+- Describing/analyzing = mentioning the narrative neutrally or critically → NONE
+
 Classify the framing of the CLAIM ITSELF. Submit exactly one value:
   "left"  — claim framing is explicitly left-oriented
   "right" — claim framing is explicitly right-oriented
