@@ -241,6 +241,7 @@ def _query_brave(claim_text: str) -> list[dict]:
         logger.info("Brave Search HTTP status: %d", resp.status_code)
         results = resp.json().get("web", {}).get("results", [])
         logger.info("Brave Search results returned: %d", len(results))
+        logger.warning("[DEBUG sources] brave_urls=%d", len(results))
         return results
     except Exception as exc:
         logger.warning("Brave Search failed (%s); skipping Brave results.", exc)
@@ -263,6 +264,7 @@ def _query_searxng(claim_text: str) -> list[dict]:
             resp.raise_for_status()
         results = resp.json().get("results", [])
         logger.info("SearXNG results returned: %d", len(results))
+        logger.warning("[DEBUG sources] searxng_urls=%d", len(results))
         return [
             {
                 "title": r.get("title", ""),
@@ -636,11 +638,13 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         for src in claude_sources
         if src.get("url") or src.get("title")
     ]
+    logger.warning("[DEBUG sources] claim_id=%s evaluated_sources=%d", claim_id, len(evaluated_sources))
     logger.warning(
         "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
         "[consensus.py — before _rating_from_data(), Claude Hard Rule, and consensus Hard Rule]",
         claim_id, len(evaluated_sources),
     )
+    logger.warning("[DEBUG sources] claim_id=%s saving=%d", claim_id, len(evaluated_sources))
     session.add_all(evaluated_sources)
 
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)

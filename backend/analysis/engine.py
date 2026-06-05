@@ -716,6 +716,7 @@ def _query_searxng_context(claim_text: str) -> str:
             resp.raise_for_status()
         results = resp.json().get("results", [])
         logger.info("SearXNG context results: %d", len(results))
+        logger.warning("[DEBUG sources] searxng_urls=%d", len(results))
         if not results:
             return ""
         lines = []
@@ -887,11 +888,13 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         for src in sources_data
         if src.get("url") or src.get("title")
     ]
+    logger.warning("[DEBUG sources] claim_id=%s evaluated_sources=%d", claim_id, len(evaluated_sources))
     logger.warning(
         "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
         "[engine.py — before rating derivation and Hard Rule]",
         claim_id, len(evaluated_sources),
     )
+    logger.warning("[DEBUG sources] claim_id=%s saving=%d", claim_id, len(evaluated_sources))
     session.add_all(evaluated_sources)
 
     # Domain deduplication: multiple sources from the same root domain count as one
