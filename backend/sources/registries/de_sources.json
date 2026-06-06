@@ -240,6 +240,36 @@
       "country": "DE",
       "region": "Europe",
       "independence_note": "Tagesschau is the flagship news programme and digital news portal of ARD (Arbeitsgemeinschaft der öffentlich-rechtlichen Rundfunkanstalten der Bundesrepublik Deutschland), Germany's first public broadcasting consortium. ARD operates under the Interstate Broadcasting Treaty (Rundfunkstaatsvertrag) with statutory editorial independence from federal and state governments. Tagesschau is produced by NDR (Norddeutscher Rundfunk) and is the most-watched news programme in Germany. Editorial decisions are governed by professional journalistic standards under the ARD editorial guidelines. No documented government direction over news content."
+    },
+    {
+      "name": "Amnesty International Deutschland",
+      "domain": "amnesty.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Amnesty International Deutschland is the German national section of Amnesty International, a Nobel Peace Prize-winning global human rights organisation founded in 1961. Like the international body (amnesty.org), it is funded entirely by individual members and donors, with no government, party, or corporate funding, and operates under a strict policy of refusing government grants to preserve independence. Its human rights reporting and country documentation follow the same independent fact-finding methodology as Amnesty International globally. Editorial decisions are made without direction from any government or political actor. Widely cited as a reliable independent secondary source for human rights documentation in Germany and globally."
+    },
+    {
+      "name": "Bundesamt für Verfassungsschutz (BfV)",
+      "domain": "verfassungsschutz.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "The Bundesamt für Verfassungsschutz (BfV) is Germany's domestic intelligence agency, operating under the authority of the Federal Ministry of the Interior and Community (BMI). It is a federal government agency with no institutional independence from the executive; its threat assessments, surveillance classifications, and annual Verfassungsschutzbericht (report on the protection of the constitution) reflect the priorities and judgments of the supervising ministry and the federal government. BfV assessments of extremist organisations, surveillance targets, and security threats carry significant legal and political weight in Germany and are authoritative primary records of the government's official positions — but they are not independent evaluations and may reflect political considerations in classification decisions.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Deutschlandfunk (Deutschlandradio)",
+      "domain": "deutschlandfunk.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Deutschlandfunk is a national public radio broadcaster operated by Deutschlandradio, a joint institution of the federal government and all sixteen German states, established under the Deutschlandradio Interstate Treaty. Unlike ARD's state broadcasters, Deutschlandradio has a unique pan-German mandate with statutory editorial independence from both federal and state governments. Its governing Broadcasting Council includes representatives from civil society, churches, and public life — not party officials — providing structural independence from political direction. Deutschlandfunk is widely regarded as one of Germany's most authoritative and editorially rigorous public radio services, known for in-depth political and cultural journalism. No documented government editorial direction over news content."
     }
   ]
 }
