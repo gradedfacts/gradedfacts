@@ -525,6 +525,66 @@ def _get_registry_version() -> str:
         return "unknown"
 
 
+# ── Claude rating self-consistency correction ─────────────────────────────────
+# Claude occasionally outputs SPECULATIVE in the structured field while its own
+# rationale clearly concludes VERIFIED or DEBUNKED. The tuples below list prose
+# phrases that reveal the actual conclusion, and _correct_claude_rating() fixes
+# the mismatch before the result propagates downstream.
+
+_CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
+    "verified ist vollständig erfüllt",
+    "kriterium verified ist erfüllt",
+    "das kriterium verified",
+    "bewertung lautet verified",
+    "ist als verified einzustufen",
+    "fully meets the criteria for verified",
+    "rating is verified",
+    "the claim is verified",
+    "therefore verified",
+    "is correct and verified",
+)
+
+_CLAUDE_DEBUNK_PHRASES: tuple[str, ...] = (
+    "ist daher falsch",
+    "ist falsch",
+    "nicht erfüllt",
+    "widerlegt",
+    "the claim is false",
+    "is therefore false",
+    "is not correct",
+)
+
+
+def _correct_claude_rating(args: dict) -> dict:
+    """Override Claude's rating when the rationale prose contradicts the structured field.
+
+    Corrects a known Claude inconsistency: structured field says SPECULATIVE while
+    the rationale clearly concludes VERIFIED or DEBUNKED. Checking is case-insensitive;
+    the args dict is not mutated (a new dict is returned).
+    """
+    rating = args.get("rating", "").lower()
+    if rating != "speculative":
+        return args
+
+    rationale_lower = args.get("rationale", "").lower()
+
+    if any(phrase in rationale_lower for phrase in _CLAUDE_DEBUNK_PHRASES):
+        logger.warning(
+            "Claude rating corrected: 'speculative' → 'debunked' "
+            "(structured rating contradicts rationale prose)"
+        )
+        return {**args, "rating": "debunked"}
+
+    if any(phrase in rationale_lower for phrase in _CLAUDE_VERIFIED_PHRASES):
+        logger.warning(
+            "Claude rating corrected: 'speculative' → 'verified' "
+            "(structured rating contradicts rationale prose)"
+        )
+        return {**args, "rating": "verified"}
+
+    return args
+
+
 # ── Pipeline phases ───────────────────────────────────────────────────────────
 
 _SPECIFICITY_PROMPT = """\
@@ -789,7 +849,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     if tool_block is None:
         raise RuntimeError("Model did not return a submit_judgment tool call.")
 
-    return tool_block.input
+    return _correct_claude_rating(tool_block.input)
 
 
 # ── Public entry point ────────────────────────────────────────────────────────

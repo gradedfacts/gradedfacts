@@ -416,6 +416,106 @@ class TestCorrectMistralRating:
             )
 
 
+# ── _correct_claude_rating ────────────────────────────────────────────────────
+
+class TestCorrectClaudeRating:
+
+    @pytest.mark.parametrize("phrase,rationale_template", [
+        ("verified ist vollständig erfüllt",  "Die Quellen belegen die Aussage. Verified ist vollständig erfüllt."),
+        ("kriterium verified ist erfüllt",    "Das Kriterium Verified ist erfüllt laut offiziellen Daten."),
+        ("das kriterium verified",            "Das Kriterium Verified wird durch drei Primärquellen gestützt."),
+        ("bewertung lautet verified",         "Nach Prüfung aller Belege: Bewertung lautet Verified."),
+        ("ist als verified einzustufen",      "Die Behauptung ist als Verified einzustufen."),
+        ("fully meets the criteria for verified", "The evidence fully meets the criteria for verified."),
+        ("rating is verified",               "All sources agree. Rating is verified."),
+        ("the claim is verified",            "Based on primary data, the claim is verified."),
+        ("therefore verified",               "All evidence aligns; therefore verified."),
+        ("is correct and verified",          "The figure is correct and verified by official statistics."),
+    ])
+    def test_speculative_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {"rating": "speculative", "rationale": rationale_template, "sources": []}
+        result = _correct_claude_rating(args)
+        assert result["rating"] == "verified", (
+            f"Expected 'speculative' → 'verified' correction for phrase {phrase!r}"
+        )
+        assert args["rating"] == "speculative"
+
+    @pytest.mark.parametrize("phrase,rationale_template", [
+        ("ist daher falsch",   "Die Zahlen belegen, dass die Behauptung ist daher falsch."),
+        ("ist falsch",         "Die Aussage ist falsch laut Primärquellen."),
+        ("nicht erfüllt",      "Das Kriterium ist nicht erfüllt."),
+        ("widerlegt",          "Die Behauptung wird durch Gegenevidenz widerlegt."),
+        ("the claim is false", "After reviewing the evidence, the claim is false."),
+        ("is therefore false", "The data contradicts the statement; it is therefore false."),
+        ("is not correct",     "The statistic is not correct based on official records."),
+    ])
+    def test_speculative_with_debunk_phrase_overridden_to_debunked(self, phrase, rationale_template):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {"rating": "speculative", "rationale": rationale_template, "sources": []}
+        result = _correct_claude_rating(args)
+        assert result["rating"] == "debunked", (
+            f"Expected 'speculative' → 'debunked' correction for phrase {phrase!r}"
+        )
+        assert args["rating"] == "speculative"
+
+    def test_debunk_phrase_takes_priority_over_verified_phrase(self):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {
+            "rating": "speculative",
+            "rationale": "The claim is false but also the claim is verified.",
+            "sources": [],
+        }
+        result = _correct_claude_rating(args)
+        assert result["rating"] == "debunked"
+
+    def test_speculative_without_any_phrase_unchanged(self):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {
+            "rating": "speculative",
+            "rationale": "Evidence is thin and contradictory. Cannot determine outcome.",
+            "sources": [],
+        }
+        result = _correct_claude_rating(args)
+        assert result["rating"] == "speculative"
+
+    def test_non_speculative_ratings_not_affected(self):
+        from backend.analysis.engine import _correct_claude_rating
+
+        for rating in ("verified", "debunked", "missing"):
+            args = {
+                "rating": rating,
+                "rationale": "therefore verified",
+                "sources": [],
+            }
+            result = _correct_claude_rating(args)
+            assert result["rating"] == rating, (
+                f"Rating {rating!r} must not be mutated by _correct_claude_rating"
+            )
+
+    def test_correction_is_case_insensitive(self):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {
+            "rating": "speculative",
+            "rationale": "THE CLAIM IS VERIFIED by official primary sources.",
+            "sources": [],
+        }
+        result = _correct_claude_rating(args)
+        assert result["rating"] == "verified"
+
+    def test_original_dict_not_mutated(self):
+        from backend.analysis.engine import _correct_claude_rating
+
+        args = {"rating": "speculative", "rationale": "therefore verified", "sources": []}
+        _correct_claude_rating(args)
+        assert args["rating"] == "speculative"
+
+
 # ── analyze_claim_with_consensus — helpers ────────────────────────────────────
 
 _THREE_INDEPENDENT_PRIMARIES = [
