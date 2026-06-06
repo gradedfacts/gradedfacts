@@ -8,7 +8,8 @@
       "tier": "primary | secondary | tertiary",
       "is_independent": "true when no documented editorial control by political parties, PACs, governments with a direct stake in the outcome, or politically-aligned major funders",
       "category": "government | news_agency | newspaper | broadcaster | academic | fact_checker | nonprofit | social_media | data_portal"
-    }
+    },
+    "deprecated": "DEPRECATED: This file is superseded by registry.json (the unified registry). Do not add new sources here. Kept for backward compatibility with tests that load individual registry files directly."
   },
   "sources": [
     {

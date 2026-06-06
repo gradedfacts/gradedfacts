@@ -1,6 +1,11 @@
 """
 Source registries — static, versioned JSON files describing known sources
 with tier, independence, and category metadata.
+
+The canonical source of truth is registry.json (the unified registry).
+The individual regional files (us_sources.json, eu_sources.json, etc.) are
+kept for backward compatibility but are DEPRECATED — do not add new sources
+to them; add to registry.json directly.
 """
 
 from __future__ import annotations
@@ -11,26 +16,27 @@ from pathlib import Path
 
 _REGISTRY_DIR = Path(__file__).parent
 
-_ALL_REGISTRIES: tuple[str, ...] = (
-    "us_sources.json",
-    "eu_sources.json",
-    "ch_sources.json",
-    "uk_sources.json",
-    "de_sources.json",
-    "fr_sources.json",
-    "international_sources.json",
-)
+# Unified registry — single source of truth for all lookups.
+_UNIFIED_REGISTRY = "registry.json"
+
+# Deprecated: kept so that load_registry(filename) callers referencing individual
+# files still work. Do not add new registries here.
+_ALL_REGISTRIES: tuple[str, ...] = (_UNIFIED_REGISTRY,)
 
 
 @lru_cache(maxsize=None)
 def load_registry(filename: str) -> dict:
-    """Load and cache a registry JSON file by filename (e.g. 'us_sources.json')."""
+    """Load and cache a registry JSON file by filename (e.g. 'us_sources.json').
+
+    The unified registry is 'registry.json'. Individual regional filenames are
+    still accepted for backward compatibility.
+    """
     path = _REGISTRY_DIR / filename
     with path.open(encoding="utf-8") as f:
         return json.load(f)
 
 
-def lookup_source(domain: str, registry: str = "us_sources.json") -> dict | None:
+def lookup_source(domain: str, registry: str = _UNIFIED_REGISTRY) -> dict | None:
     """
     Look up a source entry by domain substring match.
 
@@ -47,24 +53,18 @@ def lookup_source(domain: str, registry: str = "us_sources.json") -> dict | None
 
 def lookup_source_all_registries(domain: str) -> dict | None:
     """
-    Search all regional registries in order and return the first matching entry.
+    Search the unified registry and return the first matching entry.
 
-    Registries are searched in the order defined by _ALL_REGISTRIES.
-    Returns None if the domain is not found in any registry.
+    Previously iterated multiple regional files; now delegates entirely to
+    registry.json. The function signature is preserved for backward compatibility.
+    Returns None if the domain is not found.
     """
-    for registry_file in _ALL_REGISTRIES:
-        try:
-            result = lookup_source(domain, registry_file)
-        except FileNotFoundError:
-            continue
-        if result is not None:
-            return result
-    return None
+    return lookup_source(domain, _UNIFIED_REGISTRY)
 
 
 def apply_registry_override(source: dict) -> dict:
     """
-    Enrich a source dict with curated metadata from the regional registries.
+    Enrich a source dict with curated metadata from the unified registry.
 
     When the URL matches a known registry entry:
       - is_independent is set from the registry (ground truth overrides Claude's judgment)

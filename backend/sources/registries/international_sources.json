@@ -10,7 +10,8 @@
       "affiliation_note": "required when is_independent is false; explains the documented dependency",
       "country": "ISO 3166-1 alpha-2, or INT for international bodies",
       "region": "geographic region"
-    }
+    },
+    "deprecated": "DEPRECATED: This file is superseded by registry.json (the unified registry). Do not add new sources here. Kept for backward compatibility with tests that load individual registry files directly."
   },
   "sources": [
     {
