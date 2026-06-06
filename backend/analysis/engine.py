@@ -532,26 +532,178 @@ def _get_registry_version() -> str:
 # the mismatch before the result propagates downstream.
 
 _CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
-    "verified ist vollständig erfüllt",
-    "kriterium verified ist erfüllt",
-    "das kriterium verified",
-    "bewertung lautet verified",
-    "ist als verified einzustufen",
+    # English
     "fully meets the criteria for verified",
     "rating is verified",
     "the claim is verified",
     "therefore verified",
     "is correct and verified",
+    "clearly verified",
+    "unambiguously verified",
+    "beyond doubt verified",
+    "undoubtedly verified",
+    "clearly meets the criteria",
+    "all criteria for verified are met",
+    "rating verified is clearly justified",
+    # German (de)
+    "verified ist vollständig erfüllt",
+    "kriterium verified ist erfüllt",
+    "das kriterium verified",
+    "bewertung lautet verified",
+    "ist als verified einzustufen",
+    "klar verifiziert",
+    "klar verified",
+    "eindeutig verifiziert",
+    "zweifelsfrei belegt",
+    "ist klar verifiziert",
+    "vollständig erfüllt",
+    "kriterium fur verified ist klar erfullt",
+    "alle kriterien fur verified",
+    "alle kriterien für verified",
+    "bewertung verified ist klar gerechtfertigt",
+    # French (fr)
+    "clairement vérifié",
+    "sans aucun doute vérifié",
+    "tous les critères pour verified",
+    "la notation verified est justifiée",
+    # Italian (it)
+    "chiaramente verificato",
+    "inequivocabilmente verificato",
+    "tutti i criteri per verified",
+    # Spanish (es)
+    "claramente verificado",
+    "inequívocamente verificado",
+    "todos los criterios para verified",
+    # Portuguese (pt)
+    "inequivocamente verificado",
+    "todos os critérios para verified",
+    # Dutch (nl)
+    "duidelijk geverifieerd",
+    "ondubbelzinnig geverifieerd",
+    "aan alle criteria voor verified voldaan",
+    # Polish (pl)
+    "wyraźnie zweryfikowany",
+    "jednoznacznie zweryfikowany",
+    "wszystkie kryteria dla verified spełnione",
+    # Swedish (sv)
+    "tydligt verifierad",
+    "otvetydigt verifierad",
+    "alla kriterier för verified uppfyllda",
+    # Danish (da)
+    "tydeligt verificeret",
+    "utvetydigt verificeret",
+    # Finnish (fi)
+    "selvästi vahvistettu",
+    "yksiselitteisesti vahvistettu",
+    # Czech (cs)
+    "jasně ověřeno",
+    "jednoznačně ověřeno",
+    # Romanian (ro)
+    "clar verificat",
+    "fără îndoială verificat",
+    # Greek (el)
+    "σαφώς επαληθευμένο",
+    "αναμφίβολα επαληθευμένο",
+    # Hungarian (hu)
+    "egyértelműen megerősített",
+    "kétségtelenül megerősített",
+    # Russian (ru)
+    "явно подтверждено",
+    "однозначно подтверждено",
+    # Ukrainian (uk)
+    "явно підтверджено",
+    "однозначно підтверджено",
+    # Turkish (tr)
+    "açıkça doğrulandı",
+    "kesinlikle doğrulandı",
+    # Arabic (ar)
+    "محقق بوضوح",
+    "محقق بشكل لا لبس فيه",
+    # Chinese (zh)
+    "明确核实",
+    "毫无疑问核实",
+    # Japanese (ja)
+    "明確に確認済み",
+    "疑いなく確認済み",
+    # Korean (ko)
+    "명확히 확인됨",
+    "의심할 여지 없이 확인됨",
 )
 
 _CLAUDE_DEBUNK_PHRASES: tuple[str, ...] = (
+    # English
+    "the claim is false",
+    "is therefore false",
+    "is not correct",
+    # German (de)
     "ist daher falsch",
     "ist falsch",
     "nicht erfüllt",
     "widerlegt",
-    "the claim is false",
-    "is therefore false",
-    "is not correct",
+    "klar widerlegt",
+    "eindeutig widerlegt",
+    "zweifelsfrei falsch",
+    "ist klar widerlegt",
+    # French (fr)
+    "clairement réfuté",
+    "sans aucun doute faux",
+    # Italian (it)
+    "chiaramente confutato",
+    "inequivocabilmente falso",
+    # Spanish (es)
+    "claramente refutado",
+    "inequívocamente falso",
+    # Portuguese (pt)
+    "claramente refutado",
+    "inequivocamente falso",
+    # Dutch (nl)
+    "duidelijk weerlegd",
+    "ondubbelzinnig onjuist",
+    # Polish (pl)
+    "wyraźnie obalony",
+    "jednoznacznie fałszywy",
+    # Swedish (sv)
+    "tydligt motbevisat",
+    "otvetydigt falskt",
+    # Danish (da)
+    "tydeligt afkræftet",
+    "utvetydigt falsk",
+    # Finnish (fi)
+    "selvästi kumottu",
+    "yksiselitteisesti väärä",
+    # Czech (cs)
+    "jasně vyvráceno",
+    "jednoznačně nepravdivé",
+    # Romanian (ro)
+    "clar infirmat",
+    "fără îndoială fals",
+    # Greek (el)
+    "σαφώς διαψεύστηκε",
+    "αναμφίβολα ψευδές",
+    # Hungarian (hu)
+    "egyértelműen megcáfolt",
+    "kétségtelenül hamis",
+    # Russian (ru)
+    "явно опровергнуто",
+    "однозначно ложно",
+    # Ukrainian (uk)
+    "явно спростовано",
+    "однозначно хибно",
+    # Turkish (tr)
+    "açıkça çürütüldü",
+    "kesinlikle yanlış",
+    # Arabic (ar)
+    "مدحوض بوضوح",
+    "خاطئ بشكل لا لبس فيه",
+    # Chinese (zh)
+    "明确驳斥",
+    "毫无疑问错误",
+    # Japanese (ja)
+    "明確に反証済み",
+    "疑いなく誤り",
+    # Korean (ko)
+    "명확히 반증됨",
+    "의심할 여지 없이 거짓",
 )
 
 
@@ -849,7 +1001,30 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     if tool_block is None:
         raise RuntimeError("Model did not return a submit_judgment tool call.")
 
-    return _correct_claude_rating(tool_block.input)
+    raw = tool_block.input
+    raw_rating = raw.get("rating", "")
+    raw_rationale = raw.get("rationale", "")
+    rationale_lower = raw_rationale.lower()
+    verified_phrase_found = next(
+        (p for p in _CLAUDE_VERIFIED_PHRASES if p in rationale_lower), None
+    )
+    debunk_phrase_found = next(
+        (p for p in _CLAUDE_DEBUNK_PHRASES if p in rationale_lower), None
+    )
+    logger.warning(
+        "[_phase2_judgment debug] raw_rating=%r rationale_preview=%r",
+        raw_rating, raw_rationale[:200],
+    )
+    logger.warning(
+        "[_phase2_judgment debug] verified_phrase_found=%r debunk_phrase_found=%r",
+        verified_phrase_found, debunk_phrase_found,
+    )
+    corrected = _correct_claude_rating(raw)
+    logger.warning(
+        "[_phase2_judgment debug] correction_fired=%r final_rating=%r",
+        corrected.get("rating") != raw_rating, corrected.get("rating"),
+    )
+    return corrected
 
 
 # ── Public entry point ────────────────────────────────────────────────────────

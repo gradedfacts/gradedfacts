@@ -431,6 +431,91 @@ class TestCorrectClaudeRating:
         ("the claim is verified",            "Based on primary data, the claim is verified."),
         ("therefore verified",               "All evidence aligns; therefore verified."),
         ("is correct and verified",          "The figure is correct and verified by official statistics."),
+        ("klar verifiziert",                 "Die Behauptung ist klar verifiziert durch drei unabhängige Quellen."),
+        ("klar verified",                    "Das Ergebnis ist klar Verified laut offiziellen Statistiken."),
+        ("eindeutig verifiziert",            "Die Aussage ist eindeutig verifiziert durch Primärquellen."),
+        ("zweifelsfrei belegt",              "Die Behauptung ist zweifelsfrei belegt durch amtliche Daten."),
+        ("ist klar verifiziert",             "Die Aussage ist klar verifiziert und entspricht den Fakten."),
+        ("vollständig erfüllt",              "Alle Kriterien sind vollständig erfüllt; die Behauptung ist korrekt."),
+        ("kriterium fur verified ist klar erfullt", "Das Kriterium fur Verified ist klar erfullt."),
+        ("alle kriterien fur verified",      "Alle Kriterien fur Verified sind durch drei Quellen erfüllt."),
+        ("clearly verified",                 "The claim is clearly verified by independent primary sources."),
+        ("unambiguously verified",           "Three primary sources confirm the figure; unambiguously verified."),
+        ("beyond doubt verified",            "The data is beyond doubt verified by official statistics."),
+        ("undoubtedly verified",             "This claim is undoubtedly verified by the official records."),
+        ("clearly meets the criteria",       "The evidence clearly meets the criteria for a verified rating."),
+        ("all criteria for verified are met","All criteria for verified are met by the available evidence."),
+        ("rating verified is clearly justified", "Rating Verified is clearly justified by three primary sources."),
+        # German (de) — additions
+        ("alle kriterien für verified",          "Alle Kriterien für Verified sind durch drei Quellen erfüllt."),
+        ("bewertung verified ist klar gerechtfertigt", "Bewertung Verified ist klar gerechtfertigt laut Primärquellen."),
+        # French (fr)
+        ("clairement vérifié",                   "La déclaration est clairement vérifié par des sources officielles."),
+        ("sans aucun doute vérifié",             "Les données sont sans aucun doute vérifié par trois sources primaires."),
+        ("tous les critères pour verified",      "Tous les critères pour Verified sont remplis."),
+        ("la notation verified est justifiée",   "La notation Verified est justifiée par les preuves disponibles."),
+        # Italian (it)
+        ("chiaramente verificato",               "L'affermazione è chiaramente verificato da fonti primarie."),
+        ("inequivocabilmente verificato",        "I dati sono inequivocabilmente verificato da tre fonti indipendenti."),
+        ("tutti i criteri per verified",         "Tutti i criteri per Verified sono soddisfatti."),
+        # Spanish (es)
+        ("claramente verificado",                "La afirmación está claramente verificado por fuentes oficiales."),
+        ("inequívocamente verificado",           "Los datos son inequívocamente verificado por tres fuentes primarias."),
+        ("todos los criterios para verified",    "Todos los criterios para Verified se cumplen."),
+        # Portuguese (pt)
+        ("inequivocamente verificado",           "Os dados são inequivocamente verificado por fontes primárias."),
+        ("todos os critérios para verified",     "Todos os critérios para Verified são cumpridos."),
+        # Dutch (nl)
+        ("duidelijk geverifieerd",               "De bewering is duidelijk geverifieerd door primaire bronnen."),
+        ("ondubbelzinnig geverifieerd",          "De gegevens zijn ondubbelzinnig geverifieerd door drie bronnen."),
+        ("aan alle criteria voor verified voldaan", "Er is aan alle criteria voor Verified voldaan."),
+        # Polish (pl)
+        ("wyraźnie zweryfikowany",               "Twierdzenie jest wyraźnie zweryfikowany przez oficjalne źródła."),
+        ("jednoznacznie zweryfikowany",          "Dane są jednoznacznie zweryfikowany przez trzy niezależne źródła."),
+        ("wszystkie kryteria dla verified spełnione", "Wszystkie kryteria dla Verified spełnione przez dostępne dowody."),
+        # Swedish (sv)
+        ("tydligt verifierad",                   "Påståendet är tydligt verifierad av primära källor."),
+        ("otvetydigt verifierad",                "Uppgifterna är otvetydigt verifierad av tre oberoende källor."),
+        ("alla kriterier för verified uppfyllda","Alla kriterier för Verified uppfyllda av tillgängliga bevis."),
+        # Danish (da)
+        ("tydeligt verificeret",                 "Påstanden er tydeligt verificeret af officielle kilder."),
+        ("utvetydigt verificeret",               "Dataene er utvetydigt verificeret af tre primære kilder."),
+        # Finnish (fi)
+        ("selvästi vahvistettu",                 "Väite on selvästi vahvistettu virallisten lähteiden perusteella."),
+        ("yksiselitteisesti vahvistettu",        "Tiedot ovat yksiselitteisesti vahvistettu kolmen lähteen toimesta."),
+        # Czech (cs)
+        ("jasně ověřeno",                        "Tvrzení je jasně ověřeno oficiálními zdroji."),
+        ("jednoznačně ověřeno",                  "Data jsou jednoznačně ověřeno třemi nezávislými zdroji."),
+        # Romanian (ro)
+        ("clar verificat",                       "Afirmația este clar verificat de surse oficiale."),
+        ("fără îndoială verificat",              "Datele sunt fără îndoială verificat de trei surse primare."),
+        # Greek (el)
+        ("σαφώς επαληθευμένο",                   "Ο ισχυρισμός είναι σαφώς επαληθευμένο από επίσημες πηγές."),
+        ("αναμφίβολα επαληθευμένο",              "Τα δεδομένα είναι αναμφίβολα επαληθευμένο από τρεις πηγές."),
+        # Hungarian (hu)
+        ("egyértelműen megerősített",            "Az állítás egyértelműen megerősített hivatalos forrásokkal."),
+        ("kétségtelenül megerősített",           "Az adatok kétségtelenül megerősített három elsődleges forrással."),
+        # Russian (ru)
+        ("явно подтверждено",                    "Утверждение явно подтверждено официальными источниками."),
+        ("однозначно подтверждено",              "Данные однозначно подтверждено тремя независимыми источниками."),
+        # Ukrainian (uk)
+        ("явно підтверджено",                    "Твердження явно підтверджено офіційними джерелами."),
+        ("однозначно підтверджено",              "Дані однозначно підтверджено трьома незалежними джерелами."),
+        # Turkish (tr)
+        ("açıkça doğrulandı",                    "İddia resmi kaynaklar tarafından açıkça doğrulandı."),
+        ("kesinlikle doğrulandı",                "Veriler üç birincil kaynak tarafından kesinlikle doğrulandı."),
+        # Arabic (ar)
+        ("محقق بوضوح",                           "الادعاء محقق بوضوح من قبل المصادر الرسمية."),
+        ("محقق بشكل لا لبس فيه",                "البيانات محقق بشكل لا لبس فيه من قبل ثلاثة مصادر مستقلة."),
+        # Chinese (zh)
+        ("明确核实",                              "该声明已经明确核实，通过三个独立的主要来源。"),
+        ("毫无疑问核实",                          "数据已经毫无疑问核实，通过官方统计数据。"),
+        # Japanese (ja)
+        ("明確に確認済み",                        "この主張は公式の情報源によって明確に確認済みです。"),
+        ("疑いなく確認済み",                      "データは三つの独立した情報源によって疑いなく確認済みです。"),
+        # Korean (ko)
+        ("명확히 확인됨",                         "이 주장은 공식 출처에 의해 명확히 확인됨."),
+        ("의심할 여지 없이 확인됨",               "데이터는 세 개의 독립적인 출처에 의해 의심할 여지 없이 확인됨."),
     ])
     def test_speculative_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
         from backend.analysis.engine import _correct_claude_rating
@@ -443,13 +528,79 @@ class TestCorrectClaudeRating:
         assert args["rating"] == "speculative"
 
     @pytest.mark.parametrize("phrase,rationale_template", [
+        # English
+        ("the claim is false", "After reviewing the evidence, the claim is false."),
+        ("is therefore false", "The data contradicts the statement; it is therefore false."),
+        ("is not correct",     "The statistic is not correct based on official records."),
+        # German (de)
         ("ist daher falsch",   "Die Zahlen belegen, dass die Behauptung ist daher falsch."),
         ("ist falsch",         "Die Aussage ist falsch laut Primärquellen."),
         ("nicht erfüllt",      "Das Kriterium ist nicht erfüllt."),
         ("widerlegt",          "Die Behauptung wird durch Gegenevidenz widerlegt."),
-        ("the claim is false", "After reviewing the evidence, the claim is false."),
-        ("is therefore false", "The data contradicts the statement; it is therefore false."),
-        ("is not correct",     "The statistic is not correct based on official records."),
+        ("klar widerlegt",     "Die Behauptung ist klar widerlegt durch amtliche Daten."),
+        ("eindeutig widerlegt","Die Aussage ist eindeutig widerlegt durch drei Primärquellen."),
+        ("zweifelsfrei falsch","Die Behauptung ist zweifelsfrei falsch laut offiziellen Quellen."),
+        ("ist klar widerlegt", "Die Aussage ist klar widerlegt und entspricht nicht den Fakten."),
+        # French (fr)
+        ("clairement réfuté",       "L'affirmation est clairement réfuté par des sources officielles."),
+        ("sans aucun doute faux",   "Les données montrent sans aucun doute faux que le chiffre est incorrect."),
+        # Italian (it)
+        ("chiaramente confutato",        "L'affermazione è chiaramente confutato da fonti primarie."),
+        ("inequivocabilmente falso",     "Il dato è inequivocabilmente falso secondo fonti ufficiali."),
+        # Spanish (es)
+        ("claramente refutado",          "La afirmación está claramente refutado por fuentes oficiales."),
+        ("inequívocamente falso",        "El dato es inequívocamente falso según las estadísticas oficiales."),
+        # Portuguese (pt)
+        ("claramente refutado",          "A afirmação está claramente refutado por fontes primárias."),
+        ("inequivocamente falso",        "O dado é inequivocamente falso segundo as estatísticas oficiais."),
+        # Dutch (nl)
+        ("duidelijk weerlegd",           "De bewering is duidelijk weerlegd door officiële bronnen."),
+        ("ondubbelzinnig onjuist",       "De gegevens zijn ondubbelzinnig onjuist volgens drie primaire bronnen."),
+        # Polish (pl)
+        ("wyraźnie obalony",             "Twierdzenie jest wyraźnie obalony przez oficjalne źródła."),
+        ("jednoznacznie fałszywy",       "Dane są jednoznacznie fałszywy według statystyk oficjalnych."),
+        # Swedish (sv)
+        ("tydligt motbevisat",           "Påståendet är tydligt motbevisat av officiella källor."),
+        ("otvetydigt falskt",            "Uppgifterna är otvetydigt falskt enligt tre primära källor."),
+        # Danish (da)
+        ("tydeligt afkræftet",           "Påstanden er tydeligt afkræftet af officielle kilder."),
+        ("utvetydigt falsk",             "Dataene er utvetydigt falsk ifølge tre primære kilder."),
+        # Finnish (fi)
+        ("selvästi kumottu",             "Väite on selvästi kumottu virallisten lähteiden perusteella."),
+        ("yksiselitteisesti väärä",      "Tiedot ovat yksiselitteisesti väärä virallisten tilastojen mukaan."),
+        # Czech (cs)
+        ("jasně vyvráceno",              "Tvrzení je jasně vyvráceno oficiálními zdroji."),
+        ("jednoznačně nepravdivé",       "Data jsou jednoznačně nepravdivé podle officiálních statistik."),
+        # Romanian (ro)
+        ("clar infirmat",                "Afirmația este clar infirmat de surse oficiale."),
+        ("fără îndoială fals",           "Datele sunt fără îndoială fals conform statisticilor oficiale."),
+        # Greek (el)
+        ("σαφώς διαψεύστηκε",            "Ο ισχυρισμός σαφώς διαψεύστηκε από επίσημες πηγές."),
+        ("αναμφίβολα ψευδές",            "Τα δεδομένα είναι αναμφίβολα ψευδές σύμφωνα με τρεις πηγές."),
+        # Hungarian (hu)
+        ("egyértelműen megcáfolt",       "Az állítás egyértelműen megcáfolt hivatalos forrásokkal."),
+        ("kétségtelenül hamis",          "Az adatok kétségtelenül hamis három elsődleges forrás szerint."),
+        # Russian (ru)
+        ("явно опровергнуто",            "Утверждение явно опровергнуто официальными источниками."),
+        ("однозначно ложно",             "Данные однозначно ложно по данным трёх независимых источников."),
+        # Ukrainian (uk)
+        ("явно спростовано",             "Твердження явно спростовано офіційними джерелами."),
+        ("однозначно хибно",             "Дані однозначно хибно за даними трьох незалежних джерел."),
+        # Turkish (tr)
+        ("açıkça çürütüldü",             "İddia resmi kaynaklar tarafından açıkça çürütüldü."),
+        ("kesinlikle yanlış",            "Veriler üç birincil kaynağa göre kesinlikle yanlış."),
+        # Arabic (ar)
+        ("مدحوض بوضوح",                  "الادعاء مدحوض بوضوح من قبل المصادر الرسمية."),
+        ("خاطئ بشكل لا لبس فيه",        "البيانات خاطئ بشكل لا لبس فيه وفقاً لثلاثة مصادر مستقلة."),
+        # Chinese (zh)
+        ("明确驳斥",                      "该声明已经明确驳斥，通过三个独立的主要来源。"),
+        ("毫无疑问错误",                  "数据毫无疑问错误，与官方统计数据相矛盾。"),
+        # Japanese (ja)
+        ("明確に反証済み",                "この主張は公式の情報源によって明確に反証済みです。"),
+        ("疑いなく誤り",                  "データは三つの独立した情報源によって疑いなく誤りです。"),
+        # Korean (ko)
+        ("명확히 반증됨",                 "이 주장은 공식 출처에 의해 명확히 반증됨."),
+        ("의심할 여지 없이 거짓",         "데이터는 세 개의 독립적인 출처에 의해 의심할 여지 없이 거짓."),
     ])
     def test_speculative_with_debunk_phrase_overridden_to_debunked(self, phrase, rationale_template):
         from backend.analysis.engine import _correct_claude_rating
