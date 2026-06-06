@@ -799,6 +799,36 @@
       "country": "GB",
       "region": "Europe",
       "independence_note": "The Economist is a leading British weekly news magazine and newspaper, founded in 1843. It is published by The Economist Group, which is partly owned by Pearson plc and partly by members of the Agnelli family (through Exor), with editorial governance structured to protect independence from major shareholders. The Economist has a classical liberal, pro-free-market editorial orientation and consistently applies the same analytical standards across the political spectrum. It publishes rigorous data journalism through The Economist Intelligence Unit and its data team. No documented political party direction over editorial content. Widely cited as a high-quality secondary source for global economics, politics, and international affairs."
+    },
+    {
+      "name": "UN Press (United Nations Department of Global Communications)",
+      "domain": "press.un.org",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "UN Press is the official communications service of the United Nations Secretariat, operated by the Department of Global Communications. It publishes official UN press releases, summaries of Security Council and General Assembly meetings, resolutions as adopted, and statements by the Secretary-General and senior UN officials. As part of the UN Secretariat, it is structurally subordinate to the Secretary-General and is not editorially independent of the UN's political leadership. It is nonetheless the authoritative primary source for official UN resolutions, meeting records, and institutional statements — content that should be read as representing the formal position of the UN system rather than as independent analysis.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "SECO — Staatssekretariat für Wirtschaft (Swiss State Secretariat for Economic Affairs)",
+      "domain": "seco.admin.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "affiliation_note": "SECO (Staatssekretariat für Wirtschaft) is Switzerland's State Secretariat for Economic Affairs, a federal government agency within the Federal Department of Economic Affairs, Education and Research (EAER/WBF). It is responsible for Swiss economic policy, labour market regulation, export promotion, trade policy, and bilateral economic agreements. As a federal government agency, SECO is not independent of the Federal Council's political direction; its statistics, reports, and official communications represent official Swiss government positions on economic matters. Its data on Swiss export controls, sanctions implementation, and economic indicators are authoritative primary sources for Swiss federal economic policy.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "SNB — Schweizerische Nationalbank (Swiss National Bank)",
+      "domain": "snb.ch",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "The Swiss National Bank (SNB) is Switzerland's central bank, established under the National Bank Act of 2003. It is legally independent: the Federal Council may not issue instructions to the SNB Governing Board on monetary policy decisions, and the SNB's mandate — ensuring price stability while taking economic developments into account — is defined by statute rather than political direction. The SNB is organised as a special-statute joint-stock company in which the Swiss Confederation and cantons hold approximately 55% of shares, but institutional governance is structured to insulate monetary policy from shareholder or government pressure. Its monetary policy decisions, financial stability reports, foreign exchange reserve data, and Swiss balance of payments statistics are authoritative primary sources for Swiss monetary and financial data."
     }
   ]
 }

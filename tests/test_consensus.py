@@ -310,6 +310,29 @@ class TestCorrectMistralRating:
         # Original dict must not be mutated
         assert args["rating"] == "verified"
 
+    @pytest.mark.parametrize("phrase,rationale_template", [
+        ("the claim is false",        "After reviewing the evidence, the claim is false."),
+        ("is therefore false",        "The data contradicts the statement; it is therefore false."),
+        ("is incorrect",              "The figure cited is incorrect according to official records."),
+        ("must be rated as debunked", "Given the contrary evidence, this must be rated as debunked."),
+        ("therefore debunked",        "No source supports the claim; therefore debunked."),
+        ("thus debunked",             "The assertion is unsupported and thus debunked."),
+        ("is not correct",            "The statistic is not correct based on primary data."),
+    ])
+    def test_verified_with_new_debunk_phrase_overridden_to_debunked(self, phrase, rationale_template):
+        from backend.analysis.consensus import _correct_mistral_rating
+
+        args = {
+            "rating": "verified",
+            "rationale": rationale_template,
+            "sources": [],
+        }
+        result = _correct_mistral_rating(args)
+        assert result["rating"] == "debunked", (
+            f"Expected 'verified' → 'debunked' correction for phrase {phrase!r}"
+        )
+        assert args["rating"] == "verified"
+
     def test_verified_without_debunk_phrase_unchanged(self):
         from backend.analysis.consensus import _correct_mistral_rating
 
@@ -332,6 +355,13 @@ class TestCorrectMistralRating:
         ("einstufung als verified",       "Nach Prüfung der Belege: Einstufung als Verified."),
         ("the claim is correct",          "The claim is correct according to official statistics."),
         ("die behauptung ist korrekt",    "Die Behauptung ist korrekt und durch Primärquellen belegt."),
+        ("the claim is verified",         "Based on the evidence, the claim is verified."),
+        ("is therefore verified",         "The statement is supported by primary sources and is therefore verified."),
+        ("rated as verified",             "After review, this claim is rated as verified."),
+        ("classified as verified",        "The information is classified as verified by independent sources."),
+        ("is correct and verified",       "The data is correct and verified across multiple sources."),
+        ("therefore verified",            "All sources align; therefore verified."),
+        ("thus verified",                 "The claim is supported and thus verified."),
     ])
     def test_debunked_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
         from backend.analysis.consensus import _correct_mistral_rating

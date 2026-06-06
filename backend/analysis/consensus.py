@@ -76,6 +76,12 @@ _MISTRAL_DEBUNK_PHRASES: tuple[str, ...] = (
     "nicht erfüllt",
     "widerlegt",
     "debunked",
+    "the claim is false",
+    "is incorrect",
+    "must be rated as debunked",
+    "therefore debunked",
+    "thus debunked",
+    "is not correct",
 )
 
 # Phrases in a DEBUNKED rationale that reveal the underlying conclusion is actually VERIFIED.
@@ -89,6 +95,13 @@ _MISTRAL_VERIFIED_PHRASES: tuple[str, ...] = (
     "einstufung als verified",
     "the claim is correct",
     "die behauptung ist korrekt",
+    "the claim is verified",
+    "is therefore verified",
+    "rated as verified",
+    "classified as verified",
+    "is correct and verified",
+    "therefore verified",
+    "thus verified",
 )
 
 
@@ -187,6 +200,36 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
+
+    user_content += (
+        "\n\nLANGUAGE RULE FOR RATING TERMS IN RATIONALE:\n"
+        "When writing your rationale text, use the translated rating terms in the target language:\n"
+        "- German (de): BESTÄTIGT, WIDERLEGT, SPEKULATIV, FEHLEND\n"
+        "- French (fr): VÉRIFIÉ, RÉFUTÉ, SPÉCULATIF, MANQUANT\n"
+        "- Italian (it): VERIFICATO, CONFUTATO, SPECULATIVO, MANCANTE\n"
+        "- Spanish (es): VERIFICADO, REFUTADO, ESPECULATIVO, FALTANTE\n"
+        "- English (en): VERIFIED, DEBUNKED, SPECULATIVE, MISSING\n"
+        "- Dutch (nl): GEVERIFIEERD, WEERLEGD, SPECULATIEF, ONTBREKEND\n"
+        "- Polish (pl): ZWERYFIKOWANY, OBALONY, SPEKULATYWNY, BRAKUJĄCY\n"
+        "- Swedish (sv): VERIFIERAD, MOTBEVISAD, SPEKULATIV, SAKNAS\n"
+        "- Portuguese (pt): VERIFICADO, REFUTADO, ESPECULATIVO, FALTANDO\n"
+        "- Danish (da): VERIFICERET, AFKRÆFTET, SPEKULATIV, MANGLENDE\n"
+        "- Finnish (fi): VAHVISTETTU, KUMOTTU, SPEKULATIIVINEN, PUUTTUVA\n"
+        "- Czech (cs): OVĚŘENO, VYVRÁCENO, SPEKULATIVNÍ, CHYBĚJÍCÍ\n"
+        "- Romanian (ro): VERIFICAT, INFIRMAT, SPECULATIV, LIPSĂ\n"
+        "- Greek (el): ΕΠΑΛΗΘΕΥΜΈΝΟ, ΔΙΑΨΕΎΣΤΗΚΕ, ΚΕΡΔΟΣΚΟΠΙΚΌ, ΑΠΟΥΣΊΑ\n"
+        "- Hungarian (hu): MEGERŐSÍTETT, MEGCÁFOLT, SPEKULATÍV, HIÁNYZÓ\n"
+        "- Russian (ru): ПОДТВЕРЖДЕНО, ОПРОВЕРГНУТО, СПЕКУЛЯТИВНО, ОТСУТСТВУЕТ\n"
+        "- Ukrainian (uk): ПІДТВЕРДЖЕНО, СПРОСТОВАНО, СПЕКУЛЯТИВНО, ВІДСУТНЄ\n"
+        "- Turkish (tr): DOĞRULANDI, ÇÜRÜTÜLDÜ, SPEKÜLATIF, EKSİK\n"
+        "- Arabic (ar): محقق, مدحوض, تكهني, مفقود\n"
+        "- Chinese (zh): 已核实, 已驳斥, 推测性, 缺失\n"
+        "- Japanese (ja): 確認済み, 反証済み, 推測的, 不足\n"
+        "- Korean (ko): 확인됨, 반증됨, 추측적, 누락\n"
+        "- For all other languages: use English rating terms\n\n"
+        "The structured rating field must always use the English enum values (verified/debunked/speculative/missing).\n"
+        "Only the rationale prose text should use the translated terms."
+    )
 
     response = client.chat.complete(
         model=_MISTRAL_MODEL,
