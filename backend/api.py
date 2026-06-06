@@ -24,6 +24,7 @@ from backend.sources.evaluator import extract_domain
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
 from backend.db.rate_limit import check_and_increment, check_followup_rate_limit
 from backend.db.session import SessionLocal, engine, get_session
+from backend.db.storage import find_canonical_claim, merge_into_canonical
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +130,9 @@ def _client_ip(request: Request) -> str:
 # claim_id → (http_status_code, human_message)
 _analysis_errors: dict[str, tuple[int, str]] = {}
 
+# temp_claim_id → canonical_claim_id, set after dedup completes so ui_poll can resolve
+_claim_redirects: dict[str, str] = {}
+
 
 def _sort_sources(sources: list) -> list:
     return sorted(sources, key=lambda s: (_TIER_ORDER.get(str(s.tier), 9), -s.relevance_score))
@@ -150,28 +154,55 @@ def _group_sources_by_domain(sources: list) -> list[dict]:
     ]
 
 
+def _deduplicate_after_analysis(claim_id: str, session) -> str | None:
+    """After a completed analysis, merge into the canonical Claim if an identical one exists.
+
+    Returns the canonical claim_id if a duplicate was found (and temp claim deleted), else None.
+    The full analysis always runs first; this is storage-level dedup only.
+    """
+    claim = session.get(Claim, claim_id)
+    if claim is None:
+        return None
+    canonical = find_canonical_claim(session, claim.text, exclude_id=claim_id)
+    if canonical is None:
+        return None
+    merge_into_canonical(session, temp_id=claim_id, canonical_id=canonical.id)
+    logger.info("Dedup: merged temp claim %s → canonical %s", claim_id, canonical.id)
+    return canonical.id
+
+
 def _run_analysis(claim_id: str, user_language: str | None = None) -> None:
-    """Background task: runs analyze_claim in its own DB session."""
+    """Background task: runs analyze_claim then deduplicates at the storage level."""
     with SessionLocal() as session:
         try:
             analyze_claim(claim_id, session, user_language=user_language)
         except RuntimeError as exc:
             _analysis_errors[claim_id] = (503, str(exc))
+            return
         except Exception as exc:
             logger.error("Background analysis failed for %s: %s", claim_id, exc, exc_info=True)
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
+            return
+        canonical_id = _deduplicate_after_analysis(claim_id, session)
+        if canonical_id:
+            _claim_redirects[claim_id] = canonical_id
 
 
 def _run_consensus_analysis(claim_id: str, user_language: str | None = None) -> None:
-    """Background task: runs analyze_claim_with_consensus in its own DB session."""
+    """Background task: runs analyze_claim_with_consensus then deduplicates at the storage level."""
     with SessionLocal() as session:
         try:
             analyze_claim_with_consensus(claim_id, session, user_language=user_language)
         except RuntimeError as exc:
             _analysis_errors[claim_id] = (503, str(exc))
+            return
         except Exception as exc:
             logger.error("Background consensus analysis failed for %s: %s", claim_id, exc, exc_info=True)
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
+            return
+        canonical_id = _deduplicate_after_analysis(claim_id, session)
+        if canonical_id:
+            _claim_redirects[claim_id] = canonical_id
 
 
 _JUDGMENT_ADDCOLS = [
@@ -475,6 +506,10 @@ def ui_poll(
     lang: str = Query("en"),
     session: Session = Depends(get_session),
 ):
+    # Resolve dedup redirect: if this temp claim was merged into a canonical one,
+    # use the canonical claim_id for all subsequent lookups.
+    resolved_id = _claim_redirects.get(claim_id, claim_id)
+
     if claim_id in _analysis_errors:
         code, message = _analysis_errors.pop(claim_id)
         return templates.TemplateResponse(
@@ -483,7 +518,7 @@ def ui_poll(
             {"code": code, "message": message},
         )
 
-    claim = session.get(Claim, claim_id)
+    claim = session.get(Claim, resolved_id)
     if not claim:
         return templates.TemplateResponse(
             request,
@@ -493,7 +528,7 @@ def ui_poll(
 
     active_judgment = session.execute(
         select(Judgment)
-        .where(Judgment.claim_id == claim_id, Judgment.is_active.is_(True))
+        .where(Judgment.claim_id == resolved_id, Judgment.is_active.is_(True))
         .order_by(Judgment.created_at.desc())
         .limit(1)
     ).scalar_one_or_none()
@@ -513,12 +548,12 @@ def ui_poll(
         )
 
     sources = session.execute(
-        select(EvaluatedSource).where(EvaluatedSource.claim_id == claim_id)
+        select(EvaluatedSource).where(EvaluatedSource.claim_id == resolved_id)
     ).scalars().all()
 
     judgments = session.execute(
         select(Judgment)
-        .where(Judgment.claim_id == claim_id)
+        .where(Judgment.claim_id == resolved_id)
         .options(joinedload(Judgment.revision))
         .order_by(Judgment.created_at.desc())
     ).scalars().unique().all()
