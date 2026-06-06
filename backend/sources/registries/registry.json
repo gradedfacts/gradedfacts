@@ -2580,6 +2580,16 @@
       "country": "INT",
       "region": "Global",
       "independence_note": "Human Rights Watch is an independent international non-governmental organisation founded in 1978, headquartered in New York. It is funded by private foundations and individual donors; it does not accept government funding, ensuring structural independence from political actors. HRW conducts independent fact-finding investigations and publishes reports on human rights violations in over 90 countries, following rigorous documentation standards. It has published reports critical of governments across the political spectrum — including the United States, Israel, Russia, China, Saudi Arabia, and others — and operates under an independent board of directors. Widely cited in academic research, international courts, and UN proceedings as a reliable secondary source for human rights documentation."
+    },
+    {
+      "name": "Amnesty International",
+      "domain": "amnesty.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "Amnesty International is an independent global human rights organisation founded in 1961 and awarded the Nobel Peace Prize in 1977, headquartered in London. It is funded entirely by individual members and private donors; it operates a strict policy of refusing all government, intergovernmental, or corporate funding to preserve independence. Its human rights reporting and country documentation follow rigorous independent fact-finding methodology — field investigations, victim testimonies, and legal analysis — conducted without editorial direction from any government or political actor. Amnesty has published reports critical of governments across the full political spectrum, including major Western democracies, Russia, China, Israel, Saudi Arabia, and others. Widely cited in international courts, UN proceedings, and academic research as a reliable independent secondary source for human rights documentation worldwide."
     }
   ]
 }
