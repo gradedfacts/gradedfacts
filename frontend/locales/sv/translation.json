@@ -21,8 +21,7 @@
     "analyzing": "Analyserar..."
   },
   "coverage": {
-    "phase1_title": "Fas 1 — USA och Europa.",
-    "phase1_body": "Analysen bygger på amerikanska och europeiska regeringshandlingar, institutioner och medier (EU, CH, UK, DE, FR). Global täckning utökas i Fas 2."
+    "phase1_body": "Analysen bygger på internationella statliga dokument, institutioner och medier. Fokus: Europa, Nordamerika och globala institutioner. Global täckning utökas kontinuerligt."
   },
   "footer": {
     "hosting": "Hostat i Schweiz · Ingen amerikansk Cloud Act-jurisdiktion",
@@ -170,6 +169,7 @@
     "section_independence": "Oberoende och finansiering",
     "section_limitations": "Begränsningar",
     "section_contact": "Kontakt och korrigeringar",
+    "epistemic_explanation": "GradedFacts tillämpar ett epistemiskt synsätt på faktakontroll: varje bedömning baseras på spårbara källor, dokumenterade bevis och transparenta kriterier. Epistemiskt betyder: vi undersöker inte bara om något är sant eller falskt, utan hur säkra vi kan vara på den kunskapen — och på vilken bevisgrund.",
     "what_p1": "GradedFacts är ett automatiserat faktakontrollverktyg som utvärderar politiska påståenden mot offentligt tillgängliga källor. Det är inte en nyhetsorganisation, en politisk vakthund eller en påverkansgrupp. Det är ett epistemiskt verktyg: dess mål är att redogöra för vad de tillgängliga bevisen visar och att vara tydlig med vad bevisen ännu inte löser.",
     "what_p2": "Vår metod skiljer sig från andra verktyg i en viktig aspekt: <strong>institutionellt oberoende har företräde framför institutionell status.</strong> En officiell källa är inte automatiskt en tillförlitlig källa — det beror på om den verkar oberoende av politiska intressen. En statlig myndighet vars ledning utnämndes utifrån lojalitetskriterier är inte oberoende, oavsett dess officiella titel. Vi bedömer varje källa på båda dimensionerna separat.",
     "what_p3": "Live-analys pågår — live-sökning och utvärdering av källor. En epistemiskt precis analys tar 1–2 minuter.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "identiska bedömningar",
     "different_count": "avvikande bedömningar"
+  },
+  "header": {
+    "tagline": "— Fakta. Källor. Transparens."
   }
 }

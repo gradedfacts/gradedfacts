@@ -21,8 +21,7 @@
     "analyzing": "Analysing..."
   },
   "coverage": {
-    "phase1_title": "Phase 1 — United States and Europe.",
-    "phase1_body": "Analysis draws from US and European government records, institutions, and media (EU, CH, UK, DE, FR). Global coverage expanding in Phase 2."
+    "phase1_body": "Analysis draws from international government records, institutions, and media. Focus: Europe, North America, and global institutions. Global coverage is continuously expanding."
   },
   "footer": {
     "hosting": "Hosted in Switzerland · No US Cloud Act jurisdiction",
@@ -170,6 +169,7 @@
     "section_independence": "Independence and funding",
     "section_limitations": "Limitations",
     "section_contact": "Contact and corrections",
+    "epistemic_explanation": "GradedFacts takes an epistemic approach to fact-checking: every judgment is based on traceable sources, documented evidence, and transparent criteria. Epistemic means: we examine not only whether something is true or false, but how confident we can be in that knowledge — and on what evidential basis.",
     "what_p1": "GradedFacts is an automated fact-checking tool that evaluates political claims against publicly available sources. It is not a news organisation, a political watchdog, or an advocacy group. It is an epistemic tool: its goal is to state what the available evidence shows, and to be explicit about what the evidence does not yet resolve.",
     "what_p2": "Our approach differs from other tools in one key respect: <strong>institutional independence takes precedence over institutional status.</strong> An official source is not automatically a reliable source — that depends on whether it operates independently of political interests. A government agency whose leadership was appointed on loyalty criteria is not independent, regardless of its official title. We assess each source on both dimensions separately.",
     "what_p3": "Live analysis running — live source search and evaluation. An epistemically precise analysis takes 1–2 minutes.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "matching judgments",
     "different_count": "differing judgments"
+  },
+  "header": {
+    "tagline": "— Facts. Sources. Transparency."
   }
 }

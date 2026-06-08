@@ -21,8 +21,7 @@
     "analyzing": "Analyzování..."
   },
   "coverage": {
-    "phase1_title": "Fáze 1 — USA a Evropa.",
-    "phase1_body": "Analýza čerpá z amerických a evropských vládních záznamů, institucí a médií (EU, CH, UK, DE, FR). Globální pokrytí se rozšíří ve fázi 2."
+    "phase1_body": "Analýza vychází z mezinárodních vládních dokumentů, institucí a médií. Zaměření: Evropa, Severní Amerika a globální instituce. Globální pokrytí se průběžně rozšiřuje."
   },
   "footer": {
     "hosting": "Hostováno ve Švýcarsku · Žádná jurisdikce US Cloud Act",
@@ -170,6 +169,7 @@
     "section_independence": "Nezávislost a financování",
     "section_limitations": "Omezení",
     "section_contact": "Kontakt a opravy",
+    "epistemic_explanation": "GradedFacts uplatňuje epistemický přístup k ověřování faktů: každý rozsudek vychází ze sledovatelných zdrojů, zdokumentovaných důkazů a transparentních kritérií. Epistemický znamená: nezkoumáme pouze zda je něco pravda nebo lež, ale jak si tím můžeme být jisti — a na jakém základě důkazů.",
     "what_p1": "GradedFacts je automatizovaný nástroj pro ověřování faktů, který hodnotí politická tvrzení oproti veřejně dostupným zdrojům. Není to zpravodajská organizace, politický hlídač ani obhájce. Je to epistemický nástroj: jeho cílem je uvést, co dostupné důkazy ukazují, a být explicitní ohledně toho, co důkazy dosud nevyřešily.",
     "what_p2": "Náš přístup se od jiných nástrojů liší v jednom klíčovém ohledu: <strong>institucionální nezávislost má přednost před institucionálním statusem.</strong> Úřední zdroj není automaticky spolehlivý zdroj — záleží na tom, zda funguje nezávisle na politických zájmech. Vládní agentura, jejíž vedení bylo jmenováno na základě loajalitních kritérií, není nezávislá bez ohledu na svůj úřední titul. Každý zdroj hodnotíme v obou dimenzích samostatně.",
     "what_p3": "Živá analýza probíhá — živé vyhledávání zdrojů a hodnocení. Epistemicky přesná analýza trvá 1–2 minuty.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "shodná hodnocení",
     "different_count": "odlišná hodnocení"
+  },
+  "header": {
+    "tagline": "— Fakta. Zdroje. Transparentnost."
   }
 }

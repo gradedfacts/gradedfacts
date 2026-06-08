@@ -21,8 +21,7 @@
     "analyzing": "Analyse..."
   },
   "coverage": {
-    "phase1_title": "Phase 1 — États-Unis et Europe.",
-    "phase1_body": "L'analyse s'appuie sur des archives gouvernementales, des institutions et des médias américains et européens (UE, CH, UK, DE, FR). Couverture mondiale élargie en Phase 2."
+    "phase1_body": "L'analyse s'appuie sur des documents gouvernementaux internationaux, des institutions et des médias. Priorité : Europe, Amérique du Nord et institutions mondiales. La couverture mondiale est en expansion continue."
   },
   "footer": {
     "hosting": "Hébergé en Suisse · Pas de juridiction US Cloud Act",
@@ -170,6 +169,7 @@
     "section_independence": "Indépendance et financement",
     "section_limitations": "Limites",
     "section_contact": "Contact et corrections",
+    "epistemic_explanation": "GradedFacts adopte une approche épistémique du fact-checking : chaque jugement repose sur des sources traçables, des preuves documentées et des critères transparents. Épistémique signifie : nous examinons non seulement si quelque chose est vrai ou faux, mais à quel point nous pouvons en être sûrs — et sur quelle base probante.",
     "what_p1": "GradedFacts est un outil automatisé de vérification des faits qui évalue les affirmations politiques à partir de sources publiquement disponibles. Ce n'est pas une organisation de presse, un observatoire politique ni un groupe de défense. C'est un outil épistémique : son objectif est d'exposer ce que les preuves disponibles montrent et d'être explicite sur ce que les preuves ne résolvent pas encore.",
     "what_p2": "Notre approche diffère des autres outils sur un point essentiel : <strong>l'indépendance institutionnelle prime sur le statut institutionnel.</strong> Une source officielle n'est pas automatiquement une source fiable — cela dépend de si elle opère indépendamment des intérêts politiques. Une agence gouvernementale dont la direction a été nommée selon des critères de loyauté n'est pas indépendante, quel que soit son titre officiel. Nous évaluons chaque source sur ces deux dimensions séparément.",
     "what_p3": "Analyse en direct — recherche et évaluation de sources en temps réel. Une analyse épistémiquement précise prend 1 à 2 minutes.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "jugements identiques",
     "different_count": "jugements divergents"
+  },
+  "header": {
+    "tagline": "— Faits. Sources. Transparence."
   }
 }

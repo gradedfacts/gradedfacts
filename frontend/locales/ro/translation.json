@@ -21,8 +21,7 @@
     "analyzing": "Se analizează..."
   },
   "coverage": {
-    "phase1_title": "Faza 1 — SUA și Europa.",
-    "phase1_body": "Analiza se bazează pe înregistrări guvernamentale, instituții și mass-media din SUA și Europa (UE, CH, UK, DE, FR). Acoperirea globală se extinde în faza 2."
+    "phase1_body": "Analiza se bazează pe documente guvernamentale internaționale, instituții și mass-media. Accent: Europa, America de Nord și instituții globale. Acoperirea globală se extinde continuu."
   },
   "footer": {
     "hosting": "Găzduit în Elveția · Fără jurisdicție US Cloud Act",
@@ -170,6 +169,7 @@
     "section_independence": "Independență și finanțare",
     "section_limitations": "Limitări",
     "section_contact": "Contact și corecții",
+    "epistemic_explanation": "GradedFacts adoptă o abordare epistemică în verificarea faptelor: fiecare judecată se bazează pe surse trasabile, dovezi documentate și criterii transparente. Epistemic înseamnă: examinăm nu doar dacă ceva este adevărat sau fals, ci cât de siguri putem fi de acea cunoaștere — și pe ce bază probatorie.",
     "what_p1": "GradedFacts este un instrument automatizat de verificare a faptelor care evaluează afirmațiile politice față de sursele disponibile public. Nu este o organizație de știri, un câine de pază politic sau un grup de advocacy. Este un instrument epistemic: scopul său este să afirme ce arată dovezile disponibile și să fie explicit cu privire la ce nu rezolvă încă dovezile.",
     "what_p2": "Abordarea noastră diferă de alte instrumente într-un aspect cheie: <strong>independența instituțională are prioritate față de statutul instituțional.</strong> O sursă oficială nu este automat o sursă de încredere — depinde de dacă funcționează independent de interesele politice. O agenție guvernamentală a cărei conducere a fost numită pe criterii de loialitate nu este independentă, indiferent de titlul său oficial. Evaluăm fiecare sursă pe ambele dimensiuni separat.",
     "what_p3": "Analiză în direct — căutare și evaluare de surse în timp real. O analiză epistemic precisă durează 1–2 minute.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "judecăți identice",
     "different_count": "judecăți divergente"
+  },
+  "header": {
+    "tagline": "— Fapte. Surse. Transparență."
   }
 }

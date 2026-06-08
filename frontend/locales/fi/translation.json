@@ -21,8 +21,7 @@
     "analyzing": "Analysoidaan..."
   },
   "coverage": {
-    "phase1_title": "Vaihe 1 — Yhdysvallat ja Eurooppa.",
-    "phase1_body": "Analyysi perustuu yhdysvaltalaisiin ja eurooppalaisiin hallitusasiakirjoihin, instituutioihin ja medioihin (EU, CH, UK, DE, FR). Globaali kattavuus laajenee vaiheessa 2."
+    "phase1_body": "Analyysi perustuu kansainvälisiin hallituksen asiakirjoihin, laitoksiin ja tiedotusvälineisiin. Painopiste: Eurooppa, Pohjois-Amerikka ja globaalit instituutiot. Maailmanlaajuinen kattavuus laajenee jatkuvasti."
   },
   "footer": {
     "hosting": "Isännöity Sveitsissä · Ei Yhdysvaltain Cloud Act -toimivaltaa",
@@ -170,6 +169,7 @@
     "section_independence": "Riippumattomuus ja rahoitus",
     "section_limitations": "Rajoitukset",
     "section_contact": "Yhteystiedot ja korjaukset",
+    "epistemic_explanation": "GradedFacts noudattaa episteemistä lähestymistapaa faktojen tarkistukseen: jokainen tuomio perustuu jäljitettäviin lähteisiin, dokumentoituun näyttöön ja läpinäkyviin kriteereihin. Episteeminen tarkoittaa: tutkimme paitsi onko jokin totta tai väärää, myös kuinka varmoja voimme olla tiedostamme — ja millä näyttöpohjalla.",
     "what_p1": "GradedFacts on automatisoitu faktatarkistustyökalu, joka arvioi poliittisia väitteitä julkisesti saatavilla olevia lähteitä vastaan. Se ei ole uutisorganisaatio, poliittinen tarkkailija eikä edunvalvontaryhmä. Se on episteeminen työkalu: sen tavoitteena on kertoa mitä saatavilla oleva näyttö osoittaa ja olla selkeä siitä, mitä näyttö ei vielä ratkaise.",
     "what_p2": "Lähestymistapamme eroaa muista työkaluista yhdessä keskeisessä suhteessa: <strong>institutionaalinen riippumattomuus on etusijalla institutionaaliseen asemaan nähden.</strong> Virallinen lähde ei ole automaattisesti luotettava lähde — se riippuu siitä, toimiiko se riippumattomasti poliittisista intresseistä. Valtion virasto, jonka johto on nimitetty lojaalisuuskriteerein, ei ole riippumaton sen virallisesta tittelistä huolimatta. Arvioimme jokaisen lähteen molemmilla ulottuvuuksilla erikseen.",
     "what_p3": "Live-analyysi käynnissä — live-lähdehaku ja -arviointi. Episteemisesti tarkka analyysi kestää 1–2 minuuttia.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "vastaavat arviot",
     "different_count": "poikkeavat arviot"
+  },
+  "header": {
+    "tagline": "— Faktat. Lähteet. Läpinäkyvyys."
   }
 }

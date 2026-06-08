@@ -21,8 +21,7 @@
     "analyzing": "Analyserer..."
   },
   "coverage": {
-    "phase1_title": "Fase 1 — USA og Europa.",
-    "phase1_body": "Analysen trækker på amerikanske og europæiske regeringsdokumenter, institutioner og medier (EU, CH, UK, DE, FR). Global dækning udvides i fase 2."
+    "phase1_body": "Analysen trækker på internationale regeringsdokumenter, institutioner og medier. Fokus: Europa, Nordamerika og globale institutioner. Global dækning udvides kontinuerligt."
   },
   "footer": {
     "hosting": "Hostet i Schweiz · Ingen US Cloud Act-jurisdiktion",
@@ -170,6 +169,7 @@
     "section_independence": "Uafhængighed og finansiering",
     "section_limitations": "Begrænsninger",
     "section_contact": "Kontakt og korrektioner",
+    "epistemic_explanation": "GradedFacts anvender en epistemisk tilgang til faktatjek: hvert omdømme er baseret på sporbare kilder, dokumenterede beviser og transparente kriterier. Epistemisk betyder: vi undersøger ikke kun om noget er sandt eller falsk, men hvor sikre vi kan være på den viden — og på hvilket bevismæssigt grundlag.",
     "what_p1": "GradedFacts er et automatiseret faktjekningsværktøj, der evaluerer politiske påstande mod offentligt tilgængelige kilder. Det er ikke en nyhedsorganisation, en politisk vagthund eller en interesseorganisation. Det er et epistemisk værktøj: dets mål er at angive, hvad de tilgængelige beviser viser, og at være eksplicit om, hvad beviserne endnu ikke løser.",
     "what_p2": "Vores tilgang adskiller sig fra andre værktøjer i ét centralt aspekt: <strong>institutionel uafhængighed prioriteres over institutionel status.</strong> En officiel kilde er ikke automatisk en pålidelig kilde — det afhænger af, om den opererer uafhængigt af politiske interesser. En offentlig myndighed, hvis ledelse er udpeget på loyalitetskriterier, er ikke uafhængig, uanset dens officielle titel. Vi vurderer enhver kilde på begge dimensioner separat.",
     "what_p3": "Live-analyse kørende — live kildesøgning og -vurdering. En epistemisk præcis analyse tager 1–2 minutter.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "ens domme",
     "different_count": "afvigende domme"
+  },
+  "header": {
+    "tagline": "— Fakta. Kilder. Gennemsigtighed."
   }
 }

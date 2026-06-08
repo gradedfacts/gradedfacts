@@ -21,8 +21,7 @@
     "analyzing": "Analizando..."
   },
   "coverage": {
-    "phase1_title": "Fase 1 — Estados Unidos y Europa.",
-    "phase1_body": "El análisis se basa en registros gubernamentales, instituciones y medios de EE.UU. y Europa (UE, CH, UK, DE, FR). Cobertura global en expansión en la Fase 2."
+    "phase1_body": "El análisis se basa en documentos gubernamentales internacionales, instituciones y medios de comunicación. Enfoque: Europa, América del Norte e instituciones globales. La cobertura global se expande continuamente."
   },
   "footer": {
     "hosting": "Alojado en Suiza · Sin jurisdicción de la Ley Cloud de EE.UU.",
@@ -170,6 +169,7 @@
     "section_independence": "Independencia y financiación",
     "section_limitations": "Limitaciones",
     "section_contact": "Contacto y correcciones",
+    "epistemic_explanation": "GradedFacts adopta un enfoque epistémico en la verificación de hechos: cada juicio se basa en fuentes rastreables, evidencias documentadas y criterios transparentes. Epistémico significa: examinamos no solo si algo es verdadero o falso, sino con qué seguridad podemos saberlo — y sobre qué base de evidencia.",
     "what_p1": "GradedFacts es una herramienta automatizada de verificación de hechos que evalúa afirmaciones políticas frente a fuentes públicamente disponibles. No es una organización de noticias, un observatorio político ni un grupo de defensa. Es una herramienta epistémica: su objetivo es exponer lo que muestra la evidencia disponible y ser explícito sobre lo que la evidencia aún no resuelve.",
     "what_p2": "Nuestro enfoque difiere de otras herramientas en un aspecto clave: <strong>la independencia institucional prevalece sobre el estatus institucional.</strong> Una fuente oficial no es automáticamente una fuente fiable — eso depende de si opera de forma independiente de los intereses políticos. Una agencia gubernamental cuya dirección fue designada por criterios de lealtad no es independiente, independientemente de su título oficial. Evaluamos cada fuente en ambas dimensiones por separado.",
     "what_p3": "Análisis en vivo — búsqueda y evaluación de fuentes en tiempo real. Un análisis epistémicamente preciso tarda 1-2 minutos.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "juicios coincidentes",
     "different_count": "juicios discrepantes"
+  },
+  "header": {
+    "tagline": "— Hechos. Fuentes. Transparencia."
   }
 }

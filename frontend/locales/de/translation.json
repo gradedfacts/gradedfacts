@@ -21,8 +21,7 @@
     "analyzing": "Analysiere..."
   },
   "coverage": {
-    "phase1_title": "Phase 1 — Vereinigte Staaten und Europa.",
-    "phase1_body": "Die Analyse stützt sich auf US-amerikanische und europäische Regierungsunterlagen, Institutionen und Medien (EU, CH, UK, DE, FR). Globale Abdeckung wird in Phase 2 erweitert."
+    "phase1_body": "Die Analyse stützt sich auf internationale Regierungsunterlagen, Institutionen und Medien. Schwerpunkt: Europa, Nordamerika und globale Institutionen. Globale Abdeckung wird kontinuierlich erweitert."
   },
   "footer": {
     "hosting": "In der Schweiz gehostet · Keine US-Cloud-Act-Jurisdiktion",
@@ -170,6 +169,7 @@
     "section_independence": "Unabhängigkeit und Finanzierung",
     "section_limitations": "Einschränkungen",
     "section_contact": "Kontakt und Korrekturen",
+    "epistemic_explanation": "GradedFacts verfolgt einen epistemischen Ansatz beim Faktencheck: Jedes Urteil basiert auf nachvollziehbaren Quellen, dokumentierten Beweisen und transparenten Kriterien. Epistemisch bedeutet: Wir prüfen nicht nur ob etwas wahr oder falsch ist, sondern wie sicher wir das wissen können — und auf welcher Evidenzgrundlage.",
     "what_p1": "GradedFacts ist ein automatisiertes Faktencheck-Tool, das politische Behauptungen anhand öffentlich zugänglicher Quellen bewertet. Es ist keine Nachrichtenorganisation, keine politische Kontrollinstanz und keine Interessenvertretung. Es ist ein epistemisches Werkzeug: Sein Ziel ist es, darzulegen, was die verfügbaren Beweise zeigen, und explizit zu machen, was die Beweise noch nicht auflösen.",
     "what_p2": "Unser Ansatz unterscheidet sich von anderen Tools in einem wesentlichen Punkt: <strong>Institutionelle Unabhängigkeit hat Vorrang vor institutionellem Status.</strong> Eine offizielle Quelle ist nicht automatisch eine zuverlässige Quelle — das hängt davon ab, ob sie unabhängig von politischen Interessen agiert. Eine Behörde, deren Führung nach Loyalitätskriterien ernannt wurde, ist unabhängig von ihrem offiziellen Titel nicht unabhängig. Wir beurteilen jede Quelle auf beiden Dimensionen separat.",
     "what_p3": "Live-Analyse läuft — Live-Quellensuche und -auswertung. Eine epistemisch präzise Analyse dauert 1–2 Minuten.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "gleiche Urteile",
     "different_count": "abweichende Urteile"
+  },
+  "header": {
+    "tagline": "— Fakten. Quellen. Transparenz."
   }
 }

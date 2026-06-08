@@ -21,8 +21,7 @@
     "analyzing": "Analiz ediliyor..."
   },
   "coverage": {
-    "phase1_title": "Aşama 1 — Amerika Birleşik Devletleri ve Avrupa.",
-    "phase1_body": "Analiz, ABD ve Avrupa hükümet kayıtlarından, kurumlardan ve medyadan (AB, CH, UK, DE, FR) yararlanmaktadır. Küresel kapsam Aşama 2'de genişliyor."
+    "phase1_body": "Analiz uluslararası hükümet belgelerine, kurumlara ve medyaya dayanmaktadır. Odak: Avrupa, Kuzey Amerika ve küresel kurumlar. Küresel kapsam sürekli genişlemektedir."
   },
   "footer": {
     "hosting": "İsviçre'de barındırılıyor · ABD Bulut Yasası yargı yetkisi yok",
@@ -170,6 +169,7 @@
     "section_independence": "Bağımsızlık ve Finansman",
     "section_limitations": "Sınırlamalar",
     "section_contact": "İletişim ve Düzeltmeler",
+    "epistemic_explanation": "GradedFacts, olgusal doğrulama için epistemik bir yaklaşım benimsemektedir: her yargı izlenebilir kaynaklara, belgelenmiş kanıtlara ve şeffaf kriterlere dayanmaktadır. Epistemik şu anlama gelir: yalnızca bir şeyin doğru mu yoksa yanlış mı olduğunu değil, bu bilgiden ne kadar emin olabileceğimizi — ve hangi kanıt temelinde — inceliyoruz.",
     "what_p1": "GradedFacts, siyasi iddiaları kamuya açık kaynaklara karşı değerlendiren otomatik bir doğrulama aracıdır. Bir haber kuruluşu, siyasi bir denetim organı veya bir savunuculuk grubu değildir. Epistemik bir araçtır: amacı mevcut kanıtların ne gösterdiğini ortaya koymak ve kanıtların henüz neyi çözmediği konusunda açık olmaktır.",
     "what_p2": "Yaklaşımımız diğer araçlardan tek temel konuda farklılık gösterir: <strong>kurumsal bağımsızlık kurumsal statünün önüne geçer.</strong> Resmi bir kaynak otomatik olarak güvenilir bir kaynak değildir — bu, kaynağın siyasi çıkarlardan bağımsız faaliyet gösterip göstermediğine bağlıdır. Liderliği sadakat kriterlerine göre atanmış bir devlet kurumu, resmi unvanından bağımsız olarak bağımsız değildir. Her kaynağı her iki boyutta ayrı ayrı değerlendiriyoruz.",
     "what_p3": "Canlı analiz çalışıyor — canlı kaynak arama ve değerlendirme. Epistemik açıdan kesin bir analiz 1-2 dakika sürer.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "aynı karar",
     "different_count": "farklı karar"
+  },
+  "header": {
+    "tagline": "— Gerçekler. Kaynaklar. Şeffaflık."
   }
 }

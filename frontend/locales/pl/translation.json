@@ -21,8 +21,7 @@
     "analyzing": "Analizuję..."
   },
   "coverage": {
-    "phase1_title": "Faza 1 — Stany Zjednoczone i Europa.",
-    "phase1_body": "Analiza opiera się na dokumentach rządowych, instytucjach i mediach USA i Europy (UE, CH, UK, DE, FR). Globalny zasięg rozszerza się w Fazie 2."
+    "phase1_body": "Analiza opiera się na międzynarodowych dokumentach rządowych, instytucjach i mediach. Skupienie: Europa, Ameryka Północna i instytucje globalne. Globalne pokrycie jest stale rozszerzane."
   },
   "footer": {
     "hosting": "Hostowany w Szwajcarii · Bez jurysdykcji US Cloud Act",
@@ -170,6 +169,7 @@
     "section_independence": "Niezależność i finansowanie",
     "section_limitations": "Ograniczenia",
     "section_contact": "Kontakt i korekty",
+    "epistemic_explanation": "GradedFacts stosuje podejście epistemiczne do weryfikacji faktów: każda ocena opiera się na możliwych do śledzenia źródłach, udokumentowanych dowodach i przejrzystych kryteriach. Epistemyczny oznacza: sprawdzamy nie tylko czy coś jest prawdą czy fałszem, ale jak pewni możemy być tej wiedzy — i na jakiej podstawie dowodowej.",
     "what_p1": "GradedFacts to zautomatyzowane narzędzie do weryfikacji faktów, które ocenia twierdzenia polityczne na podstawie publicznie dostępnych źródeł. Nie jest organizacją prasową, politycznym obserwatorem ani grupą rzeczniczą. Jest narzędziem epistemicznym: jego celem jest przedstawienie tego, co pokazują dostępne dowody, oraz jasne wskazanie tego, czego dowody jeszcze nie rozstrzygają.",
     "what_p2": "Nasze podejście różni się od innych narzędzi pod jednym kluczowym względem: <strong>niezależność instytucjonalna ma pierwszeństwo przed statusem instytucjonalnym.</strong> Oficjalne źródło nie jest automatycznie wiarygodnym źródłem — zależy to od tego, czy działa niezależnie od interesów politycznych. Agencja rządowa, której kierownictwo zostało mianowane według kryteriów lojalności, nie jest niezależna, niezależnie od jej oficjalnego tytułu. Oceniamy każde źródło osobno pod obiema względami.",
     "what_p3": "Analiza na żywo — wyszukiwanie i ocena źródeł w czasie rzeczywistym. Epistemicznie precyzyjna analiza zajmuje 1–2 minuty.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "zgodne oceny",
     "different_count": "odmienne oceny"
+  },
+  "header": {
+    "tagline": "— Fakty. Źródła. Przejrzystość."
   }
 }

@@ -21,8 +21,7 @@
     "analyzing": "Analyseren..."
   },
   "coverage": {
-    "phase1_title": "Fase 1 — Verenigde Staten en Europa.",
-    "phase1_body": "De analyse is gebaseerd op Amerikaanse en Europese overheidsdocumenten, instellingen en media (EU, CH, UK, DE, FR). Wereldwijde dekking breidt uit in Fase 2."
+    "phase1_body": "De analyse put uit internationale overheidsdocumenten, instellingen en media. Focus: Europa, Noord-Amerika en mondiale instellingen. Wereldwijde dekking wordt voortdurend uitgebreid."
   },
   "footer": {
     "hosting": "Gehost in Zwitserland · Geen Amerikaanse Cloud Act-jurisdictie",
@@ -170,6 +169,7 @@
     "section_independence": "Onafhankelijkheid en financiering",
     "section_limitations": "Beperkingen",
     "section_contact": "Contact en correcties",
+    "epistemic_explanation": "GradedFacts hanteert een epistemische aanpak bij factchecking: elk oordeel is gebaseerd op traceerbare bronnen, gedocumenteerd bewijs en transparante criteria. Epistemisch betekent: we onderzoeken niet alleen of iets waar of onwaar is, maar hoe zeker we dat kunnen weten — en op basis van welk bewijs.",
     "what_p1": "GradedFacts is een geautomatiseerde fact-checktool die politieke beweringen beoordeelt aan de hand van openbaar beschikbare bronnen. Het is geen nieuwsorganisatie, een politieke waakhond of een belangengroep. Het is een epistemisch hulpmiddel: het doel is te laten zien wat het beschikbare bewijs aantoont en expliciet te zijn over wat het bewijs nog niet oplost.",
     "what_p2": "Onze aanpak verschilt op één belangrijk punt van andere tools: <strong>institutionele onafhankelijkheid heeft voorrang op institutionele status.</strong> Een officiële bron is niet automatisch een betrouwbare bron — dat hangt ervan af of ze onafhankelijk van politieke belangen opereert. Een overheidsinstantie waarvan de leiding op loyaliteitscriteria is benoemd, is niet onafhankelijk, ongeacht haar officiële titel. We beoordelen elke bron op beide dimensies afzonderlijk.",
     "what_p3": "Live analyse — live zoeken en evalueren van bronnen. Een epistemisch nauwkeurige analyse duurt 1-2 minuten.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "overeenkomende oordelen",
     "different_count": "afwijkende oordelen"
+  },
+  "header": {
+    "tagline": "— Feiten. Bronnen. Transparantie."
   }
 }

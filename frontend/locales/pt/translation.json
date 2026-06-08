@@ -21,8 +21,7 @@
     "analyzing": "Analisando..."
   },
   "coverage": {
-    "phase1_title": "Fase 1 — Estados Unidos e Europa.",
-    "phase1_body": "A análise baseia-se em registos governamentais, instituições e meios de comunicação dos EUA e da Europa (UE, CH, UK, DE, FR). Cobertura global a expandir na Fase 2."
+    "phase1_body": "A análise baseia-se em documentos governamentais internacionais, instituições e meios de comunicação. Foco: Europa, América do Norte e instituições globais. A cobertura global está em expansão contínua."
   },
   "footer": {
     "hosting": "Alojado na Suíça · Sem jurisdição da Lei Cloud dos EUA",
@@ -170,6 +169,7 @@
     "section_independence": "Independência e financiamento",
     "section_limitations": "Limitações",
     "section_contact": "Contacto e correções",
+    "epistemic_explanation": "GradedFacts adota uma abordagem epistémica na verificação de factos: cada julgamento baseia-se em fontes rastreáveis, evidências documentadas e critérios transparentes. Epistémico significa: examinamos não apenas se algo é verdadeiro ou falso, mas com que confiança podemos saber isso — e com base em que evidências.",
     "what_p1": "GradedFacts é uma ferramenta automatizada de verificação de factos que avalia afirmações políticas com base em fontes publicamente disponíveis. Não é uma organização de notícias, um observatório político nem um grupo de defesa. É uma ferramenta epistémica: o seu objetivo é expor o que as evidências disponíveis mostram e ser explícito sobre o que as evidências ainda não resolvem.",
     "what_p2": "A nossa abordagem difere de outras ferramentas num aspeto fundamental: <strong>a independência institucional prevalece sobre o estatuto institucional.</strong> Uma fonte oficial não é automaticamente uma fonte fiável — depende de operar de forma independente de interesses políticos. Uma agência governamental cuja liderança foi nomeada com base em critérios de lealdade não é independente, independentemente do seu título oficial. Avaliamos cada fonte em ambas as dimensões separadamente.",
     "what_p3": "Análise em direto — pesquisa e avaliação de fontes em tempo real. Uma análise epistemicamente precisa demora 1-2 minutos.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "julgamentos idênticos",
     "different_count": "julgamentos divergentes"
+  },
+  "header": {
+    "tagline": "— Factos. Fontes. Transparência."
   }
 }

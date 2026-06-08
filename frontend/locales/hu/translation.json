@@ -21,8 +21,7 @@
     "analyzing": "Elemzés..."
   },
   "coverage": {
-    "phase1_title": "1. fázis — Egyesült Államok és Európa.",
-    "phase1_body": "Az elemzés az USA és Európa kormányzati dokumentumain, intézményein és médiáján alapul (EU, CH, UK, DE, FR). A globális lefedettség a 2. fázisban bővül."
+    "phase1_body": "Az elemzés nemzetközi kormányzati dokumentumokra, intézményekre és médiára támaszkodik. Fókusz: Európa, Észak-Amerika és globális intézmények. A globális lefedettség folyamatosan bővül."
   },
   "footer": {
     "hosting": "Svájcban üzemeltetve · Az USA Cloud Act joghatóságán kívül",
@@ -170,6 +169,7 @@
     "section_independence": "Függetlenség és finanszírozás",
     "section_limitations": "Korlátok",
     "section_contact": "Kapcsolat és javítások",
+    "epistemic_explanation": "A GradedFacts episztemikus megközelítést alkalmaz a tényellenőrzésben: minden ítélet nyomon követhető forrásokon, dokumentált bizonyítékokon és átlátható kritériumokon alapul. Episztemikus azt jelenti: nem csupán azt vizsgáljuk, hogy valami igaz-e vagy hamis, hanem azt is, mennyire lehetünk biztosak ebben a tudásban — és milyen bizonyítéki alapon.",
     "what_p1": "A GradedFacts egy automatizált tényellenőrző eszköz, amely politikai állításokat értékel nyilvánosan elérhető források alapján. Nem hírszervezet, politikai felügyeleti szerv vagy érdekképviseleti csoport. Ismeretelméleti eszköz: célja annak bemutatása, hogy a rendelkezésre álló bizonyítékok mit mutatnak, és egyértelműen jelezni, hogy a bizonyítékok mit nem oldanak meg még.",
     "what_p2": "Megközelítésünk egy lényeges szempontból tér el a többi eszköztől: <strong>az intézményi függetlenség elsőbbséget élvez az intézményi státusszal szemben.</strong> Egy hivatalos forrás nem automatikusan megbízható forrás — ez attól függ, hogy politikai érdekektől függetlenül működik-e. Egy olyan kormányzati ügynökség, amelynek vezetését lojalitási kritériumok alapján nevezték ki, nem független, hivatalos megnevezésétől függetlenül. Minden forrást külön-külön értékelünk mindkét dimenzióban.",
     "what_p3": "Élő elemzés fut — valós idejű forráskeresés és -értékelés. Egy ismeretelméleti szempontból pontos elemzés 1–2 percet vesz igénybe.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "egyező ítéletek",
     "different_count": "eltérő ítéletek"
+  },
+  "header": {
+    "tagline": "— Tények. Források. Átláthatóság."
   }
 }

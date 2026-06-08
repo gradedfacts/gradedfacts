@@ -21,8 +21,7 @@
     "analyzing": "Analisi..."
   },
   "coverage": {
-    "phase1_title": "Fase 1 — Stati Uniti ed Europa.",
-    "phase1_body": "L'analisi attinge da documenti governativi, istituzioni e media statunitensi ed europei (UE, CH, UK, DE, FR). Copertura globale in espansione nella Fase 2."
+    "phase1_body": "L'analisi si basa su documenti governativi internazionali, istituzioni e media. Focus: Europa, Nord America e istituzioni globali. La copertura globale è in continua espansione."
   },
   "footer": {
     "hosting": "Ospitato in Svizzera · Nessuna giurisdizione US Cloud Act",
@@ -170,6 +169,7 @@
     "section_independence": "Indipendenza e finanziamento",
     "section_limitations": "Limitazioni",
     "section_contact": "Contatto e correzioni",
+    "epistemic_explanation": "GradedFacts adotta un approccio epistemico al fact-checking: ogni giudizio si basa su fonti tracciabili, prove documentate e criteri trasparenti. Epistemico significa: esaminiamo non solo se qualcosa è vero o falso, ma quanto possiamo essere certi di saperlo — e su quale base di prove.",
     "what_p1": "GradedFacts è uno strumento automatizzato di fact-checking che valuta le affermazioni politiche rispetto a fonti pubblicamente disponibili. Non è un'organizzazione di notizie, un osservatorio politico o un gruppo di advocacy. È uno strumento epistemico: il suo obiettivo è esporre ciò che le prove disponibili mostrano ed essere esplicito su ciò che le prove non risolvono ancora.",
     "what_p2": "Il nostro approccio differisce dagli altri strumenti in un aspetto chiave: <strong>l'indipendenza istituzionale ha la precedenza sullo status istituzionale.</strong> Una fonte ufficiale non è automaticamente una fonte affidabile — dipende dal fatto che operi indipendentemente dagli interessi politici. Un'agenzia governativa la cui leadership è stata nominata in base a criteri di lealtà non è indipendente, indipendentemente dal suo titolo ufficiale. Valutiamo ogni fonte su entrambe le dimensioni separatamente.",
     "what_p3": "Analisi in diretta — ricerca e valutazione delle fonti in tempo reale. Un'analisi epistemicamente precisa richiede 1-2 minuti.",
@@ -195,5 +195,8 @@
   "history": {
     "same_count": "giudizi corrispondenti",
     "different_count": "giudizi divergenti"
+  },
+  "header": {
+    "tagline": "— Fatti. Fonti. Trasparenza."
   }
 }
