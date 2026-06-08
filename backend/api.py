@@ -19,8 +19,9 @@ from sqlalchemy.orm import Session, joinedload
 
 from backend import schemas
 from backend.analysis.consensus import analyze_claim_with_consensus
-from backend.analysis.engine import analyze_claim, _get_client
+from backend.analysis.engine import analyze_claim, _get_client, independence_bool, independence_label
 from backend.sources.evaluator import extract_domain
+from backend.sources.registries import lookup_source_all_registries
 from backend.db.models import Base, Claim, EvaluatedSource, Judgment
 from backend.db.rate_limit import check_and_increment, check_followup_rate_limit
 from backend.db.session import SessionLocal, engine, get_session
@@ -132,6 +133,41 @@ _analysis_errors: dict[str, tuple[int, str]] = {}
 
 # temp_claim_id → canonical_claim_id, set after dedup completes so ui_poll can resolve
 _claim_redirects: dict[str, str] = {}
+
+
+_SOURCE_PASSTHROUGH = (
+    "id", "claim_id", "url", "relevance_score", "excerpt",
+    "full_text_snapshot", "anonymous", "anonymity_justification", "fetched_at",
+)
+
+
+def _apply_live_registry(source) -> object:
+    """Return a render-time view of source with tier/independence from the current registry.
+
+    The DB is append-only, so rows written before a registry update may carry stale
+    tier or independence values.  When the domain is found in registry.json, override
+    those fields so the UI always reflects the current curated classification.
+    Returns the original object unchanged when the domain is not in the registry.
+    """
+    import types
+    from backend.analysis.rating import SourceTier
+
+    entry = lookup_source_all_registries(source.url)
+    if entry is None:
+        return source
+
+    live_indep = independence_bool(entry["is_independent"])
+
+    ns = types.SimpleNamespace()
+    for attr in _SOURCE_PASSTHROUGH:
+        setattr(ns, attr, getattr(source, attr, None))
+    ns.tier = SourceTier(entry["tier"])
+    ns.is_independent = live_indep
+    ns.independence_label = independence_label(entry["is_independent"])
+    ns.affiliation_note = entry.get("affiliation_note") if not live_indep else None
+    # A registered domain is by definition verified.
+    ns.is_unverified = False
+    return ns
 
 
 def _sort_sources(sources: list) -> list:
@@ -558,7 +594,8 @@ def ui_poll(
         .order_by(Judgment.created_at.desc())
     ).scalars().unique().all()
 
-    sorted_sources = _sort_sources(sources)
+    live_sources = [_apply_live_registry(s) for s in sources]
+    sorted_sources = _sort_sources(live_sources)
     return templates.TemplateResponse(
         request,
         "partials/result.html",
