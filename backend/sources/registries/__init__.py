@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import urlparse
 
 _REGISTRY_DIR = Path(__file__).parent
 
@@ -36,18 +37,53 @@ def load_registry(filename: str) -> dict:
         return json.load(f)
 
 
+@lru_cache(maxsize=None)
+def _domain_index(registry: str) -> dict[str, dict]:
+    """Return a lowercase domain→entry mapping for O(1) exact lookups."""
+    data = load_registry(registry)
+    return {e.get("domain", "").lower(): e for e in data.get("sources", [])}
+
+
+def _hostname(url: str) -> str:
+    """Extract the lowercase hostname from a full URL or a bare domain string."""
+    url = url.strip()
+    if not url:
+        return ""
+    if "://" not in url:
+        url = "https://" + url
+    try:
+        return urlparse(url).hostname or ""
+    except Exception:
+        return ""
+
+
 def lookup_source(domain: str, registry: str = _UNIFIED_REGISTRY) -> dict | None:
     """
-    Look up a source entry by domain substring match.
+    Look up a source entry by hostname with progressive subdomain stripping.
 
-    Returns the first matching entry dict, or None if no match.
-    Matching is case-insensitive substring against the entry's `domain` field.
+    Accepts a full URL or a bare domain.  Extracts the hostname then tries:
+      1. Exact match against registry entry domains.
+      2. Strip the leftmost label and retry.
+    Stops when a match is found or only 2 labels remain (never strips to TLD).
+
+    Examples:
+      de.wikipedia.org  → wikipedia.org  (if in registry)
+      www.bpb.de        → bpb.de
+      news.bbc.co.uk    → bbc.co.uk
+      www.bfs.admin.ch  → bfs.admin.ch   (more specific entry wins)
+
+    Returns the matching entry dict, or None if no match.
     """
-    data = load_registry(registry)
-    domain_lower = domain.lower()
-    for entry in data.get("sources", []):
-        if entry.get("domain", "").lower() in domain_lower:
-            return entry
+    index = _domain_index(registry)
+    host = _hostname(domain)
+    if not host:
+        return None
+    parts = host.split(".")
+    while len(parts) >= 2:
+        if parts_joined := ".".join(parts):
+            if parts_joined in index:
+                return index[parts_joined]
+        parts = parts[1:]
     return None
 
 
