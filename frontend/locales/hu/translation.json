@@ -14,7 +14,7 @@
     "leaning_hint": "A politikai besorolás automatikusan aktiválódik, ahogy egyre több állítást elemzünk."
   },
   "form": {
-    "heading": "Állítás ellenőrzése",
+    "heading": "Ellenőrizze a politikai állítást",
     "placeholder": "Adjon meg egy politikai állítást ellenőrzésre — pl. «Az amerikai munkanélküliségi ráta 3,4%-ra csökkent 2023 januárjában»",
     "hint": "Ellenőrzésenként egy állítás",
     "submit": "Tényellenőrzés",

@@ -14,7 +14,7 @@
     "leaning_hint": "Klasifikace politického sklonu se aktivuje automaticky, jakmile je analyzováno více tvrzení."
   },
   "form": {
-    "heading": "Ověřit tvrzení",
+    "heading": "Ověřte politické tvrzení",
     "placeholder": "Zadejte politické tvrzení k ověření — např. \"Míra nezaměstnanosti v USA klesla na 3,4 % v lednu 2023\"",
     "hint": "Jedno tvrzení na kontrolu",
     "submit": "Ověřit",

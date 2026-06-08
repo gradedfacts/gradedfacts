@@ -14,7 +14,7 @@
     "leaning_hint": "La classification politique s'active automatiquement à mesure que davantage d'affirmations sont analysées."
   },
   "form": {
-    "heading": "Vérifier une affirmation",
+    "heading": "Vérifier une affirmation politique",
     "placeholder": "Entrez une affirmation politique à vérifier — ex. « Le taux de chômage américain est passé à 3,4 % en janvier 2023 »",
     "hint": "Une affirmation par vérification",
     "submit": "Vérifier",

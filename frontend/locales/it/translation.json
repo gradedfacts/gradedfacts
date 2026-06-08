@@ -14,7 +14,7 @@
     "leaning_hint": "La classificazione dell'orientamento politico si attiva automaticamente man mano che vengono analizzate più affermazioni."
   },
   "form": {
-    "heading": "Verifica un'affermazione",
+    "heading": "Verifica un'affermazione politica",
     "placeholder": "Inserisci un'affermazione politica da verificare — es. «Il tasso di disoccupazione USA è sceso al 3,4% a gennaio 2023»",
     "hint": "Un'affermazione per verifica",
     "submit": "Verifica",

@@ -14,7 +14,7 @@
     "leaning_hint": "Politisk klassificering aktiveras automatiskt i takt med att fler påståenden analyseras."
   },
   "form": {
-    "heading": "Faktakontrollera ett påstående",
+    "heading": "Kontrollera ett politiskt påstående",
     "placeholder": "Ange ett politiskt påstående att verifiera — t.ex. «Den amerikanska arbetslöshetsnivån sjönk till 3,4% i januari 2023»",
     "hint": "Ett påstående per kontroll",
     "submit": "Faktakontroll",

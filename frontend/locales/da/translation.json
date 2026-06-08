@@ -14,7 +14,7 @@
     "leaning_hint": "Klassificering af politisk tendens aktiveres automatisk, efterhånden som flere påstande analyseres."
   },
   "form": {
-    "heading": "Faktjek en påstand",
+    "heading": "Tjek et politisk udsagn",
     "placeholder": "Indtast en politisk påstand for at verificere — f.eks. \"Den amerikanske arbejdsløshed faldt til 3,4 % i januar 2023\"",
     "hint": "Én påstand pr. tjek",
     "submit": "Faktjek",

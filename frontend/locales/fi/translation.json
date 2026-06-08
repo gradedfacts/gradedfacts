@@ -14,7 +14,7 @@
     "leaning_hint": "Poliittisen suuntauksen luokittelu aktivoituu automaattisesti, kun useampia väitteitä analysoidaan."
   },
   "form": {
-    "heading": "Faktatarkista väite",
+    "heading": "Tarkista poliittinen väite",
     "placeholder": "Syötä poliittinen väite tarkistettavaksi — esim. \"Yhdysvaltain työttömyysaste laski 3,4 prosenttiin tammikuussa 2023\"",
     "hint": "Yksi väite per tarkistus",
     "submit": "Faktatarkista",

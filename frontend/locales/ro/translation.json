@@ -14,7 +14,7 @@
     "leaning_hint": "Clasificarea orientării politice se activează automat pe măsură ce sunt analizate mai multe afirmații."
   },
   "form": {
-    "heading": "Verificați o afirmație",
+    "heading": "Verificați o afirmație politică",
     "placeholder": "Introduceți o afirmație politică pentru verificare — ex. \"Rata șomajului din SUA a scăzut la 3,4% în ianuarie 2023\"",
     "hint": "O afirmație per verificare",
     "submit": "Verifică",

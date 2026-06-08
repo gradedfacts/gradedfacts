@@ -14,7 +14,7 @@
     "leaning_hint": "Klasyfikacja polityczna aktywuje się automatycznie w miarę analizowania kolejnych twierdzeń."
   },
   "form": {
-    "heading": "Sprawdź twierdzenie",
+    "heading": "Sprawdź twierdzenie polityczne",
     "placeholder": "Wprowadź twierdzenie polityczne do weryfikacji — np. «Bezrobocie w USA spadło do 3,4% w styczniu 2023»",
     "hint": "Jedno twierdzenie na sprawdzenie",
     "submit": "Sprawdź fakty",

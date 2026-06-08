@@ -14,7 +14,7 @@
     "leaning_hint": "La clasificación de tendencia política se activa automáticamente a medida que se analizan más afirmaciones."
   },
   "form": {
-    "heading": "Verificar una afirmación",
+    "heading": "Verificar una afirmación política",
     "placeholder": "Introduce una afirmación política para verificar — ej. «La tasa de desempleo en EE.UU. cayó al 3,4% en enero de 2023»",
     "hint": "Una afirmación por verificación",
     "submit": "Verificar",

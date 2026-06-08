@@ -14,7 +14,7 @@
     "leaning_hint": "Siyasi eğilim sınıflandırması, daha fazla iddia analiz edildikçe otomatik olarak etkinleşir."
   },
   "form": {
-    "heading": "Bir iddiayı doğrula",
+    "heading": "Siyasi bir iddiayı kontrol edin",
     "placeholder": "Doğrulanacak siyasi bir iddia girin — ör. «ABD işsizlik oranı Ocak 2023'te %3,4'e düştü»",
     "hint": "Kontrol başına bir iddia",
     "submit": "Gerçeği doğrula",

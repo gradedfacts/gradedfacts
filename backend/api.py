@@ -119,8 +119,6 @@ _LOADING_MESSAGES = [
     {"key": "analyzing.deriving",   "text": "Deriving rating…"},
 ]
 
-_TIER_ORDER = {"primary": 0, "secondary": 1, "tertiary": 2}
-
 
 def _client_ip(request: Request) -> str:
     forwarded = request.headers.get("x-forwarded-for")
@@ -170,8 +168,30 @@ def _apply_live_registry(source) -> object:
     return ns
 
 
+def _source_sort_key(s) -> tuple:
+    """Five-bucket quality sort, then relevance descending within each bucket.
+
+    Bucket 0 — Primary / Independent
+    Bucket 1 — Primary / Not Independent
+    Bucket 2 — Secondary / Independent
+    Bucket 3 — Secondary / Not Independent
+    Bucket 4 — Tertiary (Neutral, Unverified, or any)
+    """
+    tier = str(s.tier)
+    indep = s.is_independent  # bool or "neutral"
+    is_indep = indep is True  # neutral and False both map to not-truly-independent
+
+    if tier == "SourceTier.PRIMARY":
+        bucket = 0 if is_indep else 1
+    elif tier == "SourceTier.SECONDARY":
+        bucket = 2 if is_indep else 3
+    else:
+        bucket = 4
+    return (bucket, -s.relevance_score)
+
+
 def _sort_sources(sources: list) -> list:
-    return sorted(sources, key=lambda s: (_TIER_ORDER.get(str(s.tier), 9), -s.relevance_score))
+    return sorted(sources, key=_source_sort_key)
 
 
 def _group_sources_by_domain(sources: list) -> list[dict]:
