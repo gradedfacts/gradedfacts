@@ -2055,6 +2055,16 @@
       "region": "North America"
     },
     {
+      "name": "Wikipedia",
+      "domain": "wikipedia.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "Wikipedia is a crowd-edited aggregation of secondary and tertiary material. It is not a primary or independent source and never counts toward the verification threshold. Wikipedia articles can point to primary sources; those primary sources should be cited directly."
+    },
+    {
       "name": "Médecins Sans Frontières (MSF) — Doctors Without Borders",
       "domain": "msf.org",
       "tier": "secondary",
