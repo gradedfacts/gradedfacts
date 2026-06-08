@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "La symétrie signifie des normes procédurales égales, pas des résultats égaux.",
     "last_30_days": "30 derniers jours"
+  },
+  "source": {
+    "unverified": "⚠ Source en cours de vérification"
   }
 }

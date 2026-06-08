@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "La simmetria significa standard procedurali uguali, non risultati uguali.",
     "last_30_days": "ultimi 30 giorni"
+  },
+  "source": {
+    "unverified": "⚠ Fonte in revisione"
   }
 }

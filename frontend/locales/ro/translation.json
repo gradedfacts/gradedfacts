@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "Simetria înseamnă standarde procedurale egale, nu rezultate egale.",
     "last_30_days": "ultimele 30 de zile"
+  },
+  "source": {
+    "unverified": "⚠ Sursă în curs de verificare"
   }
 }

@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "Symmetri betyder ens proceduremæssige standarder, ikke ens resultater.",
     "last_30_days": "seneste 30 dage"
+  },
+  "source": {
+    "unverified": "⚠ Kilde under gennemgang"
   }
 }

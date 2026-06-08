@@ -15,11 +15,58 @@ The evaluator never mutates input dicts — it returns new ones.
 
 from __future__ import annotations
 
+import fcntl
+import json
+import logging
+from datetime import datetime, timezone
+from pathlib import Path
 from urllib.parse import urlparse
 
 from backend.sources.classifier import is_wikipedia
 from backend.sources.independence_registry import apply_independence_override
-from backend.sources.registries import apply_registry_override
+from backend.sources.registries import apply_registry_override, lookup_source_all_registries
+
+logger = logging.getLogger(__name__)
+
+_NEW_SOURCES_PATH = Path(__file__).parent / "registries" / "new_sources_to_review.json"
+_NEW_SOURCES_LOCK = _NEW_SOURCES_PATH.with_suffix(".lock")
+
+
+def _track_unregistered_source(domain: str, url: str) -> None:
+    """Append or update domain in new_sources_to_review.json with file locking."""
+    try:
+        with _NEW_SOURCES_LOCK.open("a+") as lock_fh:
+            fcntl.flock(lock_fh, fcntl.LOCK_EX)
+            try:
+                if _NEW_SOURCES_PATH.exists():
+                    with _NEW_SOURCES_PATH.open("r", encoding="utf-8") as f:
+                        data = json.load(f)
+                else:
+                    data = {"sources_to_review": []}
+
+                sources = data.setdefault("sources_to_review", [])
+                now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+                for entry in sources:
+                    if entry.get("domain") == domain:
+                        entry["appearance_count"] = entry.get("appearance_count", 1) + 1
+                        entry["last_seen"] = now
+                        break
+                else:
+                    sources.append({
+                        "domain": domain,
+                        "first_seen": now,
+                        "appearance_count": 1,
+                        "example_url": url,
+                        "last_seen": now,
+                    })
+
+                with _NEW_SOURCES_PATH.open("w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+            finally:
+                fcntl.flock(lock_fh, fcntl.LOCK_UN)
+    except Exception:
+        logger.debug("_track_unregistered_source: skipped for %s", domain, exc_info=True)
 
 
 def extract_domain(url: str) -> str:
@@ -54,6 +101,9 @@ def evaluate_source(src: dict) -> dict:
 
     Returns a new dict (or the same object if no changes are needed).
     """
+    url = src.get("url", "")
+    _is_unregistered = bool(url) and lookup_source_all_registries(url) is None
+
     # Step 1: apply regional registry overrides (known sources get curated metadata)
     src = apply_registry_override(src)
 
@@ -62,6 +112,14 @@ def evaluate_source(src: dict) -> dict:
     if is_wikipedia(src.get("url", "")) and src.get("tier") != "tertiary":
         src = dict(src)
         src["tier"] = "tertiary"
+
+    # Step 1c: track unregistered domains and flag them for UI display.
+    if _is_unregistered and not is_wikipedia(url):
+        domain = extract_domain(url)
+        if domain:
+            _track_unregistered_source(domain, url)
+        src = dict(src)
+        src["is_unverified"] = True
 
     # Step 2: apply compromised-institution registry (can further downgrade independence)
     src = apply_independence_override(src)

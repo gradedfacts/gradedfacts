@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "Symmetri innebär lika procedurstandarder, inte lika utfall.",
     "last_30_days": "senaste 30 dagarna"
+  },
+  "source": {
+    "unverified": "⚠ Källa under granskning"
   }
 }

@@ -13,6 +13,10 @@ __pycache__/
 *.db-shm
 *.db-wal
 
+# Auto-discovered sources (local review queue, not committed)
+backend/sources/registries/new_sources_to_review.json
+backend/sources/registries/new_sources_to_review.lock
+
 # Claude Code
 .claude/
 

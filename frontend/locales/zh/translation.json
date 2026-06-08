@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "对称性意味着相同的程序标准，而非相同的结果。",
     "last_30_days": "过去30天"
+  },
+  "source": {
+    "unverified": "⚠ 来源待审核"
   }
 }

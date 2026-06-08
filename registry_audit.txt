@@ -1,0 +1,289 @@
+Total sources: 274
+
+  primary / False: 26
+  primary / True: 118
+  secondary / False: 10
+  secondary / True: 114
+  tertiary / False: 1
+  tertiary / True: 1
+  tertiary / neutral: 2
+  tertiary / not_independent: 2
+
+
+FULL LIST:
+DOMAIN                                        TIER         IS_INDEPENDENT       COUNTS
+----------------------------------------------------------------------------------------------------
+abs.gov.au                                    primary      True                 True
+aka.fi                                        primary      True                 True
+archives.gov                                  primary      True                 True
+arolsen-archives.org                          primary      True                 True
+assemblee-nationale.fr                        primary      True                 
+assembly.go.kr                                primary      True                 True
+avcr.cz                                       primary      True                 True
+bea.gov                                       primary      True                 
+bfs.admin.ch                                  primary      True                 True
+bger.ch                                       primary      True                 
+bls.gov                                       primary      True                 
+bundesarchiv.de                               primary      True                 True
+bundesgericht.ch                              primary      True                 True
+bundestag.de                                  primary      True                 
+bundesverfassungsgericht.de                   primary      True                 
+c-span.org                                    primary      True                 
+cbo.gov                                       primary      True                 
+cbs.nl                                        primary      True                 True
+cdep.ro                                       primary      True                 True
+census.gov                                    primary      True                 
+cnr.it                                        primary      True                 True
+cnrs.fr                                       primary      True                 True
+coe.int                                       primary      True                 True
+congreso.es                                   primary      True                 True
+congress.gov                                  primary      True                 True
+conseil-constitutionnel.fr                    primary      True                 
+cortecostituzionale.it                        primary      True                 True
+courdecassation.fr                            primary      True                 
+csic.es                                       primary      True                 True
+cso.ie                                        primary      True                 True
+ctbto.org                                     primary      True                 True
+curia.europa.eu                               primary      True                 
+czso.cz                                       primary      True                 True
+destatis.de                                   primary      True                 
+dff.dk                                        primary      True                 True
+dfg.de                                        primary      True                 True
+dst.dk                                        primary      True                 True
+ecb.europa.eu                                 primary      True                 
+echr.coe.int                                  primary      True                 
+eduskunta.fi                                  primary      True                 True
+eia.gov                                       primary      True                 True
+elidek.gr                                     primary      True                 True
+europarl.europa.eu                            primary      True                 
+fao.org                                       primary      True                 True
+fct.pt                                        primary      True                 True
+federalregister.gov                           primary      True                 
+federalreserve.gov                            primary      True                 True
+fred.stlouisfed.org                           primary      True                 
+ft.dk                                         primary      True                 True
+gao.gov                                       primary      True                 
+hellenicparliament.gr                         primary      True                 True
+iaea.org                                      primary      True                 True
+ibge.gov.br                                   primary      True                 True
+icrc.org                                      primary      True                 True
+iea.org                                       primary      True                 True
+ilo.org                                       primary      True                 True
+indec.gob.ar                                  primary      True                 True
+ine.es                                        primary      True                 True
+ine.pt                                        primary      True                 True
+insee.fr                                      primary      True                 
+insse.ro                                      primary      True                 True
+istat.it                                      primary      True                 True
+iwm.org.uk                                    primary      True                 True
+jsps.go.jp                                    primary      True                 True
+knaw.nl                                       primary      True                 True
+kva.se                                        primary      True                 True
+mta.hu                                        primary      True                 True
+nas.gov.ua                                    primary      True                 True
+nationalarchives.gov.uk                       primary      True                 True
+ndl.go.jp                                     primary      True                 True
+nrf.re.kr                                     primary      True                 True
+oecd.org                                      primary      True                 True
+ombudsman.europa.eu                           primary      True                 
+ons.gov.uk                                    primary      True                 
+opcw.org                                      primary      True                 True
+osce.org                                      primary      True                 True
+pacer.gov                                     primary      True                 
+pan.pl                                        primary      True                 True
+parlament.ch                                  primary      True                 True
+parlament.hu                                  primary      True                 True
+parlamento.it                                 primary      True                 True
+parlamento.pt                                 primary      True                 True
+parliament.uk                                 primary      True                 
+psp.cz                                        primary      True                 True
+publications.europa.eu                        primary      True                 
+rada.gov.ua                                   primary      True                 True
+rechtspraak.nl                                primary      True                 True
+riksdagen.se                                  primary      True                 True
+scb.se                                        primary      True                 True
+sec.gov                                       primary      True                 
+sejm.gov.pl                                   primary      True                 True
+shugiin.go.jp                                 primary      True                 True
+snb.ch                                        primary      True                 True
+ssb.no                                        primary      True                 True
+stat.ee                                       primary      True                 True
+stat.fi                                       primary      True                 True
+stat.go.jp                                    primary      True                 True
+stat.gov.lv                                   primary      True                 True
+stat.gov.pl                                   primary      True                 True
+stat.si                                       primary      True                 True
+statcan.gc.ca                                 primary      True                 True
+statice.is                                    primary      True                 True
+statistics.gr                                 primary      True                 True
+statistik.at                                  primary      True                 True
+stats.govt.nz                                 primary      True                 True
+stats.oecd.org                                primary      True                 True
+supremecourt.gov                              primary      True                 True
+supremecourt.uk                               primary      True                 
+susr.sk                                       primary      True                 True
+tribunalconstitucional.es                     primary      True                 True
+tweedekamer.nl                                primary      True                 True
+uefiscdi.gov.ro                               primary      True                 True
+unesco.org                                    primary      True                 True
+unhcr.org                                     primary      True                 True
+ushmm.org                                     primary      True                 True
+vda.lrv.lt                                    primary      True                 True
+wfp.org                                       primary      True                 True
+yadvashem.org                                 primary      True                 True
+admin.ch                                      primary      False                True
+bk.admin.ch                                   primary      False                
+bka.de                                        primary      False                True
+bundesregierung.de                            primary      False                True
+consilium.europa.eu                           primary      False                True
+ec.europa.eu                                  primary      False                
+eeas.europa.eu                                primary      False                
+eurostat.ec.europa.eu                         primary      False                True
+gov.sa                                        primary      False                True
+gov.uk                                        primary      False                
+ohchr.org                                     primary      False                True
+opendata.swiss                                primary      False                True
+portal.ksh.hu                                 primary      False                True
+press.un.org                                  primary      False                True
+rki.de                                        primary      False                True
+seco.admin.ch                                 primary      False                True
+stat.gov.ua                                   primary      False                True
+statbel.fgov.be                               primary      False                True
+state.gov                                     primary      False                True
+statistiques.public.lu                        primary      False                True
+tbmm.gov.tr                                   primary      False                True
+tubitak.gov.tr                                primary      False                True
+turkstat.gov.tr                               primary      False                True
+uae.gov.ae                                    primary      False                True
+umweltbundesamt.de                            primary      False                True
+verfassungsschutz.de                          primary      False                True
+afp.com                                       secondary    True                 
+agora-energiewende.de                         secondary    True                 True
+amnesty.de                                    secondary    True                 True
+amnesty.org                                   secondary    True                 True
+apnews.com                                    secondary    True                 
+ard.de                                        secondary    True                 
+arxiv.org                                     secondary    True                 True
+asahi.com                                     secondary    True                 True
+axios.com                                     secondary    True                 
+bbc.co.uk                                     secondary    True                 
+bbc.com                                       secondary    True                 
+bianet.org                                    secondary    True                 True
+bib.bund.de                                   secondary    True                 True
+bpb.de                                        secondary    True                 True
+cam.ac.uk                                     secondary    True                 True
+chathamhouse.org                              secondary    True                 True
+cnbc.com                                      secondary    True                 True
+cnn.com                                       secondary    True                 
+corriere.it                                   secondary    True                 True
+crisisgroup.org                               secondary    True                 True
+ct24.cz                                       secondary    True                 True
+cumhuriyet.com.tr                             secondary    True                 True
+deutsche-biographie.de                        secondary    True                 True
+deutschlandfunk.de                            secondary    True                 True
+dhm.de                                        secondary    True                 True
+digi24.ro                                     secondary    True                 True
+dn.se                                         secondary    True                 True
+dr.dk                                         secondary    True                 True
+dw.com                                        secondary    True                 True
+economist.com                                 secondary    True                 True
+elmundo.es                                    secondary    True                 True
+elpais.com                                    secondary    True                 True
+energeiaplus.com                              secondary    True                 True
+ert.gr                                        secondary    True                 True
+ethz.ch                                       secondary    True                 True
+factcheck.org                                 secondary    True                 
+faz.net                                       secondary    True                 True
+forscenter.ch                                 secondary    True                 True
+ft.com                                        secondary    True                 True
+graduateinstitute.ch                          secondary    True                 True
+hankyoreh.com                                 secondary    True                 True
+hertie-school.org                             secondary    True                 True
+hromadske.ua                                  secondary    True                 True
+hrw.org                                       secondary    True                 True
+hs.fi                                         secondary    True                 True
+hvg.hu                                        secondary    True                 True
+idea.int                                      secondary    True                 True
+ifau.se                                       secondary    True                 True
+ifo.de                                        secondary    True                 True
+ifrc.org                                      secondary    True                 True
+iiss.org                                      secondary    True                 True
+irozhlas.cz                                   secondary    True                 True
+kathimerini.gr                                secondary    True                 True
+kbs.co.kr                                     secondary    True                 True
+latimes.com                                   secondary    True                 
+lemo.dhm.de                                   secondary    True                 True
+lemonde.fr                                    secondary    True                 
+liberation.fr                                 secondary    True                 True
+lse.ac.uk                                     secondary    True                 True
+msf.org                                       secondary    True                 True
+nature.com                                    secondary    True                 True
+ncbi.nlm.nih.gov                              secondary    True                 True
+nhk.or.jp                                     secondary    True                 True
+nos.nl                                        secondary    True                 True
+npr.org                                       secondary    True                 
+nrc.nl                                        secondary    True                 True
+nsdoku.de                                     secondary    True                 True
+nytimes.com                                   secondary    True                 
+nzz.ch                                        secondary    True                 
+openknowledge.worldbank.org                   secondary    True                 True
+ourworldindata.org                            secondary    True                 True
+ox.ac.uk                                      secondary    True                 True
+oxfam.org                                     secondary    True                 True
+pbs.org                                       secondary    True                 
+pewresearch.org                               secondary    True                 True
+politico.com                                  secondary    True                 
+politifact.com                                secondary    True                 
+politiken.dk                                  secondary    True                 True
+propublica.org                                secondary    True                 
+publico.pt                                    secondary    True                 True
+rand.org                                      secondary    True                 True
+repubblica.it                                 secondary    True                 True
+reuters.com                                   secondary    True                 
+rsf.org                                       secondary    True                 True
+rtp.pt                                        secondary    True                 True
+rts.ch                                        secondary    True                 
+science.org                                   secondary    True                 True
+sciences-po.fr                                secondary    True                 True
+scotusblog.com                                secondary    True                 
+sozialpolitik-aktuell.de                      secondary    True                 True
+spiegel.de                                    secondary    True                 
+springer.com                                  secondary    True                 True
+srf.ch                                        secondary    True                 
+svt.se                                        secondary    True                 True
+swissinfo.ch                                  secondary    True                 True
+tagesanzeiger.ch                              secondary    True                 
+tagesschau.de                                 secondary    True                 True
+tandfonline.com                               secondary    True                 True
+telex.hu                                      secondary    True                 True
+theguardian.com                               secondary    True                 
+thehill.com                                   secondary    True                 
+thelancet.com                                 secondary    True                 True
+tvn24.pl                                      secondary    True                 True
+tvr.ro                                        secondary    True                 True
+uni-konstanz.de                               secondary    True                 True
+usatoday.com                                  secondary    True                 
+vdeminstitute.org                             secondary    True                 True
+vrt.be                                        secondary    True                 True
+washingtonpost.com                            secondary    True                 
+wiley.com                                     secondary    True                 True
+wsj.com                                       secondary    True                 
+wyborcza.pl                                   secondary    True                 True
+yle.fi                                        secondary    True                 True
+zeit.de                                       secondary    True                 
+alarabiya.net                                 secondary    False                True
+aljazeera.com                                 secondary    False                True
+foxnews.com                                   secondary    False                
+france24.com                                  secondary    False                
+freedomhouse.org                              secondary    False                True
+interpol.int                                  secondary    False                True
+msnbc.com                                     secondary    False                
+nato.int                                      secondary    False                True
+ssrn.com                                      secondary    False                True
+ukrinform.ua                                  secondary    False                True
+jstor.org                                     tertiary     True                 False
+breitbart.com                                 tertiary     not_independent      False
+truthsocial.com                               tertiary     not_independent      False
+pubmed.ncbi.nlm.nih.gov                       tertiary     neutral              False
+statista.com                                  tertiary     neutral              False
+scholar.google.com                            tertiary     False                False

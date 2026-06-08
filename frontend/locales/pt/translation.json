@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "Simetria significa padrões processuais iguais, não resultados iguais.",
     "last_30_days": "últimos 30 dias"
+  },
+  "source": {
+    "unverified": "⚠ Fonte em revisão"
   }
 }

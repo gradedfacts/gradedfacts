@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "A szimmetria egyenlő eljárási normákat jelent, nem egyenlő eredményeket.",
     "last_30_days": "utolsó 30 nap"
+  },
+  "source": {
+    "unverified": "⚠ Forrás ellenőrzés alatt"
   }
 }

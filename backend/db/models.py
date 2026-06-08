@@ -64,6 +64,11 @@ class EvaluatedSource(Base):
 
     claim: Mapped[Claim] = relationship(back_populates="sources")
 
+    @property
+    def is_unverified(self) -> bool:
+        from backend.sources.registries import lookup_source_all_registries
+        return lookup_source_all_registries(self.url) is None
+
 
 class Judgment(Base):
     __tablename__ = "judgments"

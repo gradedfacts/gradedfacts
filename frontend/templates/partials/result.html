@@ -91,7 +91,11 @@
                  title="{{ source.url }}">{{ source.url | domain }}</a>
               <span class="badge badge-{{ source.tier.value }}" data-i18n="tier.{{ source.tier.value }}">{{ source.tier.value | capitalize }}</span>
               {% if indep_label == 'neutral' %}
+                {% if source.is_unverified %}
+                <span class="badge badge-unverified" data-i18n="source.unverified">⚠ Quelle noch nicht verifiziert</span>
+                {% else %}
                 <span class="badge badge-neutral" data-i18n="result.neutral">Neutral</span>
+                {% endif %}
               {% elif indep_label == 'not_independent' %}
                 <span class="badge badge-not-indep" data-i18n="result.not_independent">Not independent</span>
               {% else %}

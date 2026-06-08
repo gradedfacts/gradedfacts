@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "대칭성은 동등한 절차적 기준을 의미하며, 동등한 결과를 의미하지 않습니다.",
     "last_30_days": "최근 30일"
+  },
+  "source": {
+    "unverified": "⚠ 출처 검토 중"
   }
 }

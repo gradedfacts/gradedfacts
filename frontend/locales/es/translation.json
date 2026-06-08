@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "La simetría significa igualdad de normas procedimentales, no igualdad de resultados.",
     "last_30_days": "últimos 30 días"
+  },
+  "source": {
+    "unverified": "⚠ Fuente en revisión"
   }
 }

@@ -188,5 +188,8 @@
   "symmetry": {
     "explanation": "Symmetry means equal procedural standards, not equal outcomes.",
     "last_30_days": "last 30 days"
+  },
+  "source": {
+    "unverified": "⚠ Source under review"
   }
 }
