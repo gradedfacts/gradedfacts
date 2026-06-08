@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import subprocess
 from pathlib import Path
 
@@ -253,6 +254,14 @@ HARD RULES — never violate:
      is a crowd-edited aggregation of secondary and tertiary material; it is not
      a primary or secondary source. Wikipedia can point to primary sources: those
      primary sources count and should be cited directly. Wikipedia itself does not.
+
+CRITICAL CONSISTENCY RULE:
+Your 'rating' field in the structured output MUST match your conclusion in the rationale
+text. If your rationale concludes the claim is verified/confirmed/bestätigt/confirmé/
+verificato/etc., you MUST set rating='verified'. If your rationale concludes the claim
+is debunked/widerlegt/réfuté/etc., you MUST set rating='debunked'. Never set
+rating='speculative' if your rationale clearly concludes verified or debunked. The
+structured rating field must always reflect your actual conclusion.
 
 SOURCE QUALITY REQUIREMENT:
   - VERIFIED requires at least 1 INDEPENDENT Primary source OR at least 2 INDEPENDENT Secondary sources.
@@ -573,6 +582,13 @@ _CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
     "alle kriterien fur verified",
     "alle kriterien für verified",
     "bewertung verified ist klar gerechtfertigt",
+    "mindestanforderungen für verified sind klar erfüllt",
+    "mindestanforderungen sind klar erfüllt",
+    "schwellenprüfung.*erfüllt",
+    "sind klar erfüllt",
+    "weit mehr als 3 relevante quellen",
+    "überwältigende.*beweislage",
+    "eindeutig belegt",
     # French (fr)
     "clairement vérifié",
     "sans aucun doute vérifié",
@@ -641,6 +657,13 @@ _CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
     "명확히 확인됨",
     "의심할 여지 없이 확인됨",
 )
+
+def _phrase_matches(phrase: str, text: str) -> bool:
+    """Match a phrase against text. Uses re.search for patterns containing '.*', else 'in'."""
+    if ".*" in phrase:
+        return bool(re.search(phrase, text))
+    return phrase in text
+
 
 _CLAUDE_DEBUNK_PHRASES: tuple[str, ...] = (
     # English
@@ -739,7 +762,7 @@ def _correct_claude_rating(args: dict) -> dict:
         )
         return {**args, "rating": "debunked"}
 
-    if any(phrase in rationale_lower for phrase in _CLAUDE_VERIFIED_PHRASES):
+    if any(_phrase_matches(phrase, rationale_lower) for phrase in _CLAUDE_VERIFIED_PHRASES):
         logger.warning(
             "Claude rating corrected: 'speculative' → 'verified' "
             "(structured rating contradicts rationale prose)"
@@ -1018,10 +1041,10 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     raw_rationale = raw.get("rationale", "")
     rationale_lower = raw_rationale.lower()
     verified_phrase_found = next(
-        (p for p in _CLAUDE_VERIFIED_PHRASES if p in rationale_lower), None
+        (p for p in _CLAUDE_VERIFIED_PHRASES if _phrase_matches(p, rationale_lower)), None
     )
     debunk_phrase_found = next(
-        (p for p in _CLAUDE_DEBUNK_PHRASES if p in rationale_lower), None
+        (p for p in _CLAUDE_DEBUNK_PHRASES if _phrase_matches(p, rationale_lower)), None
     )
     logger.warning(
         "[_phase2_judgment debug] raw_rating=%r rationale_preview=%r",
