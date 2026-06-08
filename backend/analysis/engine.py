@@ -216,6 +216,11 @@ SOURCE INDEPENDENCE:
     - DOJ statements from an AG confirmed after pledging personal loyalty
     - State media outlets (RT, CGTN, TRT, MTVA) regardless of their official status
     - Official government statements from authoritarian regimes on claims about themselves
+    - UN bodies such as OHCHR and press.un.org — institutionally authoritative primary
+      sources, but NOT independent: they reflect member-state consensus and are subject
+      to political influence from UN member governments. Never classify UN bodies as
+      independent. Use "institutionally authoritative" if you need to describe their
+      standing; mark is_independent=False.
 
 HARD RULES — never violate:
   1. Your own unverified analysis counts as zero sources.

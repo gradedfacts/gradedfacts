@@ -308,7 +308,7 @@
       "name": "Google Scholar",
       "domain": "scholar.google.com",
       "tier": "tertiary",
-      "is_independent": false,
+      "is_independent": "neutral",
       "counts_for_threshold": false,
       "affiliation_note": "Google Scholar is a commercial academic search engine operated by Alphabet Inc. (Google). It is an aggregator and does not produce or vet research; it indexes academic papers, theses, books, preprints, and court opinions from across the web. Coverage is broad but metadata accuracy is variable — citation counts, author attributions, and journal designations are sometimes erroneous. Google Scholar's indexing is automated and does not apply quality filters distinguishing peer-reviewed from non-peer-reviewed content. Useful as a discovery tool for academic literature; content quality must be assessed by examining the underlying source, not by virtue of appearing in Google Scholar's index.",
       "country": "US",
