@@ -154,33 +154,86 @@
   <!-- ── Revision trail ────────────────────────────────────────────────── -->
   <div class="card" style="margin-top: 1.25rem">
     <p class="panel-heading" data-i18n="result.history" data-i18n-options='{"count": {{ judgments | length }}}'>Judgment history ({{ judgments | length }})</p>
-    <ol class="judgment-list">
-      {% for j in judgments %}
-      <li class="judgment-entry">
-        <details {% if j.is_active %}open{% endif %}>
-          <summary class="judgment-summary">
-            <span class="rating-badge {{ j.rating.value }}">
-              <span class="rating-dot"></span><span data-i18n="rating.{{ j.rating.value }}">{{ j.rating.value }}</span>
-            </span>
-            {% if j.is_active %}
-            <span class="judgment-current-tag" data-i18n="result.current">current</span>
-            {% endif %}
-            <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
-          </summary>
-          <div class="judgment-body">
-            <p class="judgment-rationale">{{ j.rationale | render_model_badges(lang) | safe }}</p>
-            <p class="judgment-analyst"><span data-i18n="result.analysis_engine">Analysis engine:</span> {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
-            {% if j.revision %}
-            <div class="judgment-trigger">
-              <span class="judgment-trigger-label" data-i18n="result.revised_because">Revised because:</span>
-              {{ j.revision.trigger_evidence }}
-            </div>
-            {% endif %}
-          </div>
-        </details>
-      </li>
-      {% endfor %}
-    </ol>
+
+    {%- set same_judgments = judgments | selectattr('rating.value', 'equalto', judgment.rating.value) | list %}
+    {%- set diff_judgments = judgments | rejectattr('rating.value', 'equalto', judgment.rating.value) | list %}
+
+    <div class="history-counters">
+
+      <div class="history-group{% if same_judgments | length == 0 %} history-group-empty{% endif %}">
+        <button class="history-group-summary" type="button" aria-expanded="false"
+                {% if same_judgments | length == 0 %}disabled{% endif %}>
+          <span class="history-group-toggle" aria-hidden="true">▶</span>
+          <span class="history-group-icon history-group-icon-same">✓</span>
+          <span><strong>{{ same_judgments | length }}</strong> <span data-i18n="history.same_count">gleiche Urteile</span></span>
+        </button>
+        <div class="history-group-body" hidden>
+          <ol class="judgment-list history-group-list">
+            {% for j in same_judgments %}
+            <li class="judgment-entry">
+              <details {% if j.is_active %}open{% endif %}>
+                <summary class="judgment-summary">
+                  <span class="rating-badge {{ j.rating.value }}">
+                    <span class="rating-dot"></span><span data-i18n="rating.{{ j.rating.value }}">{{ j.rating.value }}</span>
+                  </span>
+                  {% if j.is_active %}
+                  <span class="judgment-current-tag" data-i18n="result.current">current</span>
+                  {% endif %}
+                  <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
+                </summary>
+                <div class="judgment-body">
+                  <p class="judgment-rationale">{{ j.rationale | render_model_badges(lang) | safe }}</p>
+                  <p class="judgment-analyst"><span data-i18n="result.analysis_engine">Analysis engine:</span> {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
+                  {% if j.revision %}
+                  <div class="judgment-trigger">
+                    <span class="judgment-trigger-label" data-i18n="result.revised_because">Revised because:</span>
+                    {{ j.revision.trigger_evidence }}
+                  </div>
+                  {% endif %}
+                </div>
+              </details>
+            </li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+
+      <div class="history-group{% if diff_judgments | length == 0 %} history-group-empty{% endif %}">
+        <button class="history-group-summary" type="button" aria-expanded="false"
+                {% if diff_judgments | length == 0 %}disabled{% endif %}>
+          <span class="history-group-toggle" aria-hidden="true">▶</span>
+          <span class="history-group-icon history-group-icon-diff">≠</span>
+          <span><strong>{{ diff_judgments | length }}</strong> <span data-i18n="history.different_count">abweichende Urteile</span></span>
+        </button>
+        <div class="history-group-body" hidden>
+          <ol class="judgment-list history-group-list">
+            {% for j in diff_judgments %}
+            <li class="judgment-entry">
+              <details>
+                <summary class="judgment-summary">
+                  <span class="rating-badge {{ j.rating.value }}">
+                    <span class="rating-dot"></span><span data-i18n="rating.{{ j.rating.value }}">{{ j.rating.value }}</span>
+                  </span>
+                  <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
+                </summary>
+                <div class="judgment-body">
+                  <p class="judgment-rationale">{{ j.rationale | render_model_badges(lang) | safe }}</p>
+                  <p class="judgment-analyst"><span data-i18n="result.analysis_engine">Analysis engine:</span> {{ j.analyst }}{% if j.analyst_secondary %} + {{ j.analyst_secondary }}{% endif %}</p>
+                  {% if j.revision %}
+                  <div class="judgment-trigger">
+                    <span class="judgment-trigger-label" data-i18n="result.revised_because">Revised because:</span>
+                    {{ j.revision.trigger_evidence }}
+                  </div>
+                  {% endif %}
+                </div>
+              </details>
+            </li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+
+    </div><!-- /history-counters -->
   </div><!-- /revision-trail -->
 
   <!-- ── Follow-up question ───────────────────────────────────────────────── -->
@@ -218,6 +271,18 @@
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el.classList.add('highlighted');
       setTimeout(function () { el.classList.remove('highlighted'); }, 2000);
+    });
+  });
+
+  /* History group toggle — click-only expand/collapse with ▶/▼ indicator. */
+  document.querySelectorAll('.history-group-summary:not([disabled])').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = btn.nextElementSibling;
+      var icon = btn.querySelector('.history-group-toggle');
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      body.hidden = expanded;
+      icon.textContent = expanded ? '▶' : '▼';
     });
   });
 </script>

@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ 출처 검토 중"
+  },
+  "history": {
+    "same_count": "동일한 판단",
+    "different_count": "다른 판단"
   }
 }

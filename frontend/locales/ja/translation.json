@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ ソースを確認中"
+  },
+  "history": {
+    "same_count": "同一判断",
+    "different_count": "異なる判断"
   }
 }

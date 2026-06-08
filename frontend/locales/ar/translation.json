@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ المصدر قيد المراجعة"
+  },
+  "history": {
+    "same_count": "أحكام متطابقة",
+    "different_count": "أحكام مغايرة"
   }
 }

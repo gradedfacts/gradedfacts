@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Kilde under gennemgang"
+  },
+  "history": {
+    "same_count": "ens domme",
+    "different_count": "afvigende domme"
   }
 }

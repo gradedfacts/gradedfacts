@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Forrás ellenőrzés alatt"
+  },
+  "history": {
+    "same_count": "egyező ítéletek",
+    "different_count": "eltérő ítéletek"
   }
 }

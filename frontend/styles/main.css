@@ -59,6 +59,9 @@
 
 [data-theme="dark"] .judgment-summary:hover { background: #0f172a; }
 
+[data-theme="dark"] .history-group-summary { background: #0f172a; }
+[data-theme="dark"] .history-group-summary:not(:disabled):hover { background: #1e293b; }
+
 [data-theme="dark"] .judgment-trigger {
   background: #1c1209;
   color: #fbbf24;
@@ -482,6 +485,52 @@ a:hover { text-decoration: underline; }
   display: block;
   margin-bottom: 0.2rem;
 }
+
+.history-counters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.history-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.history-group-empty { opacity: 0.45; }
+.history-group-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.875rem;
+  width: 100%;
+  border: none;
+  background: var(--surface);
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.history-group-summary:disabled { cursor: default; }
+.history-group-summary:not(:disabled):hover { background: var(--bg); }
+.history-group-toggle {
+  font-size: 0.6rem;
+  color: var(--text-3);
+  flex-shrink: 0;
+  width: 0.875rem;
+  text-align: center;
+}
+.history-group-icon {
+  font-size: 0.85rem;
+  font-weight: 700;
+  width: 1.25rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.history-group-icon-same  { color: #15803d; }
+.history-group-icon-diff  { color: #7c3aed; }
+.history-group-list { padding: 0.5rem; }
 
 /* ── 8. Symmetry report sidebar ──────────────────────────────────────────── */
 .symmetry-banner {

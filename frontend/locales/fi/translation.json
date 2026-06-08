@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Lähde tarkistuksen alla"
+  },
+  "history": {
+    "same_count": "vastaavat arviot",
+    "different_count": "poikkeavat arviot"
   }
 }

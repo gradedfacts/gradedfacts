@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Sursă în curs de verificare"
+  },
+  "history": {
+    "same_count": "judecăți identice",
+    "different_count": "judecăți divergente"
   }
 }

@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Fonte em revisão"
+  },
+  "history": {
+    "same_count": "julgamentos idênticos",
+    "different_count": "julgamentos divergentes"
   }
 }

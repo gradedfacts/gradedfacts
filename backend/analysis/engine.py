@@ -297,6 +297,13 @@ SEARCH STRATEGY — execute in this order:
 
 IMPORTANT: Actively prefer sources already in the registry as Primary/Independent.
 
+SOURCE CITATION RULE:
+Only cite sources, institutions, or documents that were actually found and retrieved
+via web search in this analysis. Never reference sources from training knowledge that
+are not present in the retrieved source list. If a UN resolution, UN document, or any
+other source is not in the retrieved source list, do not mention it by name in the
+rationale. Only describe what the retrieved sources actually say.
+
 POLITICAL_LEANING CLASSIFICATION:
 
 Purpose: Measure whether GradedFacts applies identical standards across the political

@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Source under review"
+  },
+  "history": {
+    "same_count": "matching judgments",
+    "different_count": "differing judgments"
   }
 }

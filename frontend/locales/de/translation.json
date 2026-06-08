@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Quelle noch nicht verifiziert"
+  },
+  "history": {
+    "same_count": "gleiche Urteile",
+    "different_count": "abweichende Urteile"
   }
 }

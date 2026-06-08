@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Джерело на перевірці"
+  },
+  "history": {
+    "same_count": "збіжних оцінок",
+    "different_count": "відмінних оцінок"
   }
 }

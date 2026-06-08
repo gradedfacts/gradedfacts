@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Källa under granskning"
+  },
+  "history": {
+    "same_count": "identiska bedömningar",
+    "different_count": "avvikande bedömningar"
   }
 }

@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Zdroj čeká na ověření"
+  },
+  "history": {
+    "same_count": "shodná hodnocení",
+    "different_count": "odlišná hodnocení"
   }
 }

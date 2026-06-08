@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Kaynak inceleme altında"
+  },
+  "history": {
+    "same_count": "aynı karar",
+    "different_count": "farklı karar"
   }
 }

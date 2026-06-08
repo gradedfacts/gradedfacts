@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Bron wordt gecontroleerd"
+  },
+  "history": {
+    "same_count": "overeenkomende oordelen",
+    "different_count": "afwijkende oordelen"
   }
 }

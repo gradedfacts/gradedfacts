@@ -191,5 +191,9 @@
   },
   "source": {
     "unverified": "⚠ Fuente en revisión"
+  },
+  "history": {
+    "same_count": "juicios coincidentes",
+    "different_count": "juicios discrepantes"
   }
 }
