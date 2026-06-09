@@ -263,6 +263,11 @@ is debunked/widerlegt/réfuté/etc., you MUST set rating='debunked'. Never set
 rating='speculative' if your rationale clearly concludes verified or debunked. The
 structured rating field must always reflect your actual conclusion.
 
+CRITICAL CONSISTENCY RULE EXAMPLES:
+- If your rationale says 'Die Behauptung ist damit als DEBUNKED zu bewerten' → rating field MUST be 'debunked'
+- If your rationale says 'The claim is VERIFIED' → rating field MUST be 'verified'
+- NEVER output rating='speculative' if your rationale conclusion says debunked or verified
+
 SOURCE QUALITY REQUIREMENT:
   - VERIFIED requires at least 1 INDEPENDENT Primary source OR at least 2 INDEPENDENT Secondary sources.
     Not-independent Primary sources (government agencies, state-controlled institutions) do NOT count
@@ -656,6 +661,78 @@ _CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
     # Korean (ko)
     "명확히 확인됨",
     "의심할 여지 없이 확인됨",
+    # English — conclusion forms ("therefore verified" already present above)
+    "must be classified as verified",
+    "is hence verified",
+    "is thus verified",
+    "must be rated as verified",
+    # German (de) — conclusion forms ("ist als verified einzustufen" already present above)
+    "ist damit als verified zu bewerten",
+    "das rating ist daher verified",
+    "muss als verified eingestuft werden",
+    "ist daher verifiziert",
+    "ist damit verifiziert",
+    # French (fr) — conclusion forms
+    "est donc vérifié",
+    "doit être classé comme vérifié",
+    "est ainsi vérifié",
+    # Italian (it) — conclusion forms
+    "è quindi verificato",
+    "deve essere classificato come verificato",
+    # Spanish (es) — conclusion forms
+    "es por tanto verificado",
+    "debe clasificarse como verificado",
+    # Portuguese (pt) — conclusion forms
+    "é portanto verificado",
+    "deve ser classificado como verificado",
+    # Dutch (nl) — conclusion forms
+    "is daarom geverifieerd",
+    "moet worden geclassificeerd als geverifieerd",
+    # Polish (pl) — conclusion forms
+    "jest zatem zweryfikowany",
+    "musi być sklasyfikowany jako zweryfikowany",
+    # Swedish (sv) — conclusion forms
+    "är därför verifierad",
+    "måste klassificeras som verifierad",
+    # Danish (da) — conclusion forms
+    "er derfor verificeret",
+    "skal klassificeres som verificeret",
+    # Finnish (fi) — conclusion forms
+    "on siksi vahvistettu",
+    "on luokiteltava vahvistetuksi",
+    # Czech (cs) — conclusion forms
+    "je proto ověřeno",
+    "musí být klasifikováno jako ověřeno",
+    # Romanian (ro) — conclusion forms
+    "este prin urmare verificat",
+    "trebuie clasificat ca verificat",
+    # Greek (el) — conclusion forms
+    "είναι επομένως επαληθευμένο",
+    "πρέπει να ταξινομηθεί ως επαληθευμένο",
+    # Hungarian (hu) — conclusion forms
+    "ezért megerősített",
+    "megerősítettnek kell minősíteni",
+    # Russian (ru) — conclusion forms
+    "поэтому подтверждено",
+    "должно быть классифицировано как подтверждённое",
+    # Ukrainian (uk) — conclusion forms
+    "тому підтверджено",
+    "повинно бути класифіковано як підтверджене",
+    # Turkish (tr) — conclusion forms
+    "bu nedenle doğrulandı",
+    "doğrulanmış olarak sınıflandırılmalıdır",
+    # Arabic (ar) — conclusion forms
+    "وبالتالي محقق",
+    "يجب تصنيفه على أنه محقق",
+    # Chinese (zh) — conclusion forms
+    "因此被核实",
+    "必须被归类为已核实",
+    # Japanese (ja) — conclusion forms
+    "したがって確認済み",
+    "確認済みとして分類されなければならない",
+    # Korean (ko) — conclusion forms
+    "따라서 확인됨",
+    "확인된 것으로 분류되어야 함",
 )
 
 def _phrase_matches(phrase: str, text: str) -> bool:
@@ -739,6 +816,85 @@ _CLAUDE_DEBUNK_PHRASES: tuple[str, ...] = (
     # Korean (ko)
     "명확히 반증됨",
     "의심할 여지 없이 거짓",
+    # Explicit "rate as debunked" conclusions — German and English
+    "ist damit als debunked zu bewerten",
+    "das rating ist daher debunked",
+    "rating ist debunked",
+    "bewertung ist debunked",
+    "einzustufen als debunked",
+    "therefore debunked",
+    "thus debunked",
+    "is therefore debunked",
+    "is thus debunked",
+    "muss als debunked eingestuft werden",
+    "ist als debunked einzustufen",
+    # German (de) — additional conclusion forms
+    "ist daher widerlegt",
+    "ist damit widerlegt",
+    # French (fr) — conclusion forms
+    "est donc réfuté",
+    "doit être classé comme réfuté",
+    "est ainsi réfuté",
+    # Italian (it) — conclusion forms
+    "è quindi confutato",
+    "deve essere classificato come confutato",
+    # Spanish (es) — conclusion forms
+    "es por tanto refutado",
+    "debe clasificarse como refutado",
+    # Portuguese (pt) — conclusion forms
+    "é portanto refutado",
+    "deve ser classificado como refutado",
+    # Dutch (nl) — conclusion forms
+    "is daarom weerlegd",
+    "moet worden geclassificeerd als weerlegd",
+    # Polish (pl) — conclusion forms
+    "jest zatem obalony",
+    "musi być sklasyfikowany jako obalony",
+    # Swedish (sv) — conclusion forms
+    "är därför motbevisat",
+    "måste klassificeras som motbevisat",
+    # Danish (da) — conclusion forms
+    "er derfor afkræftet",
+    "skal klassificeres som afkræftet",
+    # Finnish (fi) — conclusion forms
+    "on siksi kumottu",
+    "on luokiteltava kumotuksi",
+    # Czech (cs) — conclusion forms
+    "je proto vyvráceno",
+    "musí být klasifikováno jako vyvráceno",
+    # Romanian (ro) — conclusion forms
+    "este prin urmare infirmat",
+    "trebuie clasificat ca infirmat",
+    # Greek (el) — conclusion forms
+    "είναι επομένως διαψευσμένο",
+    "πρέπει να ταξινομηθεί ως διαψευσμένο",
+    # Hungarian (hu) — conclusion forms
+    "ezért megcáfolt",
+    "megcáfoltnak kell minősíteni",
+    # Russian (ru) — conclusion forms
+    "поэтому опровергнуто",
+    "должно быть классифицировано как опровергнутое",
+    # Ukrainian (uk) — conclusion forms
+    "тому спростовано",
+    "повинно бути класифіковано як спростоване",
+    # Turkish (tr) — conclusion forms
+    "bu nedenle çürütülmüş",
+    "çürütülmüş olarak sınıflandırılmalıdır",
+    # Arabic (ar) — conclusion forms
+    "وبالتالي مدحوض",
+    "يجب تصنيفه على أنه مدحوض",
+    # Chinese (zh) — conclusion forms
+    "因此被驳斥",
+    "必须被归类为已驳斥",
+    # Japanese (ja) — conclusion forms
+    "したがって反証済み",
+    "反証済みとして分類されなければならない",
+    # Korean (ko) — conclusion forms
+    "따라서 반증됨",
+    "반증된 것으로 분류되어야 함",
+    # English — additional conclusion forms
+    "must be classified as debunked",
+    "is hence debunked",
 )
 
 
