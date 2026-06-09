@@ -13,11 +13,14 @@ Responsibilities:
     - Enforce the immutability contract at the storage layer so higher-level
       code cannot accidentally overwrite a past judgment.
 """
+import logging
 import unicodedata
 
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 
 from backend.db.models import Claim, EvaluatedSource, Judgment
+
+logger = logging.getLogger(__name__)
 
 
 def normalize_claim_text(text: str) -> str:
@@ -48,6 +51,16 @@ def merge_into_canonical(session, temp_id: str, canonical_id: str) -> None:
     The new Judgment and its sources are appended to the canonical Claim's history;
     the temp Claim row is removed. All operations commit atomically.
     """
+    _src_before = session.execute(
+        select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == temp_id)
+    ).scalar_one()
+    _jdg_before = session.execute(
+        select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == canonical_id)
+    ).scalar_one()
+    logger.warning(
+        "[DEBUG merge] temp_id=%s canonical_id=%s sources_on_temp=%d sources_already_on_canonical=%d",
+        temp_id, canonical_id, _src_before, _jdg_before,
+    )
     session.execute(
         update(EvaluatedSource)
         .where(EvaluatedSource.claim_id == temp_id)
@@ -62,3 +75,10 @@ def merge_into_canonical(session, temp_id: str, canonical_id: str) -> None:
     if temp is not None:
         session.delete(temp)
     session.commit()
+    _src_after = session.execute(
+        select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == canonical_id)
+    ).scalar_one()
+    logger.warning(
+        "[DEBUG merge] canonical_id=%s post_merge_source_count=%d (was %d on temp + %d on canonical)",
+        canonical_id, _src_after, _src_before, _jdg_before,
+    )

@@ -256,8 +256,17 @@ def _run_consensus_analysis(claim_id: str, user_language: str | None = None) -> 
             logger.error("Background consensus analysis failed for %s: %s", claim_id, exc, exc_info=True)
             _analysis_errors[claim_id] = (500, "Analysis pipeline failed.")
             return
+        _pre_dedup_count = session.execute(
+            select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == claim_id)
+        ).scalar_one()
+        logger.warning("[DEBUG dedup] claim_id=%s pre_dedup_source_count=%d", claim_id, _pre_dedup_count)
         canonical_id = _deduplicate_after_analysis(claim_id, session)
+        logger.warning("[DEBUG dedup] claim_id=%s canonical_id=%s dedup_occurred=%s", claim_id, canonical_id, canonical_id is not None)
         if canonical_id:
+            _migrated_count = session.execute(
+                select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == canonical_id)
+            ).scalar_one()
+            logger.warning("[DEBUG dedup] canonical_id=%s post_merge_source_count=%d", canonical_id, _migrated_count)
             _claim_redirects[claim_id] = canonical_id
 
 
@@ -606,6 +615,10 @@ def ui_poll(
     sources = session.execute(
         select(EvaluatedSource).where(EvaluatedSource.claim_id == resolved_id)
     ).scalars().all()
+    logger.warning(
+        "[DEBUG ui_poll] claim_id=%s resolved_id=%s sources_found=%d redirected=%s",
+        claim_id, resolved_id, len(sources), resolved_id != claim_id,
+    )
 
     judgments = session.execute(
         select(Judgment)

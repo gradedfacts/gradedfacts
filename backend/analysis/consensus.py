@@ -41,6 +41,8 @@ from backend.analysis.engine import (
     _phase1_search,
     _phase2_judgment,
 )
+from sqlalchemy import func, select as _sa_select
+
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.analysis.engine import independence_bool, independence_label
 from backend.config import settings
@@ -681,7 +683,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         for src in claude_sources
         if src.get("url") or src.get("title")
     ]
-    logger.warning("[DEBUG sources] claim_id=%s evaluated_sources=%d", claim_id, len(evaluated_sources))
+    logger.warning("[DEBUG sources] claim_id=%s evaluated_sources_created=%d (Claude only)", claim_id, len(evaluated_sources))
     logger.warning(
         "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
         "[consensus.py — before _rating_from_data(), Claude Hard Rule, and consensus Hard Rule]",
@@ -689,6 +691,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     )
     logger.warning("[DEBUG sources] claim_id=%s saving=%d", claim_id, len(evaluated_sources))
     session.add_all(evaluated_sources)
+    logger.warning("[DEBUG sources] claim_id=%s add_all_called_with=%d objects", claim_id, len(evaluated_sources))
 
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
 
@@ -722,6 +725,14 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             if isinstance(s, dict)
         ]
         mistral_has_primary = _has_primary_independent(mistral_sources_eval)
+        logger.warning(
+            "[DEBUG sources] claim_id=%s Mistral sources evaluated for quality only (NOT persisted): "
+            "raw=%d evaluated=%d has_primary=%s",
+            claim_id,
+            len(mistral_data.get("sources", [])),
+            len(mistral_sources_eval),
+            mistral_has_primary,
+        )
 
     # ── Consensus resolution ─────────────────────────────────────────────────
     consensus_rating, models_agree = _resolve_consensus(
@@ -805,8 +816,19 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         prompt_version="1.0",
     )
 
+    logger.warning(
+        "[DEBUG sources] claim_id=%s PRE-COMMIT: staged_sources=%d consensus=%s models_agree=%s",
+        claim_id, len(evaluated_sources), consensus_rating, models_agree,
+    )
     session.add(judgment)
     session.commit()
+    _post_commit_count = session.execute(
+        _sa_select(func.count()).select_from(EvaluatedSource).where(EvaluatedSource.claim_id == claim_id)
+    ).scalar_one()
+    logger.warning(
+        "[DEBUG sources] claim_id=%s POST-COMMIT db_count=%d consensus=%s models_agree=%s",
+        claim_id, _post_commit_count, consensus_rating, models_agree,
+    )
     session.refresh(judgment)
 
     return judgment
