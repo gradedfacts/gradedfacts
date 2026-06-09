@@ -976,6 +976,83 @@ class TestAnalyzeClaimWithConsensus:
         assert isinstance(sources[0], EvaluatedSource)
         assert sources[0].url == "https://wiki.example.com/page"
 
+    # ── Regression: Quellen(0) on disagreement path ───────────────────────────
+
+    def test_sources_persisted_when_claude_speculative_mistral_debunked(self):
+        """
+        Regression: EvaluatedSource objects must be saved even when Claude=SPECULATIVE
+        and Mistral=DEBUNKED disagree and consensus is downgraded to SPECULATIVE.
+        The Quellen(0) bug arose because session.add_all() was gated on consensus
+        resolution; moving it before _resolve_consensus() fixes the path.
+        """
+        from backend.db.models import EvaluatedSource
+
+        source = {
+            "url": "https://example.com/source-1",
+            "title": "Source 1",
+            "tier": "tertiary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        }
+        claude_j = {"rationale": "Claude speculative.", "sources": [source], "rating": "speculative"}
+        mistral_j = {"rationale": "Mistral debunked.", "sources": [], "rating": "debunked"}
+
+        j, sources = _run_consensus(claude_j, mistral_j)
+
+        assert j.rating == EpistemicRating.SPECULATIVE
+        assert j.consensus_rating == EpistemicRating.SPECULATIVE
+        assert len(sources) > 0
+        assert all(isinstance(s, EvaluatedSource) for s in sources)
+
+    def test_sources_persisted_when_claude_verified_mistral_speculative(self):
+        """
+        Regression: EvaluatedSource objects must be saved even when Claude=VERIFIED
+        and Mistral=SPECULATIVE disagree and consensus resolves to SPECULATIVE.
+        Claude has no qualifying primary source so the hard quality gate also fires.
+        """
+        from backend.db.models import EvaluatedSource
+
+        source = {
+            "url": "https://example.com/source-2",
+            "title": "Source 2",
+            "tier": "tertiary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        }
+        claude_j = {"rationale": "Claude verified.", "sources": [source], "rating": "verified"}
+        mistral_j = {"rationale": "Mistral speculative.", "sources": [], "rating": "speculative"}
+
+        j, sources = _run_consensus(claude_j, mistral_j)
+
+        assert j.rating == EpistemicRating.SPECULATIVE
+        assert j.consensus_rating == EpistemicRating.SPECULATIVE
+        assert len(sources) > 0
+        assert all(isinstance(s, EvaluatedSource) for s in sources)
+
+    def test_sources_persisted_when_both_debunked_normal_case(self):
+        """
+        Regression (normal case): EvaluatedSource objects must be saved when both
+        models agree on DEBUNKED. Verifies no regression on the agreement path.
+        """
+        from backend.db.models import EvaluatedSource
+
+        claude_j = {
+            "rationale": "Claude debunked.",
+            "sources": _THREE_INDEPENDENT_PRIMARIES,
+            "rating": "debunked",
+        }
+        mistral_j = {"rationale": "Mistral debunked.", "sources": [], "rating": "debunked"}
+
+        j, sources = _run_consensus(claude_j, mistral_j)
+
+        assert j.rating == EpistemicRating.DEBUNKED
+        assert j.consensus_rating == EpistemicRating.DEBUNKED
+        assert j.models_agree is True
+        assert len(sources) > 0
+        assert all(isinstance(s, EvaluatedSource) for s in sources)
+
 
 # ── _mistral_phase1_brave_search ──────────────────────────────────────────────
 
