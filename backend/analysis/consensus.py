@@ -683,15 +683,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         for src in claude_sources
         if src.get("url") or src.get("title")
     ]
-    logger.warning("[DEBUG sources] claim_id=%s evaluated_sources_created=%d (Claude only)", claim_id, len(evaluated_sources))
-    logger.warning(
-        "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
-        "[consensus.py — before _rating_from_data(), Claude Hard Rule, and consensus Hard Rule]",
-        claim_id, len(evaluated_sources),
-    )
-    logger.warning("[DEBUG sources] claim_id=%s saving=%d", claim_id, len(evaluated_sources))
-    session.add_all(evaluated_sources)
-    logger.warning("[DEBUG sources] claim_id=%s add_all_called_with=%d objects", claim_id, len(evaluated_sources))
+    logger.warning("[DEBUG sources] claim_id=%s claude_sources_staged=%d", claim_id, len(evaluated_sources))
 
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
 
@@ -725,14 +717,40 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             if isinstance(s, dict)
         ]
         mistral_has_primary = _has_primary_independent(mistral_sources_eval)
+        # Persist Mistral's sources alongside Claude's, deduped by URL.
+        _seen_urls: set[str] = {es.url for es in evaluated_sources}
+        _mistral_extra: list[EvaluatedSource] = []
+        for _src in mistral_sources_eval:
+            _url = _src.get("url") or _src.get("title") or ""
+            if not _url or _url in _seen_urls:
+                continue
+            _seen_urls.add(_url)
+            _mistral_extra.append(EvaluatedSource(
+                claim_id=claim_id,
+                url=_url,
+                tier=SourceTier(_src.get("tier", "tertiary")),
+                is_independent=independence_bool(_src.get("is_independent", True)),
+                independence_label=independence_label(_src.get("is_independent", True)),
+                affiliation_note=_src.get("affiliation_note"),
+                relevance_score=max(0.0, min(1.0, float(_src.get("relevance_score") or 0.5))),
+                excerpt=_src.get("excerpt"),
+            ))
+        evaluated_sources.extend(_mistral_extra)
         logger.warning(
-            "[DEBUG sources] claim_id=%s Mistral sources evaluated for quality only (NOT persisted): "
-            "raw=%d evaluated=%d has_primary=%s",
+            "[DEBUG sources] claim_id=%s Mistral sources: raw=%d evaluated=%d added=%d (deduped, total now=%d)",
             claim_id,
             len(mistral_data.get("sources", [])),
             len(mistral_sources_eval),
-            mistral_has_primary,
+            len(_mistral_extra),
+            len(evaluated_sources),
         )
+
+    logger.warning(
+        "claim %s: staging %d EvaluatedSource object(s) with session.add_all() "
+        "[consensus.py — Claude + Mistral combined, before consensus resolution]",
+        claim_id, len(evaluated_sources),
+    )
+    session.add_all(evaluated_sources)
 
     # ── Consensus resolution ─────────────────────────────────────────────────
     consensus_rating, models_agree = _resolve_consensus(

@@ -1270,6 +1270,16 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         )
         rating = EpistemicRating.SPECULATIVE
 
+    # Hard Rule: 0 sources → MISSING.
+    # SPECULATIVE requires at least some evidence; zero sources = no basis for any judgment.
+    if not sources_data and rating == EpistemicRating.SPECULATIVE:
+        logger.warning(
+            "claim %s: hard quality gate FIRED — 0 sources found; "
+            "SPECULATIVE overridden to MISSING (no evidence basis).",
+            claim_id,
+        )
+        rating = EpistemicRating.MISSING
+
     raw_leaning = data.get("political_leaning", "none")
     political_leaning = raw_leaning if raw_leaning in ("left", "right", "none") else "none"
 
