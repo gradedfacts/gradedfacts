@@ -1306,9 +1306,9 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             logger.warning("claim %s: could not parse sources JSON string; ignoring sources.", claim_id)
             raw_sources = []
     sources_data: list[dict] = [
-        evaluate_source(src)
-        for src in raw_sources[:MAX_SOURCES]
-        if isinstance(src, dict)
+        ev
+        for ev in (evaluate_source(src) for src in raw_sources[:MAX_SOURCES] if isinstance(src, dict))
+        if ev is not None
     ]
 
     # Persist EvaluatedSource objects IMMEDIATELY after sources_data is available —

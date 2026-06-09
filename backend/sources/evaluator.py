@@ -90,18 +90,61 @@ def extract_domain(url: str) -> str:
         return host
     return ".".join(parts[-2:])
 
+
+_SOCIAL_MEDIA_BLACKLIST: frozenset[str] = frozenset({
+    "x.com",
+    "twitter.com",
+    "facebook.com",
+    "fb.com",
+    "instagram.com",
+    "tiktok.com",
+    "youtube.com",
+    "linkedin.com",
+    "reddit.com",
+    "bluesky.app",
+    "bsky.app",
+    "threads.net",
+    "mastodon.social",
+    "telegram.org",
+    "t.me",
+    "whatsapp.com",
+    "snapchat.com",
+    "pinterest.com",
+    "tumblr.com",
+})
+
+
+def is_social_media_url(url: str) -> bool:
+    """Return True if the URL belongs to a blacklisted social media platform."""
+    try:
+        host = urlparse(url).hostname or ""
+    except Exception:
+        return False
+    host_lower = host.lower()
+    if extract_domain(url) in _SOCIAL_MEDIA_BLACKLIST:
+        return True
+    # Catch any mastodon instance: mastodon.online, mastodon.world, etc.
+    if "mastodon." in host_lower:
+        return True
+    return False
+
+
 _GENERIC_AFFILIATION_NOTE = (
     "Source is not editorially independent; specific affiliation not documented."
 )
 
 
-def evaluate_source(src: dict) -> dict:
+def evaluate_source(src: dict) -> dict | None:
     """
     Apply all quality checks to a single source dict from Claude's judgment.
 
     Returns a new dict (or the same object if no changes are needed).
+    Returns None when the URL is on the social media blacklist — callers must filter.
     """
     url = src.get("url", "")
+    if url and is_social_media_url(url):
+        logger.warning("[BLACKLIST] Social media URL excluded: %s", url)
+        return None
     _is_unregistered = bool(url) and lookup_source_all_registries(url) is None
 
     # Step 1: apply regional registry overrides (known sources get curated metadata)

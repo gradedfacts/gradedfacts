@@ -481,7 +481,7 @@ def _process_sources(
             })
         else:
             logger.warning("_process_sources: dropping unrecognised source item %r", s)
-    sources_data = [evaluate_source(src) for src in coerced]
+    sources_data = [ev for ev in (evaluate_source(src) for src in coerced) if ev is not None]
     logger.debug("_process_sources: %d raw → %d evaluated", len(sources_raw), len(sources_data))
 
     seen_domains: set[str] = set()
@@ -713,8 +713,12 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                     raw_mistral_rating, claim_id,
                 )
         mistral_sources_eval = [
-            evaluate_source(s) for s in mistral_data.get("sources", [])[:MAX_SOURCES]
-            if isinstance(s, dict)
+            ev
+            for ev in (
+                evaluate_source(s) for s in mistral_data.get("sources", [])[:MAX_SOURCES]
+                if isinstance(s, dict)
+            )
+            if ev is not None
         ]
         mistral_has_primary = _has_primary_independent(mistral_sources_eval)
         # Persist Mistral's sources alongside Claude's, deduped by URL.

@@ -2600,6 +2600,189 @@
       "country": "INT",
       "region": "Global",
       "independence_note": "Amnesty International is an independent global human rights organisation founded in 1961 and awarded the Nobel Peace Prize in 1977, headquartered in London. It is funded entirely by individual members and private donors; it operates a strict policy of refusing all government, intergovernmental, or corporate funding to preserve independence. Its human rights reporting and country documentation follow rigorous independent fact-finding methodology — field investigations, victim testimonies, and legal analysis — conducted without editorial direction from any government or political actor. Amnesty has published reports critical of governments across the full political spectrum, including major Western democracies, Russia, China, Israel, Saudi Arabia, and others. Widely cited in international courts, UN proceedings, and academic research as a reliable independent secondary source for human rights documentation worldwide."
+    },
+    {
+      "name": "Kurier",
+      "domain": "kurier.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "AT",
+      "region": "Europe",
+      "independence_note": "Kurier is one of Austria's leading daily newspapers, founded in 1954. It is owned by Kurier Medienhaus GmbH, with Raiffeisen Holding as a significant shareholder. It has a centre-right editorial orientation. No documented political party direction over editorial content."
+    },
+    {
+      "name": "Konrad-Adenauer-Stiftung (KAS)",
+      "domain": "kas.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "KAS is the political foundation affiliated with the CDU (Christlich Demokratische Union). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly Christian-democratic political perspective. Content should be read with awareness of this institutional affiliation.",
+      "independence_note": "The Konrad-Adenauer-Stiftung is the CDU-affiliated German political foundation, established in 1964. It is funded primarily by the German federal government via parliamentary budget allocations. Its policy research and publications broadly reflect Christian-democratic political values. As a politically affiliated foundation it is classified neutral rather than fully independent."
+    },
+    {
+      "name": "Die Welt",
+      "domain": "welt.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Die Welt is a leading German national daily newspaper, founded in 1946 and owned by Axel Springer SE. It has a conservative-liberal editorial orientation. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "taz — die tageszeitung",
+      "domain": "taz.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "taz (die tageszeitung) is a German national daily newspaper founded in 1979 as a left-leaning cooperative newspaper. It is owned by its employees and readers via a cooperative structure (taz Genossenschaft), with no single controlling shareholder or political party ownership. Its editorial orientation is left-progressive. No documented political party direction over editorial content."
+    },
+    {
+      "name": "Euronews",
+      "domain": "euronews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "Europe",
+      "independence_note": "Euronews is a pan-European multilingual news television channel and website, founded in 1993 and headquartered in Lyon, France. It is currently majority-owned by the Alpac Capital investment group. It operates under an editorial charter that guarantees independence from its shareholders. Broadcasts in 12 languages. No documented systematic political bias in news reporting."
+    },
+    {
+      "name": "Handelsblatt",
+      "domain": "handelsblatt.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Handelsblatt is Germany's leading business and financial daily newspaper, founded in 1946 and owned by Dieter von Holtzbrinck Medien. It focuses on economics, business, and finance reporting and is widely regarded as Germany's equivalent of the Financial Times. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "Frankfurter Rundschau",
+      "domain": "fr.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Frankfurter Rundschau is a German daily newspaper founded in 1945, published by the DuMont Mediengruppe. It has a centre-left editorial orientation. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "CORRECTIV",
+      "domain": "correctiv.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "CORRECTIV is a German nonprofit investigative newsroom founded in 2014, funded by foundations, reader contributions, and donations. It is a member of the International Fact-Checking Network (IFCN). It has published major investigative reports (including the 2024 Potsdam meeting investigation) and operates with structural editorial independence from funders. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "Bundesakademie für Sicherheitspolitik (BAKS)",
+      "domain": "baks.bund.de",
+      "tier": "primary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "BAKS (Bundesakademie für Sicherheitspolitik) is a federal government training academy under the German Federal Ministry of Defence. Its publications and analyses reflect official German government security policy positions and are not editorially independent.",
+      "independence_note": "The Bundesakademie für Sicherheitspolitik is an interdepartmental federal institution under the German Federal Ministry of Defence, established in 1992. Its research and publications represent official German government security policy perspectives. As a government institution it is not editorially independent."
+    },
+    {
+      "name": "dekoder",
+      "domain": "dekoder.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "dekoder is a German nonprofit media project founded in 2015, specialising in translating and contextualising Russian media and public discourse for German-speaking audiences. It is funded by foundations and public grants and operates with editorial independence from its funders. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "SWR — Südwestrundfunk",
+      "domain": "swr.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "SWR (Südwestrundfunk) is a German public broadcaster covering Baden-Württemberg and Rhineland-Palatinate, established in 1998. It is a member of ARD (Arbeitsgemeinschaft der öffentlich-rechtlichen Rundfunkanstalten der Bundesrepublik Deutschland). SWR operates under the Interstate Broadcasting Treaty with a statutory editorial independence clause and is governed by a Broadcasting Council without government direction over news content. No documented political direction over editorial content."
+    },
+    {
+      "name": "Osteuropa — Zeitschrift für Gegenwartsfragen des Ostens",
+      "domain": "owep.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Osteuropa (published via owep.de — Ost-West Europäische Perspektiven) is a German academic journal specialising in Eastern Europe, published since 1951. It is an independent scholarly publication with peer-reviewed articles on Eastern European politics, history, and society. No documented political party ownership or direction over editorial content."
+    },
+    {
+      "name": "George Washington University / National Security Archive",
+      "domain": "gwu.edu",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "George Washington University is a private research university founded in 1821 in Washington, D.C. The National Security Archive (nsarchive.gwu.edu) is an independent research institute and library housed at GWU, specialising in declassified government documents obtained through Freedom of Information Act requests. The Archive operates as an independent research institution with no government editorial control over its publications and has published documents critical of multiple administrations. Widely cited as a primary source for declassified US government records."
+    },
+    {
+      "name": "Foreign Affairs",
+      "domain": "foreignaffairs.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Foreign Affairs is the flagship journal of the Council on Foreign Relations (CFR), published since 1922. CFR is a nonpartisan American think tank and publishers' organisation. Foreign Affairs publishes analysis and commentary from academics, policymakers, and practitioners across the political spectrum. No documented political party ownership or systematic editorial bias; authors from both Democratic and Republican administrations publish regularly."
+    },
+    {
+      "name": "Willy-Brandt-Stiftung",
+      "domain": "willy-brandt.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "The Willy-Brandt-Stiftung is the SPD-affiliated German political foundation, receiving the majority of its funding from the German federal budget via parliamentary allocation. Research and publications reflect a social-democratic political perspective.",
+      "independence_note": "The Bundeskanzler-Willy-Brandt-Stiftung is a German public foundation affiliated with the SPD (Sozialdemokratische Partei Deutschlands), established in 1994. It is funded primarily by the German federal government. Its publications broadly reflect social-democratic values and are classified neutral rather than fully independent."
+    },
+    {
+      "name": "Focus Plus",
+      "domain": "focusplus.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "focusplus.de is associated with Focus magazine's online digital offerings. Focus is a German weekly news magazine owned by Hubert Burda Media. It has a centre-right editorial orientation. Classified tertiary due to its aggregation and magazine-style editorial format."
+    },
+    {
+      "name": "German Historical Institute Washington DC (GHI)",
+      "domain": "ghi-dc.org",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "North America",
+      "independence_note": "The German Historical Institute Washington DC (GHI) is an independent research institute funded by the German federal government through the Max Weber Foundation. It conducts and publishes academic historical research on German-American relations and transatlantic history. Research direction is governed by academic standards and an independent scholarly advisory board, without political direction over research outputs. Widely cited as a primary source for historical scholarship on German-American relations."
+    },
+    {
+      "name": "MIT — Massachusetts Institute of Technology",
+      "domain": "mit.edu",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "US",
+      "region": "North America",
+      "independence_note": "The Massachusetts Institute of Technology is one of the world's leading research universities, founded in 1861 and based in Cambridge, Massachusetts. MIT academic publications, research papers, and institutional reports are produced by independent researchers following peer-review standards. No political party ownership or direction over research or publication. MIT is a widely recognised authoritative source for scientific and technical academic research."
     }
   ]
 }
