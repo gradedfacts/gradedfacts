@@ -209,11 +209,14 @@
           <ol class="judgment-list history-group-list">
             {% for j in diff_judgments %}
             <li class="judgment-entry">
-              <details>
+              <details {% if j.is_active %}open{% endif %}>
                 <summary class="judgment-summary">
                   <span class="rating-badge {{ j.rating.value }}">
                     <span class="rating-dot"></span><span data-i18n="rating.{{ j.rating.value }}">{{ j.rating.value }}</span>
                   </span>
+                  {% if j.is_active %}
+                  <span class="judgment-current-tag" data-i18n="result.current">current</span>
+                  {% endif %}
                   <span class="judgment-timestamp">{{ j.created_at.strftime('%b %d, %Y %H:%M') }}</span>
                 </summary>
                 <div class="judgment-body">
