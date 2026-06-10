@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fapte. Surse. Transparență."
+  },
+  "consensus": {
+    "disagreement": "Modelele nu au fost de acord. Consensul a fost retrogradat la SPECULATIV.",
+    "debunked_beats_missing": "Modelele nu au fost de acord. Semnalul INFIRMAT prevalează față de LIPSĂ.",
+    "source_quality_claude": "Modelele nu au fost de acord. Rezolvat prin calitatea surselor — evaluarea Claude aplicată (surse primare/independente prezente).",
+    "source_quality_mistral": "Modelele nu au fost de acord. Rezolvat prin calitatea surselor — evaluarea Mistral aplicată (surse primare/independente prezente)."
   }
 }

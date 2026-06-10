@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— 사실. 출처. 투명성."
+  },
+  "consensus": {
+    "disagreement": "모델이 불일치했습니다. 컨센서스가 추측적으로 하향 조정되었습니다.",
+    "debunked_beats_missing": "모델이 불일치했습니다. 반증됨 신호가 누락보다 우선합니다.",
+    "source_quality_claude": "모델이 불일치했습니다. 출처 품질로 해결되었습니다 — Claude의 평가가 적용되었습니다(기본/독립 출처 존재).",
+    "source_quality_mistral": "모델이 불일치했습니다. 출처 품질로 해결되었습니다 — Mistral의 평가가 적용되었습니다(기본/독립 출처 존재)."
   }
 }

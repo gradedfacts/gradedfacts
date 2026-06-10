@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Factos. Fontes. Transparência."
+  },
+  "consensus": {
+    "disagreement": "Os modelos discordaram. Consenso rebaixado para ESPECULATIVO.",
+    "debunked_beats_missing": "Os modelos discordaram. O sinal REFUTADO prevalece sobre FALTANDO.",
+    "source_quality_claude": "Os modelos discordaram. Resolvido pela qualidade das fontes — avaliação do Claude aplicada (fontes primárias/independentes presentes).",
+    "source_quality_mistral": "Os modelos discordaram. Resolvido pela qualidade das fontes — avaliação do Mistral aplicada (fontes primárias/independentes presentes)."
   }
 }

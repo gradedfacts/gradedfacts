@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Faktat. Lähteet. Läpinäkyvyys."
+  },
+  "consensus": {
+    "disagreement": "Mallit olivat eri mieltä. Konsensus alennettu spekulatiiviseksi.",
+    "debunked_beats_missing": "Mallit olivat eri mieltä. Kumottu-signaali ohittaa puuttuvan.",
+    "source_quality_claude": "Mallit olivat eri mieltä. Ratkaistu lähteen laadun perusteella — Clauden arvio käytössä (ensisijaisia/riippumattomia lähteitä läsnä).",
+    "source_quality_mistral": "Mallit olivat eri mieltä. Ratkaistu lähteen laadun perusteella — Mistralin arvio käytössä (ensisijaisia/riippumattomia lähteitä läsnä)."
   }
 }

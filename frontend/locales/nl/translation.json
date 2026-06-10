@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Feiten. Bronnen. Transparantie."
+  },
+  "consensus": {
+    "disagreement": "De modellen waren het niet eens. Consensus afgewaardeerd naar SPECULATIEF.",
+    "debunked_beats_missing": "De modellen waren het niet eens. Het WEERLEGD-signaal prevaleert boven ONTBREKEND.",
+    "source_quality_claude": "De modellen waren het niet eens. Opgelost op basis van bronkwaliteit — de beoordeling van Claude toegepast (primaire/onafhankelijke bronnen aanwezig).",
+    "source_quality_mistral": "De modellen waren het niet eens. Opgelost op basis van bronkwaliteit — de beoordeling van Mistral toegepast (primaire/onafhankelijke bronnen aanwezig)."
   }
 }

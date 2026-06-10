@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Facts. Sources. Transparency."
+  },
+  "consensus": {
+    "disagreement": "Models disagreed. Consensus downgraded to SPECULATIVE.",
+    "debunked_beats_missing": "Models disagreed. DEBUNKED signal prevails over MISSING.",
+    "source_quality_claude": "Models disagreed. Resolved by source quality — Claude's rating applied (Primary/Independent sources present).",
+    "source_quality_mistral": "Models disagreed. Resolved by source quality — Mistral's rating applied (Primary/Independent sources present)."
   }
 }

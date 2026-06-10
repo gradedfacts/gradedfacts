@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fakten. Quellen. Transparenz."
+  },
+  "consensus": {
+    "disagreement": "Die Modelle waren sich uneinig. Konsens auf SPEKULATIV herabgestuft.",
+    "debunked_beats_missing": "Die Modelle waren sich uneinig. WIDERLEGT hat Vorrang vor FEHLEND.",
+    "source_quality_claude": "Die Modelle waren sich uneinig. Entschieden durch Quellenqualität — Claudes Bewertung übernommen (Primär-/Unabhängige Quellen vorhanden).",
+    "source_quality_mistral": "Die Modelle waren sich uneinig. Entschieden durch Quellenqualität — Mistrals Bewertung übernommen (Primär-/Unabhängige Quellen vorhanden)."
   }
 }

@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fakta. Kilder. Gennemsigtighed."
+  },
+  "consensus": {
+    "disagreement": "Modellerne var uenige. Konsensus nedgraderet til spekulativ.",
+    "debunked_beats_missing": "Modellerne var uenige. Afkræftet-signalet har forrang over manglende.",
+    "source_quality_claude": "Modellerne var uenige. Løst via kildekvalitet — Claudes vurdering anvendt (primære/uafhængige kilder til stede).",
+    "source_quality_mistral": "Modellerne var uenige. Løst via kildekvalitet — Mistrals vurdering anvendt (primære/uafhængige kilder til stede)."
   }
 }

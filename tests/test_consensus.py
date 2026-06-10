@@ -103,8 +103,7 @@ class TestResolveConsensus:
     def test_disagree_claude_primary_wins(self):
         rating, agree = self._fn(
             EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
-            claude_has_primary_independent=True,
-            mistral_has_primary_independent=False,
+            claude_source_quality=(1, 0),
         )
         assert rating == EpistemicRating.VERIFIED
         assert agree is False
@@ -112,17 +111,17 @@ class TestResolveConsensus:
     def test_disagree_mistral_primary_wins(self):
         rating, agree = self._fn(
             EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
-            claude_has_primary_independent=False,
-            mistral_has_primary_independent=True,
+            mistral_source_quality=(1, 0),
         )
         assert rating == EpistemicRating.VERIFIED
         assert agree is False
 
-    def test_disagree_both_primary_falls_back_to_speculative(self):
+    def test_disagree_equal_quality_falls_back_to_speculative(self):
+        # Equal quality (1 primary each) → no tiebreaker winner → SPECULATIVE
         rating, agree = self._fn(
             EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
-            claude_has_primary_independent=True,
-            mistral_has_primary_independent=True,
+            claude_source_quality=(1, 0),
+            mistral_source_quality=(1, 0),
         )
         assert rating == EpistemicRating.SPECULATIVE
         assert agree is False
@@ -131,8 +130,7 @@ class TestResolveConsensus:
         # DEBUNKED+MISSING is resolved before source quality check
         rating, agree = self._fn(
             EpistemicRating.DEBUNKED, EpistemicRating.MISSING,
-            claude_has_primary_independent=False,
-            mistral_has_primary_independent=True,
+            mistral_source_quality=(1, 0),
         )
         assert rating == EpistemicRating.DEBUNKED
         assert agree is False
@@ -141,8 +139,7 @@ class TestResolveConsensus:
         # Claude=DEBUNKED with Primary/Independent beats Mistral=VERIFIED (Mistral has no primary)
         rating, agree = self._fn(
             EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
-            claude_has_primary_independent=True,
-            mistral_has_primary_independent=False,
+            claude_source_quality=(1, 0),
         )
         assert rating == EpistemicRating.DEBUNKED
         assert agree is False
@@ -152,8 +149,38 @@ class TestResolveConsensus:
         # Counter-evidence from the primary pipeline prevails over supporting evidence.
         rating, agree = self._fn(
             EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
-            claude_has_primary_independent=True,
-            mistral_has_primary_independent=True,
+            claude_source_quality=(1, 0),
+            mistral_source_quality=(1, 0),
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_tiebreak_more_primary_wins(self):
+        # Claude has 2 primary/independent, Mistral has 1 — Claude's rating wins
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.SPECULATIVE,
+            claude_source_quality=(2, 0),
+            mistral_source_quality=(1, 0),
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_tiebreak_secondary_decides_when_primary_tied(self):
+        # Equal primary (1 each); Claude has more secondary — Claude wins
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.SPECULATIVE,
+            claude_source_quality=(1, 2),
+            mistral_source_quality=(1, 0),
+        )
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_tiebreak_no_primary_secondary_decides(self):
+        # Neither has primary; Claude has secondary sources — Claude wins
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.SPECULATIVE,
+            claude_source_quality=(0, 2),
+            mistral_source_quality=(0, 0),
         )
         assert rating == EpistemicRating.DEBUNKED
         assert agree is False
@@ -457,7 +484,7 @@ class TestAnalyzeClaimWithConsensus:
 
         assert "VERIFIED" in j.rationale
         assert "DEBUNKED" in j.rationale
-        assert "source quality" in j.rationale  # resolved by source quality, not SPECULATIVE
+        assert "[RESOLUTION:consensus.source_quality_claude]" in j.rationale
 
     def test_models_disagree_rationale_speculative_note_when_no_advantage(self):
         claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
@@ -465,7 +492,7 @@ class TestAnalyzeClaimWithConsensus:
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
-        assert "Consensus downgraded to SPECULATIVE" in j.rationale
+        assert "[RESOLUTION:consensus.disagreement]" in j.rationale
 
     def test_mistral_phase2_raises_falls_back_to_claude(self):
         claude_j = {"rationale": "Claude only.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}

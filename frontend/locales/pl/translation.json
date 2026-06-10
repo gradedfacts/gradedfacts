@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fakty. Źródła. Przejrzystość."
+  },
+  "consensus": {
+    "disagreement": "Modele były niezgodne. Konsensus obniżony do SPEKULATYWNY.",
+    "debunked_beats_missing": "Modele były niezgodne. Sygnał OBALONY przeważa nad BRAKUJĄCY.",
+    "source_quality_claude": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Claude (obecne źródła pierwotne/niezależne).",
+    "source_quality_mistral": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Mistral (obecne źródła pierwotne/niezależne)."
   }
 }

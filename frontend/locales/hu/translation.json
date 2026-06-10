@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Tények. Források. Átláthatóság."
+  },
+  "consensus": {
+    "disagreement": "A modellek nem értettek egyet. A konszenzus SPEKULATÍV-ra csökkent.",
+    "debunked_beats_missing": "A modellek nem értettek egyet. A MEGCÁFOLT jel elsőbbséget élvez a HIÁNYZÓ felett.",
+    "source_quality_claude": "A modellek nem értettek egyet. Forrásminőség alapján megoldva — Claude értékelése alkalmazva (elsődleges/független források jelen vannak).",
+    "source_quality_mistral": "A modellek nem értettek egyet. Forrásminőség alapján megoldva — Mistral értékelése alkalmazva (elsődleges/független források jelen vannak)."
   }
 }

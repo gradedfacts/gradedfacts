@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— 事实。来源。透明度。"
+  },
+  "consensus": {
+    "disagreement": "模型意见不一致。共识降级为推测性。",
+    "debunked_beats_missing": "模型意见不一致。已驳斥信号优先于缺失。",
+    "source_quality_claude": "模型意见不一致。根据来源质量解决 — 采用Claude的评级（存在主要/独立来源）。",
+    "source_quality_mistral": "模型意见不一致。根据来源质量解决 — 采用Mistral的评级（存在主要/独立来源）。"
   }
 }

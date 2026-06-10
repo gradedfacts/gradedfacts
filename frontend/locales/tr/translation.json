@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Gerçekler. Kaynaklar. Şeffaflık."
+  },
+  "consensus": {
+    "disagreement": "Modeller anlaşamadı. Konsensüs SPEKÜLATIF olarak düşürüldü.",
+    "debunked_beats_missing": "Modeller anlaşamadı. ÇÜRÜTÜLDÜ sinyali EKSİK üzerinde geçerlidir.",
+    "source_quality_claude": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Claude'un değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut).",
+    "source_quality_mistral": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Mistral'ın değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut)."
   }
 }

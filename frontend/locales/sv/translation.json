@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fakta. Källor. Transparens."
+  },
+  "consensus": {
+    "disagreement": "Modellerna var oeniga. Konsensus nedgraderades till spekulativ.",
+    "debunked_beats_missing": "Modellerna var oeniga. Motbevisad-signalen har företräde över saknas.",
+    "source_quality_claude": "Modellerna var oeniga. Löst genom källkvalitet — Claudes bedömning tillämpades (primära/oberoende källor finns).",
+    "source_quality_mistral": "Modellerna var oeniga. Löst genom källkvalitet — Mistrals bedömning tillämpades (primära/oberoende källor finns)."
   }
 }

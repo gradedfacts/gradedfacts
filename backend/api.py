@@ -53,6 +53,13 @@ def _rating_label(rating) -> str:
 
 
 _BADGE_RE = re.compile(r'\[([A-Za-z]+): ([A-Z]+)\]')
+_RESOLUTION_RE = re.compile(r'\[RESOLUTION:([^\]]+)\]')
+_RESOLUTION_FALLBACKS: dict[str, str] = {
+    "consensus.disagreement":        "Models disagreed. Consensus downgraded to SPECULATIVE.",
+    "consensus.debunked_beats_missing": "Models disagreed. DEBUNKED signal prevails over MISSING.",
+    "consensus.source_quality_claude":  "Models disagreed. Resolved by source quality — Claude’s rating applied (Primary/Independent sources present).",
+    "consensus.source_quality_mistral": "Models disagreed. Resolved by source quality — Mistral’s rating applied (Primary/Independent sources present).",
+}
 
 # Translated display labels for rating words inside [Model: RATING] badges.
 # Loaded from locale JSON files (rating.* keys, first character capitalised).
@@ -102,6 +109,13 @@ def _render_model_badges(text: str, lang: str = "en") -> str:
         )
 
     result = _BADGE_RE.sub(_badge, escaped)
+
+    def _resolution_span(m: re.Match) -> str:
+        key = m.group(1)
+        fallback = html.escape(_RESOLUTION_FALLBACKS.get(key, key))
+        return f'<span data-i18n="{html.escape(key)}">{fallback}</span>'
+
+    result = _RESOLUTION_RE.sub(_resolution_span, result)
     result = result.replace('\n\n', '<br><br>').replace('\n', '<br>')
     return result
 

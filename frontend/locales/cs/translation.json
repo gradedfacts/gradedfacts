@@ -198,5 +198,11 @@
   },
   "header": {
     "tagline": "— Fakta. Zdroje. Transparentnost."
+  },
+  "consensus": {
+    "disagreement": "Modely se neshodly. Konsensus snížen na spekulativní.",
+    "debunked_beats_missing": "Modely se neshodly. Signál vyvráceno převažuje nad chybějící.",
+    "source_quality_claude": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Claude (přítomny primární/nezávislé zdroje).",
+    "source_quality_mistral": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Mistral (přítomny primární/nezávislé zdroje)."
   }
 }
