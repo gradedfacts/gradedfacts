@@ -5,7 +5,6 @@ import subprocess
 from pathlib import Path
 
 import anthropic
-import httpx
 
 try:
     from langdetect import detect as _ld_detect, DetectorFactory as _LDFactory
@@ -18,6 +17,7 @@ from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source, extract_domain
+from backend.sources.search import search_claim
 
 logger = logging.getLogger(__name__)
 
@@ -302,17 +302,7 @@ When a claim uses threshold language ('more than X', 'over X', 'at least X', 'fe
   - The threshold is either met or not met — no gradations, no straw men
   - Apply this rule in all languages
 
-SEARCH STRATEGY — execute in this order:
-1. FIRST: Search Brave Search and SearXNG for Primary sources using targeted queries:
-   - Official government statistics (e.g. 'site:destatis.de', 'site:bfe.admin.ch', 'site:bls.gov', 'site:eurostat.ec.europa.eu')
-   - Peer-reviewed research and court decisions
-   - Official institution websites
-2. SECOND: Search for Secondary sources:
-   - Established journalism (e.g. SRF, BBC, Reuters, NZZ, Tagesschau)
-   - Academic research institutes (e.g. pewresearch.org, ourworldindata.org)
-3. ONLY IF Primary and Secondary sources are insufficient after steps 1 and 2:
-   - Use Tertiary sources for context only
-   - Never use Tertiary sources alone as basis for VERIFIED or DEBUNKED
+EVIDENCE: Research findings from Brave Search and SearXNG are provided in the user message. Base your judgment exclusively on these findings. Prioritize Primary sources, then Secondary. Only cite sources that appear in the provided findings — never invent or recall sources from memory.
 
 IMPORTANT: Actively prefer sources already in the registry as Primary/Independent.
 
@@ -433,8 +423,6 @@ On any uncertainty → "none". On any parsing failure → "none" silently.\
 """
 
 # ── Tool definitions ──────────────────────────────────────────────────────────
-
-_WEB_SEARCH_TOOL = {"type": "web_search_20250305", "name": "web_search"}
 
 _JUDGMENT_TOOL = {
     "name": "submit_judgment",
@@ -1081,76 +1069,12 @@ def _check_off_topic(client: anthropic.Anthropic, claim_text: str, lang_name: st
     return False, _get_off_topic_message(lang_name)
 
 
-def _phase1_search(client: anthropic.Anthropic, claim_text: str) -> str:
+def _phase1_search(claim_text: str) -> str:
     """
-    Ask Claude to search for 2-3 sources and, if SEARXNG_URL is configured, also query
-    SearXNG and append those results as additional context. Falls back silently on any error.
+    Search for evidence about the claim using Brave Search and/or SearXNG.
+    Returns a formatted plain-text findings string, or "" if neither source is configured.
     """
-    claude_findings = ""
-    try:
-        resp = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=4096,
-            system=_cached_system(),
-            tools=[_WEB_SEARCH_TOOL],
-            messages=[{
-                "role": "user",
-                "content": (
-                    f"Search for evidence about this claim. "
-                    f"PRIORITY ORDER: (1) Primary sources first — official statistics, "
-                    f"government databases, peer-reviewed research, court records, "
-                    f"official institution websites. "
-                    f"(2) Secondary sources next — established journalism and academic "
-                    f"analysis that cites primary sources with full attribution. "
-                    f"(3) Do NOT use Wikipedia, Statista, commercial portals, or "
-                    f"aggregator sites as evidence. "
-                    f"Summarise what you find and include the URLs of all sources:\n\n{claim_text}"
-                ),
-            }],
-        )
-        claude_findings = "\n".join(
-            block.text for block in resp.content if hasattr(block, "text") and block.text
-        ).strip()
-    except anthropic.PermissionDeniedError:
-        logger.warning("Web search not available on this API key; skipping phase 1.")
-    except Exception as exc:
-        logger.warning("Phase 1 web search failed (%s); proceeding without results.", exc)
-
-    searxng_findings = _query_searxng_context(claim_text)
-    if claude_findings and searxng_findings:
-        return f"{claude_findings}\n\nAdditional sources from SearXNG:\n{searxng_findings}"
-    return claude_findings or searxng_findings
-
-
-def _query_searxng_context(claim_text: str) -> str:
-    """
-    Query SearXNG and return formatted context string for Claude's Phase 2.
-    Returns "" immediately if SEARXNG_URL is not configured or the request fails.
-    """
-    if not settings.searxng_url:
-        return ""
-    try:
-        base = settings.searxng_url.rstrip("/")
-        params = {"q": claim_text, "format": "json", "categories": "general"}
-        logger.info("SearXNG context query for Claude: %r", claim_text)
-        with httpx.Client(timeout=30.0) as client:
-            resp = client.get(f"{base}/search", params=params)
-            resp.raise_for_status()
-        results = resp.json().get("results", [])
-        logger.info("SearXNG context results: %d", len(results))
-        logger.warning("[DEBUG sources] searxng_urls=%d", len(results))
-        if not results:
-            return ""
-        lines = []
-        for i, r in enumerate(results, 1):
-            title = r.get("title", "")
-            url = r.get("url", "")
-            content = r.get("content", "")
-            lines.append(f"Source {i}: {title}\nURL: {url}\nExcerpt: {content}")
-        return "\n\n".join(lines)
-    except Exception as exc:
-        logger.warning("SearXNG context query failed (%s); proceeding without SearXNG results.", exc)
-        return ""
+    return search_claim(claim_text)
 
 
 def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
@@ -1289,7 +1213,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         return judgment
 
     # Phase 1: gather evidence via web search (best-effort)
-    search_findings = _phase1_search(client, claim.text)
+    search_findings = _phase1_search(claim.text)
 
     # Phase 2: structured judgment (forced tool call)
     data = _phase2_judgment(client, claim.text, search_findings, lang_instruction)

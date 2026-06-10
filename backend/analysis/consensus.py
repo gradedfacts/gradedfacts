@@ -21,11 +21,9 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 
-import httpx
 from mistralai.client import Mistral
 
 from backend.analysis.engine import (
@@ -48,12 +46,12 @@ from backend.analysis.engine import independence_bool, independence_label
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source, extract_domain
+from backend.sources.search import search_claim
 
 logger = logging.getLogger(__name__)
 
 _MISTRAL_MODEL = "mistral-large-2512"
 _CLAUDE_MODEL = "claude-sonnet-4-6"
-_BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
 
 # ── Mistral tool definition (Mistral uses OpenAI-compatible function format) ──
 
@@ -174,16 +172,14 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
             "Only return an empty sources array if you genuinely cannot name any source for this claim."
         )
     user_content += (
-        "\n\nSOURCE PRIORITY: Search for and use (1) Primary sources first — official statistics, "
-        "government data, peer-reviewed research, court decisions, official institution websites; "
-        "(2) Secondary sources next — reputable journalism and academic analysis citing primary sources. "
-        "Do NOT use Wikipedia, Statista, commercial portals, aggregators, or industry lobby sites as evidence. "
-        "If only Tertiary sources are available, rate MISSING.\n\n"
-        "Rating guidance: If you have ≥3 independent Primary or Secondary sources that consistently confirm "
-        "the claim without contradiction, rate VERIFIED. Secondary sources citing primary sources are "
+        "\n\nEVIDENCE: Research findings from Brave Search and SearXNG are provided above. "
+        "Base your judgment exclusively on these findings. Prioritize Primary sources, then Secondary. "
+        "Only cite sources that appear in the provided findings — never invent or recall sources from memory.\n\n"
+        "Rating guidance: If the provided findings include ≥3 independent Primary or Secondary sources "
+        "that consistently confirm the claim, rate VERIFIED. Secondary sources citing primary sources are "
         "sufficient — do not downgrade to SPECULATIVE merely because a primary document is not directly "
-        "in your search results. Keep conservative rules: rate DEBUNKED only when counter-evidence is "
-        "clear and direct; rate MISSING when evidence is genuinely absent or contradictory."
+        "listed. Rate DEBUNKED only when counter-evidence is clear and direct; rate MISSING when evidence "
+        "is genuinely absent or contradictory."
     )
     user_content += (
         "\n\nCRITICAL NUMERICAL THRESHOLD RULE:\n"
@@ -266,120 +262,16 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     return _correct_mistral_rating(args)
 
 
-# ── Search helpers (Brave + SearXNG) for Mistral's Phase 1 ───────────────────
-
-def _query_brave(claim_text: str) -> list[dict]:
-    """Query Brave Web Search; returns raw result dicts. Returns [] on any failure."""
-    if not settings.brave_api_key:
-        return []
-    try:
-        headers = {
-            "Accept": "application/json",
-            "Accept-Encoding": "gzip",
-            "X-Subscription-Token": settings.brave_api_key,
-        }
-        params = {"q": claim_text, "count": 10}
-        logger.info("Brave Search query: %r", claim_text)
-        with httpx.Client(timeout=30.0) as client:
-            resp = client.get(_BRAVE_SEARCH_URL, headers=headers, params=params)
-            resp.raise_for_status()
-        logger.info("Brave Search HTTP status: %d", resp.status_code)
-        results = resp.json().get("web", {}).get("results", [])
-        logger.info("Brave Search results returned: %d", len(results))
-        logger.warning("[DEBUG sources] brave_urls=%d", len(results))
-        return results
-    except Exception as exc:
-        logger.warning("Brave Search failed (%s); skipping Brave results.", exc)
-        return []
-
-
-def _query_searxng(claim_text: str) -> list[dict]:
-    """
-    Query SearXNG REST API; returns normalised result dicts. Returns [] on any failure.
-    Each dict has keys: title, url, description (matching Brave's field names).
-    """
-    if not settings.searxng_url:
-        return []
-    try:
-        base = settings.searxng_url.rstrip("/")
-        params = {"q": claim_text, "format": "json", "categories": "general"}
-        logger.info("SearXNG query: %r", claim_text)
-        with httpx.Client(timeout=30.0) as client:
-            resp = client.get(f"{base}/search", params=params)
-            resp.raise_for_status()
-        results = resp.json().get("results", [])
-        logger.info("SearXNG results returned: %d", len(results))
-        logger.warning("[DEBUG sources] searxng_urls=%d", len(results))
-        return [
-            {
-                "title": r.get("title", ""),
-                "url": r.get("url", ""),
-                "description": r.get("content", ""),
-            }
-            for r in results
-        ]
-    except Exception as exc:
-        logger.warning("SearXNG search failed (%s); skipping SearXNG results.", exc)
-        return []
-
-
-def _mistral_phase1_brave_search(claim_text: str) -> str:
-    """
-    Query Brave and/or SearXNG in parallel; merge and deduplicate results by URL.
-
-    Returns formatted findings for Mistral's Phase 2, or "" when no configured
-    source returns results. Never raises — keeps Mistral's pipeline independent
-    of Claude's regardless of search-source availability.
-    """
-    logger.info(
-        "_mistral_phase1_brave_search called, brave key present: %s, searxng configured: %s",
-        bool(settings.brave_api_key), bool(settings.searxng_url),
-    )
-    logger.info("BRAVE_API_KEY present: %s", bool(os.getenv("BRAVE_API_KEY")))
-
-    has_brave = bool(settings.brave_api_key)
-    has_searxng = bool(settings.searxng_url)
-    if not has_brave and not has_searxng:
-        return ""
-
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        brave_future = executor.submit(_query_brave, claim_text)
-        searxng_future = executor.submit(_query_searxng, claim_text)
-        brave_results = brave_future.result()
-        searxng_results = searxng_future.result()
-
-    # Merge and deduplicate by URL; Brave results take precedence for duplicates.
-    seen_urls: set[str] = set()
-    merged: list[dict] = []
-    for r in brave_results + searxng_results:
-        url = r.get("url", "")
-        if url and url not in seen_urls:
-            seen_urls.add(url)
-            merged.append(r)
-
-    if not merged:
-        return ""
-
-    lines = []
-    for i, r in enumerate(merged, 1):
-        title = r.get("title", "")
-        url = r.get("url", "")
-        description = r.get("description", "")
-        lines.append(f"Source {i}: {title}\nURL: {url}\nExcerpt: {description}")
-
-    return "\n\n".join(lines)
-
-
 def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:
     """
-    Mistral's independent Phase 1+2: fetch Brave findings then run Phase 2 judgment.
+    Mistral's independent Phase 1+2: fetch search findings then run Phase 2 judgment.
     Runs inside the Phase 2 ThreadPoolExecutor alongside Claude's thread.
-    Brave findings may be "" if Brave is unavailable; _mistral_phase2_judgment
-    handles that case with a knowledge-only fallback message.
+    Search findings may be "" if neither Brave nor SearXNG is configured;
+    _mistral_phase2_judgment handles that case with a knowledge-only fallback message.
     """
     logger.info("_mistral_search_and_judge called")
-    brave_findings = _mistral_phase1_brave_search(claim_text)
-    return _mistral_phase2_judgment(claim_text, brave_findings, lang_instruction)
+    search_findings = search_claim(claim_text)
+    return _mistral_phase2_judgment(claim_text, search_findings, lang_instruction)
 
 
 # ── Consensus resolution ──────────────────────────────────────────────────────
@@ -611,8 +503,8 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     if lang_instruction:
         logger.debug("Claim language: %s.", lang_name)
 
-    # ── Phase 1: web search (Claude only — Mistral has no built-in search) ────
-    search_findings = _phase1_search(claude_client, claim.text)
+    # ── Phase 1: web search ────────────────────────────────────────────────────
+    search_findings = _phase1_search(claim.text)
 
     # ── Phase 2: parallel judgment ────────────────────────────────────────────
     mistral_available = bool(settings.mistral_api_key)
