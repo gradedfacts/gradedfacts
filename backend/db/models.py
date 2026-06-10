@@ -43,6 +43,9 @@ class EvaluatedSource(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
     claim_id: Mapped[str] = mapped_column(ForeignKey("claims.id"), nullable=False)
+    # Scopes this source to the specific judgment run that produced it.
+    # Nullable for rows written before this column was added (pre-migration rows).
+    judgment_id: Mapped[str | None] = mapped_column(ForeignKey("judgments.id"), nullable=True)
     url: Mapped[str] = mapped_column(Text, nullable=False)
     tier: Mapped[SourceTier] = mapped_column(SAEnum(SourceTier), nullable=False)
     is_independent: Mapped[bool] = mapped_column(Boolean, nullable=False)
@@ -63,6 +66,7 @@ class EvaluatedSource(Base):
     fetched_at: Mapped[datetime] = mapped_column(default=_now)
 
     claim: Mapped[Claim] = relationship(back_populates="sources")
+    judgment: Mapped["Judgment | None"] = relationship(foreign_keys=[judgment_id])
 
     @property
     def is_unverified(self) -> bool:

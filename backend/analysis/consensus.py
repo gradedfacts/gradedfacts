@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
+import uuid
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 
@@ -469,6 +470,10 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     # ── Process Claude's sources and derive its rating ────────────────────────
     claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources") or [])
 
+    # Pre-generate the consensus judgment ID so all source rows (both Claude's and
+    # Mistral's) can reference it before the Judgment object is created.
+    _pending_judgment_id = str(uuid.uuid4())
+
     # Persist EvaluatedSource objects IMMEDIATELY after _process_sources() returns —
     # before _rating_from_data(), before the Claude Hard Rule, before the consensus
     # Hard Rule, before any other logic that could raise and skip session.commit().
@@ -480,6 +485,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     evaluated_sources = [
         EvaluatedSource(
             claim_id=claim_id,
+            judgment_id=_pending_judgment_id,
             url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
             is_independent=independence_bool(src.get("is_independent", True)),
@@ -539,6 +545,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             _seen_urls.add(_url)
             _mistral_extra.append(EvaluatedSource(
                 claim_id=claim_id,
+                judgment_id=_pending_judgment_id,
                 url=_url,
                 tier=SourceTier(_src.get("tier", "tertiary")),
                 is_independent=independence_bool(_src.get("is_independent", True)),
@@ -628,6 +635,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     political_leaning = _safe_leaning(mistral_data) if mistral_won else _safe_leaning(claude_data)
 
     judgment = Judgment(
+        id=_pending_judgment_id,
         claim_id=claim_id,
         rating=consensus_rating,
         rationale=rationale,

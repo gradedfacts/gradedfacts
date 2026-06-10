@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import func, inspect, text
+from sqlalchemy import func, inspect, or_, text
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
@@ -300,6 +300,7 @@ _CLAIM_ADDCOLS = [
 
 _EVALUATED_SOURCE_ADDCOLS = [
     ("independence_label", "VARCHAR(20)"),
+    ("judgment_id", "VARCHAR(36)"),
 ]
 
 
@@ -627,7 +628,13 @@ def ui_poll(
         )
 
     sources = session.execute(
-        select(EvaluatedSource).where(EvaluatedSource.claim_id == resolved_id)
+        select(EvaluatedSource).where(
+            EvaluatedSource.claim_id == resolved_id,
+            or_(
+                EvaluatedSource.judgment_id == active_judgment.id,
+                EvaluatedSource.judgment_id.is_(None),
+            ),
+        )
     ).scalars().all()
     logger.warning(
         "[DEBUG ui_poll] claim_id=%s resolved_id=%s sources_found=%d redirected=%s",

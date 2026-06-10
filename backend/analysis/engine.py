@@ -1,6 +1,7 @@
 import json
 import logging
 import subprocess
+import uuid
 from pathlib import Path
 
 import anthropic
@@ -884,6 +885,10 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         if ev is not None
     ]
 
+    # Pre-generate the judgment ID so source rows can reference it before the
+    # Judgment object is created (sources are staged first; both are committed together).
+    _pending_judgment_id = str(uuid.uuid4())
+
     # Persist EvaluatedSource objects IMMEDIATELY after sources_data is available —
     # before the rating derivation loop, before any Hard Rule, before any other logic
     # that could raise and prevent session.commit() from being reached.
@@ -895,6 +900,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     evaluated_sources = [
         EvaluatedSource(
             claim_id=claim_id,
+            judgment_id=_pending_judgment_id,
             url=src.get("url") or src.get("title") or "",
             tier=SourceTier(src.get("tier", "tertiary")),
             is_independent=independence_bool(src.get("is_independent", True)),
@@ -1013,6 +1019,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     political_leaning = raw_leaning if raw_leaning in ("left", "right", "none") else "none"
 
     judgment = Judgment(
+        id=_pending_judgment_id,
         claim_id=claim_id,
         rating=rating,
         rationale=data["rationale"],
