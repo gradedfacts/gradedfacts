@@ -61,16 +61,40 @@ def merge_into_canonical(session, temp_id: str, canonical_id: str) -> None:
         "[DEBUG merge] temp_id=%s canonical_id=%s sources_on_temp=%d sources_already_on_canonical=%d",
         temp_id, canonical_id, _src_before, _jdg_before,
     )
+    # Capture the IDs of judgments being moved from temp before reassigning them.
+    # These will become the new active judgments on canonical; all pre-existing
+    # active judgments on canonical must be deactivated in the same transaction.
+    temp_judgment_ids = session.execute(
+        select(Judgment.id).where(Judgment.claim_id == temp_id)
+    ).scalars().all()
+
     session.execute(
         update(EvaluatedSource)
         .where(EvaluatedSource.claim_id == temp_id)
         .values(claim_id=canonical_id)
+        .execution_options(synchronize_session=False)
     )
     session.execute(
         update(Judgment)
         .where(Judgment.claim_id == temp_id)
         .values(claim_id=canonical_id)
+        .execution_options(synchronize_session=False)
     )
+
+    # Deactivate any prior active judgments on canonical that are not part of the
+    # newly reassigned set — preserves the single-active invariant.
+    if temp_judgment_ids:
+        session.execute(
+            update(Judgment)
+            .where(
+                Judgment.claim_id == canonical_id,
+                Judgment.is_active.is_(True),
+                Judgment.id.notin_(temp_judgment_ids),
+            )
+            .values(is_active=False)
+            .execution_options(synchronize_session=False)
+        )
+
     temp = session.get(Claim, temp_id)
     if temp is not None:
         session.delete(temp)

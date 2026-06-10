@@ -5,6 +5,7 @@ import uuid
 from pathlib import Path
 
 import anthropic
+from sqlalchemy import update
 
 try:
     from langdetect import detect as _ld_detect, DetectorFactory as _LDFactory
@@ -794,6 +795,23 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
 # ── Public entry point ────────────────────────────────────────────────────────
 
+def _deactivate_prior_judgments(session, claim_id: str) -> None:
+    """Set is_active=False on all currently active judgments for claim_id.
+
+    Runs inside the caller's open transaction.  no_autoflush prevents premature
+    flushing of pending ORM objects (e.g. EvaluatedSources that already carry the
+    new judgment_id but whose Judgment row hasn't been inserted yet), which would
+    violate the FK constraint on PostgreSQL.
+    """
+    with session.no_autoflush:
+        session.execute(
+            update(Judgment)
+            .where(Judgment.claim_id == claim_id, Judgment.is_active.is_(True))
+            .values(is_active=False)
+            .execution_options(synchronize_session=False)
+        )
+
+
 def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", user_language: str | None = None) -> Judgment:
     """
     Run the full epistemic analysis pipeline for a claim.
@@ -839,6 +857,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             registry_version=_get_registry_version(),
             prompt_version="1.0",
         )
+        _deactivate_prior_judgments(session, claim_id)
         session.add(judgment)
         session.commit()
         session.refresh(judgment)
@@ -857,6 +876,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             registry_version=_get_registry_version(),
             prompt_version="1.0",
         )
+        _deactivate_prior_judgments(session, claim_id)
         session.add(judgment)
         session.commit()
         session.refresh(judgment)
@@ -1031,6 +1051,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         prompt_version="1.0",
     )
 
+    _deactivate_prior_judgments(session, claim_id)
     session.add(judgment)
     session.commit()
     session.refresh(judgment)

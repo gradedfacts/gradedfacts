@@ -33,7 +33,9 @@ from backend.analysis.engine import (
     _JUDGMENT_TOOL,
     _SYSTEM_PROMPT,
     _build_lang_instruction,
+    _check_off_topic,
     _check_specificity,
+    _deactivate_prior_judgments,
     _detect_language,
     _get_client,
     _get_registry_version,
@@ -41,7 +43,7 @@ from backend.analysis.engine import (
     _phase2_judgment,
     _verify_rating_consistency,
 )
-from sqlalchemy import func, select as _sa_select
+from sqlalchemy import func, select as _sa_select, update
 
 from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
 from backend.analysis.engine import independence_bool, independence_label
@@ -394,6 +396,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             registry_version=_get_registry_version(),
             prompt_version="1.0",
         )
+        _deactivate_prior_judgments(session, claim_id)
         session.add(judgment)
         session.commit()
         session.refresh(judgment)
@@ -412,6 +415,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             registry_version=_get_registry_version(),
             prompt_version="1.0",
         )
+        _deactivate_prior_judgments(session, claim_id)
         session.add(judgment)
         session.commit()
         session.refresh(judgment)
@@ -655,6 +659,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         "[DEBUG sources] claim_id=%s PRE-COMMIT: staged_sources=%d consensus=%s models_agree=%s",
         claim_id, len(evaluated_sources), consensus_rating, models_agree,
     )
+    _deactivate_prior_judgments(session, claim_id)
     session.add(judgment)
     session.commit()
     _post_commit_count = session.execute(
