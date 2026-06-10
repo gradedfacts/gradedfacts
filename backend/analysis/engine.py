@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import subprocess
 from pathlib import Path
 
@@ -255,18 +254,12 @@ HARD RULES — never violate:
      a primary or secondary source. Wikipedia can point to primary sources: those
      primary sources count and should be cited directly. Wikipedia itself does not.
 
-CRITICAL CONSISTENCY RULE:
-Your 'rating' field in the structured output MUST match your conclusion in the rationale
-text. If your rationale concludes the claim is verified/confirmed/bestätigt/confirmé/
-verificato/etc., you MUST set rating='verified'. If your rationale concludes the claim
-is debunked/widerlegt/réfuté/etc., you MUST set rating='debunked'. Never set
-rating='speculative' if your rationale clearly concludes verified or debunked. The
-structured rating field must always reflect your actual conclusion.
-
-CRITICAL CONSISTENCY RULE EXAMPLES:
-- If your rationale says 'Die Behauptung ist damit als DEBUNKED zu bewerten' → rating field MUST be 'debunked'
-- If your rationale says 'The claim is VERIFIED' → rating field MUST be 'verified'
-- NEVER output rating='speculative' if your rationale conclusion says debunked or verified
+RATING LANGUAGE RULE:
+Write the rationale entirely in the user's UI language. Never include rating keywords
+(VERIFIED, DEBUNKED, SPECULATIVE, MISSING or their translations such as WIDERLEGT,
+BESTÄTIGT, RÉFUTÉ, CONFUTATO, REFUTADO, СПРОСТОВАНО) in the rationale text. State your
+conclusion in plain descriptive language — describe what the evidence shows, not what
+verdict label to assign. The verdict belongs exclusively in the structured rating field.
 
 SOURCE QUALITY REQUIREMENT:
   - VERIFIED requires at least 1 INDEPENDENT Primary source OR at least 2 INDEPENDENT Secondary sources.
@@ -539,381 +532,56 @@ def _get_registry_version() -> str:
         return "unknown"
 
 
-# ── Claude rating self-consistency correction ─────────────────────────────────
-# Claude occasionally outputs SPECULATIVE in the structured field while its own
-# rationale clearly concludes VERIFIED or DEBUNKED. The tuples below list prose
-# phrases that reveal the actual conclusion, and _correct_claude_rating() fixes
-# the mismatch before the result propagates downstream.
+# ── Rating consistency gate ───────────────────────────────────────────────────
 
-_CLAUDE_VERIFIED_PHRASES: tuple[str, ...] = (
-    # English
-    "fully meets the criteria for verified",
-    "rating is verified",
-    "the claim is verified",
-    "therefore verified",
-    "is correct and verified",
-    "clearly verified",
-    "unambiguously verified",
-    "beyond doubt verified",
-    "undoubtedly verified",
-    "clearly meets the criteria",
-    "all criteria for verified are met",
-    "rating verified is clearly justified",
-    # German (de)
-    "verified ist vollständig erfüllt",
-    "kriterium verified ist erfüllt",
-    "das kriterium verified",
-    "bewertung lautet verified",
-    "ist als verified einzustufen",
-    "klar verifiziert",
-    "klar verified",
-    "eindeutig verifiziert",
-    "zweifelsfrei belegt",
-    "ist klar verifiziert",
-    "vollständig erfüllt",
-    "kriterium fur verified ist klar erfullt",
-    "alle kriterien fur verified",
-    "alle kriterien für verified",
-    "bewertung verified ist klar gerechtfertigt",
-    "mindestanforderungen für verified sind klar erfüllt",
-    "mindestanforderungen sind klar erfüllt",
-    "schwellenprüfung.*erfüllt",
-    "sind klar erfüllt",
-    "weit mehr als 3 relevante quellen",
-    "überwältigende.*beweislage",
-    "eindeutig belegt",
-    # French (fr)
-    "clairement vérifié",
-    "sans aucun doute vérifié",
-    "tous les critères pour verified",
-    "la notation verified est justifiée",
-    # Italian (it)
-    "chiaramente verificato",
-    "inequivocabilmente verificato",
-    "tutti i criteri per verified",
-    # Spanish (es)
-    "claramente verificado",
-    "inequívocamente verificado",
-    "todos los criterios para verified",
-    # Portuguese (pt)
-    "inequivocamente verificado",
-    "todos os critérios para verified",
-    # Dutch (nl)
-    "duidelijk geverifieerd",
-    "ondubbelzinnig geverifieerd",
-    "aan alle criteria voor verified voldaan",
-    # Polish (pl)
-    "wyraźnie zweryfikowany",
-    "jednoznacznie zweryfikowany",
-    "wszystkie kryteria dla verified spełnione",
-    # Swedish (sv)
-    "tydligt verifierad",
-    "otvetydigt verifierad",
-    "alla kriterier för verified uppfyllda",
-    # Danish (da)
-    "tydeligt verificeret",
-    "utvetydigt verificeret",
-    # Finnish (fi)
-    "selvästi vahvistettu",
-    "yksiselitteisesti vahvistettu",
-    # Czech (cs)
-    "jasně ověřeno",
-    "jednoznačně ověřeno",
-    # Romanian (ro)
-    "clar verificat",
-    "fără îndoială verificat",
-    # Greek (el)
-    "σαφώς επαληθευμένο",
-    "αναμφίβολα επαληθευμένο",
-    # Hungarian (hu)
-    "egyértelműen megerősített",
-    "kétségtelenül megerősített",
-    # Russian (ru)
-    "явно подтверждено",
-    "однозначно подтверждено",
-    # Ukrainian (uk)
-    "явно підтверджено",
-    "однозначно підтверджено",
-    # Turkish (tr)
-    "açıkça doğrulandı",
-    "kesinlikle doğrulandı",
-    # Arabic (ar)
-    "محقق بوضوح",
-    "محقق بشكل لا لبس فيه",
-    # Chinese (zh)
-    "明确核实",
-    "毫无疑问核实",
-    # Japanese (ja)
-    "明確に確認済み",
-    "疑いなく確認済み",
-    # Korean (ko)
-    "명확히 확인됨",
-    "의심할 여지 없이 확인됨",
-    # English — conclusion forms ("therefore verified" already present above)
-    "must be classified as verified",
-    "is hence verified",
-    "is thus verified",
-    "must be rated as verified",
-    # German (de) — conclusion forms ("ist als verified einzustufen" already present above)
-    "ist damit als verified zu bewerten",
-    "das rating ist daher verified",
-    "muss als verified eingestuft werden",
-    "ist daher verifiziert",
-    "ist damit verifiziert",
-    # French (fr) — conclusion forms
-    "est donc vérifié",
-    "doit être classé comme vérifié",
-    "est ainsi vérifié",
-    # Italian (it) — conclusion forms
-    "è quindi verificato",
-    "deve essere classificato come verificato",
-    # Spanish (es) — conclusion forms
-    "es por tanto verificado",
-    "debe clasificarse como verificado",
-    # Portuguese (pt) — conclusion forms
-    "é portanto verificado",
-    "deve ser classificado como verificado",
-    # Dutch (nl) — conclusion forms
-    "is daarom geverifieerd",
-    "moet worden geclassificeerd als geverifieerd",
-    # Polish (pl) — conclusion forms
-    "jest zatem zweryfikowany",
-    "musi być sklasyfikowany jako zweryfikowany",
-    # Swedish (sv) — conclusion forms
-    "är därför verifierad",
-    "måste klassificeras som verifierad",
-    # Danish (da) — conclusion forms
-    "er derfor verificeret",
-    "skal klassificeres som verificeret",
-    # Finnish (fi) — conclusion forms
-    "on siksi vahvistettu",
-    "on luokiteltava vahvistetuksi",
-    # Czech (cs) — conclusion forms
-    "je proto ověřeno",
-    "musí být klasifikováno jako ověřeno",
-    # Romanian (ro) — conclusion forms
-    "este prin urmare verificat",
-    "trebuie clasificat ca verificat",
-    # Greek (el) — conclusion forms
-    "είναι επομένως επαληθευμένο",
-    "πρέπει να ταξινομηθεί ως επαληθευμένο",
-    # Hungarian (hu) — conclusion forms
-    "ezért megerősített",
-    "megerősítettnek kell minősíteni",
-    # Russian (ru) — conclusion forms
-    "поэтому подтверждено",
-    "должно быть классифицировано как подтверждённое",
-    # Ukrainian (uk) — conclusion forms
-    "тому підтверджено",
-    "повинно бути класифіковано як підтверджене",
-    # Turkish (tr) — conclusion forms
-    "bu nedenle doğrulandı",
-    "doğrulanmış olarak sınıflandırılmalıdır",
-    # Arabic (ar) — conclusion forms
-    "وبالتالي محقق",
-    "يجب تصنيفه على أنه محقق",
-    # Chinese (zh) — conclusion forms
-    "因此被核实",
-    "必须被归类为已核实",
-    # Japanese (ja) — conclusion forms
-    "したがって確認済み",
-    "確認済みとして分類されなければならない",
-    # Korean (ko) — conclusion forms
-    "따라서 확인됨",
-    "확인된 것으로 분류되어야 함",
+_VERIFY_RATING_PROMPT = (
+    "Which of these four ratings does this rationale conclude: "
+    "VERIFIED, DEBUNKED, SPECULATIVE, MISSING? "
+    "Answer with exactly one word."
 )
 
-def _phrase_matches(phrase: str, text: str) -> bool:
-    """Match a phrase against text. Uses re.search for patterns containing '.*', else 'in'."""
-    if ".*" in phrase:
-        return bool(re.search(phrase, text))
-    return phrase in text
+_VALID_RATINGS: frozenset[str] = frozenset({"verified", "debunked", "speculative", "missing"})
 
+def _verify_rating_consistency(
+    rationale: str,
+    structured_rating: str,
+    anthropic_client: "anthropic.Anthropic | None" = None,
+) -> str:
+    """Call Claude Haiku to independently derive a rating from the rationale prose.
 
-_CLAUDE_DEBUNK_PHRASES: tuple[str, ...] = (
-    # English
-    "the claim is false",
-    "is therefore false",
-    "is not correct",
-    # German (de)
-    "ist daher falsch",
-    "ist falsch",
-    "nicht erfüllt",
-    "widerlegt",
-    "klar widerlegt",
-    "eindeutig widerlegt",
-    "zweifelsfrei falsch",
-    "ist klar widerlegt",
-    # French (fr)
-    "clairement réfuté",
-    "sans aucun doute faux",
-    # Italian (it)
-    "chiaramente confutato",
-    "inequivocabilmente falso",
-    # Spanish (es)
-    "claramente refutado",
-    "inequívocamente falso",
-    # Portuguese (pt)
-    "claramente refutado",
-    "inequivocamente falso",
-    # Dutch (nl)
-    "duidelijk weerlegd",
-    "ondubbelzinnig onjuist",
-    # Polish (pl)
-    "wyraźnie obalony",
-    "jednoznacznie fałszywy",
-    # Swedish (sv)
-    "tydligt motbevisat",
-    "otvetydigt falskt",
-    # Danish (da)
-    "tydeligt afkræftet",
-    "utvetydigt falsk",
-    # Finnish (fi)
-    "selvästi kumottu",
-    "yksiselitteisesti väärä",
-    # Czech (cs)
-    "jasně vyvráceno",
-    "jednoznačně nepravdivé",
-    # Romanian (ro)
-    "clar infirmat",
-    "fără îndoială fals",
-    # Greek (el)
-    "σαφώς διαψεύστηκε",
-    "αναμφίβολα ψευδές",
-    # Hungarian (hu)
-    "egyértelműen megcáfolt",
-    "kétségtelenül hamis",
-    # Russian (ru)
-    "явно опровергнуто",
-    "однозначно ложно",
-    # Ukrainian (uk)
-    "явно спростовано",
-    "однозначно хибно",
-    # Turkish (tr)
-    "açıkça çürütüldü",
-    "kesinlikle yanlış",
-    # Arabic (ar)
-    "مدحوض بوضوح",
-    "خاطئ بشكل لا لبس فيه",
-    # Chinese (zh)
-    "明确驳斥",
-    "毫无疑问错误",
-    # Japanese (ja)
-    "明確に反証済み",
-    "疑いなく誤り",
-    # Korean (ko)
-    "명확히 반증됨",
-    "의심할 여지 없이 거짓",
-    # Explicit "rate as debunked" conclusions — German and English
-    "ist damit als debunked zu bewerten",
-    "das rating ist daher debunked",
-    "rating ist debunked",
-    "bewertung ist debunked",
-    "einzustufen als debunked",
-    "therefore debunked",
-    "thus debunked",
-    "is therefore debunked",
-    "is thus debunked",
-    "muss als debunked eingestuft werden",
-    "ist als debunked einzustufen",
-    # German (de) — additional conclusion forms
-    "ist daher widerlegt",
-    "ist damit widerlegt",
-    # French (fr) — conclusion forms
-    "est donc réfuté",
-    "doit être classé comme réfuté",
-    "est ainsi réfuté",
-    # Italian (it) — conclusion forms
-    "è quindi confutato",
-    "deve essere classificato come confutato",
-    # Spanish (es) — conclusion forms
-    "es por tanto refutado",
-    "debe clasificarse como refutado",
-    # Portuguese (pt) — conclusion forms
-    "é portanto refutado",
-    "deve ser classificado como refutado",
-    # Dutch (nl) — conclusion forms
-    "is daarom weerlegd",
-    "moet worden geclassificeerd als weerlegd",
-    # Polish (pl) — conclusion forms
-    "jest zatem obalony",
-    "musi być sklasyfikowany jako obalony",
-    # Swedish (sv) — conclusion forms
-    "är därför motbevisat",
-    "måste klassificeras som motbevisat",
-    # Danish (da) — conclusion forms
-    "er derfor afkræftet",
-    "skal klassificeres som afkræftet",
-    # Finnish (fi) — conclusion forms
-    "on siksi kumottu",
-    "on luokiteltava kumotuksi",
-    # Czech (cs) — conclusion forms
-    "je proto vyvráceno",
-    "musí být klasifikováno jako vyvráceno",
-    # Romanian (ro) — conclusion forms
-    "este prin urmare infirmat",
-    "trebuie clasificat ca infirmat",
-    # Greek (el) — conclusion forms
-    "είναι επομένως διαψευσμένο",
-    "πρέπει να ταξινομηθεί ως διαψευσμένο",
-    # Hungarian (hu) — conclusion forms
-    "ezért megcáfolt",
-    "megcáfoltnak kell minősíteni",
-    # Russian (ru) — conclusion forms
-    "поэтому опровергнуто",
-    "должно быть классифицировано как опровергнутое",
-    # Ukrainian (uk) — conclusion forms
-    "тому спростовано",
-    "повинно бути класифіковано як спростоване",
-    # Turkish (tr) — conclusion forms
-    "bu nedenle çürütülmüş",
-    "çürütülmüş olarak sınıflandırılmalıdır",
-    # Arabic (ar) — conclusion forms
-    "وبالتالي مدحوض",
-    "يجب تصنيفه على أنه مدحوض",
-    # Chinese (zh) — conclusion forms
-    "因此被驳斥",
-    "必须被归类为已驳斥",
-    # Japanese (ja) — conclusion forms
-    "したがって反証済み",
-    "反証済みとして分類されなければならない",
-    # Korean (ko) — conclusion forms
-    "따라서 반증됨",
-    "반증된 것으로 분류되어야 함",
-    # English — additional conclusion forms
-    "must be classified as debunked",
-    "is hence debunked",
-)
-
-
-def _correct_claude_rating(args: dict) -> dict:
-    """Override Claude's rating when the rationale prose contradicts the structured field.
-
-    Corrects a known Claude inconsistency: structured field says SPECULATIVE while
-    the rationale clearly concludes VERIFIED or DEBUNKED. Checking is case-insensitive;
-    the args dict is not mutated (a new dict is returned).
+    Returns the Haiku-derived rating when it differs from structured_rating (and logs
+    the override), or structured_rating unchanged when they agree or when Haiku fails.
+    Falls back gracefully on any exception (network error, missing API key, etc.).
     """
-    rating = args.get("rating", "").lower()
-    if rating != "speculative":
-        return args
-
-    rationale_lower = args.get("rationale", "").lower()
-
-    if any(phrase in rationale_lower for phrase in _CLAUDE_DEBUNK_PHRASES):
-        logger.warning(
-            "Claude rating corrected: 'speculative' → 'debunked' "
-            "(structured rating contradicts rationale prose)"
+    try:
+        client = anthropic_client if anthropic_client is not None else _get_client()
+        resp = client.messages.create(
+            model=_SPECIFICITY_MODEL,
+            max_tokens=8,
+            temperature=0,
+            messages=[{
+                "role": "user",
+                "content": f"{_VERIFY_RATING_PROMPT}\n\nRationale:\n{rationale}",
+            }],
         )
-        return {**args, "rating": "debunked"}
-
-    if any(_phrase_matches(phrase, rationale_lower) for phrase in _CLAUDE_VERIFIED_PHRASES):
+        text = next(
+            (b.text for b in resp.content if hasattr(b, "text") and b.text), ""
+        ).strip().lower()
+        word = text.split()[0].rstrip(".,;:") if text else ""
+        if word in _VALID_RATINGS:
+            if word != structured_rating:
+                logger.warning(
+                    "[RATING-GATE] structured=%r haiku_derived=%r → overriding to %r",
+                    structured_rating, word, word,
+                )
+                return word
+            return structured_rating
+    except Exception as exc:
         logger.warning(
-            "Claude rating corrected: 'speculative' → 'verified' "
-            "(structured rating contradicts rationale prose)"
+            "[RATING-GATE] Haiku check failed (%s); keeping original rating %r.",
+            exc, structured_rating,
         )
-        return {**args, "rating": "verified"}
-
-    return args
+    return structured_rating
 
 
 # ── Pipeline phases ───────────────────────────────────────────────────────────
@@ -1117,29 +785,10 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         raise RuntimeError("Model did not return a submit_judgment tool call.")
 
     raw = tool_block.input
-    raw_rating = raw.get("rating", "")
-    raw_rationale = raw.get("rationale", "")
-    rationale_lower = raw_rationale.lower()
-    verified_phrase_found = next(
-        (p for p in _CLAUDE_VERIFIED_PHRASES if _phrase_matches(p, rationale_lower)), None
+    final_rating = _verify_rating_consistency(
+        raw.get("rationale", ""), raw.get("rating", "").lower(), client
     )
-    debunk_phrase_found = next(
-        (p for p in _CLAUDE_DEBUNK_PHRASES if _phrase_matches(p, rationale_lower)), None
-    )
-    logger.warning(
-        "[_phase2_judgment debug] raw_rating=%r rationale_preview=%r",
-        raw_rating, raw_rationale[:200],
-    )
-    logger.warning(
-        "[_phase2_judgment debug] verified_phrase_found=%r debunk_phrase_found=%r",
-        verified_phrase_found, debunk_phrase_found,
-    )
-    corrected = _correct_claude_rating(raw)
-    logger.warning(
-        "[_phase2_judgment debug] correction_fired=%r final_rating=%r",
-        corrected.get("rating") != raw_rating, corrected.get("rating"),
-    )
-    return corrected
+    return {**raw, "rating": final_rating}
 
 
 # ── Public entry point ────────────────────────────────────────────────────────

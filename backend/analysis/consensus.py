@@ -38,6 +38,7 @@ from backend.analysis.engine import (
     _get_registry_version,
     _phase1_search,
     _phase2_judgment,
+    _verify_rating_consistency,
 )
 from sqlalchemy import func, select as _sa_select
 
@@ -63,78 +64,6 @@ _MISTRAL_JUDGMENT_TOOL = {
         "parameters": _JUDGMENT_TOOL["input_schema"],
     },
 }
-
-# ── Mistral rating post-processing ───────────────────────────────────────────
-
-# Phrases in a VERIFIED rationale that reveal the underlying conclusion is actually DEBUNKED.
-# Used to correct the known Mistral bug where the structured rating field contradicts the prose.
-_MISTRAL_DEBUNK_PHRASES: tuple[str, ...] = (
-    "ist daher falsch",
-    "ist falsch",
-    "is therefore false",
-    "is not fulfilled",
-    "nicht erfüllt",
-    "widerlegt",
-    "debunked",
-    "the claim is false",
-    "is incorrect",
-    "must be rated as debunked",
-    "therefore debunked",
-    "thus debunked",
-    "is not correct",
-)
-
-# Phrases in a DEBUNKED rationale that reveal the underlying conclusion is actually VERIFIED.
-# Corrects the inverse Mistral inconsistency: structured field says DEBUNKED, prose says VERIFIED.
-_MISTRAL_VERIFIED_PHRASES: tuple[str, ...] = (
-    "verified ist gerechtfertigt",
-    "rating is verified",
-    "bewertung lautet verified",
-    "ist faktisch korrekt",
-    "kann als verified eingestuft werden",
-    "einstufung als verified",
-    "the claim is correct",
-    "die behauptung ist korrekt",
-    "the claim is verified",
-    "is therefore verified",
-    "rated as verified",
-    "classified as verified",
-    "is correct and verified",
-    "therefore verified",
-    "thus verified",
-)
-
-
-def _correct_mistral_rating(args: dict) -> dict:
-    """Override Mistral's rating when the rationale prose contradicts the structured field.
-
-    Two known Mistral inconsistencies are corrected here:
-    - 'verified' + debunk prose → override to 'debunked'
-    - 'debunked' + verified prose → override to 'verified'
-
-    Checking is case-insensitive; the args dict is not mutated (a new dict is returned).
-    """
-    rating = args.get("rating", "").lower()
-    rationale_lower = args.get("rationale", "").lower()
-
-    if rating == "verified":
-        if any(phrase in rationale_lower for phrase in _MISTRAL_DEBUNK_PHRASES):
-            logger.warning(
-                "Mistral rating corrected: 'verified' → 'debunked' "
-                "(structured rating contradicts rationale prose)"
-            )
-            return {**args, "rating": "debunked"}
-
-    if rating == "debunked":
-        if any(phrase in rationale_lower for phrase in _MISTRAL_VERIFIED_PHRASES):
-            logger.warning(
-                "Mistral rating corrected: 'debunked' → 'verified' "
-                "(structured rating contradicts rationale prose)"
-            )
-            return {**args, "rating": "verified"}
-
-    return args
-
 
 # ── Mistral client (lazy singleton) ──────────────────────────────────────────
 
@@ -189,45 +118,8 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
         "- This rule overrides all other considerations"
     )
-    user_content += (
-        "\n\nCRITICAL CONSISTENCY RULE: Your final rating MUST match your own conclusion in the "
-        "rationale. If your analysis concludes the claim is false/wrong/not fulfilled → rate DEBUNKED. "
-        "If your rationale says 'die Behauptung ist daher falsch' or 'the claim is false' → rate "
-        "DEBUNKED, not VERIFIED. If your rationale says the claim is supported → rate VERIFIED, not "
-        "DEBUNKED. A rating that contradicts the rationale's own conclusion is always wrong."
-    )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
-
-    user_content += (
-        "\n\nLANGUAGE RULE FOR RATING TERMS IN RATIONALE:\n"
-        "When writing your rationale text, use the translated rating terms in the target language:\n"
-        "- German (de): BESTÄTIGT, WIDERLEGT, SPEKULATIV, FEHLEND\n"
-        "- French (fr): VÉRIFIÉ, RÉFUTÉ, SPÉCULATIF, MANQUANT\n"
-        "- Italian (it): VERIFICATO, CONFUTATO, SPECULATIVO, MANCANTE\n"
-        "- Spanish (es): VERIFICADO, REFUTADO, ESPECULATIVO, FALTANTE\n"
-        "- English (en): VERIFIED, DEBUNKED, SPECULATIVE, MISSING\n"
-        "- Dutch (nl): GEVERIFIEERD, WEERLEGD, SPECULATIEF, ONTBREKEND\n"
-        "- Polish (pl): ZWERYFIKOWANY, OBALONY, SPEKULATYWNY, BRAKUJĄCY\n"
-        "- Swedish (sv): VERIFIERAD, MOTBEVISAD, SPEKULATIV, SAKNAS\n"
-        "- Portuguese (pt): VERIFICADO, REFUTADO, ESPECULATIVO, FALTANDO\n"
-        "- Danish (da): VERIFICERET, AFKRÆFTET, SPEKULATIV, MANGLENDE\n"
-        "- Finnish (fi): VAHVISTETTU, KUMOTTU, SPEKULATIIVINEN, PUUTTUVA\n"
-        "- Czech (cs): OVĚŘENO, VYVRÁCENO, SPEKULATIVNÍ, CHYBĚJÍCÍ\n"
-        "- Romanian (ro): VERIFICAT, INFIRMAT, SPECULATIV, LIPSĂ\n"
-        "- Greek (el): ΕΠΑΛΗΘΕΥΜΈΝΟ, ΔΙΑΨΕΎΣΤΗΚΕ, ΚΕΡΔΟΣΚΟΠΙΚΌ, ΑΠΟΥΣΊΑ\n"
-        "- Hungarian (hu): MEGERŐSÍTETT, MEGCÁFOLT, SPEKULATÍV, HIÁNYZÓ\n"
-        "- Russian (ru): ПОДТВЕРЖДЕНО, ОПРОВЕРГНУТО, СПЕКУЛЯТИВНО, ОТСУТСТВУЕТ\n"
-        "- Ukrainian (uk): ПІДТВЕРДЖЕНО, СПРОСТОВАНО, СПЕКУЛЯТИВНО, ВІДСУТНЄ\n"
-        "- Turkish (tr): DOĞRULANDI, ÇÜRÜTÜLDÜ, SPEKÜLATIF, EKSİK\n"
-        "- Arabic (ar): محقق, مدحوض, تكهني, مفقود\n"
-        "- Chinese (zh): 已核实, 已驳斥, 推测性, 缺失\n"
-        "- Japanese (ja): 確認済み, 反証済み, 推測的, 不足\n"
-        "- Korean (ko): 확인됨, 반증됨, 추측적, 누락\n"
-        "- For all other languages: use English rating terms\n\n"
-        "The structured rating field must always use the English enum values (verified/debunked/speculative/missing).\n"
-        "Only the rationale prose text should use the translated terms."
-    )
 
     response = client.chat.complete(
         model=_MISTRAL_MODEL,
@@ -259,7 +151,10 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         args.get("rating"),
         args.get("rationale", ""),
     )
-    return _correct_mistral_rating(args)
+    final_rating = _verify_rating_consistency(
+        args.get("rationale", ""), args.get("rating", "").lower()
+    )
+    return {**args, "rating": final_rating}
 
 
 def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:

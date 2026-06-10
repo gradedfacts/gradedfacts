@@ -293,381 +293,42 @@ class TestMistralPhase2:
                 _mistral_phase2_judgment("claim", "findings")
 
 
-# ── _correct_mistral_rating ───────────────────────────────────────────────────
+# ── _verify_rating_consistency ────────────────────────────────────────────────
 
-class TestCorrectMistralRating:
+class TestVerifyRatingConsistency:
 
-    def test_verified_with_debunk_phrase_overridden_to_debunked(self):
-        from backend.analysis.consensus import _correct_mistral_rating
+    def setup_method(self):
+        from backend.analysis.engine import _verify_rating_consistency
+        self._fn = _verify_rating_consistency
 
-        args = {
-            "rating": "verified",
-            "rationale": "Die Zahlen belegen, dass die Behauptung ist daher falsch.",
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "debunked"
-        # Original dict must not be mutated
-        assert args["rating"] == "verified"
+    def test_agreement_returns_structured_rating_unchanged(self):
+        """Haiku agrees with structured rating → return it unchanged."""
+        mock_client = MagicMock()
+        mock_block = MagicMock()
+        mock_block.text = "VERIFIED"
+        mock_client.messages.create.return_value.content = [mock_block]
 
-    @pytest.mark.parametrize("phrase,rationale_template", [
-        ("the claim is false",        "After reviewing the evidence, the claim is false."),
-        ("is therefore false",        "The data contradicts the statement; it is therefore false."),
-        ("is incorrect",              "The figure cited is incorrect according to official records."),
-        ("must be rated as debunked", "Given the contrary evidence, this must be rated as debunked."),
-        ("therefore debunked",        "No source supports the claim; therefore debunked."),
-        ("thus debunked",             "The assertion is unsupported and thus debunked."),
-        ("is not correct",            "The statistic is not correct based on primary data."),
-    ])
-    def test_verified_with_new_debunk_phrase_overridden_to_debunked(self, phrase, rationale_template):
-        from backend.analysis.consensus import _correct_mistral_rating
+        result = self._fn("The evidence clearly supports the claim.", "verified", mock_client)
+        assert result == "verified"
 
-        args = {
-            "rating": "verified",
-            "rationale": rationale_template,
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "debunked", (
-            f"Expected 'verified' → 'debunked' correction for phrase {phrase!r}"
-        )
-        assert args["rating"] == "verified"
+    def test_override_when_haiku_disagrees(self):
+        """Haiku returns different rating → override structured rating."""
+        mock_client = MagicMock()
+        mock_block = MagicMock()
+        mock_block.text = "DEBUNKED"
+        mock_client.messages.create.return_value.content = [mock_block]
 
-    def test_verified_without_debunk_phrase_unchanged(self):
-        from backend.analysis.consensus import _correct_mistral_rating
+        result = self._fn("The claim is false according to all sources.", "speculative", mock_client)
+        assert result == "debunked"
 
-        args = {
-            "rating": "verified",
-            "rationale": "Three independent primary sources confirm the claim.",
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "verified"
+    def test_haiku_failure_keeps_original_rating(self):
+        """Haiku call raises → keep structured rating unchanged."""
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = RuntimeError("API error")
 
-    # ── DEBUNKED → VERIFIED corrections ──────────────────────────────────────
+        result = self._fn("Some rationale text.", "speculative", mock_client)
+        assert result == "speculative"
 
-    @pytest.mark.parametrize("phrase,rationale_template", [
-        ("verified ist gerechtfertigt",   "Die Quellen belegen die Aussage. Verified ist gerechtfertigt."),
-        ("rating is verified",            "All three sources confirm the claim. Rating is verified."),
-        ("bewertung lautet verified",      "Die Fakten stützen die Behauptung. Bewertung lautet Verified."),
-        ("ist faktisch korrekt",          "Die Behauptung ist faktisch korrekt laut offiziellen Quellen."),
-        ("kann als verified eingestuft werden", "Die Behauptung kann als verified eingestuft werden."),
-        ("einstufung als verified",       "Nach Prüfung der Belege: Einstufung als Verified."),
-        ("the claim is correct",          "The claim is correct according to official statistics."),
-        ("die behauptung ist korrekt",    "Die Behauptung ist korrekt und durch Primärquellen belegt."),
-        ("the claim is verified",         "Based on the evidence, the claim is verified."),
-        ("is therefore verified",         "The statement is supported by primary sources and is therefore verified."),
-        ("rated as verified",             "After review, this claim is rated as verified."),
-        ("classified as verified",        "The information is classified as verified by independent sources."),
-        ("is correct and verified",       "The data is correct and verified across multiple sources."),
-        ("therefore verified",            "All sources align; therefore verified."),
-        ("thus verified",                 "The claim is supported and thus verified."),
-    ])
-    def test_debunked_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
-        from backend.analysis.consensus import _correct_mistral_rating
-
-        args = {
-            "rating": "debunked",
-            "rationale": rationale_template,
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "verified", (
-            f"Expected 'debunked' → 'verified' correction for phrase {phrase!r}"
-        )
-        # Original dict must not be mutated
-        assert args["rating"] == "debunked"
-
-    def test_debunked_without_verified_phrase_unchanged(self):
-        from backend.analysis.consensus import _correct_mistral_rating
-
-        args = {
-            "rating": "debunked",
-            "rationale": "Two primary sources directly contradict the claim.",
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "debunked"
-
-    def test_debunked_correction_is_case_insensitive(self):
-        from backend.analysis.consensus import _correct_mistral_rating
-
-        args = {
-            "rating": "debunked",
-            "rationale": "THE CLAIM IS CORRECT based on official records.",
-            "sources": [],
-        }
-        result = _correct_mistral_rating(args)
-        assert result["rating"] == "verified"
-
-    def test_other_ratings_not_affected_by_verified_phrases(self):
-        """SPECULATIVE and MISSING ratings must not be changed even if rationale has verified phrases."""
-        from backend.analysis.consensus import _correct_mistral_rating
-
-        for rating in ("speculative", "missing"):
-            args = {
-                "rating": rating,
-                "rationale": "The claim is correct but evidence is thin.",
-                "sources": [],
-            }
-            result = _correct_mistral_rating(args)
-            assert result["rating"] == rating, (
-                f"Rating {rating!r} must not be mutated by verified-phrase correction"
-            )
-
-
-# ── _correct_claude_rating ────────────────────────────────────────────────────
-
-class TestCorrectClaudeRating:
-
-    @pytest.mark.parametrize("phrase,rationale_template", [
-        ("verified ist vollständig erfüllt",  "Die Quellen belegen die Aussage. Verified ist vollständig erfüllt."),
-        ("kriterium verified ist erfüllt",    "Das Kriterium Verified ist erfüllt laut offiziellen Daten."),
-        ("das kriterium verified",            "Das Kriterium Verified wird durch drei Primärquellen gestützt."),
-        ("bewertung lautet verified",         "Nach Prüfung aller Belege: Bewertung lautet Verified."),
-        ("ist als verified einzustufen",      "Die Behauptung ist als Verified einzustufen."),
-        ("fully meets the criteria for verified", "The evidence fully meets the criteria for verified."),
-        ("rating is verified",               "All sources agree. Rating is verified."),
-        ("the claim is verified",            "Based on primary data, the claim is verified."),
-        ("therefore verified",               "All evidence aligns; therefore verified."),
-        ("is correct and verified",          "The figure is correct and verified by official statistics."),
-        ("klar verifiziert",                 "Die Behauptung ist klar verifiziert durch drei unabhängige Quellen."),
-        ("klar verified",                    "Das Ergebnis ist klar Verified laut offiziellen Statistiken."),
-        ("eindeutig verifiziert",            "Die Aussage ist eindeutig verifiziert durch Primärquellen."),
-        ("zweifelsfrei belegt",              "Die Behauptung ist zweifelsfrei belegt durch amtliche Daten."),
-        ("ist klar verifiziert",             "Die Aussage ist klar verifiziert und entspricht den Fakten."),
-        ("vollständig erfüllt",              "Alle Kriterien sind vollständig erfüllt; die Behauptung ist korrekt."),
-        ("kriterium fur verified ist klar erfullt", "Das Kriterium fur Verified ist klar erfullt."),
-        ("alle kriterien fur verified",      "Alle Kriterien fur Verified sind durch drei Quellen erfüllt."),
-        ("clearly verified",                 "The claim is clearly verified by independent primary sources."),
-        ("unambiguously verified",           "Three primary sources confirm the figure; unambiguously verified."),
-        ("beyond doubt verified",            "The data is beyond doubt verified by official statistics."),
-        ("undoubtedly verified",             "This claim is undoubtedly verified by the official records."),
-        ("clearly meets the criteria",       "The evidence clearly meets the criteria for a verified rating."),
-        ("all criteria for verified are met","All criteria for verified are met by the available evidence."),
-        ("rating verified is clearly justified", "Rating Verified is clearly justified by three primary sources."),
-        # German (de) — additions
-        ("alle kriterien für verified",          "Alle Kriterien für Verified sind durch drei Quellen erfüllt."),
-        ("bewertung verified ist klar gerechtfertigt", "Bewertung Verified ist klar gerechtfertigt laut Primärquellen."),
-        # French (fr)
-        ("clairement vérifié",                   "La déclaration est clairement vérifié par des sources officielles."),
-        ("sans aucun doute vérifié",             "Les données sont sans aucun doute vérifié par trois sources primaires."),
-        ("tous les critères pour verified",      "Tous les critères pour Verified sont remplis."),
-        ("la notation verified est justifiée",   "La notation Verified est justifiée par les preuves disponibles."),
-        # Italian (it)
-        ("chiaramente verificato",               "L'affermazione è chiaramente verificato da fonti primarie."),
-        ("inequivocabilmente verificato",        "I dati sono inequivocabilmente verificato da tre fonti indipendenti."),
-        ("tutti i criteri per verified",         "Tutti i criteri per Verified sono soddisfatti."),
-        # Spanish (es)
-        ("claramente verificado",                "La afirmación está claramente verificado por fuentes oficiales."),
-        ("inequívocamente verificado",           "Los datos son inequívocamente verificado por tres fuentes primarias."),
-        ("todos los criterios para verified",    "Todos los criterios para Verified se cumplen."),
-        # Portuguese (pt)
-        ("inequivocamente verificado",           "Os dados são inequivocamente verificado por fontes primárias."),
-        ("todos os critérios para verified",     "Todos os critérios para Verified são cumpridos."),
-        # Dutch (nl)
-        ("duidelijk geverifieerd",               "De bewering is duidelijk geverifieerd door primaire bronnen."),
-        ("ondubbelzinnig geverifieerd",          "De gegevens zijn ondubbelzinnig geverifieerd door drie bronnen."),
-        ("aan alle criteria voor verified voldaan", "Er is aan alle criteria voor Verified voldaan."),
-        # Polish (pl)
-        ("wyraźnie zweryfikowany",               "Twierdzenie jest wyraźnie zweryfikowany przez oficjalne źródła."),
-        ("jednoznacznie zweryfikowany",          "Dane są jednoznacznie zweryfikowany przez trzy niezależne źródła."),
-        ("wszystkie kryteria dla verified spełnione", "Wszystkie kryteria dla Verified spełnione przez dostępne dowody."),
-        # Swedish (sv)
-        ("tydligt verifierad",                   "Påståendet är tydligt verifierad av primära källor."),
-        ("otvetydigt verifierad",                "Uppgifterna är otvetydigt verifierad av tre oberoende källor."),
-        ("alla kriterier för verified uppfyllda","Alla kriterier för Verified uppfyllda av tillgängliga bevis."),
-        # Danish (da)
-        ("tydeligt verificeret",                 "Påstanden er tydeligt verificeret af officielle kilder."),
-        ("utvetydigt verificeret",               "Dataene er utvetydigt verificeret af tre primære kilder."),
-        # Finnish (fi)
-        ("selvästi vahvistettu",                 "Väite on selvästi vahvistettu virallisten lähteiden perusteella."),
-        ("yksiselitteisesti vahvistettu",        "Tiedot ovat yksiselitteisesti vahvistettu kolmen lähteen toimesta."),
-        # Czech (cs)
-        ("jasně ověřeno",                        "Tvrzení je jasně ověřeno oficiálními zdroji."),
-        ("jednoznačně ověřeno",                  "Data jsou jednoznačně ověřeno třemi nezávislými zdroji."),
-        # Romanian (ro)
-        ("clar verificat",                       "Afirmația este clar verificat de surse oficiale."),
-        ("fără îndoială verificat",              "Datele sunt fără îndoială verificat de trei surse primare."),
-        # Greek (el)
-        ("σαφώς επαληθευμένο",                   "Ο ισχυρισμός είναι σαφώς επαληθευμένο από επίσημες πηγές."),
-        ("αναμφίβολα επαληθευμένο",              "Τα δεδομένα είναι αναμφίβολα επαληθευμένο από τρεις πηγές."),
-        # Hungarian (hu)
-        ("egyértelműen megerősített",            "Az állítás egyértelműen megerősített hivatalos forrásokkal."),
-        ("kétségtelenül megerősített",           "Az adatok kétségtelenül megerősített három elsődleges forrással."),
-        # Russian (ru)
-        ("явно подтверждено",                    "Утверждение явно подтверждено официальными источниками."),
-        ("однозначно подтверждено",              "Данные однозначно подтверждено тремя независимыми источниками."),
-        # Ukrainian (uk)
-        ("явно підтверджено",                    "Твердження явно підтверджено офіційними джерелами."),
-        ("однозначно підтверджено",              "Дані однозначно підтверджено трьома незалежними джерелами."),
-        # Turkish (tr)
-        ("açıkça doğrulandı",                    "İddia resmi kaynaklar tarafından açıkça doğrulandı."),
-        ("kesinlikle doğrulandı",                "Veriler üç birincil kaynak tarafından kesinlikle doğrulandı."),
-        # Arabic (ar)
-        ("محقق بوضوح",                           "الادعاء محقق بوضوح من قبل المصادر الرسمية."),
-        ("محقق بشكل لا لبس فيه",                "البيانات محقق بشكل لا لبس فيه من قبل ثلاثة مصادر مستقلة."),
-        # Chinese (zh)
-        ("明确核实",                              "该声明已经明确核实，通过三个独立的主要来源。"),
-        ("毫无疑问核实",                          "数据已经毫无疑问核实，通过官方统计数据。"),
-        # Japanese (ja)
-        ("明確に確認済み",                        "この主張は公式の情報源によって明確に確認済みです。"),
-        ("疑いなく確認済み",                      "データは三つの独立した情報源によって疑いなく確認済みです。"),
-        # Korean (ko)
-        ("명확히 확인됨",                         "이 주장은 공식 출처에 의해 명확히 확인됨."),
-        ("의심할 여지 없이 확인됨",               "데이터는 세 개의 독립적인 출처에 의해 의심할 여지 없이 확인됨."),
-    ])
-    def test_speculative_with_verified_phrase_overridden_to_verified(self, phrase, rationale_template):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {"rating": "speculative", "rationale": rationale_template, "sources": []}
-        result = _correct_claude_rating(args)
-        assert result["rating"] == "verified", (
-            f"Expected 'speculative' → 'verified' correction for phrase {phrase!r}"
-        )
-        assert args["rating"] == "speculative"
-
-    @pytest.mark.parametrize("phrase,rationale_template", [
-        # English
-        ("the claim is false", "After reviewing the evidence, the claim is false."),
-        ("is therefore false", "The data contradicts the statement; it is therefore false."),
-        ("is not correct",     "The statistic is not correct based on official records."),
-        # German (de)
-        ("ist daher falsch",   "Die Zahlen belegen, dass die Behauptung ist daher falsch."),
-        ("ist falsch",         "Die Aussage ist falsch laut Primärquellen."),
-        ("nicht erfüllt",      "Das Kriterium ist nicht erfüllt."),
-        ("widerlegt",          "Die Behauptung wird durch Gegenevidenz widerlegt."),
-        ("klar widerlegt",     "Die Behauptung ist klar widerlegt durch amtliche Daten."),
-        ("eindeutig widerlegt","Die Aussage ist eindeutig widerlegt durch drei Primärquellen."),
-        ("zweifelsfrei falsch","Die Behauptung ist zweifelsfrei falsch laut offiziellen Quellen."),
-        ("ist klar widerlegt", "Die Aussage ist klar widerlegt und entspricht nicht den Fakten."),
-        # French (fr)
-        ("clairement réfuté",       "L'affirmation est clairement réfuté par des sources officielles."),
-        ("sans aucun doute faux",   "Les données montrent sans aucun doute faux que le chiffre est incorrect."),
-        # Italian (it)
-        ("chiaramente confutato",        "L'affermazione è chiaramente confutato da fonti primarie."),
-        ("inequivocabilmente falso",     "Il dato è inequivocabilmente falso secondo fonti ufficiali."),
-        # Spanish (es)
-        ("claramente refutado",          "La afirmación está claramente refutado por fuentes oficiales."),
-        ("inequívocamente falso",        "El dato es inequívocamente falso según las estadísticas oficiales."),
-        # Portuguese (pt)
-        ("claramente refutado",          "A afirmação está claramente refutado por fontes primárias."),
-        ("inequivocamente falso",        "O dado é inequivocamente falso segundo as estatísticas oficiais."),
-        # Dutch (nl)
-        ("duidelijk weerlegd",           "De bewering is duidelijk weerlegd door officiële bronnen."),
-        ("ondubbelzinnig onjuist",       "De gegevens zijn ondubbelzinnig onjuist volgens drie primaire bronnen."),
-        # Polish (pl)
-        ("wyraźnie obalony",             "Twierdzenie jest wyraźnie obalony przez oficjalne źródła."),
-        ("jednoznacznie fałszywy",       "Dane są jednoznacznie fałszywy według statystyk oficjalnych."),
-        # Swedish (sv)
-        ("tydligt motbevisat",           "Påståendet är tydligt motbevisat av officiella källor."),
-        ("otvetydigt falskt",            "Uppgifterna är otvetydigt falskt enligt tre primära källor."),
-        # Danish (da)
-        ("tydeligt afkræftet",           "Påstanden er tydeligt afkræftet af officielle kilder."),
-        ("utvetydigt falsk",             "Dataene er utvetydigt falsk ifølge tre primære kilder."),
-        # Finnish (fi)
-        ("selvästi kumottu",             "Väite on selvästi kumottu virallisten lähteiden perusteella."),
-        ("yksiselitteisesti väärä",      "Tiedot ovat yksiselitteisesti väärä virallisten tilastojen mukaan."),
-        # Czech (cs)
-        ("jasně vyvráceno",              "Tvrzení je jasně vyvráceno oficiálními zdroji."),
-        ("jednoznačně nepravdivé",       "Data jsou jednoznačně nepravdivé podle officiálních statistik."),
-        # Romanian (ro)
-        ("clar infirmat",                "Afirmația este clar infirmat de surse oficiale."),
-        ("fără îndoială fals",           "Datele sunt fără îndoială fals conform statisticilor oficiale."),
-        # Greek (el)
-        ("σαφώς διαψεύστηκε",            "Ο ισχυρισμός σαφώς διαψεύστηκε από επίσημες πηγές."),
-        ("αναμφίβολα ψευδές",            "Τα δεδομένα είναι αναμφίβολα ψευδές σύμφωνα με τρεις πηγές."),
-        # Hungarian (hu)
-        ("egyértelműen megcáfolt",       "Az állítás egyértelműen megcáfolt hivatalos forrásokkal."),
-        ("kétségtelenül hamis",          "Az adatok kétségtelenül hamis három elsődleges forrás szerint."),
-        # Russian (ru)
-        ("явно опровергнуто",            "Утверждение явно опровергнуто официальными источниками."),
-        ("однозначно ложно",             "Данные однозначно ложно по данным трёх независимых источников."),
-        # Ukrainian (uk)
-        ("явно спростовано",             "Твердження явно спростовано офіційними джерелами."),
-        ("однозначно хибно",             "Дані однозначно хибно за даними трьох незалежних джерел."),
-        # Turkish (tr)
-        ("açıkça çürütüldü",             "İddia resmi kaynaklar tarafından açıkça çürütüldü."),
-        ("kesinlikle yanlış",            "Veriler üç birincil kaynağa göre kesinlikle yanlış."),
-        # Arabic (ar)
-        ("مدحوض بوضوح",                  "الادعاء مدحوض بوضوح من قبل المصادر الرسمية."),
-        ("خاطئ بشكل لا لبس فيه",        "البيانات خاطئ بشكل لا لبس فيه وفقاً لثلاثة مصادر مستقلة."),
-        # Chinese (zh)
-        ("明确驳斥",                      "该声明已经明确驳斥，通过三个独立的主要来源。"),
-        ("毫无疑问错误",                  "数据毫无疑问错误，与官方统计数据相矛盾。"),
-        # Japanese (ja)
-        ("明確に反証済み",                "この主張は公式の情報源によって明確に反証済みです。"),
-        ("疑いなく誤り",                  "データは三つの独立した情報源によって疑いなく誤りです。"),
-        # Korean (ko)
-        ("명확히 반증됨",                 "이 주장은 공식 출처에 의해 명확히 반증됨."),
-        ("의심할 여지 없이 거짓",         "데이터는 세 개의 독립적인 출처에 의해 의심할 여지 없이 거짓."),
-    ])
-    def test_speculative_with_debunk_phrase_overridden_to_debunked(self, phrase, rationale_template):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {"rating": "speculative", "rationale": rationale_template, "sources": []}
-        result = _correct_claude_rating(args)
-        assert result["rating"] == "debunked", (
-            f"Expected 'speculative' → 'debunked' correction for phrase {phrase!r}"
-        )
-        assert args["rating"] == "speculative"
-
-    def test_debunk_phrase_takes_priority_over_verified_phrase(self):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {
-            "rating": "speculative",
-            "rationale": "The claim is false but also the claim is verified.",
-            "sources": [],
-        }
-        result = _correct_claude_rating(args)
-        assert result["rating"] == "debunked"
-
-    def test_speculative_without_any_phrase_unchanged(self):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {
-            "rating": "speculative",
-            "rationale": "Evidence is thin and contradictory. Cannot determine outcome.",
-            "sources": [],
-        }
-        result = _correct_claude_rating(args)
-        assert result["rating"] == "speculative"
-
-    def test_non_speculative_ratings_not_affected(self):
-        from backend.analysis.engine import _correct_claude_rating
-
-        for rating in ("verified", "debunked", "missing"):
-            args = {
-                "rating": rating,
-                "rationale": "therefore verified",
-                "sources": [],
-            }
-            result = _correct_claude_rating(args)
-            assert result["rating"] == rating, (
-                f"Rating {rating!r} must not be mutated by _correct_claude_rating"
-            )
-
-    def test_correction_is_case_insensitive(self):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {
-            "rating": "speculative",
-            "rationale": "THE CLAIM IS VERIFIED by official primary sources.",
-            "sources": [],
-        }
-        result = _correct_claude_rating(args)
-        assert result["rating"] == "verified"
-
-    def test_original_dict_not_mutated(self):
-        from backend.analysis.engine import _correct_claude_rating
-
-        args = {"rating": "speculative", "rationale": "therefore verified", "sources": []}
-        _correct_claude_rating(args)
-        assert args["rating"] == "speculative"
-
-
-# ── analyze_claim_with_consensus — helpers ────────────────────────────────────
 
 _THREE_INDEPENDENT_PRIMARIES = [
     {
@@ -702,11 +363,6 @@ def _run_consensus(
     """
     Run analyze_claim_with_consensus with fully mocked I/O.
     Returns (judgment, evaluated_sources) captured from session.add() / session.add_all().
-
-    brave_key defaults to "" so Brave Search is bypassed and _mistral_phase2_judgment
-    (which is mocked here) receives Claude's findings — matching pre-Brave behaviour.
-    Pass a non-empty brave_key to exercise the Brave code path, but then also mock
-    _mistral_phase1_brave_search at the call site.
     """
     from backend.analysis import consensus as cons
     from backend.db.models import EvaluatedSource, Judgment
