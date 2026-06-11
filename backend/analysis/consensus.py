@@ -575,6 +575,13 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
             claim_id, len(claude_verifying_tiers), claude_indep_secondary_verifying,
         )
+        if len(claude_verifying_tiers) == 0:
+            _raw_claude = claude_data.get("sources") or []
+            logger.warning(
+                "[THRESHOLD-CAP-DETAIL] claim %s (Claude): raw sources before evaluate_source() — %s",
+                claim_id,
+                [(s.get("url", ""), s.get("relevance_score")) for s in _raw_claude if isinstance(s, dict)],
+            )
         claude_rating = EpistemicRating.SPECULATIVE
 
     # Hard quality gate — cannot be overridden by model judgment.
@@ -623,6 +630,13 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                     "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
                     claim_id, len(mistral_verifying_tiers), mistral_indep_secondary,
                 )
+                if len(mistral_verifying_tiers) == 0:
+                    _raw_mistral = mistral_data.get("sources") or []
+                    logger.warning(
+                        "[THRESHOLD-CAP-DETAIL] claim %s (Mistral): raw sources before evaluate_source() — %s",
+                        claim_id,
+                        [(s.get("url", ""), s.get("relevance_score")) for s in _raw_mistral if isinstance(s, dict)],
+                    )
                 mistral_rating = EpistemicRating.SPECULATIVE
         # Persist Mistral's sources alongside Claude's, deduped by URL.
         _seen_urls: set[str] = {es.url for es in evaluated_sources}

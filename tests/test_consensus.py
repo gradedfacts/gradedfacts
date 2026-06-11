@@ -1097,6 +1097,48 @@ class TestBraveIntegration:
         assert j.models_agree is True
         assert j.consensus_rating == EpistemicRating.VERIFIED
 
+    def test_threshold_cap_detail_logged_when_verifying_zero(self, caplog):
+        """
+        When Claude's threshold cap fires with verifying=0 (all raw sources were filtered
+        by evaluate_source()), a [THRESHOLD-CAP-DETAIL] line listing the raw sources must
+        be emitted so false-downgrade incidents are auditable.
+        """
+        import logging
+        # evaluate_source() assigns relevance based on registry data; use sources that
+        # will survive evaluation but with supports_claim=False so verifying_tiers stays
+        # empty — simulating a run where Claude cited only counter-evidence or low-relevance
+        # sources. Simplest trigger: no sources at all (raw list empty → verifying=0).
+        claude_j = {
+            "rationale": "Claude says verified.",
+            "sources": [
+                {"url": "https://example.com/x", "tier": "primary",
+                 "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+            ],
+            "rating": "verified",
+        }
+        # Both models no-op; the single source from example.com has relevance 0.9 but
+        # evaluate_source() may downgrade it. To guarantee verifying=0 we patch
+        # _process_sources to return empty tiers while keeping the raw source list intact.
+        from unittest.mock import patch
+        from backend.analysis.rating import EpistemicRating as ER, SourceTier
+
+        empty_result = (
+            [{"url": "https://example.com/x", "tier": "primary",
+              "is_independent": True, "relevance_score": 0.9, "supports_claim": True}],
+            ER.SPECULATIVE,  # derived
+            False,           # has_independent_qualifying
+            0,               # indep_secondary_verifying_count
+            [],              # verifying_tiers — empty → cap will fire
+        )
+        from backend.analysis import consensus as cons
+        with patch.object(cons, "_process_sources", return_value=empty_result), \
+             caplog.at_level(logging.WARNING):
+            _run_consensus(claude_j, None, mistral_key="")
+
+        detail_lines = [r.message for r in caplog.records if "[THRESHOLD-CAP-DETAIL]" in r.message]
+        assert detail_lines, "Expected at least one [THRESHOLD-CAP-DETAIL] log line"
+        assert "example.com" in detail_lines[0]
+
 
 # ── SearXNG helpers: _query_searxng ──────────────────────────────────────────
 
