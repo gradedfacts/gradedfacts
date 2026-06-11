@@ -536,48 +536,113 @@ def _get_registry_version() -> str:
 
 # ── Rating consistency gate ───────────────────────────────────────────────────
 
-_VERIFY_RATING_PROMPT = (
-    "Which of these four ratings does this rationale conclude: "
-    "VERIFIED, DEBUNKED, SPECULATIVE, MISSING? "
-    "Answer with exactly one word."
-)
+_VERIFY_RATING_PROMPT = """\
+You are a consistency checker for a fact-checking system.
+You will be given a CLAIM and the RATIONALE written by an analyst.
+Your task is to determine what conclusion the rationale reaches ABOUT THE CLAIM.
+
+The four possible ratings and their exact meanings:
+  verified   — the rationale concludes the CLAIM IS SUPPORTED by evidence
+  debunked   — the rationale concludes the CLAIM IS CONTRADICTED by evidence
+  speculative — the rationale concludes the claim is plausible but not conclusively provable
+  missing    — the rationale concludes there is insufficient evidence; judgment is withheld
+
+CRITICAL RULE: Judge what the rationale CONCLUDES about the claim — do NOT count negative
+words or mentions of critics as a verdict. A rationale may note that opponents dispute a claim
+while still concluding that the claim is supported by evidence; that is "verified". Sentences
+like "the claim is well supported" or "the evidence confirms this" mean verified even if the
+text elsewhere mentions that other parties call it false.
+
+Respond with EXACTLY ONE WORD — one of: verified, debunked, speculative, missing, or UNCLEAR.
+Use UNCLEAR only when the rationale's final conclusion is genuinely ambiguous.\
+"""
 
 _VALID_RATINGS: frozenset[str] = frozenset({"verified", "debunked", "speculative", "missing"})
+
+# Pairs of ratings that are direct opposites — these require a second confirmation call.
+_OPPOSITE_PAIRS: frozenset[frozenset] = frozenset({frozenset({"verified", "debunked"})})
+
+
+def _call_haiku_rating_check(
+    client: "anthropic.Anthropic",
+    claim_text: str,
+    rationale: str,
+) -> str:
+    """Single Haiku call returning a valid rating token or 'unclear'."""
+    resp = client.messages.create(
+        model=_SPECIFICITY_MODEL,
+        max_tokens=8,
+        temperature=0,
+        messages=[{
+            "role": "user",
+            "content": (
+                f"{_VERIFY_RATING_PROMPT}\n\n"
+                f"Claim: {claim_text}\n\n"
+                f"Rationale: {rationale}"
+            ),
+        }],
+    )
+    text = next(
+        (b.text for b in resp.content if hasattr(b, "text") and b.text), ""
+    ).strip().lower()
+    word = text.split()[0].rstrip(".,;:") if text else ""
+    return word if word in _VALID_RATINGS else "unclear"
+
 
 def _verify_rating_consistency(
     rationale: str,
     structured_rating: str,
     anthropic_client: "anthropic.Anthropic | None" = None,
+    claim_text: str = "",
 ) -> str:
     """Call Claude Haiku to independently derive a rating from the rationale prose.
 
-    Returns the Haiku-derived rating when it differs from structured_rating (and logs
-    the override), or structured_rating unchanged when they agree or when Haiku fails.
+    Conservative gate: on UNCLEAR or any unexpected output the structured rating is kept
+    unchanged.  When structured and haiku_derived are direct opposites (verified vs debunked),
+    a second Haiku call is required to confirm before any override is applied.
+
     Falls back gracefully on any exception (network error, missing API key, etc.).
     """
+    rationale_excerpt = rationale[:120].replace("\n", " ")
     try:
         client = anthropic_client if anthropic_client is not None else _get_client()
-        resp = client.messages.create(
-            model=_SPECIFICITY_MODEL,
-            max_tokens=8,
-            temperature=0,
-            messages=[{
-                "role": "user",
-                "content": f"{_VERIFY_RATING_PROMPT}\n\nRationale:\n{rationale}",
-            }],
-        )
-        text = next(
-            (b.text for b in resp.content if hasattr(b, "text") and b.text), ""
-        ).strip().lower()
-        word = text.split()[0].rstrip(".,;:") if text else ""
-        if word in _VALID_RATINGS:
-            if word != structured_rating:
-                logger.warning(
-                    "[RATING-GATE] structured=%r haiku_derived=%r → overriding to %r",
-                    structured_rating, word, word,
-                )
-                return word
+        haiku_derived = _call_haiku_rating_check(client, claim_text, rationale)
+
+        if haiku_derived == "unclear":
+            logger.warning(
+                "[RATING-GATE] structured=%r haiku_derived=UNCLEAR → keeping structured. "
+                "excerpt=%r",
+                structured_rating, rationale_excerpt,
+            )
             return structured_rating
+
+        if haiku_derived == structured_rating:
+            return structured_rating
+
+        # Ratings differ — check for opposite-polarity case first.
+        pair = frozenset({haiku_derived, structured_rating})
+        if pair in _OPPOSITE_PAIRS:
+            haiku_derived2 = _call_haiku_rating_check(client, claim_text, rationale)
+            if haiku_derived2 != haiku_derived:
+                logger.warning(
+                    "[RATING-GATE-CONFLICT] structured=%r call1=%r call2=%r "
+                    "→ keeping structured (calls disagree). excerpt=%r",
+                    structured_rating, haiku_derived, haiku_derived2, rationale_excerpt,
+                )
+                return structured_rating
+            logger.warning(
+                "[RATING-GATE] structured=%r haiku_derived=%r (both calls agree, opposite polarity) "
+                "→ overriding. excerpt=%r",
+                structured_rating, haiku_derived, rationale_excerpt,
+            )
+            return haiku_derived
+
+        logger.warning(
+            "[RATING-GATE] structured=%r haiku_derived=%r → overriding. excerpt=%r",
+            structured_rating, haiku_derived, rationale_excerpt,
+        )
+        return haiku_derived
+
     except Exception as exc:
         logger.warning(
             "[RATING-GATE] Haiku check failed (%s); keeping original rating %r.",
@@ -788,7 +853,8 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
     raw = tool_block.input
     final_rating = _verify_rating_consistency(
-        raw.get("rationale", ""), raw.get("rating", "").lower(), client
+        raw.get("rationale", ""), raw.get("rating", "").lower(), client,
+        claim_text=claim_text,
     )
     return {**raw, "rating": final_rating}
 
