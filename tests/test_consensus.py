@@ -144,15 +144,15 @@ class TestResolveConsensus:
         assert rating == EpistemicRating.DEBUNKED
         assert agree is False
 
-    def test_debunked_verified_claude_primary_beats_both_primary(self):
-        # Claude=DEBUNKED + Primary/Independent wins even when Mistral also has primary sources.
-        # Counter-evidence from the primary pipeline prevails over supporting evidence.
+    def test_debunked_verified_equal_primary_resolves_speculative(self):
+        # Both models have 1 independent primary (equal). Margin requires ≥1 MORE primary
+        # OR equal primaries AND ≥2 more secondaries — not met here → SPECULATIVE.
         rating, agree = self._fn(
             EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
             claude_source_quality=(1, 0),
             mistral_source_quality=(1, 0),
         )
-        assert rating == EpistemicRating.DEBUNKED
+        assert rating == EpistemicRating.SPECULATIVE
         assert agree is False
 
     def test_tiebreak_more_primary_wins(self):
@@ -201,6 +201,60 @@ class TestResolveConsensus:
             result, flag = self._fn(r1, r2)
             assert result == EpistemicRating.SPECULATIVE, f"Expected SPECULATIVE for {r1}+{r2}, got {result}"
             assert flag is False
+
+    # ── Polarity margin tests (FIX 3) ─────────────────────────────────────────
+
+    def test_polarity_eu_claim_comparable_quality_resolves_speculative(self):
+        """
+        EU-claim scenario: (1,4) vs (1,3) — equal primaries, S_diff=1 < 2 required.
+        Margin NOT met → SPECULATIVE.
+        """
+        rating, agree = self._fn(
+            EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
+            claude_source_quality=(1, 4),
+            mistral_source_quality=(1, 3),
+        )
+        assert rating == EpistemicRating.SPECULATIVE
+        assert agree is False
+
+    def test_polarity_two_more_primary_wins(self):
+        """
+        (2,0) vs (1,3): winner has 2 primaries vs 1 → P_diff=1 ≥ 1 → margin met → winner applies.
+        """
+        rating, agree = self._fn(
+            EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED,
+            claude_source_quality=(2, 0),
+            mistral_source_quality=(1, 3),
+        )
+        # Claude has (2,0) > (1,3) → Claude wins → VERIFIED
+        assert rating == EpistemicRating.VERIFIED
+        assert agree is False
+
+    def test_polarity_two_more_secondary_wins_when_primary_equal(self):
+        """
+        Equal primaries (1,4) vs (1,2): S_diff=2 ≥ 2 → margin met → winner applies.
+        """
+        rating, agree = self._fn(
+            EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED,
+            claude_source_quality=(1, 4),
+            mistral_source_quality=(1, 2),
+        )
+        # Claude has (1,4) > (1,2) → Claude wins → DEBUNKED
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is False
+
+    def test_non_polarity_disagreement_tiebreaker_unchanged(self):
+        """
+        Non-polarity conflict (VERIFIED vs SPECULATIVE) still uses the general
+        lexicographic tiebreaker without the margin requirement.
+        """
+        rating, agree = self._fn(
+            EpistemicRating.VERIFIED, EpistemicRating.SPECULATIVE,
+            claude_source_quality=(2, 0),
+            mistral_source_quality=(0, 0),
+        )
+        assert rating == EpistemicRating.VERIFIED
+        assert agree is False
 
 
 # ── _mistral_phase2_judgment ──────────────────────────────────────────────────
@@ -495,15 +549,19 @@ class TestAnalyzeClaimWithConsensus:
 
         assert "VERIFIED" in j.rationale
         assert "DEBUNKED" in j.rationale
-        assert "[RESOLUTION:consensus.source_quality_claude]" in j.rationale
+        # Polarity conflict with clear margin (3 primaries vs 0) → polarity_margin_met note.
+        assert "[RESOLUTION:consensus.polarity_margin_met]" in j.rationale
 
     def test_models_disagree_rationale_speculative_note_when_no_advantage(self):
-        claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
-        mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
+        # Equal source quality (3 independent primaries each) → polarity margin not met → SPECULATIVE.
+        # Claude needs sources to survive the threshold cap and keep its VERIFIED rating.
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says debunked.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "debunked"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
-        assert "[RESOLUTION:consensus.disagreement]" in j.rationale
+        # Polarity conflict with comparable source quality → polarity_margin_not_met note.
+        assert "[RESOLUTION:consensus.polarity_margin_not_met]" in j.rationale
 
     def test_mistral_phase2_raises_falls_back_to_claude(self):
         claude_j = {"rationale": "Claude only.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}

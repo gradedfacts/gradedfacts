@@ -203,6 +203,8 @@
     "disagreement": "Modely se neshodly. Konsensus snížen na spekulativní.",
     "debunked_beats_missing": "Modely se neshodly. Signál vyvráceno převažuje nad chybějící.",
     "source_quality_claude": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Claude (přítomny primární/nezávislé zdroje).",
-    "source_quality_mistral": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Mistral (přítomny primární/nezávislé zdroje)."
+    "source_quality_mistral": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Mistral (přítomny primární/nezávislé zdroje).",
+    "polarity_margin_met": "Modely dospěly k opačným závěrům. Verdikt se řídí analýzou podpořenou podstatně silnějšími nezávislými zdroji.",
+    "polarity_margin_not_met": "Modely dospěly k opačným závěrům při srovnatelné kvalitě zdrojů. Verdikt je standardně Spekulativní."
   }
 }

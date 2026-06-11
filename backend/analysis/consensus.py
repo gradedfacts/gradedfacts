@@ -194,6 +194,17 @@ def _source_quality_score(sources: list[dict]) -> tuple[int, int]:
     return primary, secondary
 
 
+def _polarity_margin_met(winner: tuple[int, int], loser: tuple[int, int]) -> bool:
+    """True when the stronger side has a clear quality margin for a verified↔debunked tiebreak.
+
+    Margin is met when the winner has ≥1 more independent primary source, OR
+    equal primaries AND ≥2 more independent secondaries.
+    """
+    w_p, w_s = winner
+    l_p, l_s = loser
+    return w_p > l_p or (w_p == l_p and w_s - l_s >= 2)
+
+
 def _resolve_consensus(
     claude_rating: EpistemicRating,
     mistral_rating: EpistemicRating | None,
@@ -205,13 +216,17 @@ def _resolve_consensus(
     Returns (consensus_rating, models_agree).
 
     Resolution order (first match wins):
-      1. mistral_rating is None                 → pass through Claude's rating; models_agree=None.
-      2. Both identical                          → that shared rating; models_agree=True.
-      3. DEBUNKED + MISSING (either order)       → DEBUNKED (stronger signal wins); models_agree=False.
-      4. DEBUNKED + VERIFIED, Claude has ≥1 P/I → DEBUNKED (counter-evidence prevails); models_agree=False.
-      5. Lexicographic source quality tiebreaker: compare (primary_indep, secondary_indep);
-         strictly higher tuple wins; logs [CONSENSUS-TIEBREAK]; models_agree=False.
-      6. All other conflicts                     → SPECULATIVE (conservative floor); models_agree=False.
+      1. mistral_rating is None                    → pass through Claude's rating; models_agree=None.
+      2. Both identical                             → that shared rating; models_agree=True.
+      3. DEBUNKED + MISSING (either order)          → DEBUNKED (stronger signal wins); models_agree=False.
+      4. VERIFIED + DEBUNKED (polarity conflict)    → quality tiebreaker with clear-margin requirement:
+           - stronger side wins only if it has ≥1 more independent primary, OR equal primaries
+             AND ≥2 more independent secondaries; logs [CONSENSUS-POLARITY]; models_agree=False.
+           - otherwise → SPECULATIVE; logs [CONSENSUS-POLARITY]; models_agree=False.
+      5. Lexicographic source quality tiebreaker for all other conflicts: compare
+         (primary_indep, secondary_indep); strictly higher tuple wins;
+         logs [CONSENSUS-TIEBREAK]; models_agree=False.
+      6. All other conflicts                        → SPECULATIVE (conservative floor); models_agree=False.
     """
     if mistral_rating is None:
         return claude_rating, None
@@ -222,17 +237,40 @@ def _resolve_consensus(
     if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
         return EpistemicRating.DEBUNKED, False
 
-    # Counter-evidence with primary/independent sources beats supporting evidence.
-    # Claude is the primary pipeline: its DEBUNKED + primary/independent wins over Mistral's VERIFIED.
-    if (
-        pair == {EpistemicRating.DEBUNKED, EpistemicRating.VERIFIED}
-        and claude_rating == EpistemicRating.DEBUNKED
-        and claude_source_quality[0] > 0
-    ):
-        return EpistemicRating.DEBUNKED, False
+    # Polarity conflict (verified ↔ debunked): requires a clear quality margin.
+    if pair == {EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED}:
+        if claude_source_quality > mistral_source_quality and _polarity_margin_met(
+            claude_source_quality, mistral_source_quality
+        ):
+            logger.warning(
+                "[CONSENSUS-POLARITY] claude=%s mistral=%s → %s (margin-met: "
+                "claude P/I=%d S/I=%d vs mistral P/I=%d S/I=%d)",
+                claude_rating.value, mistral_rating.value, claude_rating.value,
+                claude_source_quality[0], claude_source_quality[1],
+                mistral_source_quality[0], mistral_source_quality[1],
+            )
+            return claude_rating, False
+        if mistral_source_quality > claude_source_quality and _polarity_margin_met(
+            mistral_source_quality, claude_source_quality
+        ):
+            logger.warning(
+                "[CONSENSUS-POLARITY] claude=%s mistral=%s → %s (margin-met: "
+                "claude P/I=%d S/I=%d vs mistral P/I=%d S/I=%d)",
+                claude_rating.value, mistral_rating.value, mistral_rating.value,
+                claude_source_quality[0], claude_source_quality[1],
+                mistral_source_quality[0], mistral_source_quality[1],
+            )
+            return mistral_rating, False
+        logger.warning(
+            "[CONSENSUS-POLARITY] claude=%s mistral=%s → speculative (margin-not-met: "
+            "claude P/I=%d S/I=%d vs mistral P/I=%d S/I=%d)",
+            claude_rating.value, mistral_rating.value,
+            claude_source_quality[0], claude_source_quality[1],
+            mistral_source_quality[0], mistral_source_quality[1],
+        )
+        return EpistemicRating.SPECULATIVE, False
 
-    # Lexicographic source quality tiebreaker: (primary_indep, secondary_indep).
-    # Python tuple comparison is lexicographic: (2,0) > (1,3) because 2 > 1 on the first element.
+    # Lexicographic source quality tiebreaker for all other conflicts.
     if claude_source_quality > mistral_source_quality:
         logger.warning(
             "[CONSENSUS-TIEBREAK] claude=%s mistral=%s → %s "
@@ -436,6 +474,14 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     lang_instruction = _build_lang_instruction(lang_name)
     if lang_instruction:
         logger.debug("Claim language: %s.", lang_name)
+    # Mistral requires an explicit language instruction for every language including English.
+    # Claude defaults to English when no instruction is given; Mistral follows the claim's
+    # natural language instead, producing German output for German claims on an English UI.
+    mistral_lang_instruction = (
+        f"IMPORTANT: The user's interface language is {lang_name}. "
+        f"Write your entire response — rationale, all labels, all text — in {lang_name}, "
+        f"regardless of what language the claim itself is written in."
+    )
 
     # ── Phase 1: web search ────────────────────────────────────────────────────
     search_findings = _phase1_search(claim.text)
@@ -463,7 +509,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             # _mistral_search_and_judge runs its own independent Brave Search Phase 1
             # then Mistral Phase 2 — no shared state with Claude's thread.
             mistral_future = executor.submit(
-                _mistral_search_and_judge, claim.text, lang_instruction
+                _mistral_search_and_judge, claim.text, mistral_lang_instruction
             )
             claude_data = claude_future.result()
             try:
@@ -636,6 +682,12 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         pair = {claude_rating, mistral_rating}
         if pair == {EpistemicRating.DEBUNKED, EpistemicRating.MISSING}:
             resolution_note = "[RESOLUTION:consensus.debunked_beats_missing]"
+        elif pair == {EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED}:
+            # Polarity conflict: margin-met note when a winner was picked, margin-not-met otherwise.
+            if consensus_rating != EpistemicRating.SPECULATIVE:
+                resolution_note = "[RESOLUTION:consensus.polarity_margin_met]"
+            else:
+                resolution_note = "[RESOLUTION:consensus.polarity_margin_not_met]"
         elif (
             claude_source_quality > mistral_source_quality
             and consensus_rating == claude_rating

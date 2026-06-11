@@ -203,6 +203,8 @@
     "disagreement": "Los modelos no coincidieron. Consenso reducido a ESPECULATIVO.",
     "debunked_beats_missing": "Los modelos no coincidieron. La señal REFUTADO prevalece sobre FALTANTE.",
     "source_quality_claude": "Los modelos no coincidieron. Resuelto por calidad de fuentes — se aplicó la valoración de Claude (fuentes primarias/independientes presentes).",
-    "source_quality_mistral": "Los modelos no coincidieron. Resuelto por calidad de fuentes — se aplicó la valoración de Mistral (fuentes primarias/independientes presentes)."
+    "source_quality_mistral": "Los modelos no coincidieron. Resuelto por calidad de fuentes — se aplicó la valoración de Mistral (fuentes primarias/independientes presentes).",
+    "polarity_margin_met": "Los modelos llegaron a veredictos opuestos. El veredicto sigue el análisis respaldado por fuentes independientes sustancialmente más sólidas.",
+    "polarity_margin_not_met": "Los modelos llegaron a veredictos opuestos con calidad de fuentes comparable. El veredicto predeterminado es Especulativo."
   }
 }

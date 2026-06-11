@@ -203,6 +203,8 @@
     "disagreement": "I modelli erano in disaccordo. Consenso degradato a SPECULATIVO.",
     "debunked_beats_missing": "I modelli erano in disaccordo. Il segnale CONFUTATO prevale su MANCANTE.",
     "source_quality_claude": "I modelli erano in disaccordo. Risolto per qualità delle fonti — applicata la valutazione di Claude (fonti primarie/indipendenti presenti).",
-    "source_quality_mistral": "I modelli erano in disaccordo. Risolto per qualità delle fonti — applicata la valutazione di Mistral (fonti primarie/indipendenti presenti)."
+    "source_quality_mistral": "I modelli erano in disaccordo. Risolto per qualità delle fonti — applicata la valutazione di Mistral (fonti primarie/indipendenti presenti).",
+    "polarity_margin_met": "I modelli hanno raggiunto verdetti opposti. Il verdetto segue l'analisi supportata da fonti indipendenti sostanzialmente più solide.",
+    "polarity_margin_not_met": "I modelli hanno raggiunto verdetti opposti con qualità delle fonti comparabile. Il verdetto predefinito è Speculativo."
   }
 }

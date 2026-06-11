@@ -303,3 +303,60 @@ def test_threshold_cap_never_upgrades_speculative():
     judgment = _run_threshold_test(sources, "speculative")
     from backend.analysis.rating import EpistemicRating
     assert judgment.rating == EpistemicRating.SPECULATIVE
+
+
+# ── 9. No-upgrade rule in rating gate ────────────────────────────────────────
+
+def test_gate_no_upgrade_speculative_to_verified(caplog):
+    """
+    Haiku reads 'verified' but structured is 'speculative'. Strength order: verified > speculative.
+    Gate must keep 'speculative' and log [RATING-GATE-NOUPGRADE].
+    """
+    import logging
+    rationale = "All available evidence strongly supports this assertion across multiple sources."
+    client = _make_client("verified")
+    with caplog.at_level(logging.WARNING):
+        result = _verify_rating_consistency(rationale, "speculative", client, claim_text="Test claim")
+    assert result == "speculative"
+    assert any("[RATING-GATE-NOUPGRADE]" in r.message for r in caplog.records)
+
+
+def test_gate_no_upgrade_missing_to_speculative(caplog):
+    """
+    Haiku reads 'speculative' but structured is 'missing'. Upgrade not allowed.
+    Gate must keep 'missing' and log [RATING-GATE-NOUPGRADE].
+    """
+    import logging
+    rationale = "Some evidence exists but it is uncertain and limited."
+    client = _make_client("speculative")
+    with caplog.at_level(logging.WARNING):
+        result = _verify_rating_consistency(rationale, "missing", client, claim_text="Test claim")
+    assert result == "missing"
+    assert any("[RATING-GATE-NOUPGRADE]" in r.message for r in caplog.records)
+
+
+def test_gate_no_upgrade_missing_to_verified(caplog):
+    """
+    Haiku reads 'verified' but structured is 'missing'. Upgrade not allowed.
+    Gate must keep 'missing' and log [RATING-GATE-NOUPGRADE].
+    """
+    import logging
+    rationale = "Multiple strong sources confirm the claim conclusively."
+    client = _make_client("verified")
+    with caplog.at_level(logging.WARNING):
+        result = _verify_rating_consistency(rationale, "missing", client, claim_text="Test claim")
+    assert result == "missing"
+    assert any("[RATING-GATE-NOUPGRADE]" in r.message for r in caplog.records)
+
+
+def test_gate_debunked_from_missing_allowed():
+    """
+    Haiku reads 'debunked' but structured is 'missing'. Debunked is polarity, not strength —
+    no-upgrade rule does NOT apply. Gate should override to 'debunked' (non-opposite pair,
+    so a single Haiku call suffices).
+    """
+    rationale = "Counter-evidence directly contradicts the claim."
+    client = _make_client("debunked")
+    result = _verify_rating_consistency(rationale, "missing", client, claim_text="Test claim")
+    assert result == "debunked"
+    client.messages.create.assert_called_once()

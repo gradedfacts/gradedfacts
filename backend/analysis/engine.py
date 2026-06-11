@@ -564,6 +564,9 @@ _VALID_RATINGS: frozenset[str] = frozenset({"verified", "debunked", "speculative
 # Pairs of ratings that are direct opposites — these require a second confirmation call.
 _OPPOSITE_PAIRS: frozenset[frozenset] = frozenset({frozenset({"verified", "debunked"})})
 
+# Strength order toward VERIFIED (debunked is polarity, not strength — not included).
+_RATING_STRENGTH: dict[str, int] = {"missing": 0, "speculative": 1, "verified": 2}
+
 
 def _call_haiku_rating_check(
     client: "anthropic.Anthropic",
@@ -619,6 +622,21 @@ def _verify_rating_consistency(
             return structured_rating
 
         if haiku_derived == structured_rating:
+            return structured_rating
+
+        # No-upgrade rule: the gate may downgrade or fix polarity but never upgrade
+        # toward VERIFIED (strength order: missing < speculative < verified;
+        # debunked is polarity, not strength).
+        if (
+            haiku_derived in _RATING_STRENGTH
+            and structured_rating in _RATING_STRENGTH
+            and _RATING_STRENGTH[haiku_derived] > _RATING_STRENGTH[structured_rating]
+        ):
+            logger.warning(
+                "[RATING-GATE-NOUPGRADE] structured=%r haiku_derived=%r "
+                "→ no-upgrade rule: keeping structured. excerpt=%r",
+                structured_rating, haiku_derived, rationale_excerpt,
+            )
             return structured_rating
 
         # Ratings differ — check for opposite-polarity case first.

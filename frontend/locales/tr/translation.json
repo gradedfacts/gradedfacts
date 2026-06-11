@@ -203,6 +203,8 @@
     "disagreement": "Modeller anlaşamadı. Konsensüs SPEKÜLATIF olarak düşürüldü.",
     "debunked_beats_missing": "Modeller anlaşamadı. ÇÜRÜTÜLDÜ sinyali EKSİK üzerinde geçerlidir.",
     "source_quality_claude": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Claude'un değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut).",
-    "source_quality_mistral": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Mistral'ın değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut)."
+    "source_quality_mistral": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Mistral'ın değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut).",
+    "polarity_margin_met": "Modeller zıt sonuçlara ulaştı. Karar, önemli ölçüde daha güçlü bağımsız kaynaklara dayanan analizi izliyor.",
+    "polarity_margin_not_met": "Modeller karşılaştırılabilir kaynak kalitesiyle zıt sonuçlara ulaştı. Karar varsayılan olarak Spekülatif'e düşüyor."
   }
 }

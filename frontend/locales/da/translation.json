@@ -203,6 +203,8 @@
     "disagreement": "Modellerne var uenige. Konsensus nedgraderet til spekulativ.",
     "debunked_beats_missing": "Modellerne var uenige. Afkræftet-signalet har forrang over manglende.",
     "source_quality_claude": "Modellerne var uenige. Løst via kildekvalitet — Claudes vurdering anvendt (primære/uafhængige kilder til stede).",
-    "source_quality_mistral": "Modellerne var uenige. Løst via kildekvalitet — Mistrals vurdering anvendt (primære/uafhængige kilder til stede)."
+    "source_quality_mistral": "Modellerne var uenige. Løst via kildekvalitet — Mistrals vurdering anvendt (primære/uafhængige kilder til stede).",
+    "polarity_margin_met": "Modellerne nåede til modsatte konklusioner. Afgørelsen følger analysen støttet af væsentligt stærkere uafhængige kilder.",
+    "polarity_margin_not_met": "Modellerne nåede til modsatte konklusioner med sammenlignelig kildekvalitet. Afgørelsen er som standard Spekulativ."
   }
 }

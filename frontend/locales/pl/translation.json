@@ -203,6 +203,8 @@
     "disagreement": "Modele były niezgodne. Konsensus obniżony do SPEKULATYWNY.",
     "debunked_beats_missing": "Modele były niezgodne. Sygnał OBALONY przeważa nad BRAKUJĄCY.",
     "source_quality_claude": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Claude (obecne źródła pierwotne/niezależne).",
-    "source_quality_mistral": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Mistral (obecne źródła pierwotne/niezależne)."
+    "source_quality_mistral": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Mistral (obecne źródła pierwotne/niezależne).",
+    "polarity_margin_met": "Modele doszły do przeciwstawnych wniosków. Wyrok podąża za analizą popartą znacznie silniejszymi niezależnymi źródłami.",
+    "polarity_margin_not_met": "Modele doszły do przeciwstawnych wniosków przy porównywalnej jakości źródeł. Wyrok domyślnie jest Spekulatywny."
   }
 }
