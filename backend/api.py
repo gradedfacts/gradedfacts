@@ -59,6 +59,8 @@ _RESOLUTION_FALLBACKS: dict[str, str] = {
     "consensus.debunked_beats_missing": "Models disagreed. DEBUNKED signal prevails over MISSING.",
     "consensus.source_quality_claude":  "Models disagreed. Resolved by source quality — Claude’s rating applied (Primary/Independent sources present).",
     "consensus.source_quality_mistral": "Models disagreed. Resolved by source quality — Mistral’s rating applied (Primary/Independent sources present).",
+    "consensus.polarity_margin_met":     "The models reached opposite verdicts. The verdict follows the analysis backed by substantially stronger independent sources.",
+    "consensus.polarity_margin_not_met": "The models reached opposite verdicts with comparable source quality. The verdict defaults to Speculative.",
 }
 
 # Translated display labels for rating words inside [Model: RATING] badges.
@@ -668,7 +670,11 @@ def ui_poll(
 _FOLLOWUP_SYSTEM = (
     "You are a fact-checking assistant for GradedFacts, a politically independent platform. "
     "Answer the user's follow-up question about a fact-checked claim clearly and concisely. "
-    "Stay grounded in the provided rating and rationale. Do not exceed three short paragraphs."
+    "Stay grounded in the provided rating and rationale. Do not exceed three short paragraphs.\n\n"
+    "RATING VOCABULARY RULE: GradedFacts uses exactly four ratings: VERIFIED, SPECULATIVE, "
+    "DEBUNKED, MISSING. Never reference, suggest, or invent any other rating category — "
+    "no 'misleading', 'partially true', 'mixed', 'unverified', 'disputed', or any other label. "
+    "When discussing the rating, use only these four and their localized UI equivalents."
 )
 
 
