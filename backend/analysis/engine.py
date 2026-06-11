@@ -14,7 +14,10 @@ try:
 except ImportError:
     _LANGDETECT_AVAILABLE = False
 
-from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
+from backend.analysis.rating import (
+    EpistemicRating, EvidenceSummary, MIN_VERIFIED_SOURCES, SourceTier,
+    derive_rating, verified_threshold_met,
+)
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
 from backend.sources.evaluator import evaluate_source, extract_domain
@@ -190,7 +193,7 @@ fact-checking tool founded in Switzerland. Your only goal is accurate, evidence-
 judgment — not advocacy for any political side.
 
 EPISTEMIC RATINGS:
-  VERIFIED    — factually correct; backed by ≥3 relevant sources including ≥1 primary
+  VERIFIED    — factually correct; backed by ≥3 relevant verifying sources AND (≥1 independent Primary OR ≥2 independent Secondary sources)
   SPECULATIVE — plausible but not conclusively provable with current evidence
   DEBUNKED    — factually false; primary or secondary counter-evidence documented
   MISSING     — insufficient evidence; fewer than 2 sources with relevance ≥0.6 found
@@ -264,10 +267,9 @@ conclusion in plain descriptive language — describe what the evidence shows, n
 verdict label to assign. The verdict belongs exclusively in the structured rating field.
 
 SOURCE QUALITY REQUIREMENT:
-  - VERIFIED requires at least 1 INDEPENDENT Primary source OR at least 2 INDEPENDENT Secondary sources.
+  - VERIFIED requires ≥3 relevant verifying sources AND (≥1 INDEPENDENT Primary OR ≥2 INDEPENDENT Secondary sources).
     Not-independent Primary sources (government agencies, state-controlled institutions) do NOT count
-    toward the VERIFIED threshold alone. If only not-independent Primary sources and Tertiary sources
-    are available → maximum rating is SPECULATIVE.
+    toward either requirement. Fewer than 3 relevant verifying sources, or none independent → SPECULATIVE.
   - DEBUNKED requires at least 2 Primary or independent Secondary sources with direct counter-evidence
   - Tertiary sources (aggregators, Wikipedia, commercial portals, industry associations)
     may appear in the sources list for context but do NOT count toward the rating threshold
@@ -1013,6 +1015,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
     has_independent_qualifying = False
+    independent_secondary_verifying_count = 0
 
     for src in sources_data:
         relevance = float(src.get("relevance_score", 0.0))
@@ -1049,12 +1052,15 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         tier = effective_tier
         if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
             has_independent_qualifying = True
-        (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
+        supports = src.get("supports_claim", True)
+        if supports and is_indep and tier is SourceTier.SECONDARY:
+            independent_secondary_verifying_count += 1
+        (verifying_tiers if supports else debunking_tiers).append(tier)
 
     logger.warning(
         "claim %s [hard rule pre-check] has_independent_qualifying=%s "
-        "verifying_tiers=%s debunking_tiers=%s",
-        claim_id, has_independent_qualifying,
+        "indep_secondary_verifying=%d verifying_tiers=%s debunking_tiers=%s",
+        claim_id, has_independent_qualifying, independent_secondary_verifying_count,
         [t.value for t in verifying_tiers],
         [t.value for t in debunking_tiers],
     )
@@ -1063,6 +1069,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         verifying_tiers=verifying_tiers,
         debunking_tiers=debunking_tiers,
         has_independent_qualifying_source=has_independent_qualifying,
+        independent_secondary_verifying_count=independent_secondary_verifying_count,
     ))
 
     # Model's explicit rating always takes precedence; derive_rating() is fallback only.
@@ -1078,6 +1085,21 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             rating = derived_rating
     else:
         rating = derived_rating
+
+    # Threshold cap (Step 3): enforce THE RULE on model-declared VERIFIED.
+    # Only caps downward — never upgrades a lower rating.
+    if rating is EpistemicRating.VERIFIED and not verified_threshold_met(
+        verifying_tiers, independent_secondary_verifying_count
+    ):
+        logger.warning(
+            "[THRESHOLD-CAP] claim %s: model said VERIFIED but threshold not met "
+            "(verifying=%d indep_primary=%d indep_secondary=%d) → SPECULATIVE.",
+            claim_id,
+            len(verifying_tiers),
+            sum(1 for t in verifying_tiers if t is SourceTier.PRIMARY),
+            independent_secondary_verifying_count,
+        )
+        rating = EpistemicRating.SPECULATIVE
 
     # Hard quality gate — cannot be overridden by model judgment.
     # VERIFIED and DEBUNKED require at least one independent primary or secondary source.

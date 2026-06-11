@@ -45,7 +45,10 @@ from backend.analysis.engine import (
 )
 from sqlalchemy import func, select as _sa_select, update
 
-from backend.analysis.rating import EpistemicRating, EvidenceSummary, SourceTier, derive_rating
+from backend.analysis.rating import (
+    EpistemicRating, EvidenceSummary, MIN_VERIFIED_SOURCES, SourceTier,
+    derive_rating, verified_threshold_met,
+)
 from backend.analysis.engine import independence_bool, independence_label
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
@@ -256,7 +259,7 @@ def _resolve_consensus(
 
 def _process_sources(
     sources_raw: list[dict],
-) -> tuple[list[dict], EpistemicRating, bool]:
+) -> tuple[list[dict], EpistemicRating, bool, int, list[SourceTier]]:
     """
     Apply evaluate_source(), filter by relevance, downgrade non-independent primaries,
     and derive an algorithmic rating from the resulting tiers.
@@ -265,9 +268,14 @@ def _process_sources(
     for threshold purposes (e.g. three CBS articles = one unique source). All sources
     remain in the returned list for UI display.
 
-    Returns (sources_data, derived_rating, has_independent_qualifying_source).
-    The third value is True when at least one independent primary or secondary source
-    meets the relevance threshold — required for VERIFIED and DEBUNKED.
+    Returns (sources_data, derived_rating, has_independent_qualifying_source,
+             independent_secondary_verifying_count, verifying_tiers).
+    - has_independent_qualifying_source: True when ≥1 independent primary/secondary source
+      passes the relevance threshold — required for VERIFIED and DEBUNKED.
+    - independent_secondary_verifying_count: count of independent secondary verifying sources
+      after domain dedup (for THE RULE secondary path to VERIFIED).
+    - verifying_tiers: domain-dedup-aware list of tiers for supporting sources; used directly
+      by verified_threshold_met() in the threshold cap.
     """
     if sources_raw is None:
         sources_raw = []
@@ -299,6 +307,7 @@ def _process_sources(
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
     has_independent_qualifying = False
+    independent_secondary_verifying_count = 0
 
     for src in sources_data:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
@@ -317,14 +326,18 @@ def _process_sources(
             tier = SourceTier.SECONDARY
         if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
             has_independent_qualifying = True
-        (verifying_tiers if src.get("supports_claim", True) else debunking_tiers).append(tier)
+        supports = src.get("supports_claim", True)
+        if supports and is_indep and tier is SourceTier.SECONDARY:
+            independent_secondary_verifying_count += 1
+        (verifying_tiers if supports else debunking_tiers).append(tier)
 
     derived = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
         debunking_tiers=debunking_tiers,
         has_independent_qualifying_source=has_independent_qualifying,
+        independent_secondary_verifying_count=independent_secondary_verifying_count,
     ))
-    return sources_data, derived, has_independent_qualifying
+    return sources_data, derived, has_independent_qualifying, independent_secondary_verifying_count, verifying_tiers
 
 
 def _rating_from_data(data: dict, derived: EpistemicRating, claim_id: str) -> EpistemicRating:
@@ -472,7 +485,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         claude_data = _phase2_judgment(claude_client, claim.text, search_findings, lang_instruction)
 
     # ── Process Claude's sources and derive its rating ────────────────────────
-    claude_sources, claude_derived, claude_has_qualifying = _process_sources(claude_data.get("sources") or [])
+    claude_sources, claude_derived, claude_has_qualifying, claude_indep_secondary_verifying, claude_verifying_tiers = _process_sources(claude_data.get("sources") or [])
 
     # Pre-generate the consensus judgment ID so all source rows (both Claude's and
     # Mistral's) can reference it before the Judgment object is created.
@@ -504,6 +517,19 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     logger.warning("[DEBUG sources] claim_id=%s claude_sources_staged=%d", claim_id, len(evaluated_sources))
 
     claude_rating = _rating_from_data(claude_data, claude_derived, claim_id)
+
+    # Threshold cap: enforce THE RULE on model-declared VERIFIED (Claude). Only caps downward.
+    # claude_verifying_tiers and claude_indep_secondary_verifying come from _process_sources()
+    # and are fully domain-dedup-aware — identical logic to engine.py and the Mistral cap.
+    if claude_rating is EpistemicRating.VERIFIED and not verified_threshold_met(
+        claude_verifying_tiers, claude_indep_secondary_verifying
+    ):
+        logger.warning(
+            "[THRESHOLD-CAP] claim %s (Claude): model said VERIFIED but threshold not met "
+            "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
+            claim_id, len(claude_verifying_tiers), claude_indep_secondary_verifying,
+        )
+        claude_rating = EpistemicRating.SPECULATIVE
 
     # Hard quality gate — cannot be overridden by model judgment.
     if not claude_has_qualifying and claude_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
@@ -539,6 +565,19 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             if ev is not None
         ]
         mistral_source_quality = _source_quality_score(mistral_sources_eval)
+
+        # Threshold cap: enforce THE RULE on model-declared VERIFIED (Mistral). Only caps downward.
+        # Derive Mistral's algorithmic rating through _process_sources so domain dedup and
+        # independence rules are applied identically to the Claude path.
+        if mistral_rating is EpistemicRating.VERIFIED:
+            _, mistral_derived, _, mistral_indep_secondary, mistral_verifying_tiers = _process_sources(mistral_sources_eval)
+            if not verified_threshold_met(mistral_verifying_tiers, mistral_indep_secondary):
+                logger.warning(
+                    "[THRESHOLD-CAP] claim %s (Mistral): model said VERIFIED but threshold not met "
+                    "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
+                    claim_id, len(mistral_verifying_tiers), mistral_indep_secondary,
+                )
+                mistral_rating = EpistemicRating.SPECULATIVE
         # Persist Mistral's sources alongside Claude's, deduped by URL.
         _seen_urls: set[str] = {es.url for es in evaluated_sources}
         _mistral_extra: list[EvaluatedSource] = []

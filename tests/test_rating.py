@@ -53,10 +53,28 @@ def test_two_primary_sources_returns_speculative_not_verified():
     )) == EpistemicRating.SPECULATIVE
 
 
-def test_three_sources_only_secondary_tertiary_returns_speculative():
-    # No primary verifying source → capped at SPECULATIVE
+def test_three_sources_only_secondary_tertiary_no_indep_count_returns_speculative():
+    # No independent-secondary count supplied → falls through to SPECULATIVE (default count=0)
     assert derive_rating(EvidenceSummary(
         verifying_tiers=[SourceTier.SECONDARY, SourceTier.SECONDARY, SourceTier.TERTIARY],
+    )) == EpistemicRating.SPECULATIVE
+
+
+def test_three_sources_two_indep_secondary_returns_verified():
+    # THE RULE secondary path: ≥3 verifying AND ≥2 independent secondary → VERIFIED
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.SECONDARY, SourceTier.SECONDARY, SourceTier.TERTIARY],
+        has_independent_qualifying_source=True,
+        independent_secondary_verifying_count=2,
+    )) == EpistemicRating.VERIFIED
+
+
+def test_three_sources_only_one_indep_secondary_stays_speculative():
+    # Only 1 independent secondary (< 2 required) and no primary → SPECULATIVE
+    assert derive_rating(EvidenceSummary(
+        verifying_tiers=[SourceTier.SECONDARY, SourceTier.SECONDARY, SourceTier.TERTIARY],
+        has_independent_qualifying_source=True,
+        independent_secondary_verifying_count=1,
     )) == EpistemicRating.SPECULATIVE
 
 

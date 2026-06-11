@@ -297,15 +297,14 @@ def test_off_topic_claim_does_not_call_phase1_or_phase2():
 
 
 def test_on_topic_claim_proceeds_past_off_topic_gate():
+    # Three distinct domains so domain dedup doesn't collapse them to one source.
     sources = [
-        {
-            "url": f"https://reuters.com/article/{i}",
-            "tier": "primary",
-            "is_independent": True,
-            "relevance_score": 0.9,
-            "supports_claim": True,
-        }
-        for i in range(3)
+        {"url": "https://bls.gov/data/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://reuters.com/article/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://apnews.com/article/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
     ]
     judgment_data = {"rationale": "Well-sourced.", "sources": sources, "rating": "verified"}
 

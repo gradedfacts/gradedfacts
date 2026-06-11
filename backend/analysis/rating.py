@@ -46,6 +46,26 @@ class EvidenceSummary:
     # (tier PRIMARY and is_independent=True) OR (tier SECONDARY and is_independent=True).
     # Defaults to True for backward compatibility; engines must set it explicitly.
     has_independent_qualifying_source: bool = True
+    # Count of independent secondary verifying sources (after domain dedup + relevance filter).
+    # Required for the secondary path to VERIFIED (≥2 indep secondary can substitute for ≥1 primary).
+    independent_secondary_verifying_count: int = 0
+
+
+def verified_threshold_met(
+    verifying_tiers: list[SourceTier],
+    independent_secondary_verifying_count: int,
+) -> bool:
+    """THE RULE: VERIFIED requires ≥3 verifying AND (≥1 indep primary OR ≥2 indep secondary).
+
+    Non-independent primaries appear as SECONDARY in verifying_tiers (downgraded upstream),
+    so any PRIMARY entry already implies independence.
+    """
+    if len(verifying_tiers) < MIN_VERIFIED_SOURCES:
+        return False
+    return (
+        any(t is SourceTier.PRIMARY for t in verifying_tiers)
+        or independent_secondary_verifying_count >= 2
+    )
 
 
 def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
@@ -56,16 +76,19 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
     analysis engine are included in the EvidenceSummary; this function sees only
     the already-filtered tiers.
 
+    THE RULE for VERIFIED: ≥3 relevant verifying sources AND (≥1 independent Primary
+    OR ≥2 independent Secondary). Non-independent primaries are downgraded to secondary
+    upstream, so PRIMARY entries in verifying_tiers always imply independence.
+
     Rules applied in priority order:
       1. Fewer than MIN_EVIDENCE_SOURCES relevant sources → MISSING.
       2. Hard quality gate: no independent primary/secondary source present
          → VERIFIED and DEBUNKED are impossible; cap at SPECULATIVE.
       3. Any primary or secondary debunking source → DEBUNKED.
       4. No verifying sources → MISSING.
-      5. Fewer than MIN_VERIFIED_SOURCES relevant sources → SPECULATIVE
-         (primary source present but threshold not met).
-      6. At least one primary verifying source → VERIFIED.
-      7. Only secondary or tertiary verifying sources → SPECULATIVE (capped).
+      5. Fewer than MIN_VERIFIED_SOURCES relevant sources → SPECULATIVE.
+      6. THE RULE met (≥1 indep primary OR ≥2 indep secondary verifying) → VERIFIED.
+      7. Rule not met (only non-qualifying secondaries/tertiaries) → SPECULATIVE.
     """
     total = len(evidence.verifying_tiers) + len(evidence.debunking_tiers)
     if total < MIN_EVIDENCE_SOURCES:
@@ -83,7 +106,7 @@ def derive_rating(evidence: EvidenceSummary) -> EpistemicRating:
     if total < MIN_VERIFIED_SOURCES:
         return EpistemicRating.SPECULATIVE
 
-    if any(t is SourceTier.PRIMARY for t in evidence.verifying_tiers):
+    if verified_threshold_met(evidence.verifying_tiers, evidence.independent_secondary_verifying_count):
         return EpistemicRating.VERIFIED if _qualifying else EpistemicRating.SPECULATIVE
 
     return EpistemicRating.SPECULATIVE

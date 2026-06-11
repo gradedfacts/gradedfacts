@@ -368,6 +368,17 @@ _THREE_INDEPENDENT_PRIMARIES = [
     for i in range(3)
 ]
 
+# Three independent primaries from DISTINCT domains — required wherever THE RULE must be
+# satisfied after domain deduplication (≥3 unique-domain verifying sources).
+_THREE_DISTINCT_PRIMARIES = [
+    {"url": "https://www.bls.gov/data/distinct-0", "tier": "primary",
+     "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+    {"url": "https://www.reuters.com/data/distinct-1", "tier": "primary",
+     "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+    {"url": "https://apnews.com/data/distinct-2", "tier": "primary",
+     "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+]
+
 
 def _make_mock_session(claim_text: str = "Test claim"):
     mock_claim = MagicMock()
@@ -435,8 +446,8 @@ def _run_consensus(
 class TestAnalyzeClaimWithConsensus:
 
     def test_models_agree_stores_correct_consensus_fields(self):
-        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral agrees.", "sources": [], "rating": "verified"}
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral agrees.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
@@ -447,8 +458,8 @@ class TestAnalyzeClaimWithConsensus:
         assert j.analyst_secondary == "mistral-large-2512"
 
     def test_models_agree_rationale_is_claude_rationale(self):
-        claude_j = {"rationale": "Claude rationale.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral rationale.", "sources": [], "rating": "verified"}
+        claude_j = {"rationale": "Claude rationale.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral rationale.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
@@ -456,7 +467,7 @@ class TestAnalyzeClaimWithConsensus:
 
     def test_models_disagree_source_quality_advantage_wins(self):
         """Claude has Primary/Independent sources; Mistral has none — Claude's rating wins."""
-        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
@@ -477,7 +488,7 @@ class TestAnalyzeClaimWithConsensus:
         assert j.models_agree is False
 
     def test_models_disagree_rationale_includes_both_verdicts(self):
-        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
@@ -495,7 +506,7 @@ class TestAnalyzeClaimWithConsensus:
         assert "[RESOLUTION:consensus.disagreement]" in j.rationale
 
     def test_mistral_phase2_raises_falls_back_to_claude(self):
-        claude_j = {"rationale": "Claude only.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
+        claude_j = {"rationale": "Claude only.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
 
         j, _ = _run_consensus(claude_j, None, mistral_raises=RuntimeError("API timeout"))
 
@@ -515,7 +526,7 @@ class TestAnalyzeClaimWithConsensus:
 
     def test_mistral_invalid_rating_treated_as_unavailable(self):
         """If Mistral returns an unrecognised rating string, Mistral's verdict is ignored."""
-        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
         mistral_j = {"rationale": "Weird.", "sources": [], "rating": "not-a-real-rating"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
@@ -1020,8 +1031,8 @@ class TestBraveIntegration:
 
     def test_consensus_result_correct_regardless_of_brave_availability(self):
         """Consensus rating is correct whether Mistral received Brave findings or ""."""
-        claude_j = {"rationale": "Claude verified.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral verified.", "sources": [], "rating": "verified"}
+        claude_j = {"rationale": "Claude verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
 
         j, _ = _run_consensus(claude_j, mistral_j)  # brave_key="" by default
 

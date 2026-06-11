@@ -1,4 +1,4 @@
-"""Tests for _verify_rating_consistency in backend/analysis/engine.py."""
+"""Tests for _verify_rating_consistency and threshold-cap enforcement in engine.py."""
 import pytest
 from unittest.mock import MagicMock, patch, call
 
@@ -218,3 +218,88 @@ def test_prompt_includes_claim_text():
     content = kwargs.get("messages", [{}])[0].get("content", "")
     assert claim in content
     assert rationale in content
+
+
+# ── 8. Threshold cap (THE RULE enforcement) ───────────────────────────────────
+
+def _run_threshold_test(sources: list[dict], model_rating: str) -> "Judgment":
+    """Run analyze_claim with a mock that bypasses the Haiku rating gate and returns the judgment."""
+    from unittest.mock import MagicMock, patch
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    judgment_data = {"rationale": "test rationale", "sources": sources, "rating": model_rating}
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+    captured: dict = {}
+    mock_session.add.side_effect = lambda obj: captured.update({"judgment": obj}) if isinstance(obj, Judgment) else None
+    mock_session.add_all.side_effect = lambda objs: None
+
+    # Bypass the Haiku rating-gate so only the threshold cap is under test.
+    with patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+         patch.object(eng, "_get_client", return_value=MagicMock()), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data):
+        eng.analyze_claim("claim-1", mock_session)
+    return captured["judgment"]
+
+
+def test_threshold_cap_verified_insufficient_sources_downgraded_to_speculative(caplog):
+    """
+    Model declares VERIFIED with only 1 independent secondary verifying source (< 2 required,
+    no primary). THE RULE is not met → threshold cap must downgrade to SPECULATIVE and log
+    [THRESHOLD-CAP].
+    """
+    import logging
+    sources = [
+        # 3 sources total — but only 1 is independent secondary, none are primary
+        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://example.org/b", "tier": "secondary", "is_independent": False,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://wiki.org/c", "tier": "tertiary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+    ]
+    with caplog.at_level(logging.WARNING):
+        judgment = _run_threshold_test(sources, "verified")
+    from backend.analysis.rating import EpistemicRating
+    assert judgment.rating == EpistemicRating.SPECULATIVE
+    assert any("[THRESHOLD-CAP]" in r.message for r in caplog.records)
+
+
+def test_threshold_cap_verified_two_indep_secondaries_stays_verified():
+    """
+    Model declares VERIFIED with 2 independent secondary verifying sources (≥3 total).
+    THE RULE secondary path is satisfied → rating must NOT be downgraded.
+    """
+    sources = [
+        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://apnews.com/b", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://bbc.com/c", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+    ]
+    judgment = _run_threshold_test(sources, "verified")
+    from backend.analysis.rating import EpistemicRating
+    assert judgment.rating == EpistemicRating.VERIFIED
+
+
+def test_threshold_cap_never_upgrades_speculative():
+    """
+    The threshold cap must never upgrade a lower rating. A model-declared SPECULATIVE
+    backed by 3 independent secondaries (which would satisfy THE RULE) must stay SPECULATIVE.
+    """
+    sources = [
+        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://apnews.com/b", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://bbc.com/c", "tier": "secondary", "is_independent": True,
+         "relevance_score": 0.9, "supports_claim": True},
+    ]
+    judgment = _run_threshold_test(sources, "speculative")
+    from backend.analysis.rating import EpistemicRating
+    assert judgment.rating == EpistemicRating.SPECULATIVE

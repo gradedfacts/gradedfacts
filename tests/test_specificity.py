@@ -294,15 +294,14 @@ def test_vague_claim_judgment_analyst_is_set():
 
 
 def test_specific_claim_proceeds_to_full_pipeline():
+    # Three distinct domains so domain dedup doesn't collapse them to one source.
     sources = [
-        {
-            "url": f"https://reuters.com/article/{i}",
-            "tier": "primary",
-            "is_independent": True,
-            "relevance_score": 0.9,
-            "supports_claim": True,
-        }
-        for i in range(3)
+        {"url": "https://bls.gov/data/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://reuters.com/article/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
+        {"url": "https://apnews.com/article/tcja", "tier": "primary",
+         "is_independent": True, "relevance_score": 0.9, "supports_claim": True},
     ]
     judgment_data = {"rationale": "Well-sourced.", "sources": sources, "rating": "verified"}
 
