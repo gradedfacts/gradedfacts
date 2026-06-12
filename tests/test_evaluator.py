@@ -5,7 +5,13 @@ Covers: evaluate_source() — independence override, affiliation_note enforcemen
 and relevance_score clamping. Also covers extract_domain() deduplication helper.
 """
 
-from backend.sources.evaluator import evaluate_source, extract_domain
+from backend.sources.evaluator import (
+    evaluate_source,
+    extract_domain,
+    is_party_politician_url,
+    is_social_media_url,
+    is_user_content_url,
+)
 from backend.sources.independence_registry import COMPROMISED_SCORE_CAP
 
 
@@ -100,6 +106,23 @@ class TestEvaluateSource:
         assert result["is_independent"] is False
         assert result.get("affiliation_note"), "Registered non-independent source must have affiliation_note"
 
+    def test_independent_source_with_registry_affiliation_note_keeps_it(self):
+        # kyivindependent.com is registered as independent but carries a country-of-origin
+        # affiliation_note. apply_registry_override must pass it through regardless of
+        # independence status so the UI can surface the context note.
+        src = {
+            "url": "https://kyivindependent.com/article/example",
+            "tier": "secondary",
+            "is_independent": True,
+            "relevance_score": 0.8,
+            "supports_claim": True,
+        }
+        result = evaluate_source(src)
+        assert result["is_independent"] is True
+        assert result.get("affiliation_note"), (
+            "Independent registry entry with affiliation_note must keep it after override"
+        )
+
     # ── Relevance score clamping ───────────────────────────────────────────────
 
     def test_relevance_score_above_1_clamped_to_1(self):
@@ -159,14 +182,105 @@ class TestExtractDomain:
     def test_lowercases_result(self):
         assert extract_domain("https://WWW.REUTERS.COM/article") == "reuters.com"
 
-    def test_empty_url_returns_empty(self):
-        assert extract_domain("") == ""
+    def test_empty_url_returns_none(self):
+        assert extract_domain("") is None
 
-    def test_non_url_returns_empty(self):
-        assert extract_domain("not a url") == ""
+    def test_non_url_returns_none(self):
+        assert extract_domain("not a url") is None
 
     def test_url_with_path_query_ignored(self):
         assert extract_domain("https://www.bbc.com/news/world?page=2#section") == "bbc.com"
 
     def test_returns_empty_for_single_label_host(self):
         assert extract_domain("https://localhost/path") == "localhost"
+
+    # ── Multi-part TLD handling ───────────────────────────────────────────────
+
+    def test_multi_part_tld_austria_gv_at(self):
+        # ris.bka.gv.at — the TLD is gv.at, registrable domain is bka.gv.at
+        assert extract_domain("https://ris.bka.gv.at/doc/rgbl/BGBL_I_2023_xxx") == "bka.gv.at"
+
+    def test_multi_part_tld_uk_co_uk(self):
+        assert extract_domain("https://www.bbc.co.uk/news") == "bbc.co.uk"
+
+    def test_two_label_domain_with_known_multi_tld_returns_tld_unchanged(self):
+        # co.uk without a registrable prefix is itself — no extra label to add
+        assert extract_domain("https://co.uk/") == "co.uk"
+
+    # ── Malformed hostname rejection ─────────────────────────────────────────
+
+    def test_malformed_hostname_brace_returns_none(self):
+        # http://{/path produces hostname "{" — must be rejected, not counted
+        assert extract_domain("http://{/path") is None
+
+    def test_malformed_hostname_bracket_prefix_returns_none(self):
+        assert extract_domain("http://[garbage/path") is None
+
+
+class TestSocialMediaBlacklist:
+
+    def test_youtube_com_excluded(self):
+        src = {"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "tier": "secondary",
+               "is_independent": True, "relevance_score": 0.8, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_youtu_be_excluded(self):
+        # youtu.be is YouTube's short-URL service — same platform, must be excluded
+        src = {"url": "https://youtu.be/dQw4w9WgXcQ", "tier": "secondary",
+               "is_independent": True, "relevance_score": 0.8, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_social_media_url_youtu_be(self):
+        assert is_social_media_url("https://youtu.be/xyz") is True
+
+    def test_is_social_media_url_youtube_subdomain(self):
+        assert is_social_media_url("https://music.youtube.com/watch?v=xyz") is True
+
+
+class TestPartyPoliticianBlacklist:
+
+    def test_politician_domain_excluded_from_evaluate_source(self):
+        src = {"url": "https://www.friedrich-merz.de/aktuell/pressemitteilung",
+               "tier": "primary", "is_independent": True, "relevance_score": 0.9,
+               "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_party_domain_excluded_from_evaluate_source(self):
+        src = {"url": "https://sp-ps.ch/de/news/pressemitteilung",
+               "tier": "primary", "is_independent": True, "relevance_score": 0.9,
+               "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_party_politician_url_merz(self):
+        assert is_party_politician_url("https://www.friedrich-merz.de/news") is True
+
+    def test_is_party_politician_url_sp(self):
+        assert is_party_politician_url("https://sp-ps.ch/de") is True
+
+    def test_non_party_domain_not_excluded(self):
+        src = {"url": "https://www.reuters.com/article/example",
+               "tier": "secondary", "is_independent": True, "relevance_score": 0.85,
+               "supports_claim": True}
+        assert evaluate_source(src) is not None
+
+
+class TestUserContentBlacklist:
+
+    def test_vocal_media_excluded(self):
+        src = {"url": "https://vocal.media/article/some-post", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_docplayer_excluded(self):
+        src = {"url": "https://docplayer.org/12345-document.html", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_user_content_url_vocal(self):
+        assert is_user_content_url("https://vocal.media/article/foo") is True
+
+    def test_is_user_content_url_docplayer(self):
+        assert is_user_content_url("https://docplayer.org/upload") is True
+
+    def test_non_user_content_not_excluded(self):
+        assert is_user_content_url("https://documentcloud.org/documents/123") is False

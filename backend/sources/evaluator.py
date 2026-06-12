@@ -18,6 +18,7 @@ from __future__ import annotations
 import fcntl
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
@@ -69,26 +70,46 @@ def _track_unregistered_source(domain: str, url: str) -> None:
         logger.debug("_track_unregistered_source: skipped for %s", domain, exc_info=True)
 
 
-def extract_domain(url: str) -> str:
+# Multi-part TLDs where the registrable domain is three labels, not two.
+# e.g. ris.bka.gv.at → registrable domain is bka.gv.at, not gv.at.
+_MULTI_PART_TLDS: frozenset[str] = frozenset({
+    "co.uk", "org.uk", "co.za", "co.nz", "gv.at", "ac.at", "com.au",
+})
+
+_VALID_HOSTNAME_RE = re.compile(r"^[a-z0-9.\-]+$")
+
+
+def extract_domain(url: str) -> str | None:
     """
-    Return the root domain of a URL, stripping www. and subdomains.
+    Return the registrable domain of a URL, handling multi-part TLDs.
 
     Examples:
         https://www.reuters.com/article  → reuters.com
         https://stats.cbs.nl/data        → cbs.nl
-        https://data.cbs.nl/data         → cbs.nl
+        https://ris.bka.gv.at/doc        → bka.gv.at
+        https://www.bbc.co.uk/news       → bbc.co.uk
 
-    Takes the last two hostname labels, which covers most TLDs (.com, .nl, .de …).
-    Returns "" for unparseable or non-HTTP URLs.
+    Returns None for empty input, unparseable URLs, or hostnames containing
+    invalid characters (e.g. bare '{' from malformed LLM output).
     """
+    if not url:
+        return None
     try:
         host = urlparse(url).hostname or ""
     except Exception:
-        return ""
-    parts = host.lower().split(".")
+        return None
+    if not host:
+        return None
+    host = host.lower()
+    if not _VALID_HOSTNAME_RE.match(host):
+        return None
+    parts = host.split(".")
     if len(parts) < 2:
-        return host
-    return ".".join(parts[-2:])
+        return host  # single-label (e.g. localhost)
+    two_part = ".".join(parts[-2:])
+    if len(parts) >= 3 and two_part in _MULTI_PART_TLDS:
+        return ".".join(parts[-3:])
+    return two_part
 
 
 _SOCIAL_MEDIA_BLACKLIST: frozenset[str] = frozenset({
@@ -99,6 +120,7 @@ _SOCIAL_MEDIA_BLACKLIST: frozenset[str] = frozenset({
     "instagram.com",
     "tiktok.com",
     "youtube.com",
+    "youtu.be",       # YouTube short-URL service — same platform, same exclusion rule
     "linkedin.com",
     "reddit.com",
     "bluesky.app",
@@ -129,6 +151,34 @@ def is_social_media_url(url: str) -> bool:
     return False
 
 
+# Political party and individual politician websites are never independent sources.
+# A politician's own website is primary-source propaganda, not independent reporting.
+# This list MUST grow symmetrically across the political spectrum — no selective
+# exclusion of parties or politicians from one ideological side only.
+_PARTY_POLITICIAN_BLACKLIST: frozenset[str] = frozenset({
+    "friedrich-merz.de",   # CDU — German federal politician
+    "sp-ps.ch",            # SP Switzerland — Swiss social democratic party
+})
+
+
+def is_party_politician_url(url: str) -> bool:
+    """Return True if the URL belongs to a political party or individual politician's website."""
+    return extract_domain(url) in _PARTY_POLITICIAN_BLACKLIST
+
+
+# User-content and upload platforms produce no original editorial content and
+# cannot be evaluated for independence or tier — excluded like social media.
+_USER_CONTENT_BLACKLIST: frozenset[str] = frozenset({
+    "vocal.media",      # user-generated content platform
+    "docplayer.org",    # document upload platform (unverifiable provenance)
+})
+
+
+def is_user_content_url(url: str) -> bool:
+    """Return True if the URL belongs to a user-content or document-upload platform."""
+    return extract_domain(url) in _USER_CONTENT_BLACKLIST
+
+
 _GENERIC_AFFILIATION_NOTE = (
     "Source is not editorially independent; specific affiliation not documented."
 )
@@ -144,6 +194,12 @@ def evaluate_source(src: dict) -> dict | None:
     url = src.get("url", "")
     if url and is_social_media_url(url):
         logger.warning("[BLACKLIST] Social media URL excluded: %s", url)
+        return None
+    if url and is_user_content_url(url):
+        logger.warning("[BLACKLIST] User-content platform URL excluded: %s", url)
+        return None
+    if url and is_party_politician_url(url):
+        logger.warning("[BLACKLIST] Party/politician URL excluded: %s", url)
         return None
     _is_unregistered = bool(url) and lookup_source_all_registries(url) is None
 

@@ -17,7 +17,9 @@
       "is_independent": "true when no documented editorial control by political actors with a direct stake in outcomes",
       "affiliation_note": "required when is_independent is false; explains the documented dependency",
       "country": "ISO 3166-1 alpha-2, EU for EU institutions, INT for international bodies",
-      "region": "geographic region"
+      "region": "geographic region",
+      "institution_type": "OPTIONAL — functional classification: statistics_agency | parliament | central_bank | court | government | audit_office | election_authority | media | ngo | think_tank | academic | aggregator | company | other. Absent field = null. NO pipeline logic may read this field yet.",
+      "parent_override": "OPTIONAL boolean — set to true on a subdomain entry whose tier or is_independent intentionally differs from its parent domain's registry entry. Required to suppress the subdomain-collision consistency check."
     }
   },
   "sources": [
@@ -307,6 +309,7 @@
       "tier": "tertiary",
       "is_independent": "neutral",
       "counts_for_threshold": false,
+      "parent_override": true,
       "category": "academic",
       "independence_note": "National Library of Medicine database (NIH / HHS) indexing peer-reviewed biomedical and life-sciences literature. The database itself is a neutral aggregator of published research — it does not produce original findings. Individual studies should be evaluated for methodology, sample size, replication status, funding source, and conflicts of interest. NIH is an executive branch agency, but published research is subject to peer review independent of NIH editorial control. Reclassified tertiary (Rule 2): PubMed is an aggregator, not an original data producer; the primary sources are the individual peer-reviewed papers it indexes."
     },
@@ -434,7 +437,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "EU",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "European Parliament",
@@ -442,7 +446,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "EU",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "European Commission",
@@ -459,7 +464,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "EU",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "European Court of Human Rights (ECHR / EGMR)",
@@ -475,7 +481,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "EU",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "EU Publications Office",
@@ -483,7 +490,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "EU",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "European External Action Service (EEAS)",
@@ -511,7 +519,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "FI",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistics Netherlands (CBS — Centraal Bureau voor de Statistiek)",
@@ -520,7 +529,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "NL",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistics Sweden (SCB — Statistiska centralbyrån)",
@@ -529,7 +539,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "SE",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistics Denmark (Danmarks Statistik)",
@@ -538,7 +549,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "DK",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistics Norway (SSB — Statistisk sentralbyrå)",
@@ -556,7 +568,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "IT",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "INE — Instituto Nacional de Estadística (Spain)",
@@ -565,15 +578,16 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "ES",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statbel — Belgian Statistical Office (Statistics Belgium)",
       "domain": "statbel.fgov.be",
       "tier": "primary",
-      "is_independent": false,
+      "is_independent": true,
       "counts_for_threshold": true,
-      "affiliation_note": "Statbel (Statistics Belgium) operates under the Belgian Federal Public Service Economy. Unlike arm's-length national statistical offices, it sits within a ministry, which limits its structural independence from government policy direction. While Statbel's professional statistical staff follow standard European Statistics Code of Practice methodologies and its outputs are broadly reliable, it does not have the institutional autonomy of an independent statistical authority. Its data are authoritative as official Belgian statistics but should be noted as ministry-embedded rather than arm's-length.",
+      "affiliation_note": "National statistics agency with statutory statistical independence.",
       "country": "BE",
       "region": "Europe"
     },
@@ -620,7 +634,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "AT",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "INE Portugal — Instituto Nacional de Estatística",
@@ -629,7 +644,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "PT",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistics Poland (GUS — Główny Urząd Statystyczny)",
@@ -638,7 +654,9 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "PL",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true,
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Czech Statistical Office (CZSO — Český statistický úřad)",
@@ -647,7 +665,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "CZ",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Hungarian Central Statistical Office (KSH — Központi Statisztikai Hivatal)",
@@ -703,7 +722,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "GR",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Central Statistics Office Ireland (CSO)",
@@ -721,7 +741,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "RO",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Statistical Office of Slovakia (ŠÚSR — Štatistický úrad Slovenskej republiky)",
@@ -923,7 +944,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "PL",
-      "region": "Europe"
+      "region": "Europe",
+      "parent_override": true
     },
     {
       "name": "PAN — Polska Akademia Nauk",
@@ -1148,7 +1170,8 @@
       "counts_for_threshold": true,
       "country": "RO",
       "region": "Europe",
-      "independence_note": "UEFISCDI is Romania's primary public research funding agency, operating under the Romanian Ministry of Education. Grant allocation is governed by peer-review panels following international standards. It is the authoritative source for Romanian research funding data and scientific program statistics. No documented political interference with individual grant decisions."
+      "independence_note": "UEFISCDI is Romania's primary public research funding agency, operating under the Romanian Ministry of Education. Grant allocation is governed by peer-review panels following international standards. It is the authoritative source for Romanian research funding data and scientific program statistics. No documented political interference with individual grant decisions.",
+      "parent_override": true
     },
     {
       "name": "Hellenic Parliament (Βουλή των Ελλήνων)",
@@ -1235,9 +1258,10 @@
       "tier": "primary",
       "is_independent": true,
       "counts_for_threshold": true,
+      "parent_override": true,
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Switzerland's principal federal statistical agency, established under the Federal Statistics Act (BStatG). The Act mandates that BFS produce and publish official statistics independently of political direction; results may not be withheld or altered by the Federal Council or individual departments. Hosted under the admin.ch domain but operationally distinct from departmental communications: statistical outputs are subject to peer review and methodological audit, not Federal Council editorial approval. Equivalent in independence design to national statistical offices such as the U.S. Bureau of Labor Statistics or Eurostat member offices."
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Swiss Parliament (Parlament.ch)",
@@ -1363,8 +1387,10 @@
       "domain": "ons.gov.uk",
       "tier": "primary",
       "is_independent": true,
+      "parent_override": true,
       "country": "GB",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "BBC (UK)",
@@ -1413,6 +1439,7 @@
       "tier": "primary",
       "is_independent": true,
       "counts_for_threshold": true,
+      "parent_override": true,
       "country": "GB",
       "region": "Europe",
       "independence_note": "The National Archives is the official archive and publisher for the UK government and is one of the world's largest archival institutions. It is a non-ministerial government department and an executive agency of the Cabinet Office, holding the historical records of the UK central government and courts of law from the Domesday Book to the present day. As an archive, it operates under a statutory duty under the Public Records Act 1958 (as amended) to preserve and make publicly accessible the official records of government, independent of the current political executive's editorial direction. Primary source for official UK government records, parliamentary papers, census records, court records, and historical documentation."
@@ -1433,7 +1460,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "DE",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Deutscher Bundestag",
@@ -1483,7 +1511,8 @@
       "counts_for_threshold": true,
       "country": "DE",
       "region": "Europe",
-      "independence_note": "Federal scientific research institute under the Federal Ministry of the Interior (BMI), established 1973. Operates as a peer-review research institution following established demographic and social-science methodology. No documented interference with research output or publication decisions. Research is internationally benchmarked and peer-reviewed. Structural separation between policy ministry and scientific publication is maintained in practice; independence assessed as upheld."
+      "independence_note": "Federal scientific research institute under the Federal Ministry of the Interior (BMI), established 1973. Operates as a peer-review research institution following established demographic and social-science methodology. No documented interference with research output or publication decisions. Research is internationally benchmarked and peer-reviewed. Structural separation between policy ministry and scientific publication is maintained in practice; independence assessed as upheld.",
+      "parent_override": true
     },
     {
       "name": "Robert Koch Institut (RKI)",
@@ -1691,7 +1720,8 @@
       "tier": "primary",
       "is_independent": true,
       "country": "FR",
-      "region": "Europe"
+      "region": "Europe",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "Assemblée nationale",
@@ -1972,7 +2002,8 @@
       "counts_for_threshold": true,
       "country": "US",
       "region": "North America",
-      "independence_note": "The National Center for Biotechnology Information is a division of the US National Library of Medicine, part of the National Institutes of Health (NIH). NCBI operates PubMed, the world's largest index of biomedical literature, indexing over 35 million citations from peer-reviewed journals. The database itself is a neutral indexing service — it does not produce original research, but provides access to peer-reviewed publications whose content is determined by journal editors and peer reviewers independent of NCBI. Individual studies indexed in PubMed should be evaluated on their own methodological merits, funding sources, replication status, and journal quality. NIH is an executive branch agency, but the peer-review process governing indexed research is independent of government editorial direction. Classified secondary: NCBI is a high-quality access layer to primary peer-reviewed research, not itself a primary data producer."
+      "independence_note": "The National Center for Biotechnology Information is a division of the US National Library of Medicine, part of the National Institutes of Health (NIH). NCBI operates PubMed, the world's largest index of biomedical literature, indexing over 35 million citations from peer-reviewed journals. The database itself is a neutral indexing service — it does not produce original research, but provides access to peer-reviewed publications whose content is determined by journal editors and peer reviewers independent of NCBI. Individual studies indexed in PubMed should be evaluated on their own methodological merits, funding sources, replication status, and journal quality. NIH is an executive branch agency, but the peer-review process governing indexed research is independent of government editorial direction. Classified secondary: NCBI is a high-quality access layer to primary peer-reviewed research, not itself a primary data producer.",
+      "parent_override": true
     },
     {
       "name": "Nature (Springer Nature)",
@@ -2022,7 +2053,8 @@
       "counts_for_threshold": true,
       "country": "INT",
       "region": "INT",
-      "independence_note": "The World Bank Open Knowledge Repository is the institutional open-access repository of the World Bank Group, providing access to World Bank research, working papers, policy reports, and data publications. The World Bank is an international financial institution governed by 189 member countries. Its research outputs — produced by career economists and policy researchers — follow academic standards and are published under an open access policy. While the World Bank's operational lending and policy advice reflect member-country priorities, its research division has documented independence from individual member-state editorial direction and has published analyses critical of member government policies on multiple occasions. Its research is widely cited in academic and policy contexts as a high-quality secondary source for development economics and global poverty data."
+      "independence_note": "The World Bank Open Knowledge Repository is the institutional open-access repository of the World Bank Group, providing access to World Bank research, working papers, policy reports, and data publications. The World Bank is an international financial institution governed by 189 member countries. Its research outputs — produced by career economists and policy researchers — follow academic standards and are published under an open access policy. While the World Bank's operational lending and policy advice reflect member-country priorities, its research division has documented independence from individual member-state editorial direction and has published analyses critical of member government policies on multiple occasions. Its research is widely cited in academic and policy contexts as a high-quality secondary source for development economics and global poverty data.",
+      "parent_override": true
     },
     {
       "name": "SSRN — Social Science Research Network",
@@ -2262,7 +2294,8 @@
       "counts_for_threshold": true,
       "country": "NZ",
       "region": "Oceania",
-      "independence_note": "Statistics New Zealand (Stats NZ) is New Zealand's national statistical agency, operating under the Statistics Act 1975. The Government Statistician is appointed by the Governor-General, and the Act provides formal independence guarantees for statistical methodology and outputs from ministerial direction on specific outputs. Stats NZ is regarded as one of the world's most professionally independent national statistical offices and fully complies with United Nations Fundamental Principles of Official Statistics. Its population census, national accounts, labour force surveys, and other statistical outputs are the authoritative primary data source for New Zealand."
+      "independence_note": "Statistics New Zealand (Stats NZ) is New Zealand's national statistical agency, operating under the Statistics Act 1975. The Government Statistician is appointed by the Governor-General, and the Act provides formal independence guarantees for statistical methodology and outputs from ministerial direction on specific outputs. Stats NZ is regarded as one of the world's most professionally independent national statistical offices and fully complies with United Nations Fundamental Principles of Official Statistics. Its population census, national accounts, labour force surveys, and other statistical outputs are the authoritative primary data source for New Zealand.",
+      "parent_override": true
     },
     {
       "name": "Verkhovna Rada — Ukrainian Parliament",
@@ -2411,7 +2444,8 @@
       "is_independent": true,
       "counts_for_threshold": true,
       "country": "JP",
-      "region": "Asia"
+      "region": "Asia",
+      "affiliation_note": "National statistics agency with statutory statistical independence."
     },
     {
       "name": "National Diet Library Japan (国立国会図書館)",
@@ -2783,6 +2817,3742 @@
       "country": "US",
       "region": "North America",
       "independence_note": "The Massachusetts Institute of Technology is one of the world's leading research universities, founded in 1861 and based in Cambridge, Massachusetts. MIT academic publications, research papers, and institutional reports are produced by independent researchers following peer-review standards. No political party ownership or direction over research or publication. MIT is a widely recognised authoritative source for scientific and technical academic research."
+    },
+    {
+      "name": "European Union Official Portal",
+      "domain": "europa.eu",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official institution of the European Union.",
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "Library of Congress",
+      "domain": "loc.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "U.S. Department of Justice",
+      "domain": "justice.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The White House",
+      "domain": "whitehouse.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "U.S. House of Representatives",
+      "domain": "house.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "U.S. Senate",
+      "domain": "senate.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "U.S. Department of Homeland Security",
+      "domain": "dhs.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Federal Bureau of Investigation (FBI)",
+      "domain": "fbi.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Office of Justice Programs (OJP)",
+      "domain": "ojp.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "NOAA Climate.gov",
+      "domain": "climate.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "National Institutes of Health (NIH)",
+      "domain": "nih.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "NASA — National Aeronautics and Space Administration",
+      "domain": "nasa.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "State of Delaware",
+      "domain": "delaware.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "German Federal Government Portal (Bund.de)",
+      "domain": "bund.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesnetzagentur (Federal Network Agency)",
+      "domain": "bundesnetzagentur.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesfinanzministerium (Federal Ministry of Finance)",
+      "domain": "bundesfinanzministerium.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Deutsche Bundesbank",
+      "domain": "bundesbank.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesverwaltungsgericht (Federal Administrative Court)",
+      "domain": "bverwg.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "State of North Rhine-Westphalia",
+      "domain": "nrw.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "State of Brandenburg",
+      "domain": "brandenburg.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "State of Saxony-Anhalt",
+      "domain": "sachsen-anhalt.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "City of Frankfurt am Main",
+      "domain": "frankfurt.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "City of Bern",
+      "domain": "bern.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Switzerland.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Swiss Federal Portal (ch.ch)",
+      "domain": "ch.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Switzerland.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Switzerland Info Portal (ch-info.swiss)",
+      "domain": "ch-info.swiss",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Switzerland.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "House of Switzerland (Presence Switzerland / EDA)",
+      "domain": "houseofswitzerland.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Switzerland.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "French Government Portal (gouv.fr)",
+      "domain": "gouv.fr",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of France.",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "Dutch Government Portal (government.nl)",
+      "domain": "government.nl",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the Netherlands.",
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "New Zealand Government Portal (govt.nz)",
+      "domain": "govt.nz",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of New Zealand.",
+      "country": "NZ",
+      "region": "Oceania"
+    },
+    {
+      "name": "Finnish Government Portal (finland.fi)",
+      "domain": "finland.fi",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Finland.",
+      "country": "FI",
+      "region": "Europe"
+    },
+    {
+      "name": "Nordic Council of Ministers (Norden.org)",
+      "domain": "norden.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official institution of the Nordic Council of Ministers.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Wirtschaftskammer Österreich (WKO)",
+      "domain": "wko.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Austrian chamber of commerce — statutory interest representation, not a government authority.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Federal Reserve Bank of New York",
+      "domain": "newyorkfed.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Vatican State (Holy See)",
+      "domain": "vaticanstate.va",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the Holy See (Vatican City State).",
+      "country": "VA",
+      "region": "Europe"
+    },
+    {
+      "name": "Kremlin — Russian Presidential Administration",
+      "domain": "kremlin.ru",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official Russian presidential administration. State-controlled; party to an ongoing armed conflict; primary source only for official Russian statements, not for contested facts.",
+      "country": "RU",
+      "region": "Europe"
+    },
+    {
+      "name": "United Nations",
+      "domain": "un.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official United Nations institution; member states exercise political direction over mandates and outputs.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "UNICEF — United Nations Children's Fund",
+      "domain": "unicef.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "UN agency; member states exercise political direction over mandates and funding.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Health Organization (WHO)",
+      "domain": "who.int",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "UN specialized agency; member states exercise political direction over mandates and health policy.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Bank",
+      "domain": "worldbank.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "International financial institution; major shareholder governments exercise political influence over policy and lending decisions.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Intergovernmental Panel on Climate Change (IPCC)",
+      "domain": "ipcc.ch",
+      "tier": "primary",
+      "is_independent": "neutral",
+      "institution_type": "government",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Economic Forum (WEF)",
+      "domain": "weforum.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Der Tagesspiegel",
+      "domain": "tagesspiegel.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Süddeutsche Zeitung",
+      "domain": "sueddeutsche.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ZDFheute",
+      "domain": "zdfheute.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ZDF (Zweites Deutsches Fernsehen)",
+      "domain": "zdf.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "WDR (Westdeutscher Rundfunk)",
+      "domain": "wdr.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "BR (Bayerischer Rundfunk)",
+      "domain": "br.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Sportschau (ARD)",
+      "domain": "sportschau.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "NBC News",
+      "domain": "nbcnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "CBS News",
+      "domain": "cbsnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Bloomberg",
+      "domain": "bloomberg.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "TIME Magazine",
+      "domain": "time.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "U.S. News & World Report",
+      "domain": "usnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "ABC News",
+      "domain": "abcnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "ORF (Österreichischer Rundfunk)",
+      "domain": "orf.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "profil",
+      "domain": "profil.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Luzerner Zeitung (CH Media)",
+      "domain": "luzernerzeitung.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Berliner Zeitung",
+      "domain": "berliner-zeitung.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "n-tv",
+      "domain": "n-tv.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Rheinische Post (RP Online)",
+      "domain": "rp-online.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "t-online",
+      "domain": "t-online.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Business Insider Deutschland",
+      "domain": "businessinsider.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "WirtschaftsWoche",
+      "domain": "wiwo.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Capital",
+      "domain": "capital.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Channel 4 News",
+      "domain": "channel4.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Internazionale",
+      "domain": "internazionale.it",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "IT",
+      "region": "Europe"
+    },
+    {
+      "name": "Helsinki Times",
+      "domain": "helsinkitimes.fi",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "FI",
+      "region": "Europe"
+    },
+    {
+      "name": "The Moscow Times (exiled)",
+      "domain": "themoscowtimes.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "RU",
+      "region": "Europe"
+    },
+    {
+      "name": "Kyiv Independent",
+      "domain": "kyivindependent.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "affiliation_note": "Ukrainian-based outlet; consider country of origin when evaluating Ukraine-conflict-related claims.",
+      "country": "UA",
+      "region": "Europe"
+    },
+    {
+      "name": "The Times of Israel",
+      "domain": "timesofisrael.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "affiliation_note": "Israeli-based outlet; consider country of origin when evaluating Israel/Palestine-related claims.",
+      "country": "IL",
+      "region": "Middle East"
+    },
+    {
+      "name": "The Jewish Chronicle",
+      "domain": "thejc.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Jewish Telegraphic Agency (JTA)",
+      "domain": "jta.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Radio Free Europe / Radio Liberty (RFE/RL)",
+      "domain": "rferl.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "US-Congress-funded (USAGM); journalistically credible but not editorially independent from its US government mandate.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Bernama (Malaysian National News Agency)",
+      "domain": "bernama.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Malaysian state news agency; state-owned and government-supervised.",
+      "country": "MY",
+      "region": "Asia"
+    },
+    {
+      "name": "WION (World Is One News)",
+      "domain": "wionews.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "IN",
+      "region": "Asia"
+    },
+    {
+      "name": "Foreign Policy",
+      "domain": "foreignpolicy.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The Conversation",
+      "domain": "theconversation.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "Tablet Magazine",
+      "domain": "tabletmag.com",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Watson (CH)",
+      "domain": "watson.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Blick",
+      "domain": "blick.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Merkur",
+      "domain": "merkur.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "tz München",
+      "domain": "tz.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bild",
+      "domain": "bild.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "20 Minuten",
+      "domain": "20min.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Berliner Kurier",
+      "domain": "berliner-kurier.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Brisant (ARD)",
+      "domain": "brisant.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "news.de",
+      "domain": "news.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "web.de",
+      "domain": "web.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweizer Illustrierte",
+      "domain": "schweizer-illustrierte.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "nau.ch",
+      "domain": "nau.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "persoenlich.com",
+      "domain": "persoenlich.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Newly Swissed",
+      "domain": "newlyswissed.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "FOX31 Denver (KDVR)",
+      "domain": "kdvr.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "WRAL News",
+      "domain": "wral.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "WFMD",
+      "domain": "wfmd.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "ABC/Disney Go.com",
+      "domain": "go.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Hersfelder Zeitung",
+      "domain": "hersfelder-zeitung.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Staatsanzeiger",
+      "domain": "staatsanzeiger.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Hirado.hu (MTVA)",
+      "domain": "hirado.hu",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Hungarian state media (MTVA); editorially controlled by the Hungarian government.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Ungarn Heute (Friends of Hungary Foundation)",
+      "domain": "ungarnheute.hu",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Hungarian government-aligned outlet (Friends of Hungary Foundation); editorially government-affiliated.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Hungary Today (Friends of Hungary Foundation)",
+      "domain": "hungarytoday.hu",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Hungarian government-aligned outlet (Friends of Hungary Foundation); editorially government-affiliated.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Hungarian Conservative",
+      "domain": "hungarianconservative.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Hungarian government-aligned conservative magazine; editorially close to Fidesz government.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Remix News",
+      "domain": "rmx.news",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Conservative news aggregator with opaque funding; editorially aligned with Hungarian government-proximate outlets.",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Szoljon (szol24.hu)",
+      "domain": "szol24.hu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Okoshir.hu",
+      "domain": "okoshir.hu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Hello Magyar",
+      "domain": "hellomagyar.hu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Veszprémi Kamara",
+      "domain": "veszpremikamara.hu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Portfolio.hu",
+      "domain": "portfolio.hu",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Index.hu",
+      "domain": "index.hu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Átlátszó",
+      "domain": "atlatszo.hu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "HU",
+      "region": "Europe"
+    },
+    {
+      "name": "Nieuw Rechts",
+      "domain": "nieuwrechts.nl",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Dutch far-right outlet; editorially partisan, not editorially independent.",
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "Russland Verstehen",
+      "domain": "russlandverstehen.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "PNAS (Proceedings of the National Academy of Sciences)",
+      "domain": "pnas.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "New England Journal of Medicine (NEJM)",
+      "domain": "nejm.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "American Journal of Public Health (AJPH)",
+      "domain": "ajpmonline.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "RSF: The Russell Sage Foundation Journal",
+      "domain": "rsfjournal.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Harvard Law Review",
+      "domain": "harvardlawreview.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "American Economic Association (AEA)",
+      "domain": "aeaweb.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "National Bureau of Economic Research (NBER)",
+      "domain": "nber.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "University of California Press",
+      "domain": "ucpress.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "De Gruyter Brill",
+      "domain": "degruyterbrill.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ScienceDirect (Elsevier)",
+      "domain": "sciencedirect.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Stanford University",
+      "domain": "stanford.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Harvard University",
+      "domain": "harvard.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Columbia University",
+      "domain": "columbia.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "University of Chicago",
+      "domain": "uchicago.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Duke University",
+      "domain": "duke.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Texas A&M University",
+      "domain": "tamu.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "United States Military Academy (West Point)",
+      "domain": "westpoint.edu",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "academic",
+      "affiliation_note": "US Military Academy; government-operated institution, not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "UC Law San Francisco",
+      "domain": "uclawsf.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Universität zu Köln",
+      "domain": "uni-koeln.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Universität Graz",
+      "domain": "uni-graz.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Universität Bern",
+      "domain": "unibe.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Institut Pasteur",
+      "domain": "pasteur.fr",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "Nordic Statistics (Norden.org)",
+      "domain": "nordicstatistics.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Konjunkturinstitutet (NIER Sweden)",
+      "domain": "konj.se",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "Ekonomifakta",
+      "domain": "ekonomifakta.se",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "DIW Berlin (Deutsches Institut für Wirtschaftsforschung)",
+      "domain": "diw.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Institut der deutschen Wirtschaft (IW Köln)",
+      "domain": "iwkoeln.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Kiel Institut für Weltwirtschaft (IfW)",
+      "domain": "kielinstitut.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Sachverständigenrat für Migration (SVR)",
+      "domain": "svr-migration.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Mediendienst Integration",
+      "domain": "mediendienst-integration.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Deutsches Institut für Menschenrechte",
+      "domain": "institut-fuer-menschenrechte.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Brookings Institution",
+      "domain": "brookings.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Carnegie Endowment for International Peace",
+      "domain": "carnegieendowment.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Peterson Institute for International Economics (PIIE)",
+      "domain": "piie.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Migration Policy Institute",
+      "domain": "migrationpolicy.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Stockholm International Peace Research Institute (SIPRI)",
+      "domain": "sipri.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "European Policy Centre (EPC)",
+      "domain": "epc.eu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "think_tank",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "Heritage Foundation",
+      "domain": "heritage.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "Conservative think tank with documented partisan alignment with the Republican Party agenda, including lead authorship of Project 2025.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Center on Budget and Policy Priorities (CBPP)",
+      "domain": "cbpp.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "affiliation_note": "US center-left policy advocacy; partisan orientation noted for symmetry with conservative counterparts.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Tax Policy Center (Urban Institute / Brookings)",
+      "domain": "taxpolicycenter.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "affiliation_note": "US center-left tax policy institute; partisan orientation noted for symmetry with conservative counterparts.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Washington Center for Equitable Growth",
+      "domain": "equitablegrowth.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "affiliation_note": "US progressive economic advocacy; partisan orientation noted for symmetry with conservative counterparts.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Brennan Center for Justice",
+      "domain": "brennancenter.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "affiliation_note": "US center-left legal advocacy; partisan orientation noted for symmetry with conservative counterparts.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Campaign Legal Center",
+      "domain": "campaignlegal.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "affiliation_note": "US campaign finance reform advocacy; center-left orientation noted for symmetry.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "American Civil Liberties Union (ACLU)",
+      "domain": "aclu.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "affiliation_note": "US civil liberties advocacy; politically active, left-of-center orientation noted for symmetry.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Just Security",
+      "domain": "justsecurity.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "affiliation_note": "US national security law analysis; center-left orientation noted for symmetry.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Tax Foundation",
+      "domain": "taxfoundation.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "affiliation_note": "US conservative-leaning tax policy institute; business/employer-proximate orientation.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Commonwealth Fund",
+      "domain": "commonwealthfund.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Miller Center (University of Virginia)",
+      "domain": "millercenter.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Federation of American Scientists (FAS)",
+      "domain": "fas.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Security Council Report",
+      "domain": "securitycouncilreport.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "ConstitutionNet (IDEA)",
+      "domain": "constitutionnet.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "ACE Electoral Knowledge Network",
+      "domain": "aceproject.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "British Institute of International and Comparative Law (BIICL)",
+      "domain": "biicl.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "PONARS Eurasia",
+      "domain": "ponarseurasia.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Swedish Centre for Eastern European Studies (SCEEUS)",
+      "domain": "sceeus.se",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "SE",
+      "region": "Europe"
+    },
+    {
+      "name": "Laender-Analysen (Research Centre for East European Studies)",
+      "domain": "laender-analysen.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "CRP Infotec",
+      "domain": "crp-infotec.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Amnesty International Netherlands",
+      "domain": "amnesty.nl",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "humanrights.ch",
+      "domain": "humanrights.ch",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Alliance Sud",
+      "domain": "alliancesud.ch",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Diakonie Deutschland",
+      "domain": "diakonie.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Carbon Brief",
+      "domain": "carbonbrief.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Climate Action Tracker",
+      "domain": "climateactiontracker.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Institute for Energy Research (IER)",
+      "domain": "instituteforenergyresearch.org",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "US fossil fuel-aligned think tank with documented Koch network funding; conflicts of interest on climate and energy claims.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Institute of Geoeconomics",
+      "domain": "instituteofgeoeconomics.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Understanding AI",
+      "domain": "understandingai.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "The Daily Economy",
+      "domain": "thedailyeconomy.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "AlgorithmWatch",
+      "domain": "algorithmwatch.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "EU vs Disinfo (EEAS)",
+      "domain": "euvsdisinfo.eu",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "EU-funded disinformation tracking service (EEAS East StratCom Task Force); not independently funded, partisan to EU institutional interests.",
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "Exposing the Invisible (Tactical Tech)",
+      "domain": "exposingtheinvisible.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Lighthouse Reports",
+      "domain": "lighthousereports.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "VoxUkraine",
+      "domain": "voxukraine.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "UA",
+      "region": "Europe"
+    },
+    {
+      "name": "Munich Security Conference (MSC)",
+      "domain": "securityconference.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweizerische Energie-Stiftung (SES)",
+      "domain": "energiestiftung.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss energy advocacy foundation; industry-affiliated, promotes renewable energy transition.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Strom Schweiz",
+      "domain": "strom.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss electricity industry association; represents electricity producers and distributors.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Nuklearforum Schweiz (kernenergie.ch)",
+      "domain": "kernenergie.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss nuclear energy industry association; advocacy for nuclear power.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "EnergieSchweiz (SFOE programme)",
+      "domain": "energieschweiz.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Federal energy efficiency promotion programme (Swiss Federal Office of Energy / SFOE); government-sponsored platform.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweizerischer Bauernverband (SBV)",
+      "domain": "sbv-usp.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss Farmers' Union; agricultural interest representation.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweizer Metzgmeisterverband (SMSV)",
+      "domain": "smsv.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss meat industry association; sectoral interest representation.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "economiesuisse",
+      "domain": "economiesuisse.ch",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Swiss business federation; major employer association and business lobby.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Die Volkswirtschaft (SECO)",
+      "domain": "dievolkswirtschaft.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Swiss State Secretariat for Economic Affairs (SECO) publication; government-published economic journal.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Trading Economics",
+      "domain": "tradingeconomics.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Atlas",
+      "domain": "worldatlas.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Worldometers",
+      "domain": "worldometers.info",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Population Review",
+      "domain": "worldpopulationreview.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "City Population",
+      "domain": "citypopulation.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Urbistat",
+      "domain": "urbistat.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Statistics Times",
+      "domain": "statisticstimes.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Laenderdaten.info",
+      "domain": "laenderdaten.info",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "World Data",
+      "domain": "worlddata.info",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Georank",
+      "domain": "georank.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "The Global Statistics",
+      "domain": "theglobalstatistics.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "StatRanker",
+      "domain": "statranker.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Visual Capitalist",
+      "domain": "visualcapitalist.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Voronoi App (Visual Capitalist)",
+      "domain": "voronoiapp.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Alle Cijfers (NL statistics)",
+      "domain": "allecijfers.nl",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "Demografieportal (BiB / Destatis)",
+      "domain": "demografie-portal.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "aggregator",
+      "affiliation_note": "German demographic data portal affiliated with Bundesinstitut für Bevölkerungsforschung (BiB) and Destatis; government-adjacent, not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "PolitPro",
+      "domain": "politpro.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundestagswahlumfrage.de",
+      "domain": "bundestagwahlumfrage.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundestagswahl 2029",
+      "domain": "bundestagswahl-2029.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Flags of the World (flagsmore.com)",
+      "domain": "flagsmore.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "CRW Flags",
+      "domain": "crwflags.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Austria-Forum",
+      "domain": "austria-forum.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Encyclopaedia Britannica",
+      "domain": "britannica.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Matricula Online",
+      "domain": "matricula-online.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Motor1",
+      "domain": "motor1.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Car and Driver",
+      "domain": "caranddriver.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The Verge",
+      "domain": "theverge.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Elektroauto-News.net",
+      "domain": "elektroauto-news.net",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Energie Experten (CH)",
+      "domain": "energie-experten.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Enerdata",
+      "domain": "enerdata.net",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "R&D World",
+      "domain": "rdworldonline.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Phys.org",
+      "domain": "phys.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "International Banker",
+      "domain": "internationalbanker.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "SmartAsset",
+      "domain": "smartasset.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Morningstar",
+      "domain": "morningstar.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "T. Rowe Price",
+      "domain": "troweprice.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Empower (financial services)",
+      "domain": "empower.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "UBS",
+      "domain": "ubs.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "LBBW (Landesbank Baden-Württemberg)",
+      "domain": "lbbw.de",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Axpo",
+      "domain": "axpo.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Airbus",
+      "domain": "airbus.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Baker McKenzie",
+      "domain": "bakermckenzie.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Kennedys Law",
+      "domain": "kennedyslaw.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Anthropic",
+      "domain": "anthropic.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "AAA (American Automobile Association)",
+      "domain": "aaa.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Reforest Action",
+      "domain": "reforestaction.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "Anthesis Group",
+      "domain": "anthesisgroup.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Rhodium Group",
+      "domain": "rhg.com",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Tax Notes",
+      "domain": "taxnotes.com",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Wirtschaftsdienst (ZBW Journal)",
+      "domain": "wirtschaftsdienst.eu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Moneyland (CH)",
+      "domain": "moneyland.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Commercial financial comparison platform; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Neho (CH)",
+      "domain": "neho.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Commercial real estate platform; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Conviva Plus",
+      "domain": "conviva-plus.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Commercial platform; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "ElitePartner",
+      "domain": "elitepartner.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Commercial platform; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "cash.ch",
+      "domain": "cash.ch",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Das Finanzen",
+      "domain": "dasfinanzen.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Fuellogic",
+      "domain": "fuellogic.net",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Soolutions",
+      "domain": "soolutions.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Premier Suites Europe",
+      "domain": "premiersuiteseurope.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "IE",
+      "region": "Europe"
+    },
+    {
+      "name": "Axis Intelligence",
+      "domain": "axis-intelligence.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Vellum AI",
+      "domain": "vellum.ai",
+      "tier": "tertiary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Garfors (travel blog)",
+      "domain": "garfors.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Ammenmaerchen.com",
+      "domain": "ammenmaerchen.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "DocumentCloud",
+      "domain": "documentcloud.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "New Union Post",
+      "domain": "newunionpost.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Central European Times",
+      "domain": "centraleuropeantimes.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "BusinessAM (BE)",
+      "domain": "businessam.be",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "Haus der Geschichte Österreich (hdgoe.at)",
+      "domain": "hdgoe.at",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Braunau History",
+      "domain": "braunau-history.at",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "John F. Kennedy Presidential Library",
+      "domain": "jfklibrary.org",
+      "tier": "primary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "American Foreign Service Association (AFSA)",
+      "domain": "afsa.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "European Bureau for Conscientious Objection (EBCO)",
+      "domain": "ebco-beoc.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "OIDP (Observatory on Participatory Democracy)",
+      "domain": "oidp.net",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Myria (Belgian Federal Migration Centre)",
+      "domain": "myria.be",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Belgian federal migration institution; government body, not editorially independent.",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "Adviesraad Migratie (NL)",
+      "domain": "adviesraadmigratie.nl",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Dutch Advisory Council on Migration; government-appointed advisory body, not editorially independent.",
+      "country": "NL",
+      "region": "Europe"
+    },
+    {
+      "name": "Steunpunt Werk (BE)",
+      "domain": "steunpuntwerk.be",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "BE",
+      "region": "Europe"
+    },
+    {
+      "name": "Toute l'Europe",
+      "domain": "touteleurope.eu",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "AI Act Law (ai-act-law.eu)",
+      "domain": "ai-act-law.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Artificial Intelligence Act (artificialintelligenceact.eu)",
+      "domain": "artificialintelligenceact.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "GADMO (German-Austrian Fact-checking Network)",
+      "domain": "gadmo.eu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "dpa Faktenfinder",
+      "domain": "dpa-factchecking.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Regiosuisse (Swiss Regional Policy, SECO)",
+      "domain": "regiosuisse.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Swiss regional development programme (SECO / Federal Department of Economic Affairs); government institution.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweizerisches Nationalmuseum",
+      "domain": "nationalmuseum.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Swiss National Museum; federal cultural institution, not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Tropeninstitut",
+      "domain": "tropeninstitut.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "BAM Project",
+      "domain": "bamproject.eu",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Fachstelle Rechtsextremismus NRW (frnrw.de)",
+      "domain": "frnrw.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "RF Berlin",
+      "domain": "rfberlin.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "domain": "parlament.gv.at",
+      "name": "Österreichisches Parlament",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "oenb.at",
+      "name": "Oesterreichische Nationalbank (Austrian National Bank)",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "vfgh.gv.at",
+      "name": "Verfassungsgerichtshof (Austrian Constitutional Court)",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "oesterreich.gv.at",
+      "name": "oesterreich.gv.at — Austrian Government Portal",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "rechnungshof.gv.at",
+      "name": "Rechnungshof (Austrian Court of Audit)",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bmi.gv.at",
+      "name": "Bundesministerium für Inneres (Austrian Federal Ministry of Interior — Elections)",
+      "country": "AT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "camera.it",
+      "name": "Camera dei Deputati (Italian Chamber of Deputies)",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "senato.it",
+      "name": "Senato della Repubblica (Italian Senate)",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bancaditalia.it",
+      "name": "Banca d'Italia (Bank of Italy)",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "governo.it",
+      "name": "Governo Italiano — Italian Government Portal",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "corteconti.it",
+      "name": "Corte dei Conti (Italian Court of Auditors)",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "interno.gov.it",
+      "name": "Ministero dell'Interno (Italian Ministry of the Interior — Elections)",
+      "country": "IT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Italy. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "senado.es",
+      "name": "Senado de España (Spanish Senate)",
+      "country": "ES",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Spain. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bde.es",
+      "name": "Banco de España (Bank of Spain)",
+      "country": "ES",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Spain. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "lamoncloa.gob.es",
+      "name": "La Moncloa — Spanish Government Portal",
+      "country": "ES",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Spain. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "tcu.es",
+      "name": "Tribunal de Cuentas (Spanish Court of Auditors)",
+      "country": "ES",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Spain. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bportugal.pt",
+      "name": "Banco de Portugal",
+      "country": "PT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Portugal. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "tribunalconstitucional.pt",
+      "name": "Tribunal Constitucional (Portuguese Constitutional Court)",
+      "country": "PT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Portugal. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "portugal.gov.pt",
+      "name": "República Portuguesa — Portuguese Government Portal",
+      "country": "PT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Portugal. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "tcontas.pt",
+      "name": "Tribunal de Contas (Portuguese Court of Auditors)",
+      "country": "PT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Portugal. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cne.pt",
+      "name": "Comissão Nacional de Eleições (Portuguese National Electoral Commission)",
+      "country": "PT",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Portugal. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "eerstekamer.nl",
+      "name": "Eerste Kamer (Dutch Senate)",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "dnb.nl",
+      "name": "De Nederlandsche Bank (Dutch Central Bank)",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "hogeraad.nl",
+      "name": "Hoge Raad der Nederlanden (Supreme Court of the Netherlands)",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "rijksoverheid.nl",
+      "name": "Rijksoverheid — Dutch Government Portal",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "rekenkamer.nl",
+      "name": "Algemene Rekenkamer (Dutch Court of Audit)",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "kiesraad.nl",
+      "name": "Kiesraad (Dutch Electoral Council)",
+      "country": "NL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Netherlands. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "dekamer.be",
+      "name": "De Kamer (Belgian Chamber of Representatives, Dutch)",
+      "country": "BE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Belgium. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "lachambre.be",
+      "name": "La Chambre (Belgian Chamber of Representatives, French)",
+      "country": "BE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Belgium. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nbb.be",
+      "name": "Nationale Bank van België / Banque Nationale de Belgique",
+      "country": "BE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Belgium. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "const-court.be",
+      "name": "Grondwettelijk Hof / Cour constitutionnelle (Belgian Constitutional Court)",
+      "country": "BE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Belgium. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "belgium.be",
+      "name": "Belgium.be — Belgian Federal Government Portal",
+      "country": "BE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Belgium. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "senat.gov.pl",
+      "name": "Senat Rzeczypospolitej Polskiej (Polish Senate)",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nbp.pl",
+      "name": "Narodowy Bank Polski (National Bank of Poland)",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "trybunal.gov.pl",
+      "name": "Trybunał Konstytucyjny (Polish Constitutional Tribunal)",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent. Institutional independence subject to documented political pressure. Primary source for its own rulings and publications, not automatically for contested factual claims.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "gov.pl",
+      "name": "gov.pl — Polish Government Portal",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nik.gov.pl",
+      "name": "Najwyższa Izba Kontroli (Supreme Audit Office of Poland)",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "pkw.gov.pl",
+      "name": "Państwowa Komisja Wyborcza (Polish National Electoral Commission)",
+      "country": "PL",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Poland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "riksbank.se",
+      "name": "Sveriges Riksbank (Swedish Central Bank)",
+      "country": "SE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Sweden. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "domstol.se",
+      "name": "Sveriges Domstolar (Swedish Courts)",
+      "country": "SE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Sweden. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "regeringen.se",
+      "name": "Regeringen — Swedish Government Portal",
+      "country": "SE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Sweden. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "riksrevisionen.se",
+      "name": "Riksrevisionen (Swedish National Audit Office)",
+      "country": "SE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Sweden. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "val.se",
+      "name": "Valmyndigheten (Swedish Election Authority)",
+      "country": "SE",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Sweden. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nationalbanken.dk",
+      "name": "Danmarks Nationalbank (Danish Central Bank)",
+      "country": "DK",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Denmark. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "domstol.dk",
+      "name": "Danmarks Domstole (Danish Courts)",
+      "country": "DK",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Denmark. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "stm.dk",
+      "name": "Statsministeriet (Danish Prime Minister's Office)",
+      "country": "DK",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Denmark. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "rigsrevisionen.dk",
+      "name": "Rigsrevisionen (National Audit Office of Denmark)",
+      "country": "DK",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Denmark. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "suomenpankki.fi",
+      "name": "Suomen Pankki / Finlands Bank (Bank of Finland)",
+      "country": "FI",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Finland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "korkeinoikeus.fi",
+      "name": "Korkein oikeus (Supreme Court of Finland)",
+      "country": "FI",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Finland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "valtioneuvosto.fi",
+      "name": "Valtioneuvosto (Finnish Government)",
+      "country": "FI",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Finland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "vtv.fi",
+      "name": "Valtiontalouden tarkastusvirasto (National Audit Office of Finland)",
+      "country": "FI",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Finland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "vaalit.fi",
+      "name": "Vaalit.fi — Finnish Election Authority (Ministry of Justice)",
+      "country": "FI",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Finland. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "senat.cz",
+      "name": "Senát Parlamentu České republiky (Czech Senate)",
+      "country": "CZ",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Czech Republic. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cnb.cz",
+      "name": "Česká národní banka (Czech National Bank)",
+      "country": "CZ",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Czech Republic. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "usoud.cz",
+      "name": "Ústavní soud (Constitutional Court of the Czech Republic)",
+      "country": "CZ",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Czech Republic. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nku.cz",
+      "name": "Nejvyšší kontrolní úřad (Supreme Audit Office of the Czech Republic)",
+      "country": "CZ",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Czech Republic. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "senat.ro",
+      "name": "Senatul României (Romanian Senate)",
+      "country": "RO",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Romania. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bnr.ro",
+      "name": "Banca Națională a României (National Bank of Romania)",
+      "country": "RO",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Romania. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ccr.ro",
+      "name": "Curtea Constituțională a României (Constitutional Court of Romania)",
+      "country": "RO",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Romania. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "gov.ro",
+      "name": "Guvernul României — Romanian Government Portal",
+      "country": "RO",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Romania. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "roaep.ro",
+      "name": "Autoritatea Electorală Permanentă (Romanian Permanent Electoral Authority)",
+      "country": "RO",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Romania. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bankofgreece.gr",
+      "name": "Bank of Greece (Τράπεζα της Ελλάδος)",
+      "country": "GR",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Greece. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "gov.gr",
+      "name": "gov.gr — Greek Government Portal",
+      "country": "GR",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Greece. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ypes.gr",
+      "name": "Υπουργείο Εσωτερικών (Greek Ministry of Interior — Elections)",
+      "country": "GR",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Greece. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ksh.hu",
+      "name": "Központi Statisztikai Hivatal (Hungarian Central Statistical Office)",
+      "country": "HU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of Hungary. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "mnb.hu",
+      "name": "Magyar Nemzeti Bank (Hungarian National Bank)",
+      "country": "HU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Hungary. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "kormany.hu",
+      "name": "Kormány.hu — Hungarian Government Portal",
+      "country": "HU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Hungary. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "asz.hu",
+      "name": "Állami Számvevőszék (State Audit Office of Hungary)",
+      "country": "HU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "audit_office",
+      "affiliation_note": "Official government institution of Hungary. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "valasztas.hu",
+      "name": "Nemzeti Választási Iroda (Hungarian National Election Office)",
+      "country": "HU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Hungary. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "rosstat.gov.ru",
+      "name": "Rosstat — Federal State Statistics Service of Russia",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "duma.gov.ru",
+      "name": "Государственная Дума (State Duma of the Russian Federation)",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cbr.ru",
+      "name": "Банк России (Bank of Russia)",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ksrf.ru",
+      "name": "Конституционный Суд РФ (Constitutional Court of Russia)",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed. Primary source for its own rulings and publications, not automatically for contested factual claims.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "government.ru",
+      "name": "Правительство Российской Федерации (Government of Russia)",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cikrf.ru",
+      "name": "Центральная избирательная комиссия РФ (Central Election Commission of Russia)",
+      "country": "RU",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Russia. State-controlled; party to an ongoing armed conflict; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ukrstat.gov.ua",
+      "name": "Державна служба статистики України (State Statistics Service of Ukraine)",
+      "country": "UA",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of Ukraine. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bank.gov.ua",
+      "name": "Національний банк України (National Bank of Ukraine)",
+      "country": "UA",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Ukraine. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ccu.gov.ua",
+      "name": "Конституційний Суд України (Constitutional Court of Ukraine)",
+      "country": "UA",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Ukraine. Party to an ongoing armed conflict; statements on conflict events require independent corroboration. Primary source for its own rulings and publications, not automatically for contested factual claims.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "kmu.gov.ua",
+      "name": "Кабінет Міністрів України (Cabinet of Ministers of Ukraine)",
+      "country": "UA",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Ukraine. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cvk.gov.ua",
+      "name": "Центральна виборча комісія (Central Election Commission of Ukraine)",
+      "country": "UA",
+      "region": "Europe",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Ukraine. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "tuik.gov.tr",
+      "name": "TÜİK — Türkiye İstatistik Kurumu (Turkish Statistical Institute)",
+      "country": "TR",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of Turkey. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "tcmb.gov.tr",
+      "name": "Türkiye Cumhuriyet Merkez Bankası (Central Bank of the Republic of Turkey)",
+      "country": "TR",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Turkey. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "anayasa.gov.tr",
+      "name": "Anayasa Mahkemesi (Constitutional Court of Turkey)",
+      "country": "TR",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Turkey. Not editorially independent. Institutional independence subject to documented political pressure. Primary source for its own rulings and publications, not automatically for contested factual claims.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "ysk.gov.tr",
+      "name": "Yüksek Seçim Kurulu (Supreme Electoral Council of Turkey)",
+      "country": "TR",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Turkey. Not editorially independent. Institutional independence subject to documented political pressure.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "stats.gov.cn",
+      "name": "国家统计局 (National Bureau of Statistics of China)",
+      "country": "CN",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of China. State-controlled; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "npc.gov.cn",
+      "name": "全国人民代表大会 (National People's Congress of China)",
+      "country": "CN",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of China. State-controlled; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "pbc.gov.cn",
+      "name": "中国人民银行 (People's Bank of China)",
+      "country": "CN",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of China. State-controlled; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "court.gov.cn",
+      "name": "中华人民共和国最高人民法院 (Supreme People's Court of China)",
+      "country": "CN",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of China. State-controlled; data reliability independently disputed. Primary source for its own rulings and publications, not automatically for contested factual claims.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "gov.cn",
+      "name": "中华人民共和国中央人民政府 (Central People's Government of China)",
+      "country": "CN",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of China. State-controlled; data reliability independently disputed.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "sangiin.go.jp",
+      "name": "参議院 (House of Councillors of Japan)",
+      "country": "JP",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Japan. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "boj.or.jp",
+      "name": "日本銀行 (Bank of Japan)",
+      "country": "JP",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Japan. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "courts.go.jp",
+      "name": "裁判所 (Courts of Japan)",
+      "country": "JP",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "court",
+      "affiliation_note": "Official government institution of Japan. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "kantei.go.jp",
+      "name": "首相官邸 (Prime Minister's Office of Japan)",
+      "country": "JP",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Japan. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "soumu.go.jp",
+      "name": "総務省 (Ministry of Internal Affairs and Communications of Japan — Elections)",
+      "country": "JP",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of Japan. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "kostat.go.kr",
+      "name": "Statistics Korea (통계청)",
+      "country": "KR",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": true,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "National statistics agency with statutory statistical independence.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "bok.or.kr",
+      "name": "한국은행 (Bank of Korea)",
+      "country": "KR",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of South Korea. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "korea.kr",
+      "name": "대한민국 정책브리핑 (Korean Government Policy Briefing Portal)",
+      "country": "KR",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of South Korea. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "nec.go.kr",
+      "name": "중앙선거관리위원회 (National Election Commission of Korea)",
+      "country": "KR",
+      "region": "Asia",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "election_authority",
+      "affiliation_note": "Official government institution of South Korea. Not editorially independent.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "cbs.gov.il",
+      "name": "הלשכה המרכזית לסטטיסטיקה (Central Bureau of Statistics of Israel)",
+      "country": "IL",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "statistics_agency",
+      "affiliation_note": "Official government institution of Israel. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "knesset.gov.il",
+      "name": "הכנסת (Knesset — Israeli Parliament)",
+      "country": "IL",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "parliament",
+      "affiliation_note": "Official government institution of Israel. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "boi.org.il",
+      "name": "בנק ישראל (Bank of Israel)",
+      "country": "IL",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "central_bank",
+      "affiliation_note": "Official government institution of Israel. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
+    },
+    {
+      "domain": "gov.il",
+      "name": "gov.il — Israeli Government Portal",
+      "country": "IL",
+      "region": "Middle East",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Israel. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
+      "counts_for_threshold": true
     }
   ]
 }

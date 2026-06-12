@@ -107,7 +107,7 @@ def apply_registry_override(source: dict) -> dict:
       - tier is set from the registry
       - counts_for_threshold is set from the registry when present
       - country and region are added from the registry
-      - affiliation_note is set from the registry for non-independent sources
+      - affiliation_note is set from the registry whenever present (any independence status)
 
     When the URL is NOT found in any registry, conservative defaults are applied:
       - tier: "tertiary"
@@ -134,15 +134,11 @@ def apply_registry_override(source: dict) -> dict:
     updated["tier"] = entry["tier"]
     if "counts_for_threshold" in entry:
         updated["counts_for_threshold"] = entry["counts_for_threshold"]
-    for field in ("country", "region"):
+    for field in ("country", "region", "institution_type"):
         if field in entry:
             updated[field] = entry[field]
-    is_not_independent = (
-        entry["is_independent"] is False or entry["is_independent"] == "not_independent"
-    )
-    if is_not_independent:
-        updated["affiliation_note"] = entry.get("affiliation_note", "")
+    if "affiliation_note" in entry:
+        updated["affiliation_note"] = entry["affiliation_note"]
     elif "affiliation_note" in updated:
-        # Registry says independent or neutral — remove any incorrectly assigned note
         del updated["affiliation_note"]
     return updated
