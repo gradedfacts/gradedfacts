@@ -4,6 +4,7 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 
+import anthropic
 import httpx
 
 from backend.config import settings
@@ -11,6 +12,42 @@ from backend.config import settings
 logger = logging.getLogger(__name__)
 
 _BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
+_TRANSLATION_MODEL = "claude-haiku-4-5-20251001"
+
+_TRANSLATE_PROMPT = (
+    "Translate the following claim to English. "
+    "If it is already in English, return it exactly unchanged. "
+    "Return only the translated text — no preamble, no explanation, no quotes."
+)
+
+
+def _translate_to_english(claim_text: str) -> str | None:
+    """
+    Translate claim_text to English using Claude Haiku (temperature=0, deterministic).
+    Returns the translated string, or None on any failure or empty response.
+    Never raises — callers fall back to original-only search on None.
+    """
+    if not settings.anthropic_api_key:
+        return None
+    try:
+        client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+        resp = client.messages.create(
+            model=_TRANSLATION_MODEL,
+            max_tokens=256,
+            temperature=0,
+            messages=[{
+                "role": "user",
+                "content": f"{_TRANSLATE_PROMPT}\n\nClaim: {claim_text}",
+            }],
+        )
+        text = next(
+            (b.text for b in resp.content if hasattr(b, "text") and b.text),
+            "",
+        ).strip()
+        return text if text else None
+    except Exception as exc:
+        logger.warning("Translation to English failed (%s); using original query only.", exc)
+        return None
 
 
 def _query_brave(claim_text: str) -> list[dict]:
@@ -70,7 +107,11 @@ def _query_searxng(claim_text: str) -> list[dict]:
 
 def search_claim(claim_text: str) -> str:
     """
-    Query Brave and/or SearXNG in parallel; merge and deduplicate results by URL.
+    Query Brave and/or SearXNG for the original claim and, when non-English, its English
+    translation — all in parallel.  Results are merged and deduplicated by URL.
+
+    Merge order: original-claim Brave → original-claim SearXNG → English Brave → English
+    SearXNG.  First occurrence of a URL wins, so original-language results are not displaced.
 
     Returns a formatted plain-text findings string ("Source N: title\\nURL: ...\\nExcerpt: ...")
     for use as model context, or "" when no source is configured or returns results.
@@ -87,25 +128,58 @@ def search_claim(claim_text: str) -> str:
     if not has_brave and not has_searxng:
         return ""
 
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        brave_future = executor.submit(_query_brave, claim_text)
-        searxng_future = executor.submit(_query_searxng, claim_text)
-        brave_results = brave_future.result()
-        searxng_results = searxng_future.result()
+    # Attempt English translation for multilang coverage.
+    translation = _translate_to_english(claim_text)
+    if translation is not None and translation.strip().lower() != claim_text.strip().lower():
+        en_query: str | None = translation
+    else:
+        en_query = None
 
-    # Merge and deduplicate by URL; Brave results take precedence for duplicates.
+    max_workers = 4 if en_query else 2
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        orig_brave_f = executor.submit(_query_brave, claim_text)
+        orig_searxng_f = executor.submit(_query_searxng, claim_text)
+        if en_query:
+            en_brave_f = executor.submit(_query_brave, en_query)
+            en_searxng_f = executor.submit(_query_searxng, en_query)
+
+        orig_brave = orig_brave_f.result()
+        orig_searxng = orig_searxng_f.result()
+        if en_query:
+            en_brave = en_brave_f.result()
+            en_searxng = en_searxng_f.result()
+        else:
+            en_brave = []
+            en_searxng = []
+
+    # Merge: original Brave → original SearXNG → English Brave → English SearXNG.
+    # First URL occurrence wins; original-language results keep priority.
     seen_urls: set[str] = set()
     merged: list[dict] = []
-    for r in brave_results + searxng_results:
+    for r in orig_brave + orig_searxng + en_brave + en_searxng:
         url = r.get("url", "")
         if url and url not in seen_urls:
             seen_urls.add(url)
             merged.append(r)
 
+    merged = merged[:30]
+
+    # Audit line — visible in uvicorn.log for every search_claim invocation.
+    if translation is None:
+        en_log = "skipped(translation-failed)"
+    elif en_query is None:
+        en_log = "skipped(same)"
+    else:
+        en_log = str(len(en_brave) + len(en_searxng))
+    logger.warning(
+        "[SEARCH-MULTILANG] original_lang_query=%d english_query=%s merged=%d",
+        len(orig_brave) + len(orig_searxng),
+        en_log,
+        len(merged),
+    )
+
     if not merged:
         return ""
-
-    merged = merged[:20]
 
     lines = []
     for i, r in enumerate(merged, 1):
