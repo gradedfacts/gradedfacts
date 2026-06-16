@@ -20,6 +20,7 @@ from backend.analysis.rating import (
 )
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
+from backend.sources.agencies import detect_wire_agency
 from backend.sources.evaluator import evaluate_source, extract_domain
 from backend.sources.search import search_claim
 
@@ -1029,7 +1030,13 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
 
     # Domain deduplication: multiple sources from the same root domain count as one
     # for threshold purposes. All sources remain in sources_data for UI display.
+    # Agency cascade dedup (Hard Rule analogue): multiple secondary sources that
+    # merely reprint the same wire-agency story (dpa, Reuters, AP, AFP, …) count
+    # as ONE independent secondary toward the VERIFIED threshold — exactly like
+    # domain dedup.  Domain dedup and agency dedup compose independently.
     seen_domains: set[str] = set()
+    seen_agencies: set[str] = set()        # first occurrence per wire agency
+    agency_skip_count: dict[str, int] = {}  # tracks skips for audit logging
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
     has_independent_qualifying = False
@@ -1042,24 +1049,33 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         raw_tier = src.get("tier", "tertiary")
         is_indep_raw = src.get("is_independent", True)
         is_indep = independence_bool(is_indep_raw)
+        supports = src.get("supports_claim", True)
         try:
             tier = SourceTier(raw_tier)
         except ValueError:
             tier = SourceTier.TERTIARY
         effective_tier = SourceTier.SECONDARY if (not is_indep and tier is SourceTier.PRIMARY) else tier
 
+        # Wire-agency attribution — only relevant for independent secondary verifying sources.
+        _src_agency: str | None = None
+        if supports and is_indep and effective_tier is SourceTier.SECONDARY:
+            _src_agency = detect_wire_agency(src.get("title", ""), src.get("excerpt", ""))
+
         skip_reason = None
         if relevance < MIN_RELEVANCE_SCORE:
             skip_reason = f"relevance {relevance:.2f} < {MIN_RELEVANCE_SCORE}"
         elif domain and domain in seen_domains:
             skip_reason = f"domain '{domain}' already counted"
+        elif _src_agency and _src_agency in seen_agencies:
+            skip_reason = f"agency '{_src_agency}' already counted"
+            agency_skip_count[_src_agency] = agency_skip_count.get(_src_agency, 0) + 1
 
         logger.warning(
             "claim %s [source eval] url=%r domain=%r tier=%s→%s is_independent=%r(%s) "
             "relevance=%.2f supports=%s %s",
             claim_id, url, domain, raw_tier, effective_tier.value,
             is_indep_raw, "indep" if is_indep else "NOT-indep",
-            relevance, src.get("supports_claim", True),
+            relevance, supports,
             f"SKIPPED({skip_reason})" if skip_reason else "COUNTED",
         )
 
@@ -1067,13 +1083,18 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             continue
         if domain:
             seen_domains.add(domain)
+        if _src_agency:
+            seen_agencies.add(_src_agency)
         tier = effective_tier
         if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
             has_independent_qualifying = True
-        supports = src.get("supports_claim", True)
         if supports and is_indep and tier is SourceTier.SECONDARY:
             independent_secondary_verifying_count += 1
         (verifying_tiers if supports else debunking_tiers).append(tier)
+
+    # Audit log: one line per agency where cascade dedup fired.
+    for _agency, _n_skipped in agency_skip_count.items():
+        logger.warning("[AGENCY-DEDUP] agency=%s collapsed=%d", _agency, _n_skipped + 1)
 
     logger.warning(
         "claim %s [hard rule pre-check] has_independent_qualifying=%s "

@@ -52,6 +52,7 @@ from backend.analysis.rating import (
 from backend.analysis.engine import independence_bool, independence_label
 from backend.config import settings
 from backend.db.models import Claim, EvaluatedSource, Judgment
+from backend.sources.agencies import detect_wire_agency
 from backend.sources.evaluator import evaluate_source, extract_domain
 from backend.sources.search import search_claim
 
@@ -178,9 +179,14 @@ def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> di
 # ── Consensus resolution ──────────────────────────────────────────────────────
 
 def _source_quality_score(sources: list[dict]) -> tuple[int, int]:
-    """Return (primary_independent_count, secondary_independent_count) at or above MIN_RELEVANCE_SCORE."""
+    """Return (primary_independent_count, secondary_independent_count) at or above MIN_RELEVANCE_SCORE.
+
+    Agency cascade dedup applies to the secondary count: multiple independent secondary
+    sources attributed to the same wire agency count as one (symmetric with engine.py).
+    """
     primary = 0
     secondary = 0
+    seen_agencies: set[str] = set()
     for src in sources:
         if float(src.get("relevance_score", 0.0)) < MIN_RELEVANCE_SCORE:
             continue
@@ -190,6 +196,11 @@ def _source_quality_score(sources: list[dict]) -> tuple[int, int]:
         if tier == "primary":
             primary += 1
         elif tier == "secondary":
+            _agency = detect_wire_agency(src.get("title", ""), src.get("excerpt", ""))
+            if _agency:
+                if _agency in seen_agencies:
+                    continue
+                seen_agencies.add(_agency)
             secondary += 1
     return primary, secondary
 
@@ -341,7 +352,10 @@ def _process_sources(
     sources_data = [ev for ev in (evaluate_source(src) for src in coerced) if ev is not None]
     logger.debug("_process_sources: %d raw → %d evaluated", len(sources_raw), len(sources_data))
 
+    # Domain dedup and agency cascade dedup compose independently — see engine.py comments.
     seen_domains: set[str] = set()
+    seen_agencies: set[str] = set()
+    agency_skip_count: dict[str, int] = {}
     verifying_tiers: list[SourceTier] = []
     debunking_tiers: list[SourceTier] = []
     has_independent_qualifying = False
@@ -366,8 +380,18 @@ def _process_sources(
             has_independent_qualifying = True
         supports = src.get("supports_claim", True)
         if supports and is_indep and tier is SourceTier.SECONDARY:
+            # Agency cascade dedup: reprints of the same wire story count as one.
+            _agency = detect_wire_agency(src.get("title", ""), src.get("excerpt", ""))
+            if _agency:
+                if _agency in seen_agencies:
+                    agency_skip_count[_agency] = agency_skip_count.get(_agency, 0) + 1
+                    continue
+                seen_agencies.add(_agency)
             independent_secondary_verifying_count += 1
         (verifying_tiers if supports else debunking_tiers).append(tier)
+
+    for _agency, _n_skipped in agency_skip_count.items():
+        logger.warning("[AGENCY-DEDUP] agency=%s collapsed=%d", _agency, _n_skipped + 1)
 
     derived = derive_rating(EvidenceSummary(
         verifying_tiers=verifying_tiers,
