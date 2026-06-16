@@ -2,7 +2,7 @@
   "_meta": {
     "description": "GradedFacts Unified Source Registry — all regional and international source registries merged into a single file. Supersedes the individual regional files (us_sources.json, eu_sources.json, ch_sources.json, uk_sources.json, de_sources.json, fr_sources.json, international_sources.json). Methodology: Same tier and independence criteria as the individual registries. Tier: primary = original data or official records produced by the institution; secondary = journalism citing primary sources; tertiary = aggregation or opinion. Independence: not implied by official status — assessed on documented editorial or operational independence from political direction.",
     "version": "2.0.0",
-    "last_updated": "2026-06-06",
+    "last_updated": "2026-06-16",
     "replaces": [
       "us_sources.json",
       "eu_sources.json",
@@ -2649,12 +2649,11 @@
       "name": "Konrad-Adenauer-Stiftung (KAS)",
       "domain": "kas.de",
       "tier": "secondary",
-      "is_independent": "neutral",
+      "is_independent": false,
       "counts_for_threshold": true,
       "country": "DE",
       "region": "Europe",
-      "affiliation_note": "KAS is the political foundation affiliated with the CDU (Christlich Demokratische Union). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly Christian-democratic political perspective. Content should be read with awareness of this institutional affiliation.",
-      "independence_note": "The Konrad-Adenauer-Stiftung is the CDU-affiliated German political foundation, established in 1964. It is funded primarily by the German federal government via parliamentary budget allocations. Its policy research and publications broadly reflect Christian-democratic political values. As a politically affiliated foundation it is classified neutral rather than fully independent."
+      "affiliation_note": "Konrad-Adenauer-Stiftung (KAS) is the political foundation affiliated with the CDU (Christlich Demokratische Union). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly Christian-democratic political perspective. Classified not independent for symmetry with the other party-affiliated foundations (SPD/FES, Grüne/Böll, FDP/Naumann, CSU/HSS, Die Linke/Rosa-Luxemburg) — political-foundation affiliation is assessed identically regardless of which party it is tied to."
     },
     {
       "name": "Die Welt",
@@ -6553,6 +6552,412 @@
       "institution_type": "government",
       "affiliation_note": "Official government institution of Israel. Party to an ongoing armed conflict; statements on conflict events require independent corroboration.",
       "counts_for_threshold": true
+    },
+    {
+      "name": "International Criminal Court (ICC)",
+      "domain": "icc-cpi.int",
+      "tier": "primary",
+      "is_independent": true,
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "Permanent international tribunal established by the Rome Statute (2002), not a party to any specific armed conflict. Judges and the Office of the Prosecutor act independently of any single state's direction; jurisdiction is invoked over situations involving multiple states/parties on a case-by-case basis. Primary source for its own filings, warrants, and rulings."
+    },
+    {
+      "name": "Central Intelligence Agency (CIA)",
+      "domain": "cia.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Transportation Security Administration (TSA)",
+      "domain": "tsa.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "NATO Strategic Communications Centre of Excellence (StratCom CoE)",
+      "domain": "stratcomcoe.org",
+      "tier": "primary",
+      "is_independent": false,
+      "affiliation_note": "NATO-accredited Centre of Excellence, governed by a steering committee of NATO member-state representatives. Effectively functions as a NATO body: outputs reflect alliance-consensus positions and are not independent of the political interests of NATO member states. Same classification basis as nato.int.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "United Nations Regional Information Centre (UNRIC)",
+      "domain": "unric.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "UN regional information centre, structurally part of the UN Secretariat. Same classification basis as un.org: member states exercise political direction over UN mandates and outputs.",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "Russian Institute for Strategic Studies (RISS / РИСИ)",
+      "domain": "riss.ru",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "RISI is directly subordinate to the Russian Presidential Administration; its director is appointed by presidential decree. State-controlled; party to an ongoing armed conflict; outputs reflect official Russian state positioning, not independent policy analysis.",
+      "country": "RU",
+      "region": "Europe"
+    },
+    {
+      "name": "B'Tselem",
+      "domain": "btselem.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "IL",
+      "region": "Middle East",
+      "independence_note": "Israeli non-state human rights documentation organisation; conducts independent field investigations in the occupied territories, funded by foreign governments and private foundations rather than the Israeli state. Non-state HR documentation; counter-party designations are not used for classification — applied symmetrically to all human-rights documentation organisations in this registry regardless of which side criticises them."
+    },
+    {
+      "name": "Ärzte der Welt (Doctors of the World Germany)",
+      "domain": "aerztederwelt.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "German chapter of the international Médecins du Monde humanitarian medical network. Non-state HR/humanitarian documentation; funded by private donors and grants, not by any state. Counter-party designations are not used for classification."
+    },
+    {
+      "name": "Al-Haq",
+      "domain": "al-haq.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "PS",
+      "region": "Middle East",
+      "independence_note": "Palestinian non-state human rights documentation organisation, based in Ramallah. Non-state HR documentation; counter-party designations are not used for classification — applied symmetrically to all human-rights documentation organisations in this registry regardless of which side criticises them."
+    },
+    {
+      "name": "Adalah — The Legal Center for Arab Minority Rights in Israel",
+      "domain": "adalah.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "IL",
+      "region": "Middle East",
+      "independence_note": "Independent legal and human rights documentation organisation, based in Haifa. Non-state HR documentation; counter-party designations are not used for classification."
+    },
+    {
+      "name": "Al Mezan Center for Human Rights",
+      "domain": "mezan.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "PS",
+      "region": "Middle East",
+      "independence_note": "Palestinian non-state human rights documentation organisation, based in Gaza. Non-state HR documentation; counter-party designations are not used for classification — applied symmetrically to all human-rights documentation organisations in this registry regardless of which side criticises them."
+    },
+    {
+      "name": "Palestinian Centre for Human Rights (PCHR)",
+      "domain": "pchrgaza.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "country": "PS",
+      "region": "Middle East",
+      "independence_note": "Palestinian non-state human rights documentation organisation, based in Gaza. Non-state HR documentation; counter-party designations are not used for classification — applied symmetrically to all human-rights documentation organisations in this registry regardless of which side criticises them."
+    },
+    {
+      "name": "Foundation for Defense of Democracies (FDD)",
+      "domain": "fdd.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "US think tank with a documented programmatic line on Iran, sanctions, and Middle East security policy; research and advocacy consistently support a hawkish foreign-policy agenda aligned with one side of regional conflicts, rather than nonpartisan analysis.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Henry Jackson Society",
+      "domain": "henryjacksonsociety.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "UK think tank with a documented programmatic hawkish/interventionist foreign policy line; outputs consistently advocate one side of the conflicts and policy debates it covers rather than nonpartisan analysis.",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Meir Amit Intelligence and Terrorism Information Center",
+      "domain": "terrorism-info.org.il",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "Staffed largely by former Israeli intelligence and military officials; outputs reflect the Israeli security establishment's perspective on conflict actors rather than independent nonpartisan research.",
+      "country": "IL",
+      "region": "Middle East"
+    },
+    {
+      "name": "Institute for National Security Studies (INSS)",
+      "domain": "inss.org.il",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "Israeli think tank, institutionally affiliated with Tel Aviv University but historically staffed by former Israeli defence-establishment officials (IDF, Mossad); research reflects a programmatic alignment with the Israeli security establishment's positioning on conflict topics.",
+      "country": "IL",
+      "region": "Middle East"
+    },
+    {
+      "name": "Atlantic Council",
+      "domain": "atlanticcouncil.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "US think tank funded substantially by NATO, NATO member governments, defence contractors, and foreign governments with direct stakes in the conflicts and policy debates it covers; outputs reflect a programmatic Atlanticist/NATO-aligned line.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Russian International Affairs Council (RIAC)",
+      "domain": "russiancouncil.ru",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "Russian think tank institutionally linked to the Russian Ministry of Foreign Affairs; outputs reflect official Russian foreign-policy positioning rather than independent nonpartisan analysis.",
+      "country": "RU",
+      "region": "Europe"
+    },
+    {
+      "name": "Valdai Discussion Club",
+      "domain": "valdaiclub.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "think_tank",
+      "affiliation_note": "Forum and publication functioning as a mouthpiece for the Russian foreign-policy elite; outputs consistently reflect official Russian state positioning on conflict topics rather than independent nonpartisan analysis.",
+      "country": "RU",
+      "region": "Europe"
+    },
+    {
+      "name": "Stiftung Wissenschaft und Politik (SWP) — German Institute for International and Security Affairs",
+      "domain": "swp-berlin.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "German foreign- and security-policy think tank, partly funded by the German federal government (Chancellery/Bundestag) but operating with academic research independence and no single programmatic line on conflict topics. Classified neutral: non-state-controlled editorial process, but not fully independent of state funding."
+    },
+    {
+      "name": "Middle East Institute (MEI)",
+      "domain": "mei.edu",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "US academic institute focused on Middle East policy and scholarship; diverse funding base including governments and private donors with no single funder holding editorial control. Classified neutral: academic, non-state, no documented programmatic line on conflict topics."
+    },
+    {
+      "name": "Razumkov Centre",
+      "domain": "razumkov.org.ua",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "UA",
+      "region": "Europe",
+      "independence_note": "Ukrainian think tank; non-state, academic-style research institute with no documented programmatic line beyond Ukrainian public-policy analysis. Classified neutral rather than fully independent given its national-policy focus."
+    },
+    {
+      "name": "Rosa-Luxemburg-Stiftung",
+      "domain": "rosalux.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "Rosa-Luxemburg-Stiftung is the political foundation affiliated with Die Linke. It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly democratic-socialist political perspective. Classified not independent, symmetric with kas.de/fes.de/boell.de/freiheit.org/hss.de — political-foundation affiliation is assessed identically regardless of which party it is tied to."
+    },
+    {
+      "name": "Friedrich-Ebert-Stiftung (FES)",
+      "domain": "fes.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "Friedrich-Ebert-Stiftung is the political foundation affiliated with the SPD (Sozialdemokratische Partei Deutschlands). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly social-democratic political perspective. Classified not independent, symmetric with kas.de/rosalux.de/boell.de/freiheit.org/hss.de — political-foundation affiliation is assessed identically regardless of which party it is tied to."
+    },
+    {
+      "name": "Heinrich-Böll-Stiftung",
+      "domain": "boell.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "Heinrich-Böll-Stiftung is the political foundation affiliated with Bündnis 90/Die Grünen. It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly green/progressive political perspective. Classified not independent, symmetric with kas.de/rosalux.de/fes.de/freiheit.org/hss.de — political-foundation affiliation is assessed identically regardless of which party it is tied to."
+    },
+    {
+      "name": "Friedrich-Naumann-Stiftung für die Freiheit",
+      "domain": "freiheit.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "Friedrich-Naumann-Stiftung für die Freiheit is the political foundation affiliated with the FDP (Freie Demokratische Partei). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly liberal/free-market political perspective. Classified not independent, symmetric with kas.de/rosalux.de/fes.de/boell.de/hss.de — political-foundation affiliation is assessed identically regardless of which party it is tied to."
+    },
+    {
+      "name": "Hanns-Seidel-Stiftung (HSS)",
+      "domain": "hss.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "country": "DE",
+      "region": "Europe",
+      "affiliation_note": "Hanns-Seidel-Stiftung is the political foundation affiliated with the CSU (Christlich-Soziale Union). It receives the majority of its funding from the German federal budget, allocated through a parliamentary formula tied to party representation. Research and publications reflect a broadly Christian-conservative/Bavarian political perspective. Classified not independent, symmetric with kas.de/rosalux.de/fes.de/boell.de/freiheit.org — political-foundation affiliation is assessed identically regardless of which party it is tied to."
+    },
+    {
+      "name": "Newsweek",
+      "domain": "newsweek.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Jüdische Allgemeine",
+      "domain": "juedische-allgemeine.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Legal Tribune Online (LTO)",
+      "domain": "lto.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "der Freitag",
+      "domain": "freitag.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Washington Examiner",
+      "domain": "washingtonexaminer.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "category": "newspaper",
+      "affiliation_note": "Owned by Clarity Media Group (Philip Anschutz, a major Republican donor). Editorial positioning consistently conservative-aligned across opinion and news coverage.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "World Socialist Web Site (WSWS)",
+      "domain": "wsws.org",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "category": "newspaper",
+      "affiliation_note": "Published by the International Committee of the Fourth International / Socialist Equality Party; functions as a Trotskyist party platform rather than an independent newsroom.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "kath.net",
+      "domain": "kath.net",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "category": "newspaper",
+      "affiliation_note": "Conservative-Catholic advocacy outlet; editorial line consistently promotes a programmatic religious-conservative position rather than independent reporting.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "George Mason University (GMU)",
+      "domain": "gmu.edu",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "heise online",
+      "domain": "heise.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "WIRED",
+      "domain": "wired.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "TechCrunch",
+      "domain": "techcrunch.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "scinexx — Das Wissensmagazin",
+      "domain": "scinexx.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ScienceBlogs.de",
+      "domain": "scienceblogs.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Gesellschaft zur wissenschaftlichen Untersuchung von Parawissenschaften (GWUP)",
+      "domain": "gwup.net",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "German skeptics organisation; non-state, advocates for a pro-scientific-consensus position rather than nonpartisan reporting. Classified neutral: not state- or party-affiliated, but has a consistent advocacy stance on pseudoscience/paranormal claims."
     }
   ]
 }
