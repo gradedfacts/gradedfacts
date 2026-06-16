@@ -73,7 +73,9 @@ def _track_unregistered_source(domain: str, url: str) -> None:
 # Multi-part TLDs where the registrable domain is three labels, not two.
 # e.g. ris.bka.gv.at → registrable domain is bka.gv.at, not gv.at.
 _MULTI_PART_TLDS: frozenset[str] = frozenset({
-    "co.uk", "org.uk", "co.za", "co.nz", "gv.at", "ac.at", "com.au",
+    "ac.at", "ac.il", "co.il", "co.nz", "co.uk", "co.za", "com.au",
+    "com.tr", "edu.tr", "gov.il", "gov.tr", "gv.at", "muni.il",
+    "net.tr", "org.il", "org.tr", "org.uk",
 })
 
 _VALID_HOSTNAME_RE = re.compile(r"^[a-z0-9.\-]+$")

@@ -207,6 +207,21 @@ class TestExtractDomain:
         # co.uk without a registrable prefix is itself — no extra label to add
         assert extract_domain("https://co.uk/") == "co.uk"
 
+    def test_multi_part_tld_israel_org_il_distinct_domains(self):
+        # inss.org.il and terrorism-info.org.il must NOT both collapse to "org.il"
+        assert extract_domain("https://inss.org.il/publication") == "inss.org.il"
+        assert extract_domain("https://terrorism-info.org.il/article") == "terrorism-info.org.il"
+
+    def test_multi_part_tld_turkey_com_tr(self):
+        assert extract_domain("https://www.aa.com.tr/en/news") == "aa.com.tr"
+
+    def test_two_label_domain_org_il_returns_tld_unchanged(self):
+        # org.il without a registrable prefix is itself — no extra label to add
+        assert extract_domain("https://org.il/") == "org.il"
+
+    def test_multi_part_tld_israel_gov_il(self):
+        assert extract_domain("https://www.mod.gov.il/Pages/default.aspx") == "mod.gov.il"
+
     # ── Malformed hostname rejection ─────────────────────────────────────────
 
     def test_malformed_hostname_brace_returns_none(self):
