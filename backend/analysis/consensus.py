@@ -580,6 +580,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             affiliation_note=src.get("affiliation_note"),
             relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),
+            supports_claim=src.get("supports_claim", True),
         )
         for src in claude_sources
         if src.get("url") or src.get("title")
@@ -680,6 +681,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                 affiliation_note=_src.get("affiliation_note"),
                 relevance_score=max(0.0, min(1.0, float(_src.get("relevance_score") or 0.5))),
                 excerpt=_src.get("excerpt"),
+                supports_claim=_src.get("supports_claim", True),
             ))
         evaluated_sources.extend(_mistral_extra)
         logger.warning(
@@ -782,6 +784,8 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         model_mistral=_MISTRAL_MODEL if mistral_data is not None else None,
         registry_version=_get_registry_version(),
         prompt_version="1.0",
+        claude_rating=claude_rating.value,
+        mistral_rating=mistral_rating.value if mistral_rating is not None else None,
     )
 
     logger.warning(

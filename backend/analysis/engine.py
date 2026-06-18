@@ -1015,6 +1015,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             affiliation_note=src.get("affiliation_note"),
             relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
             excerpt=src.get("excerpt"),
+            supports_claim=src.get("supports_claim", True),
         )
         for src in sources_data
         if src.get("url") or src.get("title")
@@ -1176,6 +1177,8 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         model_claude=analyst,
         registry_version=_get_registry_version(),
         prompt_version="1.0",
+        claude_rating=rating.value,
+        mistral_rating=None,
     )
 
     _deactivate_prior_judgments(session, claim_id)

@@ -294,6 +294,8 @@ _JUDGMENT_ADDCOLS = [
     ("model_mistral",     "VARCHAR(64)"),
     ("registry_version",  "VARCHAR(40)"),
     ("prompt_version",    "VARCHAR(16)"),
+    ("claude_rating",     "VARCHAR(11)"),
+    ("mistral_rating",    "VARCHAR(11)"),
 ]
 
 _CLAIM_ADDCOLS = [
@@ -303,6 +305,7 @@ _CLAIM_ADDCOLS = [
 _EVALUATED_SOURCE_ADDCOLS = [
     ("independence_label", "VARCHAR(20)"),
     ("judgment_id", "VARCHAR(36)"),
+    ("supports_claim",    "BOOLEAN"),
 ]
 
 

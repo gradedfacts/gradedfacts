@@ -60,6 +60,10 @@ class EvaluatedSource(Base):
     excerpt: Mapped[str | None] = mapped_column(Text, nullable=True)
     # Snapshot of full text at fetch time — ensures past judgments remain reproducible
     full_text_snapshot: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Whether this source verifies (True) or contradicts (False) the claim.
+    # Null for rows written before this column was added — excluded from the
+    # offline registry-sensitivity recomputation set.
+    supports_claim: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     anonymous: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     # Required when anonymous is True; no anonymous source accepted without justification
     anonymity_justification: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -104,6 +108,12 @@ class Judgment(Base):
     model_mistral: Mapped[str | None] = mapped_column(String(64), nullable=True)
     registry_version: Mapped[str | None] = mapped_column(String(40), nullable=True)
     prompt_version: Mapped[str | None] = mapped_column(String(16), nullable=True, default="1.0")
+    # Per-model ratings for offline registry-sensitivity recomputation.
+    # Stores EpistemicRating.value strings ("verified", "speculative", etc.).
+    # Null for rows written before this column was added (pre-migration rows).
+    # mistral_rating is also null on single-engine (Claude-only) runs.
+    claude_rating: Mapped[str | None] = mapped_column(String(11), nullable=True)
+    mistral_rating: Mapped[str | None] = mapped_column(String(11), nullable=True)
 
     claim: Mapped[Claim] = relationship(back_populates="judgments")
     # One-to-one: a judgment is superseded by at most one revision
