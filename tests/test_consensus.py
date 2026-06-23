@@ -1129,6 +1129,7 @@ class TestBraveIntegration:
             False,           # has_independent_qualifying
             0,               # indep_secondary_verifying_count
             [],              # verifying_tiers — empty → cap will fire
+            [],              # debunking_tiers — empty
         )
         from backend.analysis import consensus as cons
         with patch.object(cons, "_process_sources", return_value=empty_result), \
