@@ -1,13 +1,8 @@
-"""Tests for _verify_rating_consistency, threshold-cap, and threshold-raise enforcement in engine.py."""
+"""Tests for _verify_rating_consistency and threshold-cap enforcement in engine.py."""
 import pytest
 from unittest.mock import MagicMock, patch, call
 
-from backend.analysis.engine import (
-    _verify_rating_consistency,
-    _call_haiku_rating_check,
-    _apply_threshold_raise,
-)
-from backend.analysis.rating import EpistemicRating, SourceTier
+from backend.analysis.engine import _verify_rating_consistency, _call_haiku_rating_check
 
 
 def _make_haiku_response(word: str) -> MagicMock:
@@ -292,13 +287,11 @@ def test_threshold_cap_verified_two_indep_secondaries_stays_verified():
     assert judgment.rating == EpistemicRating.VERIFIED
 
 
-def test_threshold_raise_speculative_to_verified_when_threshold_met(caplog):
+def test_threshold_cap_never_upgrades_speculative():
     """
-    Model declares SPECULATIVE but 3 independent secondary verifying sources satisfy
-    THE RULE (≥3 verifying AND ≥2 indep secondary). Symmetric threshold raise must
-    correct to VERIFIED and log [THRESHOLD-RAISE].
+    The threshold cap must never upgrade a lower rating. A model-declared SPECULATIVE
+    backed by 3 independent secondaries (which would satisfy THE RULE) must stay SPECULATIVE.
     """
-    import logging
     sources = [
         {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
          "relevance_score": 0.9, "supports_claim": True},
@@ -307,10 +300,9 @@ def test_threshold_raise_speculative_to_verified_when_threshold_met(caplog):
         {"url": "https://bbc.com/c", "tier": "secondary", "is_independent": True,
          "relevance_score": 0.9, "supports_claim": True},
     ]
-    with caplog.at_level(logging.WARNING):
-        judgment = _run_threshold_test(sources, "speculative")
-    assert judgment.rating == EpistemicRating.VERIFIED
-    assert any("[THRESHOLD-RAISE]" in r.message for r in caplog.records)
+    judgment = _run_threshold_test(sources, "speculative")
+    from backend.analysis.rating import EpistemicRating
+    assert judgment.rating == EpistemicRating.SPECULATIVE
 
 
 # ── 9. No-upgrade rule in rating gate ────────────────────────────────────────
@@ -368,263 +360,3 @@ def test_gate_debunked_from_missing_allowed():
     result = _verify_rating_consistency(rationale, "missing", client, claim_text="Test claim")
     assert result == "debunked"
     client.messages.create.assert_called_once()
-
-
-# ── 10. Symmetric threshold raise (_apply_threshold_raise unit tests) ──────────
-
-def _sec(n: int) -> list:
-    """n independent secondary SourceTier values."""
-    return [SourceTier.SECONDARY] * n
-
-
-def _prim(n: int) -> list:
-    return [SourceTier.PRIMARY] * n
-
-
-def test_apply_threshold_raise_speculative_to_verified():
-    """SPECULATIVE + verified_threshold_met → VERIFIED."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=_sec(3),
-        debunking_tiers=[],
-        independent_secondary_verifying_count=3,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.VERIFIED
-
-
-def test_apply_threshold_raise_missing_to_verified():
-    """MISSING + verified_threshold_met → VERIFIED."""
-    result = _apply_threshold_raise(
-        EpistemicRating.MISSING,
-        verifying_tiers=_prim(1) + _sec(2),
-        debunking_tiers=[],
-        independent_secondary_verifying_count=2,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.VERIFIED
-
-
-def test_apply_threshold_raise_no_raise_when_threshold_not_met():
-    """SPECULATIVE + threshold NOT met (only 1 indep secondary, no primary) → stays SPECULATIVE."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=_sec(1),
-        debunking_tiers=[],
-        independent_secondary_verifying_count=1,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.SPECULATIVE
-
-
-def test_apply_threshold_raise_no_raise_without_qualifying():
-    """Threshold counts met but has_independent_qualifying=False → NOT raised."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=_sec(3),
-        debunking_tiers=[],
-        independent_secondary_verifying_count=3,
-        has_independent_qualifying=False,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.SPECULATIVE
-
-
-def test_apply_threshold_raise_speculative_to_debunked():
-    """SPECULATIVE + strong debunking source present + qualifying → DEBUNKED."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=[],
-        debunking_tiers=[SourceTier.SECONDARY],
-        independent_secondary_verifying_count=0,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.DEBUNKED
-
-
-def test_apply_threshold_raise_debunked_not_raised_without_qualifying():
-    """Strong debunking source present but no qualifying source → NOT raised to DEBUNKED."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=[],
-        debunking_tiers=[SourceTier.SECONDARY],
-        independent_secondary_verifying_count=0,
-        has_independent_qualifying=False,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.SPECULATIVE
-
-
-def test_apply_threshold_raise_conflict_stays_speculative(caplog):
-    """Both verifying AND debunking thresholds met → genuine conflict → stays SPECULATIVE."""
-    import logging
-    with caplog.at_level(logging.WARNING):
-        result = _apply_threshold_raise(
-            EpistemicRating.SPECULATIVE,
-            verifying_tiers=_sec(3),
-            debunking_tiers=[SourceTier.PRIMARY],
-            independent_secondary_verifying_count=3,
-            has_independent_qualifying=True,
-            claim_id="test",
-        )
-    assert result == EpistemicRating.SPECULATIVE
-    assert any("[THRESHOLD-RAISE]" in r.message and "conflict" in r.message for r in caplog.records)
-
-
-def test_apply_threshold_raise_verified_not_touched():
-    """VERIFIED is not within the raise gate's scope — passed through unchanged."""
-    result = _apply_threshold_raise(
-        EpistemicRating.VERIFIED,
-        verifying_tiers=_sec(3),
-        debunking_tiers=[],
-        independent_secondary_verifying_count=3,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.VERIFIED
-
-
-def test_apply_threshold_raise_debunked_not_touched():
-    """DEBUNKED is not within the raise gate's scope — passed through unchanged."""
-    result = _apply_threshold_raise(
-        EpistemicRating.DEBUNKED,
-        verifying_tiers=[],
-        debunking_tiers=[SourceTier.PRIMARY],
-        independent_secondary_verifying_count=0,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.DEBUNKED
-
-
-def test_apply_threshold_raise_only_tertiary_debunking_not_raised():
-    """Only tertiary debunking sources → not a strong-tier debunking, NOT raised to DEBUNKED."""
-    result = _apply_threshold_raise(
-        EpistemicRating.SPECULATIVE,
-        verifying_tiers=[],
-        debunking_tiers=[SourceTier.TERTIARY],
-        independent_secondary_verifying_count=0,
-        has_independent_qualifying=True,
-        claim_id="test",
-    )
-    assert result == EpistemicRating.SPECULATIVE
-
-
-# ── 11. Saddam regression test (5 indep secondary verifying) ──────────────────
-
-def test_threshold_raise_saddam_regression(caplog):
-    """
-    Regression for the Saddam/football-torture production case: 5 independent secondary
-    verifying sources (≥3 verifying AND ≥2 indep secondary), model declared SPECULATIVE.
-    Symmetric raise must correct to VERIFIED and log [THRESHOLD-RAISE].
-    """
-    import logging
-    # Five distinct reputable outlets, all independent secondary, all supporting the claim,
-    # no wire-agency attribution in title/excerpt → no agency dedup, no domain dedup.
-    sources = [
-        {"url": "https://nytimes.com/a",    "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.85, "supports_claim": True},
-        {"url": "https://theguardian.com/b","tier": "secondary", "is_independent": True,
-         "relevance_score": 0.85, "supports_claim": True},
-        {"url": "https://spiegel.de/c",     "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.80, "supports_claim": True},
-        {"url": "https://faz.net/d",        "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.80, "supports_claim": True},
-        {"url": "https://taz.de/e",         "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.75, "supports_claim": True},
-    ]
-    with caplog.at_level(logging.WARNING):
-        judgment = _run_threshold_test(sources, "speculative")
-    assert judgment.rating == EpistemicRating.VERIFIED
-    assert any("[THRESHOLD-RAISE]" in r.message for r in caplog.records)
-    # Confirm downward cap did NOT fire (model said SPECULATIVE, not VERIFIED)
-    assert not any("[THRESHOLD-CAP]" in r.message for r in caplog.records)
-
-
-# ── 12. Pipeline raise: MISSING → VERIFIED via _run_threshold_test ────────────
-
-def test_threshold_raise_missing_to_verified_pipeline(caplog):
-    """model=MISSING + sufficient sources → raised to VERIFIED through the full pipeline."""
-    import logging
-    sources = [
-        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-        {"url": "https://apnews.com/b",  "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-        {"url": "https://bbc.com/c",     "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-    ]
-    with caplog.at_level(logging.WARNING):
-        judgment = _run_threshold_test(sources, "missing")
-    assert judgment.rating == EpistemicRating.VERIFIED
-    assert any("[THRESHOLD-RAISE]" in r.message for r in caplog.records)
-
-
-# ── 13. Pipeline raise: SPECULATIVE → DEBUNKED via _run_threshold_test ─────────
-
-def test_threshold_raise_speculative_to_debunked_pipeline(caplog):
-    """model=SPECULATIVE + strong debunking source + qualifying → raised to DEBUNKED."""
-    import logging
-    sources = [
-        # qualifying independent secondary (verifying) — satisfies has_independent_qualifying
-        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-        # strong debunking source (independent secondary, refutes the claim)
-        {"url": "https://apnews.com/b", "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": False},
-        # additional debunking — ensures has_independent_qualifying is True
-        {"url": "https://bbc.com/c", "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": False},
-    ]
-    with caplog.at_level(logging.WARNING):
-        judgment = _run_threshold_test(sources, "speculative")
-    assert judgment.rating == EpistemicRating.DEBUNKED
-    assert any("[THRESHOLD-RAISE]" in r.message for r in caplog.records)
-
-
-# ── 14. Downward cap still fires on model=VERIFIED + insufficient sources ─────
-
-def test_downward_cap_unaffected_by_raise_logic(caplog):
-    """
-    Existing downward-cap behaviour: model=VERIFIED with only 1 indep secondary →
-    capped to SPECULATIVE. The raise does NOT fire because the cap runs first and
-    SPECULATIVE with only 1 indep secondary does not meet verified_threshold_met().
-    """
-    import logging
-    sources = [
-        {"url": "https://reuters.com/a", "tier": "secondary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-        {"url": "https://example.org/b", "tier": "secondary", "is_independent": False,
-         "relevance_score": 0.9, "supports_claim": True},
-        {"url": "https://wiki.org/c", "tier": "tertiary", "is_independent": True,
-         "relevance_score": 0.9, "supports_claim": True},
-    ]
-    with caplog.at_level(logging.WARNING):
-        judgment = _run_threshold_test(sources, "verified")
-    assert judgment.rating == EpistemicRating.SPECULATIVE
-    assert any("[THRESHOLD-CAP]" in r.message for r in caplog.records)
-    # Raise must NOT fire — after the cap, 1 indep secondary < 2 required
-    assert not any("[THRESHOLD-RAISE]" in r.message for r in caplog.records)
-
-
-# ── 15. Haiku gate NO-UPGRADE behaviour unchanged ─────────────────────────────
-
-def test_haiku_gate_noupgrade_still_blocks_speculative_to_verified(caplog):
-    """
-    Haiku gate [RATING-GATE-NOUPGRADE] is untouched by the threshold-raise change.
-    structured=speculative, haiku_derived=verified → gate keeps speculative.
-    This is a DIFFERENT mechanism from the threshold raise (which operates on source
-    tiers, not rationale text). Both can coexist: Haiku gate fires on text,
-    threshold raise fires on source counts — they are independent.
-    """
-    import logging
-    rationale = "All available evidence strongly supports this assertion across multiple sources."
-    client = _make_client("verified")
-    with caplog.at_level(logging.WARNING):
-        result = _verify_rating_consistency(rationale, "speculative", client, claim_text="Test claim")
-    assert result == "speculative"
-    assert any("[RATING-GATE-NOUPGRADE]" in r.message for r in caplog.records)

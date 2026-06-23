@@ -882,68 +882,6 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
 # ── Public entry point ────────────────────────────────────────────────────────
 
-def _apply_threshold_raise(
-    rating: EpistemicRating,
-    verifying_tiers: list,
-    debunking_tiers: list,
-    independent_secondary_verifying_count: int,
-    has_independent_qualifying: bool,
-    claim_id: str,
-    model_label: str = "",
-) -> EpistemicRating:
-    """Symmetric upward threshold enforcement.
-
-    Raises SPECULATIVE/MISSING → VERIFIED or DEBUNKED when the objective
-    evidence threshold is met on classified (dedup-filtered) sources.
-    Called immediately after the downward THRESHOLD-CAP.
-
-    Never raises VERIFIED↔DEBUNKED across polarity — that is the consensus
-    polarity tiebreaker's job.  If both thresholds are met simultaneously
-    (genuine conflict), the rating stays SPECULATIVE.
-    """
-    if rating not in (EpistemicRating.SPECULATIVE, EpistemicRating.MISSING):
-        return rating
-
-    verifying_met = (
-        verified_threshold_met(verifying_tiers, independent_secondary_verifying_count)
-        and has_independent_qualifying
-    )
-    _strong = {SourceTier.PRIMARY, SourceTier.SECONDARY}
-    debunking_met = bool(any(t in _strong for t in debunking_tiers)) and has_independent_qualifying
-
-    prefix = f" ({model_label})" if model_label else ""
-
-    if verifying_met and debunking_met:
-        logger.warning(
-            "[THRESHOLD-RAISE] claim %s%s: model said %s but BOTH verifying AND debunking "
-            "thresholds met — genuine conflict, keeping SPECULATIVE.",
-            claim_id, prefix, rating.value,
-        )
-        return EpistemicRating.SPECULATIVE
-
-    if verifying_met:
-        logger.warning(
-            "[THRESHOLD-RAISE] claim %s%s: model said %s but verified_threshold_met=True "
-            "(verifying=%d indep_primary=%d indep_secondary=%d) → VERIFIED.",
-            claim_id, prefix, rating.value,
-            len(verifying_tiers),
-            sum(1 for t in verifying_tiers if t is SourceTier.PRIMARY),
-            independent_secondary_verifying_count,
-        )
-        return EpistemicRating.VERIFIED
-
-    if debunking_met:
-        logger.warning(
-            "[THRESHOLD-RAISE] claim %s%s: model said %s but debunking threshold met "
-            "(strong_debunking=%d) → DEBUNKED.",
-            claim_id, prefix, rating.value,
-            sum(1 for t in debunking_tiers if t in _strong),
-        )
-        return EpistemicRating.DEBUNKED
-
-    return rating
-
-
 def _deactivate_prior_judgments(session, claim_id: str) -> None:
     """Set is_active=False on all currently active judgments for claim_id.
 
@@ -1202,14 +1140,6 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
             independent_secondary_verifying_count,
         )
         rating = EpistemicRating.SPECULATIVE
-
-    # Threshold raise (symmetric upward): correct SPECULATIVE/MISSING → VERIFIED/DEBUNKED
-    # when the objective evidence threshold is met on classified sources.
-    rating = _apply_threshold_raise(
-        rating, verifying_tiers, debunking_tiers,
-        independent_secondary_verifying_count, has_independent_qualifying,
-        claim_id,
-    )
 
     # Hard quality gate — cannot be overridden by model judgment.
     # VERIFIED and DEBUNKED require at least one independent primary or secondary source.
