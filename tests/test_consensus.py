@@ -374,6 +374,79 @@ class TestMistralPhase2:
                 _mistral_phase2_judgment("claim", "findings")
 
 
+# ── FIX 1: Mistral consistency gate claim_text ───────────────────────────────
+
+class TestMistralConsistencyGateClaimText:
+    """FIX 1: _verify_rating_consistency must receive the real claim text for Mistral."""
+
+    def _make_mistral_tool_response(self, args: dict) -> MagicMock:
+        fn = MagicMock()
+        fn.name = "submit_judgment"
+        fn.arguments = json.dumps(args)
+        call = MagicMock()
+        call.function = fn
+        message = MagicMock()
+        message.tool_calls = [call]
+        choice = MagicMock()
+        choice.message = message
+        response = MagicMock()
+        response.choices = [choice]
+        return response
+
+    def test_mistral_gate_receives_real_claim_text(self):
+        """
+        FIX 1: _verify_rating_consistency called inside _mistral_phase2_judgment must
+        receive claim_text equal to the actual claim — not an empty string.
+        Sonnet's call site (engine.py:876) passes claim_text; Mistral's must too.
+        """
+        from backend.analysis.consensus import _mistral_phase2_judgment
+
+        payload = {"rating": "verified", "rationale": "Sources confirm the claim.", "sources": []}
+        mock_response = self._make_mistral_tool_response(payload)
+        mock_mistral_client = MagicMock()
+        mock_mistral_client.chat.complete.return_value = mock_response
+
+        captured: dict = {}
+
+        def fake_gate(rationale, rating, anthropic_client=None, claim_text=""):
+            captured["claim_text"] = claim_text
+            return rating
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_mistral_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency", side_effect=fake_gate), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            _mistral_phase2_judgment("The actual claim text", "some findings")
+
+        assert captured.get("claim_text") == "The actual claim text"
+
+    def test_mistral_gate_receives_anthropic_client(self):
+        """
+        FIX 1: _verify_rating_consistency called for Mistral must receive an explicit
+        Anthropic client (not rely on the internal _get_client() fallback), matching
+        the Sonnet call site pattern at engine.py:876.
+        """
+        from backend.analysis.consensus import _mistral_phase2_judgment
+
+        payload = {"rating": "missing", "rationale": "No evidence found.", "sources": []}
+        mock_response = self._make_mistral_tool_response(payload)
+        mock_mistral_client = MagicMock()
+        mock_mistral_client.chat.complete.return_value = mock_response
+
+        mock_anthropic_client = MagicMock()
+        captured: dict = {}
+
+        def fake_gate(rationale, rating, anthropic_client=None, claim_text=""):
+            captured["anthropic_client"] = anthropic_client
+            return rating
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_mistral_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency", side_effect=fake_gate), \
+             patch("backend.analysis.consensus._get_client", return_value=mock_anthropic_client):
+            _mistral_phase2_judgment("claim", "findings")
+
+        assert captured.get("anthropic_client") is mock_anthropic_client
+
+
 # ── _verify_rating_consistency ────────────────────────────────────────────────
 
 class TestVerifyRatingConsistency:
@@ -530,8 +603,12 @@ class TestAnalyzeClaimWithConsensus:
         assert j.consensus_rating == EpistemicRating.VERIFIED
         assert j.models_agree is False
 
-    def test_models_disagree_no_source_advantage_is_speculative(self):
-        """Neither model has Primary/Independent sources — disagreement falls back to SPECULATIVE."""
+    def test_no_qualifying_sources_both_capped_to_speculative(self):
+        """
+        With no qualifying sources on either leg, each model's rating is independently
+        capped to SPECULATIVE (Claude by the threshold cap; Mistral by the hard quality
+        gate) before consensus resolution — so both legs agree on SPECULATIVE.
+        """
         claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
@@ -539,17 +616,20 @@ class TestAnalyzeClaimWithConsensus:
 
         assert j.rating == EpistemicRating.SPECULATIVE
         assert j.consensus_rating == EpistemicRating.SPECULATIVE
-        assert j.models_agree is False
+        # Both legs independently capped → models agree at SPECULATIVE.
+        assert j.models_agree is True
 
     def test_models_disagree_rationale_includes_both_verdicts(self):
+        # Mistral must have a qualifying source so DEBUNKED survives the hard quality gate;
+        # Claude has 3 primaries, Mistral has 1 → polarity conflict with clear margin.
         claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
+        mistral_j = {"rationale": "Mistral says debunked.", "sources": [_THREE_DISTINCT_PRIMARIES[0]], "rating": "debunked"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
         assert "VERIFIED" in j.rationale
         assert "DEBUNKED" in j.rationale
-        # Polarity conflict with clear margin (3 primaries vs 0) → polarity_margin_met note.
+        # Polarity conflict with clear margin (3 primaries vs 1) → polarity_margin_met note.
         assert "[RESOLUTION:consensus.polarity_margin_met]" in j.rationale
 
     def test_models_disagree_rationale_speculative_note_when_no_advantage(self):
@@ -786,7 +866,8 @@ class TestAnalyzeClaimWithConsensus:
     def test_sources_persisted_when_both_debunked_normal_case(self):
         """
         Regression (normal case): EvaluatedSource objects must be saved when both
-        models agree on DEBUNKED. Verifies no regression on the agreement path.
+        models agree on DEBUNKED. Each model must have an independent qualifying source
+        so the hard quality gate does not cap either leg to SPECULATIVE.
         """
         from backend.db.models import EvaluatedSource
 
@@ -795,7 +876,7 @@ class TestAnalyzeClaimWithConsensus:
             "sources": _THREE_INDEPENDENT_PRIMARIES,
             "rating": "debunked",
         }
-        mistral_j = {"rationale": "Mistral debunked.", "sources": [], "rating": "debunked"}
+        mistral_j = {"rationale": "Mistral debunked.", "sources": [_THREE_DISTINCT_PRIMARIES[0]], "rating": "debunked"}
 
         j, sources = _run_consensus(claude_j, mistral_j)
 
@@ -1096,6 +1177,79 @@ class TestBraveIntegration:
 
         assert j.models_agree is True
         assert j.consensus_rating == EpistemicRating.VERIFIED
+
+    # ── FIX 2: Mistral individual hard quality gate ───────────────────────────
+
+    def test_mistral_hard_quality_gate_verified_no_qualifying_downgraded(self):
+        """
+        FIX 2: Mistral declares VERIFIED but has no independent qualifying source.
+        The individual hard quality gate must downgrade Mistral's rating to SPECULATIVE,
+        identical to the Claude gate at consensus.py:612-619.
+        """
+        claude_j = {"rationale": "Claude says speculative.", "sources": [], "rating": "speculative"}
+        mistral_j = {
+            "rationale": "Mistral says verified.",
+            "sources": [{"url": "https://wiki.example.com/page", "title": "Wiki",
+                         "tier": "tertiary", "is_independent": True,
+                         "relevance_score": 0.8, "supports_claim": True}],
+            "rating": "verified",
+        }
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        # Mistral's VERIFIED must be downgraded to SPECULATIVE by the hard quality gate.
+        assert j.mistral_rating == EpistemicRating.SPECULATIVE.value
+
+    def test_mistral_hard_quality_gate_debunked_no_qualifying_downgraded(self):
+        """
+        FIX 2: Mistral declares DEBUNKED but has no independent qualifying source.
+        The gate must downgrade to SPECULATIVE — same rule as for VERIFIED.
+        """
+        claude_j = {"rationale": "Claude speculative.", "sources": [], "rating": "speculative"}
+        mistral_j = {
+            "rationale": "Mistral says debunked.",
+            "sources": [],
+            "rating": "debunked",
+        }
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        assert j.mistral_rating == EpistemicRating.SPECULATIVE.value
+
+    def test_mistral_hard_quality_gate_does_not_fire_when_qualifying_source_present(self):
+        """
+        FIX 2: Mistral DEBUNKED with an independent primary source must NOT be downgraded.
+        The gate only fires when mistral_has_qualifying is False.
+        """
+        claude_j = {"rationale": "Claude speculative.", "sources": [], "rating": "speculative"}
+        mistral_j = {
+            "rationale": "Mistral says debunked.",
+            "sources": [_THREE_DISTINCT_PRIMARIES[0]],
+            "rating": "debunked",
+        }
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        assert j.mistral_rating == EpistemicRating.DEBUNKED.value
+
+    def test_symmetry_identical_inputs_yield_identical_per_leg_gate_outcomes(self):
+        """
+        SYMMETRY: When both models declare the same rating with no qualifying sources,
+        the same hard quality gate must fire on both legs and produce the same outcome.
+        """
+        # Both models claim VERIFIED with only tertiary sources → both gates fire → SPECULATIVE
+        non_qualifying = [{"url": "https://wiki.example.com/x", "tier": "tertiary",
+                           "is_independent": True, "relevance_score": 0.8, "supports_claim": True}]
+        claude_j = {"rationale": "Claude says verified.", "sources": non_qualifying, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says verified.", "sources": non_qualifying, "rating": "verified"}
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        # Both legs downgraded → both SPECULATIVE → agreement
+        assert j.claude_rating == EpistemicRating.SPECULATIVE.value
+        assert j.mistral_rating == EpistemicRating.SPECULATIVE.value
+        assert j.models_agree is True
+        assert j.rating == EpistemicRating.SPECULATIVE
 
     def test_threshold_cap_detail_logged_when_verifying_zero(self, caplog):
         """

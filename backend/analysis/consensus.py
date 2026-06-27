@@ -158,8 +158,12 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         args.get("rating"),
         args.get("rationale", ""),
     )
+    # Pass the real claim text and an explicit Anthropic client — identical to the
+    # Sonnet call site in engine.py:876 so Haiku evaluates both models' ratings
+    # against the same claim context.
     final_rating = _verify_rating_consistency(
-        args.get("rationale", ""), args.get("rating", "").lower()
+        args.get("rationale", ""), args.get("rating", "").lower(), _get_client(),
+        claim_text=claim_text,
     )
     return {**args, "rating": final_rating}
 
@@ -634,35 +638,41 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                     "Mistral returned unknown rating %r for claim %s; ignoring Mistral verdict.",
                     raw_mistral_rating, claim_id,
                 )
-        mistral_sources_eval = [
-            ev
-            for ev in (
-                evaluate_source(s) for s in mistral_data.get("sources", [])[:MAX_SOURCES]
-                if isinstance(s, dict)
-            )
-            if ev is not None
-        ]
+        # Process Mistral's sources through _process_sources — identical to the Claude
+        # path at line 558.  This gives us mistral_has_qualifying for the hard quality
+        # gate below, plus mistral_verifying_tiers / mistral_indep_secondary for the
+        # threshold cap, all with correct domain-dedup and independence rules applied.
+        mistral_sources_eval, _, mistral_has_qualifying, mistral_indep_secondary, mistral_verifying_tiers = _process_sources(
+            mistral_data.get("sources", [])
+        )
         mistral_source_quality = _source_quality_score(mistral_sources_eval)
 
         # Threshold cap: enforce THE RULE on model-declared VERIFIED (Mistral). Only caps downward.
-        # Derive Mistral's algorithmic rating through _process_sources so domain dedup and
-        # independence rules are applied identically to the Claude path.
-        if mistral_rating is EpistemicRating.VERIFIED:
-            _, mistral_derived, _, mistral_indep_secondary, mistral_verifying_tiers = _process_sources(mistral_sources_eval)
-            if not verified_threshold_met(mistral_verifying_tiers, mistral_indep_secondary):
+        if mistral_rating is EpistemicRating.VERIFIED and not verified_threshold_met(
+            mistral_verifying_tiers, mistral_indep_secondary
+        ):
+            logger.warning(
+                "[THRESHOLD-CAP] claim %s (Mistral): model said VERIFIED but threshold not met "
+                "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
+                claim_id, len(mistral_verifying_tiers), mistral_indep_secondary,
+            )
+            if len(mistral_verifying_tiers) == 0:
+                _raw_mistral = mistral_data.get("sources") or []
                 logger.warning(
-                    "[THRESHOLD-CAP] claim %s (Mistral): model said VERIFIED but threshold not met "
-                    "(verifying=%d indep_secondary=%d) → SPECULATIVE.",
-                    claim_id, len(mistral_verifying_tiers), mistral_indep_secondary,
+                    "[THRESHOLD-CAP-DETAIL] claim %s (Mistral): raw sources before evaluate_source() — %s",
+                    claim_id,
+                    [(s.get("url", ""), s.get("relevance_score")) for s in _raw_mistral if isinstance(s, dict)],
                 )
-                if len(mistral_verifying_tiers) == 0:
-                    _raw_mistral = mistral_data.get("sources") or []
-                    logger.warning(
-                        "[THRESHOLD-CAP-DETAIL] claim %s (Mistral): raw sources before evaluate_source() — %s",
-                        claim_id,
-                        [(s.get("url", ""), s.get("relevance_score")) for s in _raw_mistral if isinstance(s, dict)],
-                    )
-                mistral_rating = EpistemicRating.SPECULATIVE
+            mistral_rating = EpistemicRating.SPECULATIVE
+
+        # Hard quality gate — identical logic to Claude's gate above (lines 612-619).
+        if not mistral_has_qualifying and mistral_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+            logger.warning(
+                "claim %s: hard quality gate (Mistral) — no independent qualifying source; "
+                "rating %s overridden to SPECULATIVE.",
+                claim_id, mistral_rating,
+            )
+            mistral_rating = EpistemicRating.SPECULATIVE
         # Persist Mistral's sources alongside Claude's, deduped by URL.
         _seen_urls: set[str] = {es.url for es in evaluated_sources}
         _mistral_extra: list[EvaluatedSource] = []
