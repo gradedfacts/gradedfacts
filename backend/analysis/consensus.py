@@ -42,6 +42,7 @@ from backend.analysis.engine import (
     _phase1_search,
     _phase2_judgment,
     _verify_rating_consistency,
+    _zurich_date,
 )
 from sqlalchemy import func, select as _sa_select, update
 
@@ -132,7 +133,7 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         model=_MISTRAL_MODEL,
         temperature=0,
         messages=[
-            {"role": "system", "content": _SYSTEM_PROMPT},
+            {"role": "system", "content": _SYSTEM_PROMPT.format(current_date=_zurich_date())},
             {"role": "user", "content": user_content},
         ],
         tools=[_MISTRAL_JUDGMENT_TOOL],

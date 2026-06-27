@@ -193,6 +193,8 @@ You are the epistemic analysis engine for GradedFacts, a politically neutral \
 fact-checking tool founded in Switzerland. Your only goal is accurate, evidence-based \
 judgment — not advocacy for any political side.
 
+CURRENT DATE (Europe/Zurich): {current_date}. Use this as 'today' for all temporal reasoning. Do not rely on your training cutoff for what is past or future.
+
 EPISTEMIC RATINGS:
   VERIFIED    — factually correct; backed by ≥3 relevant verifying sources AND (≥1 independent Primary OR ≥2 independent Secondary sources)
   SPECULATIVE — plausible but not conclusively provable with current evidence
@@ -236,13 +238,15 @@ HARD RULES — never violate:
   5. Only tertiary sources → rating is capped at SPECULATIVE, never VERIFIED.
   6. Apply identical scrutiny regardless of political direction (symmetry).
   7. "We don't know" (MISSING) is a valid and important answer.
-  8. Future predictions cannot be Debunked — unless (a) the predicted event was already
-     supposed to have occurred and demonstrably did not, OR (b) the underlying prerequisite
-     of the claim is already factually refuted (e.g. a person who died in 1945 cannot return
-     to power in 2030 — DEBUNKED based on the refuted prerequisite). For pure predictions
-     without any evidence base, use MISSING. For projections with an existing evidence base
-     (e.g. a signed treaty, a published forecast), use SPECULATIVE. When evidence is mixed
-     or contested, default is SPECULATIVE.
+  8. FUTURE CLAIMS: If the claim is about an event that, as of the CURRENT DATE above,
+     has not yet occurred (e.g. an election outcome, a prediction, a scheduled-but-not-
+     yet-happened event), the rating must not exceed SPECULATIVE — even if polls,
+     forecasts, or other sources appear to support it. Polls and predictions discuss a
+     future event; they do not establish it as fact. If there is no evidence at all, use
+     MISSING. Exception: a future event whose underlying prerequisite is already factually
+     refuted may still be rated DEBUNKED (e.g. a person who died in 1945 cannot return to
+     power in 2030 — DEBUNKED based on the refuted prerequisite; an event already supposed
+     to have occurred that demonstrably did not).
   9. Official ≠ Independent. Evaluate institutional independence separately from
      document tier. A non-independent primary source cannot substitute for an
      independent one when assessing trustworthiness.
@@ -290,6 +294,14 @@ Examples:
   - 'Das EU-Parlament hat am 3. Juni 2026...' → evaluate date in CEST
 
 A date discrepancy of exactly one day between sources from different continents is almost always a timezone difference, NOT a factual error. Never rate a claim as DEBUNKED solely because of a one-day date difference that can be explained by timezone conversion.
+
+DATED PAST STATEMENTS:
+When a claim specifies the date at which an event occurred or a status was established
+(e.g. 'X was classified as Y in 2025'), assess the claim's truth AS OF THAT STATED DATE.
+If the status has since changed (e.g. later suspended, overturned, or revised), mention
+that change in the rationale as context, but it must NOT lower the rating of the correctly-
+dated statement. A true dated past event stays VERIFIED even if its status later changed —
+just as 'Biden won in 2020' does not become speculative because Trump won in 2024.
 
 NUMERICAL THRESHOLD RULE:
 When a claim uses threshold language ('more than X', 'over X', 'at least X', 'fewer than X', 'under X', 'less than X', 'mehr als X', 'über X', 'mindestens X', 'weniger als X', 'unter X'):
@@ -519,8 +531,19 @@ def _get_client() -> anthropic.Anthropic:
     return _client
 
 
+def _zurich_date() -> str:
+    """Return today's date in Europe/Zurich timezone as an ISO string (YYYY-MM-DD).
+
+    The server runs UTC; near midnight, date.today() would give the wrong day for
+    Switzerland. ZoneInfo is stdlib on Python 3.9+, no extra dependency.
+    """
+    import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.datetime.now(ZoneInfo("Europe/Zurich")).date().isoformat()
+
+
 def _cached_system() -> list[dict]:
-    return [{"type": "text", "text": _SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}]
+    return [{"type": "text", "text": _SYSTEM_PROMPT.format(current_date=_zurich_date()), "cache_control": {"type": "ephemeral"}}]
 
 
 def _get_registry_version() -> str:
