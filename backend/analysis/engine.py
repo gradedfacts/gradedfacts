@@ -896,6 +896,11 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         raise RuntimeError("Model did not return a submit_judgment tool call.")
 
     raw = tool_block.input
+    logger.warning(
+        "[SONNET-RAW] claim rating=%r rationale_excerpt=%.120s",
+        raw.get("rating"),
+        raw.get("rationale", "").replace("\n", " "),
+    )
     final_rating = _verify_rating_consistency(
         raw.get("rationale", ""), raw.get("rating", "").lower(), client,
         claim_text=claim_text,
