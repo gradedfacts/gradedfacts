@@ -354,3 +354,211 @@ class TestProximalEvidenceBlock:
         # And it is a non-empty string
         assert isinstance(_PROXIMAL_EVIDENCE_BLOCK, str)
         assert len(_PROXIMAL_EVIDENCE_BLOCK) > 100  # sanity: not accidentally empty
+
+
+# ── Source re-ask net: _claude_reask_sources / _mistral_reask_sources ────────
+
+def _make_sonnet_tool_response(tool_name: str, tool_input: dict) -> MagicMock:
+    """Build a minimal Anthropic SDK tool-use response mock."""
+    tool_block = MagicMock()
+    tool_block.type = "tool_use"
+    tool_block.name = tool_name
+    tool_block.input = tool_input
+    resp = MagicMock()
+    resp.content = [tool_block]
+    return resp
+
+
+def _make_sonnet_phase2_response(rating: str, rationale: str, sources: list) -> MagicMock:
+    """submit_judgment response for the first Sonnet call."""
+    return _make_sonnet_tool_response(
+        "submit_judgment",
+        {"rating": rating, "rationale": rationale, "sources": sources},
+    )
+
+
+def _make_sonnet_reask_response(sources: list) -> MagicMock:
+    """submit_sources response for the Sonnet re-ask call."""
+    return _make_sonnet_tool_response("submit_sources", {"sources": sources})
+
+
+def _make_mistral_response_reask(tool_name: str, args: dict) -> MagicMock:
+    """Build a minimal Mistral SDK tool-call response mock."""
+    fn = MagicMock()
+    fn.name = tool_name
+    fn.arguments = json.dumps(args)
+    call = MagicMock()
+    call.function = fn
+    message = MagicMock()
+    message.tool_calls = [call]
+    choice = MagicMock()
+    choice.message = message
+    response = MagicMock()
+    response.choices = [choice]
+    return response
+
+
+_FINDINGS = "Source 1: Title\nURL: https://example.com/\nExcerpt: Some text."
+
+_REASK_SOURCES = [
+    {"url": "https://example.com/", "title": "Title", "tier": "secondary",
+     "is_independent": True, "relevance_score": 0.8, "supports_claim": True}
+]
+
+
+class TestSourceReaskNet:
+    """
+    Tests for the single-retry source re-ask net in _phase2_judgment (Sonnet)
+    and _mistral_phase2_judgment (Mistral).
+    """
+
+    # ── (i) Sonnet: empty sources triggers exactly ONE re-ask, merges sources ──
+
+    def test_sonnet_empty_sources_triggers_reask_and_merges(self):
+        """
+        When Sonnet returns sources:[] despite non-empty findings, exactly one
+        re-ask fires and its sources are merged; original rating + rationale unchanged.
+        """
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Original rationale.", [])
+        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            if call_count["n"] == 1:
+                return first_response
+            return reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected 2 API calls (phase2 + reask), got {call_count['n']}"
+        assert result["sources"] == _REASK_SOURCES
+        assert result["rationale"] == "Original rationale."
+        assert result["rating"] == "verified"
+
+    # ── (ii) Sonnet: re-ask still empty → sources stay empty, no second retry ──
+
+    def test_sonnet_reask_still_empty_no_second_retry(self):
+        """
+        If the re-ask also returns sources:[], sources stay empty and no further
+        call is made — existing gates handle the fallthrough.
+        """
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("speculative", "Rationale.", [])
+        reask_response = _make_sonnet_reask_response([])
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            if call_count["n"] == 1:
+                return first_response
+            return reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected exactly 2 calls (no third), got {call_count['n']}"
+        assert result["sources"] == []
+
+    # ── (iii) Sonnet: non-empty sources on first try → NO re-ask ──
+
+    def test_sonnet_no_reask_when_sources_present(self):
+        """When Sonnet returns non-empty sources, no re-ask call is made."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", _REASK_SOURCES)
+
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = first_response
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert mock_client.messages.create.call_count == 1
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── (iv) Sonnet: empty findings → NO re-ask ──
+
+    def test_sonnet_no_reask_when_findings_empty(self):
+        """Re-ask must NOT fire when search_findings is empty (empty-search path)."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("missing", "No findings.", [])
+
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = first_response
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", "")
+
+        assert mock_client.messages.create.call_count == 1
+        assert result["sources"] == []
+
+    # ── (v) Mistral: empty sources triggers re-ask, merges sources ──
+
+    def test_mistral_empty_sources_triggers_reask_and_merges(self):
+        """
+        Mirrors test (i) for Mistral: empty sources despite findings → one re-ask,
+        sources merged, original rating + rationale unchanged.
+        """
+        from backend.analysis import consensus as cons
+
+        first_response = _make_mistral_response_reask(
+            "submit_judgment",
+            {"rating": "speculative", "rationale": "Mistral rationale.", "sources": []},
+        )
+        reask_response = _make_mistral_response_reask("submit_sources", {"sources": _REASK_SOURCES})
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            if call_count["n"] == 1:
+                return first_response
+            return reask_response
+
+        mock_client = MagicMock()
+        mock_client.chat.complete.side_effect = side_effect
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency",
+                   side_effect=lambda r, s, *a, **kw: s), \
+             patch("backend.analysis.consensus._verify_temporal_cap",
+                   side_effect=lambda r, *a, **kw: r), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            result = cons._mistral_phase2_judgment("Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected 2 API calls, got {call_count['n']}"
+        assert result["sources"] == _REASK_SOURCES
+        assert result["rationale"] == "Mistral rationale."
+        assert result["rating"] == "speculative"
+
+    # ── (vi) Shared prompt constant: object identity across both models ──
+
+    def test_source_reask_prompt_is_shared_constant(self):
+        """
+        _SOURCE_REASK_PROMPT imported by consensus.py is the same object as the one
+        in engine.py — guarantees identical re-ask text for both models.
+        """
+        from backend.analysis import engine as eng
+        from backend.analysis import consensus as cons
+
+        assert cons._SOURCE_REASK_PROMPT is eng._SOURCE_REASK_PROMPT
+        assert isinstance(eng._SOURCE_REASK_PROMPT, str)
+        assert len(eng._SOURCE_REASK_PROMPT) > 50

@@ -522,6 +522,23 @@ _JUDGMENT_TOOL = {
     },
 }
 
+# Sources-only re-ask tool — used when the model returns sources:[] despite findings.
+# Requests ONLY the sources array; rating and rationale are kept from the first call.
+_SOURCES_ONLY_TOOL = {
+    "name": "submit_sources",
+    "description": (
+        "Submit the sources array for the judgment you already gave. "
+        "Return every source you cited or consulted, as structured objects."
+    ),
+    "input_schema": {
+        "type": "object",
+        "required": ["sources"],
+        "properties": {
+            "sources": _JUDGMENT_TOOL["input_schema"]["properties"]["sources"],
+        },
+    },
+}
+
 # ── Proximal evidence block (appended to user message for BOTH Claude and Mistral) ──
 #
 # Both models receive these instructions in the system prompt (distal, cached for
@@ -544,6 +561,18 @@ _PROXIMAL_EVIDENCE_BLOCK: str = (
     "- NEVER interpret 'over X' as 'significantly over X' or 'clearly over X'\n"
     "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
     "- This rule overrides all other considerations"
+)
+
+# ── Source re-ask prompt (shared by BOTH Claude and Mistral re-ask callers) ─────
+#
+# Fired exactly once when sources:[] despite non-empty findings.  Keeps original
+# rating + rationale; replaces ONLY the sources array with what the re-ask returns.
+# consensus.py imports this constant so the two pipelines cannot drift.
+_SOURCE_REASK_PROMPT: str = (
+    "Your previous response left the sources array empty although research findings "
+    "were provided above. Return ONLY the sources array now — every source you cited "
+    "or used in your rationale, as structured objects per the schema. "
+    "Do NOT change your rating or rationale."
 )
 
 # Model used for the cheap pre-flight specificity gate (no web search, no tools).
@@ -1027,12 +1056,60 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         raw.get("rating"),
         raw.get("rationale", "").replace("\n", " "),
     )
+    # Re-ask if sources empty despite findings — exactly one targeted retry.
+    if not raw.get("sources") and search_findings:
+        logger.warning("[SOURCE-REASK] (Claude): empty sources despite findings → re-asking")
+        reask_sources = _claude_reask_sources(client, claim_text, search_findings, raw)
+        logger.warning("[SOURCE-REASK-RESULT] (Claude): got %d sources", len(reask_sources))
+        if reask_sources:
+            raw = {**raw, "sources": reask_sources}
     final_rating = _verify_rating_consistency(
         raw.get("rationale", ""), raw.get("rating", "").lower(), client,
         claim_text=claim_text,
     )
     final_rating = _verify_temporal_cap(final_rating, claim_text, client)
     return {**raw, "rating": final_rating}
+
+
+def _claude_reask_sources(
+    client: "anthropic.Anthropic",
+    claim_text: str,
+    search_findings: str,
+    original_data: dict,
+) -> list:
+    """
+    Single targeted re-ask for the sources array when Sonnet returned sources:[]
+    despite non-empty findings.  Keeps original rating + rationale; returns only
+    the new sources list ([] on failure or still-empty response).
+    """
+    reask_content = (
+        f"Claim to evaluate:\n{claim_text}\n\n"
+        f"Research findings from web search:\n{search_findings}\n\n"
+        f"Your previous rating: {original_data.get('rating', '')}\n"
+        f"Your previous rationale: {original_data.get('rationale', '')}\n\n"
+        f"{_SOURCE_REASK_PROMPT}"
+    )
+    try:
+        resp = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=2048,
+            temperature=0,
+            system=_cached_system(),
+            tools=[_SOURCES_ONLY_TOOL],
+            tool_choice={"type": "tool", "name": "submit_sources"},
+            messages=[{"role": "user", "content": reask_content}],
+        )
+        tool_block = next(
+            (b for b in resp.content if b.type == "tool_use" and b.name == "submit_sources"),
+            None,
+        )
+        if tool_block is None:
+            return []
+        sources = tool_block.input.get("sources") or []
+        return sources if isinstance(sources, list) else []
+    except Exception as exc:
+        logger.warning("[SOURCE-REASK] Claude re-ask call failed (%s)", exc)
+        return []
 
 
 # ── Public entry point ────────────────────────────────────────────────────────

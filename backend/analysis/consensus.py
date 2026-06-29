@@ -32,6 +32,8 @@ from backend.analysis.engine import (
     MIN_RELEVANCE_SCORE,
     _JUDGMENT_TOOL,
     _PROXIMAL_EVIDENCE_BLOCK,
+    _SOURCE_REASK_PROMPT,
+    _SOURCES_ONLY_TOOL,
     _SYSTEM_PROMPT,
     _build_lang_instruction,
     _check_off_topic,
@@ -73,6 +75,15 @@ _MISTRAL_JUDGMENT_TOOL = {
         "name": "submit_judgment",
         "description": _JUDGMENT_TOOL["description"],
         "parameters": _JUDGMENT_TOOL["input_schema"],
+    },
+}
+
+_MISTRAL_SOURCES_ONLY_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "submit_sources",
+        "description": _SOURCES_ONLY_TOOL["description"],
+        "parameters": _SOURCES_ONLY_TOOL["input_schema"],
     },
 }
 
@@ -141,6 +152,13 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         args.get("rating"),
         args.get("rationale", ""),
     )
+    # Re-ask if sources empty despite findings — exactly one targeted retry.
+    if not args.get("sources") and search_findings:
+        logger.warning("[SOURCE-REASK] (Mistral): empty sources despite findings → re-asking")
+        reask_sources = _mistral_reask_sources(claim_text, search_findings, args)
+        logger.warning("[SOURCE-REASK-RESULT] (Mistral): got %d sources", len(reask_sources))
+        if reask_sources:
+            args = {**args, "sources": reask_sources}
     # Pass the real claim text and an explicit Anthropic client — identical to the
     # Sonnet call site in engine.py:876 so Haiku evaluates both models' ratings
     # against the same claim context.
@@ -150,6 +168,48 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     )
     final_rating = _verify_temporal_cap(final_rating, claim_text, _get_client())
     return {**args, "rating": final_rating}
+
+
+def _mistral_reask_sources(
+    claim_text: str,
+    search_findings: str,
+    original_data: dict,
+) -> list:
+    """
+    Single targeted re-ask for the sources array when Mistral returned sources:[]
+    despite non-empty findings.  Keeps original rating + rationale; returns only
+    the new sources list ([] on failure or still-empty response).
+    """
+    reask_content = (
+        f"Claim to evaluate:\n{claim_text}\n\n"
+        f"Research findings from web search:\n{search_findings}\n\n"
+        f"Your previous rating: {original_data.get('rating', '')}\n"
+        f"Your previous rationale: {original_data.get('rationale', '')}\n\n"
+        f"{_SOURCE_REASK_PROMPT}"
+    )
+    try:
+        client = _get_mistral_client()
+        response = client.chat.complete(
+            model=_MISTRAL_MODEL,
+            temperature=0,
+            messages=[
+                {"role": "system", "content": _SYSTEM_PROMPT.format(current_date=_zurich_date())},
+                {"role": "user", "content": reask_content},
+            ],
+            tools=[_MISTRAL_SOURCES_ONLY_TOOL],
+            tool_choice="any",
+        )
+        tool_calls = response.choices[0].message.tool_calls
+        if not tool_calls:
+            return []
+        reask_args = tool_calls[0].function.arguments
+        if isinstance(reask_args, str):
+            reask_args = json.loads(reask_args)
+        sources = reask_args.get("sources") or []
+        return sources if isinstance(sources, list) else []
+    except Exception as exc:
+        logger.warning("[SOURCE-REASK] Mistral re-ask call failed (%s)", exc)
+        return []
 
 
 def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:
