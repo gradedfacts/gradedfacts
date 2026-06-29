@@ -42,6 +42,7 @@ from backend.analysis.engine import (
     _phase1_search,
     _phase2_judgment,
     _verify_rating_consistency,
+    _verify_temporal_cap,
     _zurich_date,
 )
 from sqlalchemy import func, select as _sa_select, update
@@ -162,6 +163,7 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         args.get("rationale", ""), args.get("rating", "").lower(), _get_client(),
         claim_text=claim_text,
     )
+    final_rating = _verify_temporal_cap(final_rating, claim_text, _get_client())
     return {**args, "rating": final_rating}
 
 

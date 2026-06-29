@@ -1,8 +1,13 @@
-"""Tests for _verify_rating_consistency and threshold-cap enforcement in engine.py."""
+"""Tests for _verify_rating_consistency, threshold-cap, and temporal gate in engine.py."""
 import pytest
 from unittest.mock import MagicMock, patch, call
 
-from backend.analysis.engine import _verify_rating_consistency, _call_haiku_rating_check
+from backend.analysis.engine import (
+    _verify_rating_consistency,
+    _call_haiku_rating_check,
+    _verify_temporal_cap,
+    _call_haiku_temporal_check,
+)
 
 
 def _make_haiku_response(word: str) -> MagicMock:
@@ -360,3 +365,120 @@ def test_gate_debunked_from_missing_allowed():
     result = _verify_rating_consistency(rationale, "missing", client, claim_text="Test claim")
     assert result == "debunked"
     client.messages.create.assert_called_once()
+
+
+# ── Temporal gate (_verify_temporal_cap / _call_haiku_temporal_check) ─────────
+
+def _make_temporal_client(token: str) -> MagicMock:
+    """Return a mock client whose messages.create returns a single-word temporal token."""
+    block = MagicMock()
+    block.text = token
+    resp = MagicMock()
+    resp.content = [block]
+    client = MagicMock()
+    client.messages.create.return_value = resp
+    return client
+
+
+def test_temporal_future_verified_capped_to_speculative():
+    """FUTURE + verified → speculative (the core cap)."""
+    client = _make_temporal_client("FUTURE")
+    result = _verify_temporal_cap("verified", "Democrats will win the 2026 midterms.", client)
+    assert result == "speculative"
+    client.messages.create.assert_called_once()
+
+
+def test_temporal_future_debunked_unchanged():
+    """FUTURE + debunked → debunked (carve-out: refuted prerequisite stays DEBUNKED)."""
+    client = _make_temporal_client("FUTURE")
+    result = _verify_temporal_cap("debunked", "A person who died in 1945 will return in 2030.", client)
+    assert result == "debunked"
+
+
+def test_temporal_future_missing_unchanged():
+    """FUTURE + missing → missing (gate only acts on verified)."""
+    client = _make_temporal_client("FUTURE")
+    result = _verify_temporal_cap("missing", "The next election will be held tomorrow.", client)
+    assert result == "missing"
+
+
+def test_temporal_future_speculative_unchanged():
+    """FUTURE + speculative → speculative (gate never upgrades, only caps verified)."""
+    client = _make_temporal_client("FUTURE")
+    result = _verify_temporal_cap("speculative", "It will probably rain next week.", client)
+    assert result == "speculative"
+
+
+def test_temporal_past_or_current_verified_unchanged():
+    """
+    PAST_OR_CURRENT + verified → verified.
+    Covers the dated-past AfD case: classification already happened as of current date,
+    even if status later changed. Gate must NOT cap this.
+    """
+    client = _make_temporal_client("PAST_OR_CURRENT")
+    result = _verify_temporal_cap(
+        "verified",
+        "The AfD was classified as right-extremist in 2025.",
+        client,
+    )
+    assert result == "verified"
+
+
+def test_temporal_unclear_verified_unchanged():
+    """UNCLEAR + verified → verified (fail-safe: no cap on ambiguous temporal classification)."""
+    client = _make_temporal_client("UNCLEAR")
+    result = _verify_temporal_cap("verified", "Some ambiguous claim.", client)
+    assert result == "verified"
+
+
+def test_temporal_exception_verified_unchanged():
+    """Exception in Haiku call → verified unchanged (fail-safe, non-destructive)."""
+    client = MagicMock()
+    client.messages.create.side_effect = RuntimeError("network error")
+    result = _verify_temporal_cap("verified", "Some claim.", client)
+    assert result == "verified"
+
+
+def test_temporal_unexpected_token_treated_as_unclear():
+    """Any unrecognised Haiku token is normalised to 'unclear' → rating unchanged."""
+    client = _make_temporal_client("CONFIRMED_FUTURE")  # not a valid token
+    result = _verify_temporal_cap("verified", "Some claim.", client)
+    assert result == "verified"
+
+
+def test_call_haiku_temporal_check_returns_future():
+    """_call_haiku_temporal_check parses 'FUTURE' correctly."""
+    client = _make_temporal_client("FUTURE")
+    result = _call_haiku_temporal_check(client, "Democrats will win 2026 midterms.", "2026-06-29")
+    assert result == "future"
+
+
+def test_call_haiku_temporal_check_returns_past_or_current():
+    """_call_haiku_temporal_check parses 'PAST_OR_CURRENT' correctly."""
+    client = _make_temporal_client("PAST_OR_CURRENT")
+    result = _call_haiku_temporal_check(client, "The AfD was classified in 2025.", "2026-06-29")
+    assert result == "past_or_current"
+
+
+def test_call_haiku_temporal_check_exception_returns_unclear():
+    """Exception in the API call returns 'unclear' (try/except in the helper itself)."""
+    client = MagicMock()
+    client.messages.create.side_effect = RuntimeError("timeout")
+    result = _call_haiku_temporal_check(client, "Some claim.", "2026-06-29")
+    assert result == "unclear"
+
+
+def test_temporal_prompt_contains_current_date_and_worked_examples(caplog):
+    """
+    Regression guard: the prompt sent to Haiku must contain the current_date and
+    the three worked examples (future election, AfD dated-past, NATO ongoing-state).
+    """
+    from backend.analysis.engine import _TEMPORAL_CHECK_PROMPT
+    prompt = _TEMPORAL_CHECK_PROMPT.format(current_date="2026-06-29", claim_text="test")
+    assert "2026-06-29" in prompt
+    assert "2026 US midterm" in prompt or "2026 midterm" in prompt or "midterm" in prompt
+    assert "AfD" in prompt
+    assert "NATO" in prompt
+    assert "PAST_OR_CURRENT" in prompt
+    assert "FUTURE" in prompt
+    assert "UNCLEAR" in prompt

@@ -703,6 +703,103 @@ def _verify_rating_consistency(
     return structured_rating
 
 
+# ── Temporal gate ─────────────────────────────────────────────────────────────
+
+_TEMPORAL_TOKENS: frozenset[str] = frozenset({"future", "past_or_current", "unclear"})
+
+_TEMPORAL_CHECK_PROMPT = """\
+You are a temporal classifier for a fact-checking system.
+Your task: identify the PRIMARY factual assertion of the claim (the central event, \
+outcome, or state being claimed), then determine whether that primary event has \
+ALREADY OCCURRED OR IS AN ESTABLISHED ONGOING STATE as of the current date shown below.
+
+Current date: {current_date}
+
+Respond with EXACTLY ONE TOKEN — no explanation, no punctuation:
+  FUTURE          — the primary event has NOT yet occurred as of the current date
+                    (election not yet held, prediction, scheduled-but-not-happened event,
+                    asserted outcome of a vote/ruling/decision still in the future)
+  PAST_OR_CURRENT — the primary event has already occurred OR is an established ongoing state
+                    as of the current date
+  UNCLEAR         — genuinely ambiguous; use this when unsure (do NOT default to FUTURE)
+
+CRITICAL RULE — DATED PAST STATEMENTS:
+A claim that names a date in the past is about when something happened, not about the future.
+Assess whether the PRIMARY EVENT (the action/classification/occurrence itself) has already happened.
+Even if the status later changed, if the event occurred before the current date → PAST_OR_CURRENT.
+
+WORKED EXAMPLES:
+  Claim: "Democrats will win the 2026 US midterm elections."
+  Current date: 2026-06-29 (before the elections)
+  → FUTURE  (the election has not yet been held)
+
+  Claim: "The AfD was classified as right-extremist in 2025."
+  Current date: 2026-06-29
+  → PAST_OR_CURRENT  (the classification happened in 2025, before current date;
+    the fact that it may have been suspended later does NOT make it future)
+
+  Claim: "NATO currently has 32 member states."
+  Current date: 2026-06-29
+  → PAST_OR_CURRENT  (this is an established ongoing state as of current date)
+
+Claim to classify:
+{claim_text}"""
+
+
+def _call_haiku_temporal_check(
+    client: "anthropic.Anthropic",
+    claim_text: str,
+    current_date: str,
+) -> str:
+    """Single Haiku call returning 'future', 'past_or_current', or 'unclear'."""
+    try:
+        resp = client.messages.create(
+            model=_SPECIFICITY_MODEL,
+            max_tokens=8,
+            temperature=0,
+            messages=[{
+                "role": "user",
+                "content": _TEMPORAL_CHECK_PROMPT.format(
+                    current_date=current_date,
+                    claim_text=claim_text,
+                ),
+            }],
+        )
+        text = next(
+            (b.text for b in resp.content if hasattr(b, "text") and b.text), ""
+        ).strip().lower()
+        word = text.split()[0].rstrip(".,;:") if text else ""
+        return word if word in _TEMPORAL_TOKENS else "unclear"
+    except Exception as exc:
+        logger.warning("[TEMPORAL-GATE] Haiku call failed (%s); returning unclear.", exc)
+        return "unclear"
+
+
+def _verify_temporal_cap(
+    rating: str,
+    claim_text: str,
+    client: "anthropic.Anthropic",
+) -> str:
+    """Cap VERIFIED → SPECULATIVE when the claim's primary event is still in the future.
+
+    Only acts on rating=='verified'. DEBUNKED, MISSING, SPECULATIVE are always returned
+    unchanged. UNCLEAR or any exception → keep rating (fail-safe, never destructive).
+    """
+    answer = _call_haiku_temporal_check(client, claim_text, _zurich_date())
+    if answer == "future" and rating == "verified":
+        logger.warning(
+            "[TEMPORAL-GATE] claim classified FUTURE, rating %r → SPECULATIVE. claim=%.120s",
+            rating, claim_text.replace("\n", " "),
+        )
+        return "speculative"
+    if answer != "past_or_current":
+        logger.warning(
+            "[TEMPORAL-GATE] answer=%r, rating=%r → keeping (fail-safe or past/current).",
+            answer, rating,
+        )
+    return rating
+
+
 # ── Pipeline phases ───────────────────────────────────────────────────────────
 
 _SPECIFICITY_PROMPT = """\
@@ -909,6 +1006,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         raw.get("rationale", ""), raw.get("rating", "").lower(), client,
         claim_text=claim_text,
     )
+    final_rating = _verify_temporal_cap(final_rating, claim_text, client)
     return {**raw, "rating": final_rating}
 
 
