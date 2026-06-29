@@ -98,6 +98,10 @@ _SPECIFICITY_FALLBACK = (
     "This claim is too vague to fact-check. "
     "Please refine it with specific names, dates, actions, or allegations."
 )
+_NO_SEARCH_RESULTS_FALLBACK = (
+    "No sources were found for this claim. "
+    "Judgment withheld — GradedFacts does not judge from model memory."
+)
 
 
 def _get_locale_message(lang_name: str, key: str, fallback: str) -> str:
@@ -120,6 +124,10 @@ def _get_off_topic_message(lang_name: str) -> str:
 
 def _get_specificity_message(lang_name: str) -> str:
     return _get_locale_message(lang_name, "specificity_message", _SPECIFICITY_FALLBACK)
+
+
+def _get_no_search_results_message(lang_name: str) -> str:
+    return _get_locale_message(lang_name, "no_search_results_message", _NO_SEARCH_RESULTS_FALLBACK)
 
 
 def _detect_language(claim_text: str) -> str:
@@ -861,17 +869,13 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     Force Claude to emit a submit_judgment tool call with structured source evaluations.
     Raises RuntimeError if the model does not return the expected tool call.
     """
+    logger.warning(
+        "[PHASE2-INPUT] findings_len=%d findings_empty=%s",
+        len(search_findings), not bool(search_findings),
+    )
     user_content = f"Claim to evaluate:\n{claim_text}"
     if search_findings:
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
-    else:
-        user_content += (
-            "\n\nNo live web search results available. "
-            "Evaluate based on your training knowledge. "
-            "Include every source you reference in the sources array — use the canonical homepage URL "
-            "(e.g. https://bls.gov) when you do not have a direct article URL. "
-            "Only return an empty sources array if you genuinely cannot name any source for this claim."
-        )
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
 
@@ -999,6 +1003,29 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
 
     # Phase 1: gather evidence via web search (best-effort)
     search_findings = _phase1_search(claim.text)
+    logger.warning(
+        "[PHASE1-OUTPUT] claim=%s findings_len=%d findings_empty=%s",
+        claim_id, len(search_findings), not bool(search_findings),
+    )
+
+    # Empty-search gate: if no sources were found, issue MISSING immediately.
+    # GradedFacts never judges from model memory — only from retrieved web evidence.
+    if not search_findings:
+        judgment = Judgment(
+            claim_id=claim_id,
+            rating=EpistemicRating.MISSING,
+            rationale=_get_no_search_results_message(lang_name),
+            analyst=analyst,
+            is_active=True,
+            model_claude=analyst,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
+        )
+        _deactivate_prior_judgments(session, claim_id)
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
 
     # Phase 2: structured judgment (forced tool call)
     data = _phase2_judgment(client, claim.text, search_findings, lang_instruction)

@@ -238,7 +238,7 @@ def _run_threshold_test(sources: list[dict], model_rating: str) -> "Judgment":
     mock_session.add_all.side_effect = lambda objs: None
 
     # Bypass the Haiku rating-gate so only the threshold cap is under test.
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
          patch.object(eng, "_get_client", return_value=MagicMock()), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data):

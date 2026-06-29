@@ -264,7 +264,7 @@ def _run_analyze(
 
     with patch.object(eng, "_check_specificity", return_value=specificity_result), \
          patch.object(eng, "_check_off_topic", return_value=off_topic_result), \
-         patch.object(eng, "_phase1_search", return_value="") as p1, \
+         patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt.") as p1, \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data) as p2, \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)

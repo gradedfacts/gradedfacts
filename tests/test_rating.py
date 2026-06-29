@@ -174,7 +174,7 @@ def test_model_cannot_override_quality_gate_to_verified():
     mock_session.add.side_effect = lambda obj: captured.update({"judgment": obj}) if isinstance(obj, Judgment) else None
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -205,7 +205,7 @@ def test_model_cannot_override_quality_gate_to_debunked():
     mock_session.add.side_effect = lambda obj: captured.update({"judgment": obj}) if isinstance(obj, Judgment) else None
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -257,7 +257,7 @@ def test_engine_filters_low_relevance_sources():
 
     from backend.analysis import engine as eng
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
 
@@ -308,7 +308,7 @@ def test_engine_caps_sources_at_max():
     from backend.analysis import engine as eng
     from backend.db.models import EvaluatedSource
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
 
@@ -350,7 +350,7 @@ def _run_engine_with_sources(sources: list[dict]) -> "Judgment":
     mock_session.add.side_effect = fake_add
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -490,7 +490,7 @@ def test_registry_override_stored_in_evaluated_source():
     mock_session.add_all.side_effect = lambda objs: stored_sources.extend(objs)
     mock_session.add.side_effect = lambda obj: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -555,7 +555,7 @@ def test_model_explicit_rating_takes_precedence_over_derived():
     mock_session.add.side_effect = fake_add
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -649,7 +649,7 @@ def test_invalid_explicit_rating_falls_back_to_derive_rating():
     mock_session.add.side_effect = fake_add
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -688,7 +688,7 @@ def test_compromised_source_relevance_capped_in_db():
     mock_session.add_all.side_effect = lambda objs: stored_sources.extend(objs)
     mock_session.add.side_effect = lambda obj: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)

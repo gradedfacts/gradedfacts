@@ -53,7 +53,7 @@ def _run_analyze_with_leaning(claim_text: str, political_leaning_value: str):
 
     with patch.object(eng, "_check_specificity", return_value=(True, "")), \
          patch.object(eng, "_check_off_topic", return_value=(True, "")), \
-         patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)
@@ -152,7 +152,7 @@ def test_missing_political_leaning_key_defaults_to_none():
 
     with patch.object(eng, "_check_specificity", return_value=(True, "")), \
          patch.object(eng, "_check_off_topic", return_value=(True, "")), \
-         patch.object(eng, "_phase1_search", return_value=""), \
+         patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()):
         eng.analyze_claim("claim-1", mock_session)

@@ -39,7 +39,7 @@ def _run_engine(sources: list[dict]) -> "Judgment":
     mock_session.add.side_effect = fake_add
     mock_session.add_all.side_effect = lambda objs: None
 
-    with patch.object(eng, "_phase1_search", return_value=""), \
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
          patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
          patch.object(eng, "_get_client", return_value=MagicMock()), \
          patch("backend.analysis.engine.evaluate_source", side_effect=lambda src: src):

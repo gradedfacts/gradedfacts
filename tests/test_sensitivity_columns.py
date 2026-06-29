@@ -76,7 +76,7 @@ class TestSingleEngineWritePath:
             "political_leaning": "none",
         }
 
-        with patch.object(eng, "_phase1_search", return_value=""), \
+        with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
              patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
              patch.object(eng, "_get_client", return_value=MagicMock()), \
              patch.object(eng, "_check_specificity", return_value=(True, "")), \
