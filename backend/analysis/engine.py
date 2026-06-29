@@ -522,6 +522,30 @@ _JUDGMENT_TOOL = {
     },
 }
 
+# ── Proximal evidence block (appended to user message for BOTH Claude and Mistral) ──
+#
+# Both models receive these instructions in the system prompt (distal, cached for
+# Sonnet).  Appending them proximally — immediately after the findings text, in the
+# user turn — ensures the model attends to them when filling the sources array.
+# Defined once here; consensus.py imports and reuses it so the two pipelines cannot
+# drift.  Text is verbatim from the original Mistral user-message block.
+_PROXIMAL_EVIDENCE_BLOCK: str = (
+    "\n\nEVIDENCE: Research findings from Brave Search and SearXNG are provided above. "
+    "Base your judgment exclusively on these findings. Prioritize Primary sources, then Secondary. "
+    "Only cite sources that appear in the provided findings — never invent or recall sources from memory.\n\n"
+    "Rating guidance: If the provided findings include ≥3 independent Primary or Secondary sources "
+    "that consistently confirm the claim, rate VERIFIED. Secondary sources citing primary sources are "
+    "sufficient — do not downgrade to SPECULATIVE merely because a primary document is not directly "
+    "listed. Rate DEBUNKED only when counter-evidence is clear and direct; rate MISSING when evidence "
+    "is genuinely absent or contradictory."
+    "\n\nCRITICAL NUMERICAL THRESHOLD RULE:\n"
+    "'Over X' means ANY number greater than X. Period.\n"
+    "- 'Over 80 million' + actual = 81.7 million → VERIFIED. Not DEBUNKED. Not SPECULATIVE.\n"
+    "- NEVER interpret 'over X' as 'significantly over X' or 'clearly over X'\n"
+    "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
+    "- This rule overrides all other considerations"
+)
+
 # Model used for the cheap pre-flight specificity gate (no web search, no tools).
 _SPECIFICITY_MODEL = "claude-haiku-4-5-20251001"
 
@@ -973,6 +997,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     user_content = f"Claim to evaluate:\n{claim_text}"
     if search_findings:
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
+        user_content += _PROXIMAL_EVIDENCE_BLOCK
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
 

@@ -218,3 +218,139 @@ class TestMistralSystemMessageDate:
         system_msgs = [m for m in captured if m.get("role") == "system"]
         assert system_msgs
         assert "{current_date}" not in system_msgs[0]["content"]
+
+
+# ── _PROXIMAL_EVIDENCE_BLOCK: symmetry and injection tests ───────────────────
+
+def _make_mistral_response_proximal() -> MagicMock:
+    fn = MagicMock()
+    fn.name = "submit_judgment"
+    fn.arguments = json.dumps({
+        "rating": "speculative",
+        "rationale": "Some rationale.",
+        "sources": [],
+    })
+    call = MagicMock()
+    call.function = fn
+    message = MagicMock()
+    message.tool_calls = [call]
+    choice = MagicMock()
+    choice.message = message
+    response = MagicMock()
+    response.choices = [choice]
+    return response
+
+
+class TestProximalEvidenceBlock:
+    """
+    Verifies that _PROXIMAL_EVIDENCE_BLOCK is injected into Sonnet's user message
+    when findings are present, that Mistral's user message also contains the same
+    block, and that the two strings are identical (shared constant, cannot drift).
+    """
+
+    def test_proximal_block_appended_to_sonnet_user_message_when_findings_present(self):
+        """_phase2_judgment must include _PROXIMAL_EVIDENCE_BLOCK in user_content when findings are non-empty."""
+        from backend.analysis import engine as eng
+        from backend.analysis.engine import _PROXIMAL_EVIDENCE_BLOCK
+
+        mock_client = MagicMock()
+        captured_messages: list = []
+
+        def capturing_create(**kwargs):
+            captured_messages.extend(kwargs.get("messages", []))
+            # Return a minimal tool-use response
+            tool_block = MagicMock()
+            tool_block.type = "tool_use"
+            tool_block.name = "submit_judgment"
+            tool_block.input = {"rating": "speculative", "rationale": "r", "sources": []}
+            resp = MagicMock()
+            resp.content = [tool_block]
+            return resp
+
+        mock_client.messages.create.side_effect = capturing_create
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            eng._phase2_judgment(mock_client, "Test claim", "Source 1: Title\nURL: https://example.com\nExcerpt: Text.")
+
+        assert captured_messages, "No messages captured from Sonnet call"
+        user_msgs = [m for m in captured_messages if m.get("role") == "user"]
+        assert user_msgs, "No user message captured"
+        user_content = user_msgs[0]["content"]
+        assert _PROXIMAL_EVIDENCE_BLOCK in user_content, (
+            f"_PROXIMAL_EVIDENCE_BLOCK not found in Sonnet user message. "
+            f"Content excerpt: {user_content[:200]!r}"
+        )
+
+    def test_proximal_block_not_appended_to_sonnet_user_message_when_findings_absent(self):
+        """_PROXIMAL_EVIDENCE_BLOCK must NOT appear when search_findings is empty."""
+        from backend.analysis import engine as eng
+        from backend.analysis.engine import _PROXIMAL_EVIDENCE_BLOCK
+
+        mock_client = MagicMock()
+        captured_messages: list = []
+
+        def capturing_create(**kwargs):
+            captured_messages.extend(kwargs.get("messages", []))
+            tool_block = MagicMock()
+            tool_block.type = "tool_use"
+            tool_block.name = "submit_judgment"
+            tool_block.input = {"rating": "missing", "rationale": "r", "sources": []}
+            resp = MagicMock()
+            resp.content = [tool_block]
+            return resp
+
+        mock_client.messages.create.side_effect = capturing_create
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            eng._phase2_judgment(mock_client, "Test claim", "")
+
+        user_msgs = [m for m in captured_messages if m.get("role") == "user"]
+        assert user_msgs
+        assert _PROXIMAL_EVIDENCE_BLOCK not in user_msgs[0]["content"]
+
+    def test_proximal_block_appended_to_mistral_user_message_when_findings_present(self):
+        """_mistral_phase2_judgment must include _PROXIMAL_EVIDENCE_BLOCK in user_content."""
+        from backend.analysis import consensus as cons
+        from backend.analysis.engine import _PROXIMAL_EVIDENCE_BLOCK
+
+        mock_client = MagicMock()
+        captured_messages: list = []
+
+        def capturing_complete(**kwargs):
+            captured_messages.extend(kwargs.get("messages", []))
+            return _make_mistral_response_proximal()
+
+        mock_client.chat.complete.side_effect = capturing_complete
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency",
+                   side_effect=lambda r, s, *a, **kw: s), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            cons._mistral_phase2_judgment("Test claim", "Source 1: Title\nURL: https://example.com\nExcerpt: Text.")
+
+        user_msgs = [m for m in captured_messages if m.get("role") == "user"]
+        assert user_msgs, "No user message captured from Mistral call"
+        user_content = user_msgs[0]["content"]
+        assert _PROXIMAL_EVIDENCE_BLOCK in user_content, (
+            f"_PROXIMAL_EVIDENCE_BLOCK not found in Mistral user message. "
+            f"Content excerpt: {user_content[:200]!r}"
+        )
+
+    def test_sonnet_and_mistral_proximal_text_is_identical(self):
+        """
+        Both models receive the SAME proximal evidence block string — the shared
+        constant ensures they cannot drift independently.
+        """
+        from backend.analysis import engine as eng
+        from backend.analysis import consensus as cons
+        from backend.analysis.engine import _PROXIMAL_EVIDENCE_BLOCK
+
+        # Confirm consensus.py imports the same object (identity, not just equality)
+        assert cons._PROXIMAL_EVIDENCE_BLOCK is eng._PROXIMAL_EVIDENCE_BLOCK, (
+            "consensus._PROXIMAL_EVIDENCE_BLOCK is not the same object as engine._PROXIMAL_EVIDENCE_BLOCK"
+        )
+        # And it is a non-empty string
+        assert isinstance(_PROXIMAL_EVIDENCE_BLOCK, str)
+        assert len(_PROXIMAL_EVIDENCE_BLOCK) > 100  # sanity: not accidentally empty

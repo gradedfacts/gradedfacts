@@ -31,6 +31,7 @@ from backend.analysis.engine import (
     MAX_SOURCES,
     MIN_RELEVANCE_SCORE,
     _JUDGMENT_TOOL,
+    _PROXIMAL_EVIDENCE_BLOCK,
     _SYSTEM_PROMPT,
     _build_lang_instruction,
     _check_off_topic,
@@ -106,24 +107,7 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     user_content = f"Claim to evaluate:\n{claim_text}"
     if search_findings:
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
-    user_content += (
-        "\n\nEVIDENCE: Research findings from Brave Search and SearXNG are provided above. "
-        "Base your judgment exclusively on these findings. Prioritize Primary sources, then Secondary. "
-        "Only cite sources that appear in the provided findings — never invent or recall sources from memory.\n\n"
-        "Rating guidance: If the provided findings include ≥3 independent Primary or Secondary sources "
-        "that consistently confirm the claim, rate VERIFIED. Secondary sources citing primary sources are "
-        "sufficient — do not downgrade to SPECULATIVE merely because a primary document is not directly "
-        "listed. Rate DEBUNKED only when counter-evidence is clear and direct; rate MISSING when evidence "
-        "is genuinely absent or contradictory."
-    )
-    user_content += (
-        "\n\nCRITICAL NUMERICAL THRESHOLD RULE:\n"
-        "'Over X' means ANY number greater than X. Period.\n"
-        "- 'Over 80 million' + actual = 81.7 million → VERIFIED. Not DEBUNKED. Not SPECULATIVE.\n"
-        "- NEVER interpret 'over X' as 'significantly over X' or 'clearly over X'\n"
-        "- NEVER DEBUNK a threshold claim when the actual number satisfies the threshold\n"
-        "- This rule overrides all other considerations"
-    )
+        user_content += _PROXIMAL_EVIDENCE_BLOCK
     if lang_instruction:
         user_content += f"\n\n{lang_instruction}"
 
