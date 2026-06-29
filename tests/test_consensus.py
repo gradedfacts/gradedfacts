@@ -556,11 +556,11 @@ def _run_consensus(
         mock_settings.searxng_url = ""
 
         if mistral_raises is not None:
-            patch_target = patch.object(cons, "_mistral_phase2_judgment", side_effect=mistral_raises)
+            patch_target = patch.object(cons, "_mistral_search_and_judge", side_effect=mistral_raises)
         elif mistral_judgment is not None:
-            patch_target = patch.object(cons, "_mistral_phase2_judgment", return_value=mistral_judgment)
+            patch_target = patch.object(cons, "_mistral_search_and_judge", return_value=mistral_judgment)
         else:
-            patch_target = patch.object(cons, "_mistral_phase2_judgment", return_value={})
+            patch_target = patch.object(cons, "_mistral_search_and_judge", return_value={})
 
         with patch_target:
             cons.analyze_claim_with_consensus("claim-1", mock_session)
@@ -603,20 +603,26 @@ class TestAnalyzeClaimWithConsensus:
         assert j.consensus_rating == EpistemicRating.VERIFIED
         assert j.models_agree is False
 
-    def test_no_qualifying_sources_both_capped_to_speculative(self):
+    def test_no_qualifying_sources_zero_combined_sources_capped_to_missing(self):
         """
-        With no qualifying sources on either leg, each model's rating is independently
-        capped to SPECULATIVE (Claude by the threshold cap; Mistral by the hard quality
-        gate) before consensus resolution — so both legs agree on SPECULATIVE.
+        Full cascade with zero sources on both legs:
+          1. Claude's THRESHOLD-CAP fires (0 verifying sources) → VERIFIED → SPECULATIVE.
+          2. Mistral's hard quality gate fires (no independent qualifying source) → DEBUNKED → SPECULATIVE.
+          3. Both models agree on SPECULATIVE after their individual gates.
+          4. The 0-combined-sources gate fires (evaluated_sources is empty) → SPECULATIVE → MISSING.
+
+        evaluated_sources is empty because both legs supplied sources=[] — zero EvaluatedSource
+        rows were produced. This is the genuine 0-source case (not "sources present but none
+        qualifying"), so the `not evaluated_sources` guard is the correct trigger.
         """
         claude_j = {"rationale": "Claude says verified.", "sources": [], "rating": "verified"}
         mistral_j = {"rationale": "Mistral says debunked.", "sources": [], "rating": "debunked"}
 
         j, _ = _run_consensus(claude_j, mistral_j)
 
-        assert j.rating == EpistemicRating.SPECULATIVE
-        assert j.consensus_rating == EpistemicRating.SPECULATIVE
-        # Both legs independently capped → models agree at SPECULATIVE.
+        assert j.rating == EpistemicRating.MISSING
+        assert j.consensus_rating == EpistemicRating.MISSING
+        # Both legs independently capped to SPECULATIVE before the 0-sources gate fires.
         assert j.models_agree is True
 
     def test_models_disagree_rationale_includes_both_verdicts(self):
@@ -1108,65 +1114,53 @@ class TestBraveIntegration:
         assert captured_claude == ["claude-only findings"]
         assert captured_mistral == ["brave-only findings"]
 
-    def test_mistral_receives_empty_string_when_brave_unavailable(self):
-        """When BRAVE_API_KEY is absent, Mistral Phase 2 receives "" — not Claude's findings."""
-        from backend.analysis import consensus as cons
+    def test_mistral_leg_dropped_when_search_empty_claude_decides_alone(self):
+        """
+        When search_claim returns "" for the Mistral leg, _mistral_search_and_judge
+        raises RuntimeError and the existing exception handler drops the Mistral leg.
+        Claude decides alone: models_agree=None, mistral_rating=None, analyst_secondary=None.
 
-        claude_j = {"rationale": "Claude.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral.", "sources": [], "rating": "verified"}
+        search_claim returns "" only when BOTH Brave AND SearXNG together yield nothing
+        (not Brave alone — SearXNG is also queried in parallel). This replaces two
+        misleadingly-named tests ("brave_unavailable" / "brave_fails") that documented
+        the removed training-knowledge fallback behaviour.
+        """
+        from backend.analysis import consensus as cons
+        from backend.db.models import Judgment
+
+        claude_j = {
+            "rationale": "Claude says verified.",
+            "sources": _THREE_DISTINCT_PRIMARIES,
+            "rating": "verified",
+        }
 
         mock_session = _make_mock_session()
-        mock_session.add.side_effect = lambda obj: None
+        captured: dict = {}
+
+        def fake_add(obj):
+            if isinstance(obj, Judgment):
+                captured["judgment"] = obj
+
+        mock_session.add.side_effect = fake_add
         mock_session.add_all.side_effect = lambda objs: None
 
-        captured_findings: list[str] = []
-
-        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
-            captured_findings.append(findings)
-            return mistral_j
-
+        # search_claim="" simulates both Brave and SearXNG returning no results.
         with patch.object(cons, "_check_specificity", return_value=(True, "")), \
-             patch.object(cons, "_phase1_search", return_value="claude findings"), \
+             patch.object(cons, "_phase1_search", return_value="Source 1: Claude findings\nURL: https://example.com/\nExcerpt: Evidence."), \
              patch.object(cons, "_phase2_judgment", return_value=claude_j), \
              patch.object(cons, "_get_client", return_value=MagicMock()), \
              patch.object(cons, "search_claim", return_value=""), \
-             patch.object(cons, "_mistral_phase2_judgment", side_effect=fake_mistral_p2), \
              patch("backend.analysis.consensus.settings") as mock_settings:
             mock_settings.mistral_api_key = "fake-mistral-key"
             mock_settings.brave_api_key = ""
+            mock_settings.searxng_url = ""
             cons.analyze_claim_with_consensus("claim-1", mock_session)
 
-        assert captured_findings == [""]
-
-    def test_mistral_receives_empty_string_when_brave_fails(self):
-        """When Brave is configured but the request fails, Mistral gets "" — not Claude's findings."""
-        from backend.analysis import consensus as cons
-
-        claude_j = {"rationale": "Claude.", "sources": _THREE_INDEPENDENT_PRIMARIES, "rating": "verified"}
-        mistral_j = {"rationale": "Mistral.", "sources": [], "rating": "verified"}
-
-        mock_session = _make_mock_session()
-        mock_session.add.side_effect = lambda obj: None
-        mock_session.add_all.side_effect = lambda objs: None
-
-        captured_findings: list[str] = []
-
-        def fake_mistral_p2(claim_text, findings, lang_instruction=""):
-            captured_findings.append(findings)
-            return mistral_j
-
-        with patch.object(cons, "_check_specificity", return_value=(True, "")), \
-             patch.object(cons, "_phase1_search", return_value="claude findings"), \
-             patch.object(cons, "_phase2_judgment", return_value=claude_j), \
-             patch.object(cons, "_get_client", return_value=MagicMock()), \
-             patch.object(cons, "search_claim", return_value=""), \
-             patch.object(cons, "_mistral_phase2_judgment", side_effect=fake_mistral_p2), \
-             patch("backend.analysis.consensus.settings") as mock_settings:
-            mock_settings.mistral_api_key = "fake-mistral-key"
-            mock_settings.brave_api_key = "fake-brave-key"
-            cons.analyze_claim_with_consensus("claim-1", mock_session)
-
-        assert captured_findings == [""]
+        j = captured["judgment"]
+        assert j.models_agree is None
+        assert j.mistral_rating is None
+        assert j.analyst_secondary is None
+        assert j.rating.value == claude_j["rating"]
 
     def test_consensus_result_correct_regardless_of_brave_availability(self):
         """Consensus rating is correct whether Mistral received Brave findings or ""."""

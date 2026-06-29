@@ -96,18 +96,14 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     Raises RuntimeError if the model does not return the expected tool call.
     """
     client = _get_mistral_client()
+    logger.warning(
+        "[PHASE2-INPUT] (mistral) findings_len=%d findings_empty=%s",
+        len(search_findings), not bool(search_findings),
+    )
 
     user_content = f"Claim to evaluate:\n{claim_text}"
     if search_findings:
         user_content += f"\n\nResearch findings from web search:\n{search_findings}"
-    else:
-        user_content += (
-            "\n\nNo live web search results available. "
-            "Evaluate based on your training knowledge. "
-            "Include every source you reference in the sources array — use the canonical homepage URL "
-            "(e.g. https://bls.gov) when you do not have a direct article URL. "
-            "Only return an empty sources array if you genuinely cannot name any source for this claim."
-        )
     user_content += (
         "\n\nEVIDENCE: Research findings from Brave Search and SearXNG are provided above. "
         "Base your judgment exclusively on these findings. Prioritize Primary sources, then Secondary. "
@@ -173,11 +169,17 @@ def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> di
     """
     Mistral's independent Phase 1+2: fetch search findings then run Phase 2 judgment.
     Runs inside the Phase 2 ThreadPoolExecutor alongside Claude's thread.
-    Search findings may be "" if neither Brave nor SearXNG is configured;
-    _mistral_phase2_judgment handles that case with a knowledge-only fallback message.
+    If search returns no results, raises RuntimeError so the executor exception
+    handler drops the Mistral leg and Claude decides alone.
     """
     logger.info("_mistral_search_and_judge called")
     search_findings = search_claim(claim_text)
+    logger.warning(
+        "[PHASE1-OUTPUT] (mistral) findings_len=%d findings_empty=%s",
+        len(search_findings), not bool(search_findings),
+    )
+    if not search_findings:
+        raise RuntimeError("Mistral search returned no results")
     return _mistral_phase2_judgment(claim_text, search_findings, lang_instruction)
 
 
@@ -727,6 +729,14 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             claim_id, consensus_rating,
         )
         consensus_rating = EpistemicRating.SPECULATIVE
+
+    # 0-sources gate: mirrors engine.py — 0 combined sources + SPECULATIVE → MISSING
+    if not evaluated_sources and consensus_rating == EpistemicRating.SPECULATIVE:
+        logger.warning(
+            "claim %s: 0 combined sources — SPECULATIVE overridden to MISSING.",
+            claim_id,
+        )
+        consensus_rating = EpistemicRating.MISSING
 
     # Build a combined rationale that surfaces both verdicts when models disagree
     if models_agree is False:
