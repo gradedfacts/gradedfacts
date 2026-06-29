@@ -205,6 +205,8 @@
     "source_quality_claude": "Mallit olivat eri mieltä. Ratkaistu lähteen laadun perusteella — Clauden arvio käytössä (ensisijaisia/riippumattomia lähteitä läsnä).",
     "source_quality_mistral": "Mallit olivat eri mieltä. Ratkaistu lähteen laadun perusteella — Mistralin arvio käytössä (ensisijaisia/riippumattomia lähteitä läsnä).",
     "polarity_margin_met": "Mallit päätyivät vastakkaisiin johtopäätöksiin. Tuomio seuraa analyysia, jota tukevat huomattavasti vahvemmat riippumattomat lähteet.",
-    "polarity_margin_not_met": "Mallit päätyivät vastakkaisiin johtopäätöksiin vertailukelpoisella lähdelaadulla. Tuomio on oletuksena Spekulatiivinen."
+    "polarity_margin_not_met": "Mallit päätyivät vastakkaisiin johtopäätöksiin vertailukelpoisella lähdelaadulla. Tuomio on oletuksena Spekulatiivinen.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

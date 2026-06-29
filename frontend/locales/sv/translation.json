@@ -205,6 +205,8 @@
     "source_quality_claude": "Modellerna var oeniga. Löst genom källkvalitet — Claudes bedömning tillämpades (primära/oberoende källor finns).",
     "source_quality_mistral": "Modellerna var oeniga. Löst genom källkvalitet — Mistrals bedömning tillämpades (primära/oberoende källor finns).",
     "polarity_margin_met": "Modellerna nådde motsatta slutsatser. Bedömningen följer analysen som stöds av väsentligt starkare oberoende källor.",
-    "polarity_margin_not_met": "Modellerna nådde motsatta slutsatser med jämförbar källkvalitet. Bedömningen faller tillbaka på Spekulativ."
+    "polarity_margin_not_met": "Modellerna nådde motsatta slutsatser med jämförbar källkvalitet. Bedömningen faller tillbaka på Spekulativ.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

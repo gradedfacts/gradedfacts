@@ -205,6 +205,8 @@
     "source_quality_claude": "Os modelos discordaram. Resolvido pela qualidade das fontes — avaliação do Claude aplicada (fontes primárias/independentes presentes).",
     "source_quality_mistral": "Os modelos discordaram. Resolvido pela qualidade das fontes — avaliação do Mistral aplicada (fontes primárias/independentes presentes).",
     "polarity_margin_met": "Os modelos chegaram a veredictos opostos. O veredicto segue a análise apoiada por fontes independentes substancialmente mais sólidas.",
-    "polarity_margin_not_met": "Os modelos chegaram a veredictos opostos com qualidade de fontes comparável. O veredicto padrão é Especulativo."
+    "polarity_margin_not_met": "Os modelos chegaram a veredictos opostos com qualidade de fontes comparável. O veredicto padrão é Especulativo.",
+    "single_model_claude": "Julgamento baseado apenas no Claude — Mistral não encontrou fontes ou não respondeu.",
+    "single_model_mistral": "Julgamento baseado apenas no Mistral — Claude não encontrou fontes ou não respondeu."
   }
 }

@@ -205,6 +205,8 @@
     "source_quality_claude": "De modellen waren het niet eens. Opgelost op basis van bronkwaliteit — de beoordeling van Claude toegepast (primaire/onafhankelijke bronnen aanwezig).",
     "source_quality_mistral": "De modellen waren het niet eens. Opgelost op basis van bronkwaliteit — de beoordeling van Mistral toegepast (primaire/onafhankelijke bronnen aanwezig).",
     "polarity_margin_met": "De modellen kwamen tot tegengestelde uitspraken. De uitspraak volgt de analyse ondersteund door aanzienlijk sterkere onafhankelijke bronnen.",
-    "polarity_margin_not_met": "De modellen kwamen tot tegengestelde uitspraken met vergelijkbare bronkwaliteit. De uitspraak valt standaard terug op Speculatief."
+    "polarity_margin_not_met": "De modellen kwamen tot tegengestelde uitspraken met vergelijkbare bronkwaliteit. De uitspraak valt standaard terug op Speculatief.",
+    "single_model_claude": "Oordeel gebaseerd op Claude alleen — Mistral vond geen bronnen of reageerde niet.",
+    "single_model_mistral": "Oordeel gebaseerd op Mistral alleen — Claude vond geen bronnen of reageerde niet."
   }
 }

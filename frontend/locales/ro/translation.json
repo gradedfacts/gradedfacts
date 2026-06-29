@@ -205,6 +205,8 @@
     "source_quality_claude": "Modelele nu au fost de acord. Rezolvat prin calitatea surselor — evaluarea Claude aplicată (surse primare/independente prezente).",
     "source_quality_mistral": "Modelele nu au fost de acord. Rezolvat prin calitatea surselor — evaluarea Mistral aplicată (surse primare/independente prezente).",
     "polarity_margin_met": "Modelele au ajuns la verdictele opuse. Verdictul urmează analiza susținută de surse independente substanțial mai puternice.",
-    "polarity_margin_not_met": "Modelele au ajuns la verdictele opuse cu calitate comparabilă a surselor. Verdictul este implicit Speculativ."
+    "polarity_margin_not_met": "Modelele au ajuns la verdictele opuse cu calitate comparabilă a surselor. Verdictul este implicit Speculativ.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

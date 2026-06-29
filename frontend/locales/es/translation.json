@@ -205,6 +205,8 @@
     "source_quality_claude": "Los modelos no coincidieron. Resuelto por calidad de fuentes — se aplicó la valoración de Claude (fuentes primarias/independientes presentes).",
     "source_quality_mistral": "Los modelos no coincidieron. Resuelto por calidad de fuentes — se aplicó la valoración de Mistral (fuentes primarias/independientes presentes).",
     "polarity_margin_met": "Los modelos llegaron a veredictos opuestos. El veredicto sigue el análisis respaldado por fuentes independientes sustancialmente más sólidas.",
-    "polarity_margin_not_met": "Los modelos llegaron a veredictos opuestos con calidad de fuentes comparable. El veredicto predeterminado es Especulativo."
+    "polarity_margin_not_met": "Los modelos llegaron a veredictos opuestos con calidad de fuentes comparable. El veredicto predeterminado es Especulativo.",
+    "single_model_claude": "Juicio basado únicamente en Claude — Mistral no encontró fuentes o no respondió.",
+    "single_model_mistral": "Juicio basado únicamente en Mistral — Claude no encontró fuentes o no respondió."
   }
 }

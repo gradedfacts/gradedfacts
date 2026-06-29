@@ -205,6 +205,8 @@
     "source_quality_claude": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Claude'un değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut).",
     "source_quality_mistral": "Modeller anlaşamadı. Kaynak kalitesiyle çözüldü — Mistral'ın değerlendirmesi uygulandı (birincil/bağımsız kaynaklar mevcut).",
     "polarity_margin_met": "Modeller zıt sonuçlara ulaştı. Karar, önemli ölçüde daha güçlü bağımsız kaynaklara dayanan analizi izliyor.",
-    "polarity_margin_not_met": "Modeller karşılaştırılabilir kaynak kalitesiyle zıt sonuçlara ulaştı. Karar varsayılan olarak Spekülatif'e düşüyor."
+    "polarity_margin_not_met": "Modeller karşılaştırılabilir kaynak kalitesiyle zıt sonuçlara ulaştı. Karar varsayılan olarak Spekülatif'e düşüyor.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

@@ -205,6 +205,8 @@
     "source_quality_claude": "Les modèles étaient en désaccord. Résolu par la qualité des sources — l'évaluation de Claude appliquée (sources primaires/indépendantes présentes).",
     "source_quality_mistral": "Les modèles étaient en désaccord. Résolu par la qualité des sources — l'évaluation de Mistral appliquée (sources primaires/indépendantes présentes).",
     "polarity_margin_met": "Les modèles ont abouti à des verdicts opposés. Le verdict suit l'analyse soutenue par des sources indépendantes nettement plus solides.",
-    "polarity_margin_not_met": "Les modèles ont abouti à des verdicts opposés avec une qualité de sources comparable. Le verdict par défaut est Spéculatif."
+    "polarity_margin_not_met": "Les modèles ont abouti à des verdicts opposés avec une qualité de sources comparable. Le verdict par défaut est Spéculatif.",
+    "single_model_claude": "Jugement basé sur Claude seul — Mistral n'a trouvé aucune source ou n'a pas répondu.",
+    "single_model_mistral": "Jugement basé sur Mistral seul — Claude n'a trouvé aucune source ou n'a pas répondu."
   }
 }

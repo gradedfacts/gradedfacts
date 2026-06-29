@@ -41,6 +41,7 @@ from backend.analysis.engine import (
     _get_registry_version,
     _phase1_search,
     _phase2_judgment,
+    _get_no_search_results_message,
     _verify_rating_consistency,
     _verify_temporal_cap,
     _zurich_date,
@@ -185,6 +186,24 @@ def _mistral_search_and_judge(claim_text: str, lang_instruction: str = "") -> di
     return _mistral_phase2_judgment(claim_text, search_findings, lang_instruction)
 
 
+def _claude_search_and_judge(claim_text: str, lang_instruction: str = "") -> dict:
+    """
+    Claude's independent Phase 1+2: fetch search findings then run Phase 2 judgment.
+    Mirrors _mistral_search_and_judge — runs inside the ThreadPoolExecutor and raises
+    RuntimeError on empty search so the exception handler drops this leg and lets
+    Mistral decide alone.
+    """
+    logger.info("_claude_search_and_judge called")
+    search_findings = _phase1_search(claim_text)
+    logger.warning(
+        "[PHASE1-OUTPUT] (claude consensus) findings_len=%d findings_empty=%s",
+        len(search_findings), not bool(search_findings),
+    )
+    if not search_findings:
+        raise RuntimeError("Claude search returned no results")
+    return _phase2_judgment(_get_client(), claim_text, search_findings, lang_instruction)
+
+
 # ── Consensus resolution ──────────────────────────────────────────────────────
 
 def _source_quality_score(sources: list[dict]) -> tuple[int, int]:
@@ -226,7 +245,7 @@ def _polarity_margin_met(winner: tuple[int, int], loser: tuple[int, int]) -> boo
 
 
 def _resolve_consensus(
-    claude_rating: EpistemicRating,
+    claude_rating: EpistemicRating | None,
     mistral_rating: EpistemicRating | None,
     *,
     claude_source_quality: tuple[int, int] = (0, 0),
@@ -236,6 +255,7 @@ def _resolve_consensus(
     Returns (consensus_rating, models_agree).
 
     Resolution order (first match wins):
+      0. claude_rating is None                     → pass through Mistral's rating; models_agree=None.
       1. mistral_rating is None                    → pass through Claude's rating; models_agree=None.
       2. Both identical                             → that shared rating; models_agree=True.
       3. DEBUNKED + MISSING (either order)          → DEBUNKED (stronger signal wins); models_agree=False.
@@ -248,6 +268,8 @@ def _resolve_consensus(
          logs [CONSENSUS-TIEBREAK]; models_agree=False.
       6. All other conflicts                        → SPECULATIVE (conservative floor); models_agree=False.
     """
+    if claude_rating is None:
+        return mistral_rating, None  # type: ignore[return-value]
     if mistral_rating is None:
         return claude_rating, None
     if claude_rating == mistral_rating:
@@ -516,35 +538,45 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
         f"regardless of what language the claim itself is written in."
     )
 
-    # ── Phase 1: web search ────────────────────────────────────────────────────
-    search_findings = _phase1_search(claim.text)
-
     # ── Phase 2: parallel judgment ────────────────────────────────────────────
+    # Phase 1 (web search) now runs inside each model's helper so that an empty
+    # search can raise and drop only that model's leg — symmetric with Stage B.
     mistral_available = bool(settings.mistral_api_key)
     logger.info("mistral_available: %s", mistral_available)
 
-    claude_data: dict
+    claude_data: dict | None = None
     mistral_data: dict | None = None
 
     if mistral_available:
         # Do NOT use `with ThreadPoolExecutor(...) as executor` here.
         # The context manager calls shutdown(wait=True) on exit, which blocks until
-        # every submitted thread finishes.  If the Mistral thread hangs (no HTTP
-        # timeout on the SDK call), the background task would block forever and the
-        # poll endpoint would never find a completed judgment.
-        # shutdown(wait=False) lets the Mistral thread run to natural completion
-        # without blocking the main pipeline.
+        # every submitted thread finishes.  If a thread hangs (no HTTP timeout on
+        # the SDK call), the background task would block forever and the poll
+        # endpoint would never find a completed judgment.
+        # shutdown(wait=False) lets threads run to natural completion without
+        # blocking the main pipeline.
         executor = ThreadPoolExecutor(max_workers=2)
         try:
+            # Both helpers run Phase 1 (search) + Phase 2 (judgment) independently.
+            # Either can raise (empty search or failure) → drops only that leg.
             claude_future = executor.submit(
-                _phase2_judgment, claude_client, claim.text, search_findings, lang_instruction
+                _claude_search_and_judge, claim.text, lang_instruction
             )
-            # _mistral_search_and_judge runs its own independent Brave Search Phase 1
-            # then Mistral Phase 2 — no shared state with Claude's thread.
             mistral_future = executor.submit(
                 _mistral_search_and_judge, claim.text, mistral_lang_instruction
             )
-            claude_data = claude_future.result()
+            try:
+                claude_data = claude_future.result(timeout=45)
+            except FuturesTimeoutError:
+                logger.warning(
+                    "[SINGLE-MODEL] Claude timed out for claim %s; Mistral may decide alone.",
+                    claim_id,
+                )
+            except Exception as exc:
+                logger.warning(
+                    "[SINGLE-MODEL] Claude failed for claim %s (%s); Mistral may decide alone.",
+                    claim_id, exc,
+                )
             try:
                 mistral_data = mistral_future.result(timeout=45)
             except FuturesTimeoutError:
@@ -561,9 +593,123 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             executor.shutdown(wait=False)
     else:
         logger.info("MISTRAL_API_KEY not set; running single-engine (Claude-only) analysis.")
-        claude_data = _phase2_judgment(claude_client, claim.text, search_findings, lang_instruction)
+        try:
+            claude_data = _claude_search_and_judge(claim.text, lang_instruction)
+        except Exception as exc:
+            logger.warning(
+                "[SINGLE-MODEL] Claude failed for claim %s (%s).",
+                claim_id, exc,
+            )
+
+    # ── Symmetric resolution: handle dropped legs ─────────────────────────────
+
+    _VALID_LEANINGS = {"left", "right", "none"}
+
+    def _safe_leaning(data: dict | None) -> str:
+        raw = (data or {}).get("political_leaning", "none")
+        return raw if raw in _VALID_LEANINGS else "none"
+
+    if claude_data is None and mistral_data is None:
+        logger.warning(
+            "[SINGLE-MODEL] Both Claude and Mistral produced no data for claim %s → MISSING.",
+            claim_id,
+        )
+        judgment = Judgment(
+            claim_id=claim_id,
+            rating=EpistemicRating.MISSING,
+            rationale=_get_no_search_results_message(lang_name),
+            analyst=_CLAUDE_MODEL,
+            is_active=True,
+            model_claude=None,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
+        )
+        _deactivate_prior_judgments(session, claim_id)
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
+
+    if claude_data is None:
+        # Mistral-only path: Claude's search returned nothing or Claude failed.
+        assert mistral_data is not None  # guaranteed by the both-None gate above
+        logger.warning("[SINGLE-MODEL] Claude unavailable for claim %s; Mistral decides alone.", claim_id)
+        m_sources, m_derived, m_has_qualifying, m_indep_secondary, m_verifying_tiers = _process_sources(
+            mistral_data.get("sources") or []
+        )
+        _pending_judgment_id = str(uuid.uuid4())
+        evaluated_sources = [
+            EvaluatedSource(
+                claim_id=claim_id,
+                judgment_id=_pending_judgment_id,
+                url=src.get("url") or src.get("title") or "",
+                tier=SourceTier(src.get("tier", "tertiary")),
+                is_independent=independence_bool(src.get("is_independent", True)),
+                independence_label=independence_label(src.get("is_independent", True)),
+                affiliation_note=src.get("affiliation_note"),
+                relevance_score=max(0.0, min(1.0, float(src.get("relevance_score") or 0.5))),
+                excerpt=src.get("excerpt"),
+                supports_claim=src.get("supports_claim", True),
+            )
+            for src in m_sources
+            if src.get("url") or src.get("title")
+        ]
+        m_rating = _rating_from_data(mistral_data, m_derived, claim_id)
+        if m_rating is EpistemicRating.VERIFIED and not verified_threshold_met(
+            m_verifying_tiers, m_indep_secondary
+        ):
+            logger.warning(
+                "[THRESHOLD-CAP] claim %s (Mistral-only): model said VERIFIED but threshold not met → SPECULATIVE.",
+                claim_id,
+            )
+            if len(m_verifying_tiers) == 0:
+                _raw_mistral = mistral_data.get("sources") or []
+                logger.warning(
+                    "[THRESHOLD-CAP-DETAIL] claim %s (Mistral-only): raw sources before evaluate_source() — %s",
+                    claim_id,
+                    [(s.get("url", ""), s.get("relevance_score")) for s in _raw_mistral if isinstance(s, dict)],
+                )
+            m_rating = EpistemicRating.SPECULATIVE
+        if not m_has_qualifying and m_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+            logger.warning(
+                "claim %s: hard quality gate (Mistral-only) — no independent qualifying source; "
+                "rating %s overridden to SPECULATIVE.",
+                claim_id, m_rating,
+            )
+            m_rating = EpistemicRating.SPECULATIVE
+        if not evaluated_sources and m_rating == EpistemicRating.SPECULATIVE:
+            logger.warning(
+                "claim %s: 0 sources (Mistral-only) — SPECULATIVE overridden to MISSING.", claim_id
+            )
+            m_rating = EpistemicRating.MISSING
+        m_rationale = (mistral_data.get("rationale") or "") + "\n\n[RESOLUTION:consensus.single_model_mistral]"
+        judgment = Judgment(
+            id=_pending_judgment_id,
+            claim_id=claim_id,
+            rating=m_rating,
+            rationale=m_rationale,
+            analyst=_MISTRAL_MODEL,
+            analyst_secondary=None,
+            consensus_rating=m_rating,
+            models_agree=None,
+            is_active=True,
+            political_leaning=_safe_leaning(mistral_data),
+            model_claude=None,
+            model_mistral=_MISTRAL_MODEL,
+            registry_version=_get_registry_version(),
+            prompt_version="1.0",
+            claude_rating=None,
+            mistral_rating=m_rating.value,
+        )
+        session.add_all(evaluated_sources)
+        _deactivate_prior_judgments(session, claim_id)
+        session.add(judgment)
+        session.commit()
+        session.refresh(judgment)
+        return judgment
 
     # ── Process Claude's sources and derive its rating ────────────────────────
+    # (claude_data is guaranteed non-None beyond this point)
     claude_sources, claude_derived, claude_has_qualifying, claude_indep_secondary_verifying, claude_verifying_tiers = _process_sources(claude_data.get("sources") or [])
 
     # Pre-generate the consensus judgment ID so all source rows (both Claude's and
@@ -767,7 +913,12 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
             f"[Mistral: {mistral_rating.value.upper()}] {mistral_rationale}\n\n"  # type: ignore[union-attr]
             f"{resolution_note}"
         )
+    elif models_agree is None:
+        # Claude-only: Mistral absent, timed out, found no sources, or failed.
+        logger.warning("[SINGLE-MODEL] claim %s: Claude only (Mistral absent/failed).", claim_id)
+        rationale = claude_data["rationale"] + "\n\n[RESOLUTION:consensus.single_model_claude]"
     else:
+        # models_agree is True: both present and agreed.
         rationale = claude_data["rationale"]
 
     # ── Write consensus judgment ──────────────────────────────────────────────
@@ -778,11 +929,6 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     # - Mistral absent or both agreed → Claude's leaning (primary)
     # - Mistral won via source-quality tiebreaker → Mistral's leaning
     # - SPECULATIVE fallback (no clear winner) → Claude's leaning (default)
-    _VALID_LEANINGS = {"left", "right", "none"}
-    def _safe_leaning(data: dict) -> str:
-        raw = data.get("political_leaning", "none") if data else "none"
-        return raw if raw in _VALID_LEANINGS else "none"
-
     mistral_won = (
         models_agree is False
         and mistral_data is not None

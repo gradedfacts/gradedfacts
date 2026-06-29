@@ -205,6 +205,8 @@
     "source_quality_claude": "Modellerne var uenige. Løst via kildekvalitet — Claudes vurdering anvendt (primære/uafhængige kilder til stede).",
     "source_quality_mistral": "Modellerne var uenige. Løst via kildekvalitet — Mistrals vurdering anvendt (primære/uafhængige kilder til stede).",
     "polarity_margin_met": "Modellerne nåede til modsatte konklusioner. Afgørelsen følger analysen støttet af væsentligt stærkere uafhængige kilder.",
-    "polarity_margin_not_met": "Modellerne nåede til modsatte konklusioner med sammenlignelig kildekvalitet. Afgørelsen er som standard Spekulativ."
+    "polarity_margin_not_met": "Modellerne nåede til modsatte konklusioner med sammenlignelig kildekvalitet. Afgørelsen er som standard Spekulativ.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

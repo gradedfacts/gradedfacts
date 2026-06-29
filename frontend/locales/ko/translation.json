@@ -205,6 +205,8 @@
     "source_quality_claude": "모델이 불일치했습니다. 출처 품질로 해결되었습니다 — Claude의 평가가 적용되었습니다(기본/독립 출처 존재).",
     "source_quality_mistral": "모델이 불일치했습니다. 출처 품질로 해결되었습니다 — Mistral의 평가가 적용되었습니다(기본/독립 출처 존재).",
     "polarity_margin_met": "모델들이 반대 결론에 도달했습니다. 평결은 실질적으로 더 강력한 독립적 출처가 뒷받침하는 분석을 따릅니다.",
-    "polarity_margin_not_met": "모델들이 비슷한 출처 품질로 반대 결론에 도달했습니다. 평결은 기본적으로 추측성입니다."
+    "polarity_margin_not_met": "모델들이 비슷한 출처 품질로 반대 결론에 도달했습니다. 평결은 기본적으로 추측성입니다.",
+    "single_model_claude": "판단은 Claude만을 기반으로 합니다 — Mistral이 소스를 찾지 못했거나 응답하지 않았습니다.",
+    "single_model_mistral": "판단은 Mistral만을 기반으로 합니다 — Claude가 소스를 찾지 못했거나 응답하지 않았습니다."
   }
 }

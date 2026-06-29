@@ -205,6 +205,8 @@
     "source_quality_claude": "A modellek nem értettek egyet. Forrásminőség alapján megoldva — Claude értékelése alkalmazva (elsődleges/független források jelen vannak).",
     "source_quality_mistral": "A modellek nem értettek egyet. Forrásminőség alapján megoldva — Mistral értékelése alkalmazva (elsődleges/független források jelen vannak).",
     "polarity_margin_met": "A modellek ellentétes ítéletekre jutottak. Az ítélet a lényegesen erősebb független forrásokkal alátámasztott elemzést követi.",
-    "polarity_margin_not_met": "A modellek hasonló forrásminőség mellett ellentétes ítéletekre jutottak. Az ítélet alapértelmezetten Spekulatív."
+    "polarity_margin_not_met": "A modellek hasonló forrásminőség mellett ellentétes ítéletekre jutottak. Az ítélet alapértelmezetten Spekulatív.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

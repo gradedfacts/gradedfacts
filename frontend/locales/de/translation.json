@@ -205,6 +205,8 @@
     "source_quality_claude": "Die Modelle waren sich uneinig. Entschieden durch Quellenqualität — Claudes Bewertung übernommen (Primär-/Unabhängige Quellen vorhanden).",
     "source_quality_mistral": "Die Modelle waren sich uneinig. Entschieden durch Quellenqualität — Mistrals Bewertung übernommen (Primär-/Unabhängige Quellen vorhanden).",
     "polarity_margin_met": "Die Modelle kamen zu entgegengesetzten Urteilen. Das Urteil folgt der Analyse mit deutlich stärkeren unabhängigen Quellen.",
-    "polarity_margin_not_met": "Die Modelle kamen zu entgegengesetzten Urteilen bei vergleichbarer Quellenqualität. Das Urteil wird auf Spekulativ gesetzt."
+    "polarity_margin_not_met": "Die Modelle kamen zu entgegengesetzten Urteilen bei vergleichbarer Quellenqualität. Das Urteil wird auf Spekulativ gesetzt.",
+    "single_model_claude": "Urteil basiert ausschließlich auf Claude — Mistral hat keine Quellen gefunden oder nicht geantwortet.",
+    "single_model_mistral": "Urteil basiert ausschließlich auf Mistral — Claude hat keine Quellen gefunden oder nicht geantwortet."
   }
 }

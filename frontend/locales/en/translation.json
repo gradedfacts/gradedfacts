@@ -205,6 +205,8 @@
     "source_quality_claude": "Models disagreed. Resolved by source quality — Claude's rating applied (Primary/Independent sources present).",
     "source_quality_mistral": "Models disagreed. Resolved by source quality — Mistral's rating applied (Primary/Independent sources present).",
     "polarity_margin_met": "The models reached opposite verdicts. The verdict follows the analysis backed by substantially stronger independent sources.",
-    "polarity_margin_not_met": "The models reached opposite verdicts with comparable source quality. The verdict defaults to Speculative."
+    "polarity_margin_not_met": "The models reached opposite verdicts with comparable source quality. The verdict defaults to Speculative.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

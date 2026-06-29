@@ -205,6 +205,8 @@
     "source_quality_claude": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Claude (přítomny primární/nezávislé zdroje).",
     "source_quality_mistral": "Modely se neshodly. Vyřešeno kvalitou zdrojů — použito hodnocení Mistral (přítomny primární/nezávislé zdroje).",
     "polarity_margin_met": "Modely dospěly k opačným závěrům. Verdikt se řídí analýzou podpořenou podstatně silnějšími nezávislými zdroji.",
-    "polarity_margin_not_met": "Modely dospěly k opačným závěrům při srovnatelné kvalitě zdrojů. Verdikt je standardně Spekulativní."
+    "polarity_margin_not_met": "Modely dospěly k opačným závěrům při srovnatelné kvalitě zdrojů. Verdikt je standardně Spekulativní.",
+    "single_model_claude": "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "single_model_mistral": "Judgment based on Mistral alone — Claude found no sources or did not respond."
   }
 }

@@ -205,6 +205,8 @@
     "source_quality_claude": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Claude (obecne źródła pierwotne/niezależne).",
     "source_quality_mistral": "Modele były niezgodne. Rozwiązano na podstawie jakości źródeł — zastosowano ocenę Mistral (obecne źródła pierwotne/niezależne).",
     "polarity_margin_met": "Modele doszły do przeciwstawnych wniosków. Wyrok podąża za analizą popartą znacznie silniejszymi niezależnymi źródłami.",
-    "polarity_margin_not_met": "Modele doszły do przeciwstawnych wniosków przy porównywalnej jakości źródeł. Wyrok domyślnie jest Spekulatywny."
+    "polarity_margin_not_met": "Modele doszły do przeciwstawnych wniosków przy porównywalnej jakości źródeł. Wyrok domyślnie jest Spekulatywny.",
+    "single_model_claude": "Ocena oparta wyłącznie na Claude — Mistral nie znalazł źródeł lub nie odpowiedział.",
+    "single_model_mistral": "Ocena oparta wyłącznie na Mistral — Claude nie znalazł źródeł lub nie odpowiedział."
   }
 }

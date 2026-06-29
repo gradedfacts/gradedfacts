@@ -1537,3 +1537,182 @@ class TestPhase1Search:
 
         mock_sc.assert_called_once_with("some claim")
         assert result == ""
+
+
+# ── Stage C: symmetric single-model orchestrator ─────────────────────────────
+
+class TestResolveConsensusClaudeNone:
+    """Stage C: _resolve_consensus(None, mistral_rating) → (mistral_rating, None)."""
+
+    def setup_method(self):
+        from backend.analysis.consensus import _resolve_consensus
+        self._fn = _resolve_consensus
+
+    def test_claude_none_passes_through_mistral_rating_for_all_values(self):
+        for r in EpistemicRating:
+            rating, agree = self._fn(None, r)
+            assert rating == r, f"Expected {r} when claude_rating=None, got {rating}"
+            assert agree is None
+
+    def test_claude_none_verified(self):
+        rating, agree = self._fn(None, EpistemicRating.VERIFIED)
+        assert rating == EpistemicRating.VERIFIED
+        assert agree is None
+
+    def test_claude_none_debunked(self):
+        rating, agree = self._fn(None, EpistemicRating.DEBUNKED)
+        assert rating == EpistemicRating.DEBUNKED
+        assert agree is None
+
+    def test_claude_none_missing(self):
+        rating, agree = self._fn(None, EpistemicRating.MISSING)
+        assert rating == EpistemicRating.MISSING
+        assert agree is None
+
+
+def _make_both_none_session(claim_text: str = "Test claim"):
+    """Session mock that captures the Judgment added via session.add()."""
+    from backend.db.models import Judgment
+
+    mock_claim = MagicMock()
+    mock_claim.text = claim_text
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+    captured: dict = {}
+
+    def fake_add(obj):
+        if isinstance(obj, Judgment):
+            captured["judgment"] = obj
+
+    mock_session.add.side_effect = fake_add
+    mock_session.add_all.side_effect = lambda objs: None
+    return mock_session, captured
+
+
+def _run_both_none(claim_text: str = "Test claim"):
+    """Run analyze_claim_with_consensus with BOTH legs raising (both-None scenario)."""
+    from backend.analysis import consensus as cons
+
+    mock_session, captured = _make_both_none_session(claim_text)
+
+    with patch.object(cons, "_check_specificity", return_value=(True, "")), \
+         patch.object(cons, "_claude_search_and_judge", side_effect=RuntimeError("Claude empty")), \
+         patch.object(cons, "_mistral_search_and_judge", side_effect=RuntimeError("Mistral empty")), \
+         patch.object(cons, "_get_client", return_value=MagicMock()), \
+         patch("backend.analysis.consensus.settings") as mock_settings:
+        mock_settings.mistral_api_key = "fake-key"
+        mock_settings.brave_api_key = ""
+        mock_settings.searxng_url = ""
+        cons.analyze_claim_with_consensus("claim-1", mock_session)
+
+    return captured.get("judgment")
+
+
+def _run_mistral_only(mistral_judgment: dict, claim_text: str = "Test claim"):
+    """Run analyze_claim_with_consensus with Claude raising and Mistral succeeding."""
+    from backend.analysis import consensus as cons
+    from backend.db.models import EvaluatedSource, Judgment
+
+    mock_claim = MagicMock()
+    mock_claim.text = claim_text
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+    captured: dict = {"sources": []}
+
+    def fake_add(obj):
+        if isinstance(obj, Judgment):
+            captured["judgment"] = obj
+
+    def fake_add_all(objs):
+        captured["sources"].extend(o for o in objs if isinstance(o, EvaluatedSource))
+
+    mock_session.add.side_effect = fake_add
+    mock_session.add_all.side_effect = fake_add_all
+
+    with patch.object(cons, "_check_specificity", return_value=(True, "")), \
+         patch.object(cons, "_claude_search_and_judge", side_effect=RuntimeError("Claude empty")), \
+         patch.object(cons, "_mistral_search_and_judge", return_value=mistral_judgment), \
+         patch.object(cons, "_get_client", return_value=MagicMock()), \
+         patch("backend.analysis.consensus.settings") as mock_settings:
+        mock_settings.mistral_api_key = "fake-key"
+        mock_settings.brave_api_key = ""
+        mock_settings.searxng_url = ""
+        cons.analyze_claim_with_consensus("claim-1", mock_session)
+
+    return captured.get("judgment"), captured["sources"]
+
+
+class TestBothNoneMissing:
+    """Stage C: Both legs fail → MISSING judgment."""
+
+    def test_rating_is_missing(self):
+        j = _run_both_none()
+        assert j is not None
+        assert j.rating == EpistemicRating.MISSING
+
+    def test_models_agree_is_none(self):
+        j = _run_both_none()
+        assert j.models_agree is None
+
+    def test_analyst_secondary_is_none(self):
+        j = _run_both_none()
+        assert j.analyst_secondary is None
+
+    def test_claude_rating_is_none(self):
+        j = _run_both_none()
+        assert j.claude_rating is None
+
+    def test_mistral_rating_is_none(self):
+        j = _run_both_none()
+        assert j.mistral_rating is None
+
+
+class TestMistralOnlyPath:
+    """Stage C: Claude fails/empty → Mistral decides alone."""
+
+    def test_uses_mistral_rating(self):
+        m_j = {"rationale": "Mistral verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.rating == EpistemicRating.VERIFIED
+
+    def test_analyst_is_mistral(self):
+        m_j = {"rationale": "Mistral.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.analyst == "mistral-large-2512"
+
+    def test_analyst_secondary_is_none(self):
+        m_j = {"rationale": "Mistral.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.analyst_secondary is None
+
+    def test_models_agree_is_none(self):
+        m_j = {"rationale": "Mistral.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.models_agree is None
+
+    def test_claude_rating_field_is_none(self):
+        m_j = {"rationale": "Mistral.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.claude_rating is None
+
+    def test_resolution_key_in_rationale(self):
+        m_j = {"rationale": "Mistral says so.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        j, _ = _run_mistral_only(m_j)
+        assert "[RESOLUTION:consensus.single_model_mistral]" in j.rationale
+
+    def test_hard_quality_gate_fires_on_mistral_no_qualifying_source(self):
+        """Mistral-only hard quality gate uses mistral sources, not Claude's (symmetric)."""
+        m_j = {
+            "rationale": "Mistral says verified.",
+            "sources": [{"url": "https://wiki.example.com/x", "tier": "tertiary",
+                         "is_independent": True, "relevance_score": 0.8, "supports_claim": True}],
+            "rating": "verified",
+        }
+        j, _ = _run_mistral_only(m_j)
+        assert j.rating == EpistemicRating.SPECULATIVE
+
+    def test_zero_sources_capped_to_missing(self):
+        """0 sources on Mistral-only path: SPECULATIVE → MISSING via 0-sources gate."""
+        m_j = {"rationale": "Mistral speculative.", "sources": [], "rating": "speculative"}
+        j, _ = _run_mistral_only(m_j)
+        assert j.rating == EpistemicRating.MISSING

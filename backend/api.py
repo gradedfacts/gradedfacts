@@ -61,6 +61,8 @@ _RESOLUTION_FALLBACKS: dict[str, str] = {
     "consensus.source_quality_mistral": "Models disagreed. Resolved by source quality — Mistral’s rating applied (Primary/Independent sources present).",
     "consensus.polarity_margin_met":     "The models reached opposite verdicts. The verdict follows the analysis backed by substantially stronger independent sources.",
     "consensus.polarity_margin_not_met": "The models reached opposite verdicts with comparable source quality. The verdict defaults to Speculative.",
+    "consensus.single_model_claude":     "Judgment based on Claude alone — Mistral found no sources or did not respond.",
+    "consensus.single_model_mistral":    "Judgment based on Mistral alone — Claude found no sources or did not respond.",
 }
 
 # Translated display labels for rating words inside [Model: RATING] badges.

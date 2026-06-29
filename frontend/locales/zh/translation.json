@@ -205,6 +205,8 @@
     "source_quality_claude": "模型意见不一致。根据来源质量解决 — 采用Claude的评级（存在主要/独立来源）。",
     "source_quality_mistral": "模型意见不一致。根据来源质量解决 — 采用Mistral的评级（存在主要/独立来源）。",
     "polarity_margin_met": "两个模型得出了相反的结论。裁决遵循由实质上更强的独立来源支持的分析。",
-    "polarity_margin_not_met": "两个模型在来源质量相当的情况下得出了相反的结论。裁决默认为推测性。"
+    "polarity_margin_not_met": "两个模型在来源质量相当的情况下得出了相反的结论。裁决默认为推测性。",
+    "single_model_claude": "判断仅基于Claude — Mistral未找到来源或未响应。",
+    "single_model_mistral": "判断仅基于Mistral — Claude未找到来源或未响应。"
   }
 }
