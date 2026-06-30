@@ -1038,6 +1038,31 @@ def _sources_unusable(sources) -> bool:
         return True
 
 
+def _coerce_sources(sources):
+    """If sources is a JSON-encoded string, attempt to parse it into a Python object.
+
+    - str → json.loads succeeds → list   : return the list
+    - str → json.loads succeeds → dict   : return [dict]  (single object wrapped)
+    - str → json.loads raises / returns non-list/non-dict: return original value unchanged
+      (so the downstream _sources_unusable check still catches it and re-ask fires)
+    - anything else (list, None, …): return unchanged.
+
+    Shared by BOTH models (Sonnet and Mistral) so coercion behaviour cannot drift.
+    Pure function: no logging, no side-effects.
+    """
+    if not isinstance(sources, str):
+        return sources
+    try:
+        parsed = json.loads(sources)
+    except (json.JSONDecodeError, ValueError):
+        return sources
+    if isinstance(parsed, list):
+        return parsed
+    if isinstance(parsed, dict):
+        return [parsed]
+    return sources
+
+
 def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
     """
     Force Claude to emit a submit_judgment tool call with structured source evaluations.
@@ -1081,9 +1106,13 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
         getattr(resp, "stop_reason", None),
         raw.get("rationale", "").replace("\n", " "),
     )
-    # Re-ask if sources unusable (empty, mis-serialised string, or zero dict items)
-    # despite findings — exactly one targeted retry.
-    _raw_sources = raw.get("sources")
+    # Coerce first: if the model returned sources as a valid JSON string, parse it
+    # into a real list before the unusable check — so a parseable string does NOT
+    # trigger a re-ask and is returned directly.  Genuinely broken strings are
+    # returned unchanged by _coerce_sources and still fail _sources_unusable.
+    _raw_sources = _coerce_sources(raw.get("sources"))
+    raw = {**raw, "sources": _raw_sources}
+    # Re-ask only if sources are still unusable after coercion.
     if _sources_unusable(_raw_sources) and search_findings:
         logger.warning(
             "[SOURCE-REASK] (Claude): unusable sources (type=%s) → re-asking",

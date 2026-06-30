@@ -575,33 +575,30 @@ class TestSourceReaskUnusableTrigger:
     (_mistral_phase2_judgment) via the shared _sources_unusable predicate.
     """
 
-    # ── (i) Sonnet: sources as a non-empty STRING → re-ask fires (the new case) ──
+    # ── (i) Sonnet: sources as a VALID JSON string → coerced, NO re-ask ──
 
-    def test_sonnet_stringified_sources_triggers_reask(self):
+    def test_sonnet_stringified_sources_coerced_no_reask(self):
         """
-        Sonnet returns sources as a JSON-encoded string (truthy → old trigger missed it).
-        The widened trigger must fire exactly one re-ask and merge the parsed sources.
+        Sonnet returns sources as a valid JSON-encoded string.
+        _coerce_sources parses it to a list of dicts → usable → NO re-ask.
+        The parsed list must appear in the result, and only 1 API call is made.
+        (Behaviour change from previous implementation: valid JSON strings are now
+        coerced before the unusable check, so the re-ask is not triggered.)
         """
         from backend.analysis import engine as eng
 
         first_response = _make_sonnet_phase2_response("verified", "Original rationale.", _STRINGIFIED_SOURCES)
-        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
-
-        call_count = {"n": 0}
-
-        def side_effect(**kwargs):
-            call_count["n"] += 1
-            return first_response if call_count["n"] == 1 else reask_response
 
         mock_client = MagicMock()
-        mock_client.messages.create.side_effect = side_effect
+        mock_client.messages.create.return_value = first_response
 
         with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
              patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
             result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
 
-        assert call_count["n"] == 2, f"Expected 2 calls (phase2 + reask), got {call_count['n']}"
-        assert result["sources"] == _REASK_SOURCES
+        assert mock_client.messages.create.call_count == 1, \
+            f"Expected 1 call (no re-ask), got {mock_client.messages.create.call_count}"
+        assert result["sources"] == _REASK_SOURCES  # _STRINGIFIED_SOURCES parses to _REASK_SOURCES
         assert result["rationale"] == "Original rationale."
         assert result["rating"] == "verified"
 
@@ -674,8 +671,10 @@ class TestSourceReaskUnusableTrigger:
 
     # ── (v) Sonnet: empty findings → NO re-ask regardless of sources shape ──
 
-    def test_sonnet_no_reask_when_findings_empty_even_if_unusable(self):
-        """Even with a stringified (unusable) sources value, empty findings must not re-ask."""
+    def test_sonnet_no_reask_when_findings_empty_even_if_string(self):
+        """With empty findings, no re-ask fires — but coercion still runs.
+        A valid JSON-string sources value is coerced to a list; the result carries
+        the parsed list, not the raw string."""
         from backend.analysis import engine as eng
 
         first_response = _make_sonnet_phase2_response("missing", "No findings.", _STRINGIFIED_SOURCES)
@@ -687,29 +686,24 @@ class TestSourceReaskUnusableTrigger:
             result = eng._phase2_judgment(mock_client, "Test claim", "")
 
         assert mock_client.messages.create.call_count == 1
-        # sources untouched (still the raw string) — no re-ask attempted
-        assert result["sources"] == _STRINGIFIED_SOURCES
+        # Coercion runs before the re-ask guard; the string is parsed to a real list.
+        assert result["sources"] == _REASK_SOURCES
 
-    # ── (vi) Mistral: sources as a non-empty STRING → re-ask fires (mirrors (i)) ──
+    # ── (vi) Mistral: sources as a VALID JSON string → coerced, NO re-ask ──
 
-    def test_mistral_stringified_sources_triggers_reask(self):
-        """Mistral mirror of (i): a stringified sources value triggers exactly one re-ask."""
+    def test_mistral_stringified_sources_coerced_no_reask(self):
+        """Mistral mirror of (i): a valid JSON-string sources value is coerced by
+        _coerce_sources → usable list → NO re-ask, 1 API call, parsed sources returned.
+        (Behaviour change symmetric with Sonnet test above.)"""
         from backend.analysis import consensus as cons
 
         first_response = _make_mistral_response_reask(
             "submit_judgment",
             {"rating": "speculative", "rationale": "Mistral rationale.", "sources": _STRINGIFIED_SOURCES},
         )
-        reask_response = _make_mistral_response_reask("submit_sources", {"sources": _REASK_SOURCES})
-
-        call_count = {"n": 0}
-
-        def side_effect(**kwargs):
-            call_count["n"] += 1
-            return first_response if call_count["n"] == 1 else reask_response
 
         mock_client = MagicMock()
-        mock_client.chat.complete.side_effect = side_effect
+        mock_client.chat.complete.return_value = first_response
 
         with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
              patch("backend.analysis.consensus._verify_rating_consistency",
@@ -719,8 +713,9 @@ class TestSourceReaskUnusableTrigger:
              patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
             result = cons._mistral_phase2_judgment("Test claim", _FINDINGS)
 
-        assert call_count["n"] == 2, f"Expected 2 API calls, got {call_count['n']}"
-        assert result["sources"] == _REASK_SOURCES
+        assert mock_client.chat.complete.call_count == 1, \
+            f"Expected 1 call (no re-ask), got {mock_client.chat.complete.call_count}"
+        assert result["sources"] == _REASK_SOURCES  # coerced from the JSON string
         assert result["rationale"] == "Mistral rationale."
         assert result["rating"] == "speculative"
 
@@ -749,3 +744,100 @@ class TestSourceReaskUnusableTrigger:
         # usable
         assert _sources_unusable(_REASK_SOURCES) is False            # list of dicts
         assert _sources_unusable([{"url": "x"}, "stray"]) is False   # ≥1 dict item
+
+
+class TestCoerceSources:
+    """
+    Unit tests for the shared _coerce_sources helper and its integration with
+    _phase2_judgment / _mistral_phase2_judgment.
+    """
+
+    # ── (i) valid JSON string of a list-of-dicts → coerced to list, no re-ask ──
+
+    def test_coerce_valid_list_string(self):
+        """A valid JSON string encoding a list of dicts is parsed into that list."""
+        from backend.analysis.engine import _coerce_sources
+        result = _coerce_sources(_STRINGIFIED_SOURCES)
+        assert result == _REASK_SOURCES
+        assert isinstance(result, list)
+
+    # ── (ii) valid JSON string of a single dict → wrapped in list ──
+
+    def test_coerce_valid_dict_string(self):
+        """A JSON string encoding a single dict is wrapped in a one-element list."""
+        from backend.analysis.engine import _coerce_sources
+        single = {"url": "https://example.com", "title": "Example"}
+        result = _coerce_sources(json.dumps(single))
+        assert result == [single]
+
+    # ── (iii) invalid / unparseable string → returned unchanged ──
+
+    def test_coerce_invalid_string_unchanged(self):
+        """A string that is not valid JSON is returned as-is (re-ask path unchanged)."""
+        from backend.analysis.engine import _coerce_sources
+        bad = "not json at all [{{"
+        assert _coerce_sources(bad) is bad
+
+    # ── (iv) already a list of dicts → unchanged ──
+
+    def test_coerce_list_unchanged(self):
+        """A list is returned as-is without any modification."""
+        from backend.analysis.engine import _coerce_sources
+        assert _coerce_sources(_REASK_SOURCES) is _REASK_SOURCES
+
+    # ── (v) JSON string that parses to a non-list/non-dict (e.g. "42" or '"hello"') ──
+
+    def test_coerce_scalar_json_string_unchanged(self):
+        """A JSON string whose parsed value is neither list nor dict is returned unchanged."""
+        from backend.analysis.engine import _coerce_sources
+        assert _coerce_sources("42") == "42"
+        assert _coerce_sources('"hello"') == '"hello"'
+        # downstream _sources_unusable will still classify these as unusable
+        from backend.analysis.engine import _sources_unusable
+        assert _sources_unusable(_coerce_sources("42")) is True
+        assert _sources_unusable(_coerce_sources('"hello"')) is True
+
+    # ── (vi) Sonnet integration: valid JSON string → coerced, no re-ask ──
+    # (covered by test_sonnet_stringified_sources_coerced_no_reask above)
+
+    # ── (vii) object identity: _coerce_sources shared across both modules ──
+
+    def test_coerce_sources_is_shared_object(self):
+        """consensus._coerce_sources must be the SAME object as engine._coerce_sources."""
+        from backend.analysis import engine as eng
+        from backend.analysis import consensus as cons
+        assert cons._coerce_sources is eng._coerce_sources
+
+    # ── Sonnet: unparseable string still triggers re-ask (re-ask path unchanged) ──
+
+    def test_sonnet_unparseable_string_still_triggers_reask(self):
+        """An invalid JSON string cannot be coerced → still unusable → re-ask fires."""
+        from backend.analysis import engine as eng
+
+        bad_str = "not valid json [{{broken"
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", bad_str)
+        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected 2 calls (re-ask for broken string), got {call_count['n']}"
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── None → unchanged ──
+
+    def test_coerce_none_unchanged(self):
+        """None is returned as-is; _sources_unusable still classifies it unusable."""
+        from backend.analysis.engine import _coerce_sources, _sources_unusable
+        assert _coerce_sources(None) is None
+        assert _sources_unusable(None) is True

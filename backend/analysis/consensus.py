@@ -45,6 +45,7 @@ from backend.analysis.engine import (
     _phase1_search,
     _phase2_judgment,
     _sources_unusable,
+    _coerce_sources,
     _get_no_search_results_message,
     _verify_rating_consistency,
     _verify_temporal_cap,
@@ -154,9 +155,13 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
         getattr(choice, "finish_reason", None),
         args.get("rationale", ""),
     )
-    # Re-ask if sources unusable (empty, mis-serialised string, or zero dict items)
-    # despite findings — exactly one targeted retry.  Identical predicate to Sonnet.
-    _raw_sources = args.get("sources")
+    # Coerce first: if the model returned sources as a valid JSON string, parse it
+    # into a real list before the unusable check — so a parseable string does NOT
+    # trigger a re-ask and is returned directly.  Genuinely broken strings are
+    # returned unchanged by _coerce_sources and still fail _sources_unusable.
+    _raw_sources = _coerce_sources(args.get("sources"))
+    args = {**args, "sources": _raw_sources}
+    # Re-ask only if sources are still unusable after coercion.
     if _sources_unusable(_raw_sources) and search_findings:
         logger.warning(
             "[SOURCE-REASK] (Mistral): unusable sources (type=%s) → re-asking",
