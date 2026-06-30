@@ -97,7 +97,7 @@ def _get_mistral_client() -> Mistral:
     if not settings.mistral_api_key:
         raise RuntimeError("MISTRAL_API_KEY is not configured")
     if _mistral_client is None:
-        _mistral_client = Mistral(api_key=settings.mistral_api_key)
+        _mistral_client = Mistral(api_key=settings.mistral_api_key, timeout_ms=90000)
     return _mistral_client
 
 
@@ -610,7 +610,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                 _mistral_search_and_judge, claim.text, mistral_lang_instruction
             )
             try:
-                claude_data = claude_future.result(timeout=45)
+                claude_data = claude_future.result(timeout=90)
             except FuturesTimeoutError:
                 logger.warning(
                     "[SINGLE-MODEL] Claude timed out for claim %s; Mistral may decide alone.",
@@ -622,7 +622,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
                     claim_id, exc,
                 )
             try:
-                mistral_data = mistral_future.result(timeout=45)
+                mistral_data = mistral_future.result(timeout=90)
             except FuturesTimeoutError:
                 logger.warning(
                     "Mistral Phase 2 timed out for claim %s; proceeding with Claude-only result.",
