@@ -162,8 +162,28 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
             "[SOURCE-REASK] (Mistral): unusable sources (type=%s) → re-asking",
             type(_raw_sources).__name__,
         )
+        if isinstance(_raw_sources, str):
+            _src_len = len(_raw_sources)
+            _src_head = repr(_raw_sources[:500])
+            _src_tail = repr(_raw_sources[-200:]) if _src_len > 500 else ""
+            logger.warning(
+                "[SOURCE-REASK-CONTENT] (Mistral): string sources len=%d head=%s%s",
+                _src_len, _src_head,
+                f" tail={_src_tail}" if _src_tail else "",
+            )
+        else:
+            logger.warning(
+                "[SOURCE-REASK-CONTENT] (Mistral): non-str unusable sources repr=%.200s",
+                repr(_raw_sources),
+            )
         reask_sources = _mistral_reask_sources(claim_text, search_findings, args)
-        logger.warning("[SOURCE-REASK-RESULT] (Mistral): got %d sources", len(reask_sources))
+        if reask_sources:
+            logger.warning("[SOURCE-REASK-RESULT] (Mistral): got %d sources", len(reask_sources))
+        else:
+            logger.warning(
+                "[SOURCE-REASK-RESULT] (Mistral): got 0 sources — reask returned type=%s repr=%.200s",
+                type(reask_sources).__name__, repr(reask_sources),
+            )
         if reask_sources:
             args = {**args, "sources": reask_sources}
     # Pass the real claim text and an explicit Anthropic client — identical to the

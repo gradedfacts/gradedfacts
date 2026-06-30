@@ -1089,8 +1089,28 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
             "[SOURCE-REASK] (Claude): unusable sources (type=%s) → re-asking",
             type(_raw_sources).__name__,
         )
+        if isinstance(_raw_sources, str):
+            _src_len = len(_raw_sources)
+            _src_head = repr(_raw_sources[:500])
+            _src_tail = repr(_raw_sources[-200:]) if _src_len > 500 else ""
+            logger.warning(
+                "[SOURCE-REASK-CONTENT] (Claude): string sources len=%d head=%s%s",
+                _src_len, _src_head,
+                f" tail={_src_tail}" if _src_tail else "",
+            )
+        else:
+            logger.warning(
+                "[SOURCE-REASK-CONTENT] (Claude): non-str unusable sources repr=%.200s",
+                repr(_raw_sources),
+            )
         reask_sources = _claude_reask_sources(client, claim_text, search_findings, raw)
-        logger.warning("[SOURCE-REASK-RESULT] (Claude): got %d sources", len(reask_sources))
+        if reask_sources:
+            logger.warning("[SOURCE-REASK-RESULT] (Claude): got %d sources", len(reask_sources))
+        else:
+            logger.warning(
+                "[SOURCE-REASK-RESULT] (Claude): got 0 sources — reask returned type=%s repr=%.200s",
+                type(reask_sources).__name__, repr(reask_sources),
+            )
         if reask_sources:
             raw = {**raw, "sources": reask_sources}
     final_rating = _verify_rating_consistency(
