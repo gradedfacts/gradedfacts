@@ -1014,6 +1014,30 @@ def _phase1_search(claim_text: str) -> str:
     return search_claim(claim_text)
 
 
+def _sources_unusable(sources) -> bool:
+    """True if the model's sources value cannot yield structured source dicts.
+
+    Unusable means the value will produce zero source objects downstream:
+      - missing / None / empty (empty list, "", etc.)
+      - a string (the model mis-serialised the array as a JSON-encoded string;
+        a non-empty string is truthy so the old `not sources` test missed it)
+      - a list/iterable containing zero dict items (e.g. bare URL strings)
+    A non-empty list with at least one dict item is usable → returns False.
+
+    Shared by BOTH models (Sonnet _phase2_judgment and Mistral _mistral_phase2_judgment)
+    so the re-ask trigger is identical and cannot drift.
+    """
+    if not sources:
+        return True
+    if isinstance(sources, str):
+        return True
+    try:
+        return not any(isinstance(s, dict) for s in sources)
+    except TypeError:
+        # Not iterable (e.g. an int) → cannot yield source dicts.
+        return True
+
+
 def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
     """
     Force Claude to emit a submit_judgment tool call with structured source evaluations.
@@ -1052,13 +1076,19 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
 
     raw = tool_block.input
     logger.warning(
-        "[SONNET-RAW] claim rating=%r rationale_excerpt=%.120s",
+        "[SONNET-RAW] claim rating=%r stop_reason=%r rationale_excerpt=%.120s",
         raw.get("rating"),
+        getattr(resp, "stop_reason", None),
         raw.get("rationale", "").replace("\n", " "),
     )
-    # Re-ask if sources empty despite findings — exactly one targeted retry.
-    if not raw.get("sources") and search_findings:
-        logger.warning("[SOURCE-REASK] (Claude): empty sources despite findings → re-asking")
+    # Re-ask if sources unusable (empty, mis-serialised string, or zero dict items)
+    # despite findings — exactly one targeted retry.
+    _raw_sources = raw.get("sources")
+    if _sources_unusable(_raw_sources) and search_findings:
+        logger.warning(
+            "[SOURCE-REASK] (Claude): unusable sources (type=%s) → re-asking",
+            type(_raw_sources).__name__,
+        )
         reask_sources = _claude_reask_sources(client, claim_text, search_findings, raw)
         logger.warning("[SOURCE-REASK-RESULT] (Claude): got %d sources", len(reask_sources))
         if reask_sources:

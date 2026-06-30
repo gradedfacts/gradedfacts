@@ -44,6 +44,7 @@ from backend.analysis.engine import (
     _get_registry_version,
     _phase1_search,
     _phase2_judgment,
+    _sources_unusable,
     _get_no_search_results_message,
     _verify_rating_consistency,
     _verify_temporal_cap,
@@ -148,13 +149,19 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     if isinstance(args, str):
         args = json.loads(args)
     logger.warning(
-        "Mistral raw response — rating: %r | rationale: %.500s",
+        "Mistral raw response — rating: %r | finish_reason=%r | rationale: %.500s",
         args.get("rating"),
+        getattr(choice, "finish_reason", None),
         args.get("rationale", ""),
     )
-    # Re-ask if sources empty despite findings — exactly one targeted retry.
-    if not args.get("sources") and search_findings:
-        logger.warning("[SOURCE-REASK] (Mistral): empty sources despite findings → re-asking")
+    # Re-ask if sources unusable (empty, mis-serialised string, or zero dict items)
+    # despite findings — exactly one targeted retry.  Identical predicate to Sonnet.
+    _raw_sources = args.get("sources")
+    if _sources_unusable(_raw_sources) and search_findings:
+        logger.warning(
+            "[SOURCE-REASK] (Mistral): unusable sources (type=%s) → re-asking",
+            type(_raw_sources).__name__,
+        )
         reask_sources = _mistral_reask_sources(claim_text, search_findings, args)
         logger.warning("[SOURCE-REASK-RESULT] (Mistral): got %d sources", len(reask_sources))
         if reask_sources:

@@ -562,3 +562,190 @@ class TestSourceReaskNet:
         assert cons._SOURCE_REASK_PROMPT is eng._SOURCE_REASK_PROMPT
         assert isinstance(eng._SOURCE_REASK_PROMPT, str)
         assert len(eng._SOURCE_REASK_PROMPT) > 50
+
+
+_STRINGIFIED_SOURCES = json.dumps(_REASK_SOURCES)  # the mis-serialised-array failure mode
+
+
+class TestSourceReaskUnusableTrigger:
+    """
+    Tests for the WIDENED re-ask trigger: fire on UNUSABLE sources (not just empty).
+    Unusable = missing/None, empty list, a JSON-encoded string, or a list with zero
+    dict items.  Symmetric across Sonnet (_phase2_judgment) and Mistral
+    (_mistral_phase2_judgment) via the shared _sources_unusable predicate.
+    """
+
+    # ── (i) Sonnet: sources as a non-empty STRING → re-ask fires (the new case) ──
+
+    def test_sonnet_stringified_sources_triggers_reask(self):
+        """
+        Sonnet returns sources as a JSON-encoded string (truthy → old trigger missed it).
+        The widened trigger must fire exactly one re-ask and merge the parsed sources.
+        """
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Original rationale.", _STRINGIFIED_SOURCES)
+        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected 2 calls (phase2 + reask), got {call_count['n']}"
+        assert result["sources"] == _REASK_SOURCES
+        assert result["rationale"] == "Original rationale."
+        assert result["rating"] == "verified"
+
+    # ── (ii) Sonnet: list of dicts → NO re-ask (usable, unchanged) ──
+
+    def test_sonnet_list_of_dicts_no_reask(self):
+        """A non-empty list of dict sources is usable → no re-ask."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", _REASK_SOURCES)
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = first_response
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert mock_client.messages.create.call_count == 1
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── (iii) Sonnet: empty list → re-ask fires (unchanged behaviour) ──
+
+    def test_sonnet_empty_list_triggers_reask(self):
+        """The original empty-list case still triggers exactly one re-ask."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", [])
+        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── (iv) Sonnet: list with zero dict items (bare URL strings) → re-ask fires ──
+
+    def test_sonnet_zero_dict_list_triggers_reask(self):
+        """A list containing only non-dict items (e.g. bare URL strings) is unusable."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", ["http://x", "http://y"])
+        reask_response = _make_sonnet_reask_response(_REASK_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── (v) Sonnet: empty findings → NO re-ask regardless of sources shape ──
+
+    def test_sonnet_no_reask_when_findings_empty_even_if_unusable(self):
+        """Even with a stringified (unusable) sources value, empty findings must not re-ask."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("missing", "No findings.", _STRINGIFIED_SOURCES)
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = first_response
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", "")
+
+        assert mock_client.messages.create.call_count == 1
+        # sources untouched (still the raw string) — no re-ask attempted
+        assert result["sources"] == _STRINGIFIED_SOURCES
+
+    # ── (vi) Mistral: sources as a non-empty STRING → re-ask fires (mirrors (i)) ──
+
+    def test_mistral_stringified_sources_triggers_reask(self):
+        """Mistral mirror of (i): a stringified sources value triggers exactly one re-ask."""
+        from backend.analysis import consensus as cons
+
+        first_response = _make_mistral_response_reask(
+            "submit_judgment",
+            {"rating": "speculative", "rationale": "Mistral rationale.", "sources": _STRINGIFIED_SOURCES},
+        )
+        reask_response = _make_mistral_response_reask("submit_sources", {"sources": _REASK_SOURCES})
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.chat.complete.side_effect = side_effect
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency",
+                   side_effect=lambda r, s, *a, **kw: s), \
+             patch("backend.analysis.consensus._verify_temporal_cap",
+                   side_effect=lambda r, *a, **kw: r), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            result = cons._mistral_phase2_judgment("Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2, f"Expected 2 API calls, got {call_count['n']}"
+        assert result["sources"] == _REASK_SOURCES
+        assert result["rationale"] == "Mistral rationale."
+        assert result["rating"] == "speculative"
+
+    # ── (vii) Shared predicate: object identity across both modules ──
+
+    def test_sources_unusable_is_shared_object(self):
+        """consensus._sources_unusable must be the SAME object as engine._sources_unusable."""
+        from backend.analysis import engine as eng
+        from backend.analysis import consensus as cons
+
+        assert cons._sources_unusable is eng._sources_unusable
+
+    # ── predicate unit table ──
+
+    def test_sources_unusable_truth_table(self):
+        """Direct unit coverage of the predicate's classification."""
+        from backend.analysis.engine import _sources_unusable
+
+        # unusable
+        assert _sources_unusable(None) is True
+        assert _sources_unusable([]) is True
+        assert _sources_unusable("") is True
+        assert _sources_unusable(_STRINGIFIED_SOURCES) is True       # non-empty string
+        assert _sources_unusable(["http://x", "http://y"]) is True   # zero dict items
+        assert _sources_unusable(123) is True                        # not iterable
+        # usable
+        assert _sources_unusable(_REASK_SOURCES) is False            # list of dicts
+        assert _sources_unusable([{"url": "x"}, "stray"]) is False   # ≥1 dict item
