@@ -279,6 +279,57 @@ def test_engine_filters_low_relevance_sources():
         assert captured["judgment"].rating == EpistemicRating.SPECULATIVE
 
 
+def test_engine_absent_supports_claim_not_counted_toward_verified():
+    """Sources that omit supports_claim must NOT count as verifying (default False).
+
+    Regression guard for the belegt-vs-diskutiert fix: three high-relevance,
+    independent primary sources with supports_claim absent no longer fill
+    verifying_tiers, so a model-declared VERIFIED is capped to SPECULATIVE by
+    verified_threshold_met(). The storage-write default (True) is unchanged and
+    tested separately in test_sensitivity_columns.py.
+    """
+    from unittest.mock import MagicMock, patch
+
+    sources = [
+        {
+            "url": f"https://indep{i}.example/a",
+            "tier": "primary",
+            "is_independent": True,
+            "relevance_score": 0.9,
+            # deliberately omitting supports_claim → threshold count defaults False
+        }
+        for i in range(3)
+    ]
+
+    judgment_data = {"rating": "verified", "rationale": "test", "sources": sources}
+
+    mock_claim = MagicMock()
+    mock_claim.text = "Test claim"
+
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_claim
+
+    from backend.analysis import engine as eng
+    from backend.db.models import Judgment
+
+    with patch.object(eng, "_phase1_search", return_value="Source 1: Test findings\nURL: https://example.com/test\nExcerpt: Test excerpt."), \
+         patch.object(eng, "_phase2_judgment", return_value=judgment_data), \
+         patch.object(eng, "_get_client", return_value=MagicMock()):
+
+        captured = {}
+
+        def fake_add(obj):
+            if isinstance(obj, Judgment):
+                captured["judgment"] = obj
+
+        mock_session.add.side_effect = fake_add
+        mock_session.add_all.side_effect = lambda objs: None
+
+        eng.analyze_claim("claim-1", mock_session)
+
+        assert captured["judgment"].rating == EpistemicRating.SPECULATIVE
+
+
 def test_engine_caps_sources_at_max():
     """analyze_claim must use at most MAX_SOURCES sources."""
     from unittest.mock import MagicMock, patch

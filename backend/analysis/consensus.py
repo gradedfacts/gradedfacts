@@ -485,7 +485,7 @@ def _process_sources(
             tier = SourceTier.SECONDARY
         if is_indep and tier in (SourceTier.PRIMARY, SourceTier.SECONDARY):
             has_independent_qualifying = True
-        supports = src.get("supports_claim", True)
+        supports = src.get("supports_claim", False)
         if supports and is_indep and tier is SourceTier.SECONDARY:
             # Agency cascade dedup: reprints of the same wire story count as one.
             _agency = detect_wire_agency(src.get("title", ""), src.get("excerpt", ""))

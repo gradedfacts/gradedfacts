@@ -513,7 +513,14 @@ _JUDGMENT_TOOL = {
                         },
                         "supports_claim": {
                             "type": "boolean",
-                            "description": "True if this source verifies the claim; false if it debunks it.",
+                            "description": (
+                                "True ONLY if this source itself documents or provides evidence that "
+                                "the claim is established fact. Set false if the source debunks the claim, "
+                                "OR if it only reports that an allegation or position exists without "
+                                "establishing it — e.g. 'X accuses Y', 'according to Z', 'A confirms the "
+                                "view that B'. Reporting that someone makes a claim is NOT the claim being "
+                                "established."
+                            ),
                         },
                     },
                 },
@@ -1384,7 +1391,7 @@ def analyze_claim(claim_id: str, session, analyst: str = "claude-sonnet-4-6", us
         raw_tier = src.get("tier", "tertiary")
         is_indep_raw = src.get("is_independent", True)
         is_indep = independence_bool(is_indep_raw)
-        supports = src.get("supports_claim", True)
+        supports = src.get("supports_claim", False)
         try:
             tier = SourceTier(raw_tier)
         except ValueError:
