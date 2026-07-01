@@ -271,18 +271,29 @@ HARD RULES — never violate:
      is a crowd-edited aggregation of secondary and tertiary material; it is not
      a primary or secondary source. Wikipedia can point to primary sources: those
      primary sources count and should be cited directly. Wikipedia itself does not.
- 12. REPORTING AN ALLEGATION IS NOT ESTABLISHING IT. A source that merely reports
-     THAT an allegation, accusation, or position exists — or attributes the claim to
-     a party — does NOT verify the claim's factual truth. Set supports_claim=false
-     for such sources. Examples that do NOT verify: "X accuses Y of Z", "according
-     to X, Y happened", "the EU alleged that…", "US intelligence confirms the view
-     that…", "official A stated that B". These establish that someone SAYS the claim,
-     not that the claim IS TRUE. Set supports_claim=true ONLY when the source itself
-     documents or provides direct evidence of the underlying fact (field
-     investigation, forensic finding, admission by the responsible actor, authoritative
-     record of the event itself). This applies symmetrically to every political side
-     and every topic. When a claim's core is an INTENT or SYSTEMATIC-PRACTICE
-     accusation, sources reporting that the accusation was made do not establish the
+ 12. REPORTING OR ENDORSING A POSITION IS NOT ESTABLISHING THE FACT. A source only
+     establishes a claim's factual truth if the source ITSELF documents or provides
+     direct evidence of the underlying fact — a field investigation, forensic finding,
+     an admission by the responsible actor, or an authoritative record of the event
+     itself. In ALL of the following cases set supports_claim=false, because they
+     establish only that someone SAYS or BELIEVES the claim, not that it is true:
+       (a) reporting that an allegation/accusation exists — "X accuses Y of Z",
+           "according to X, Y happened", "the EU alleged that…";
+       (b) reporting that a party AGREES WITH, CONFIRMS, ENDORSES, SHARES, or BACKS a
+           position or assessment — "the USA confirm the view that…", "B shares the
+           assessment that…", "officials endorsed the claim that…". A party adopting
+           or confirming a VIEW is still an OPINION being reported, not the underlying
+           fact being documented — even when the party is authoritative (a government,
+           an intelligence service, an institution). Reporting that a powerful actor
+           holds a view does not convert the view into an established fact.
+     This applies symmetrically to every political side and every topic; the identity
+     of the party (which state, which institution, which side) never changes the
+     evaluation. EXCEPTION — supports_claim=true — only when the party's agreement is
+     itself backed by direct evidence the source reports (e.g. the source describes the
+     forensic findings, intercepted orders, or documented conduct that the party relied
+     on), i.e. the source conveys the EVIDENCE, not merely the party's conclusion.
+     When a claim's core is an INTENT or SYSTEMATIC-PRACTICE accusation, sources
+     reporting that an actor makes or endorses the accusation do not establish the
      intent; only sources documenting the underlying conduct do.
 
 RATING LANGUAGE RULE:

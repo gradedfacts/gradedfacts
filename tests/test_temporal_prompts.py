@@ -142,8 +142,8 @@ class TestSymmetryBothModels:
         from backend.analysis.engine import _cached_system, _SYSTEM_PROMPT, _zurich_date
         sonnet_text = _cached_system()[0]["text"]
         mistral_text = _SYSTEM_PROMPT.format(current_date=_zurich_date())
-        assert "REPORTING AN ALLEGATION IS NOT ESTABLISHING IT" in sonnet_text
-        assert "REPORTING AN ALLEGATION IS NOT ESTABLISHING IT" in mistral_text
+        assert "REPORTING OR ENDORSING A POSITION IS NOT ESTABLISHING THE FACT" in sonnet_text
+        assert "REPORTING OR ENDORSING A POSITION IS NOT ESTABLISHING THE FACT" in mistral_text
 
 
 # ── Mistral live call path: system message contains formatted date ─────────────
