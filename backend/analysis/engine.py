@@ -271,6 +271,19 @@ HARD RULES — never violate:
      is a crowd-edited aggregation of secondary and tertiary material; it is not
      a primary or secondary source. Wikipedia can point to primary sources: those
      primary sources count and should be cited directly. Wikipedia itself does not.
+ 12. REPORTING AN ALLEGATION IS NOT ESTABLISHING IT. A source that merely reports
+     THAT an allegation, accusation, or position exists — or attributes the claim to
+     a party — does NOT verify the claim's factual truth. Set supports_claim=false
+     for such sources. Examples that do NOT verify: "X accuses Y of Z", "according
+     to X, Y happened", "the EU alleged that…", "US intelligence confirms the view
+     that…", "official A stated that B". These establish that someone SAYS the claim,
+     not that the claim IS TRUE. Set supports_claim=true ONLY when the source itself
+     documents or provides direct evidence of the underlying fact (field
+     investigation, forensic finding, admission by the responsible actor, authoritative
+     record of the event itself). This applies symmetrically to every political side
+     and every topic. When a claim's core is an INTENT or SYSTEMATIC-PRACTICE
+     accusation, sources reporting that the accusation was made do not establish the
+     intent; only sources documenting the underlying conduct do.
 
 RATING LANGUAGE RULE:
 Write the rationale entirely in the user's UI language. Never include rating keywords

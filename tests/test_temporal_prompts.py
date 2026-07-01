@@ -136,6 +136,15 @@ class TestSymmetryBothModels:
         assert "FUTURE CLAIMS" in sonnet_text
         assert "FUTURE CLAIMS" in mistral_text
 
+    def test_rule12_reporting_allegation_in_both_assembled_prompts(self):
+        """Rule 12 (reports-an-allegation ≠ establishes-the-fact) must reach both
+        models via the shared _SYSTEM_PROMPT, mirroring the Rule 8 symmetry above."""
+        from backend.analysis.engine import _cached_system, _SYSTEM_PROMPT, _zurich_date
+        sonnet_text = _cached_system()[0]["text"]
+        mistral_text = _SYSTEM_PROMPT.format(current_date=_zurich_date())
+        assert "REPORTING AN ALLEGATION IS NOT ESTABLISHING IT" in sonnet_text
+        assert "REPORTING AN ALLEGATION IS NOT ESTABLISHING IT" in mistral_text
+
 
 # ── Mistral live call path: system message contains formatted date ─────────────
 
