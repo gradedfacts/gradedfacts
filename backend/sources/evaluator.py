@@ -131,6 +131,7 @@ _SOCIAL_MEDIA_BLACKLIST: frozenset[str] = frozenset({
     "mastodon.social",
     "telegram.org",
     "t.me",
+    "t.co",           # Twitter/X URL-shortener — same platform, same exclusion rule
     "whatsapp.com",
     "snapchat.com",
     "pinterest.com",
@@ -160,6 +161,7 @@ def is_social_media_url(url: str) -> bool:
 _PARTY_POLITICIAN_BLACKLIST: frozenset[str] = frozenset({
     "friedrich-merz.de",   # CDU — German federal politician
     "sp-ps.ch",            # SP Switzerland — Swiss social democratic party
+    "michael-donth.de",    # CDU — German federal politician
 })
 
 
@@ -173,6 +175,9 @@ def is_party_politician_url(url: str) -> bool:
 _USER_CONTENT_BLACKLIST: frozenset[str] = frozenset({
     "vocal.media",      # user-generated content platform
     "docplayer.org",    # document upload platform (unverifiable provenance)
+    "quora.com",        # user-generated Q&A platform (unverifiable provenance)
+    "blogspan.net",     # open blog-hosting platform
+    "michael-mannheimer.net",  # single-author blog, no editorial control structure
 })
 
 

@@ -3569,7 +3569,8 @@
       "is_independent": "neutral",
       "institution_type": "media",
       "country": "CH",
-      "region": "Europe"
+      "region": "Europe",
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Blick",
@@ -6958,6 +6959,618 @@
       "country": "DE",
       "region": "Europe",
       "independence_note": "German skeptics organisation; non-state, advocates for a pro-scientific-consensus position rather than nonpartisan reporting. Classified neutral: not state- or party-affiliated, but has a consistent advocacy stance on pseudoscience/paranormal claims."
+    },
+    {
+      "name": "The Daily Telegraph",
+      "domain": "telegraph.co.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "ESPN",
+      "domain": "espn.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Established sports media outlet (Disney/Hearst/NFL stake). Independent for general sports reporting; not independent for claims directly involving ESPN, Disney, broadcast rights, or partner leagues."
+    },
+    {
+      "name": "Hamburger Abendblatt",
+      "domain": "abendblatt.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Lawfare",
+      "domain": "lawfaremedia.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Legal and national-security analysis publication; Brookings/Lawfare Institute context. Strong specialist source, treated as neutral (not institutionally independent) for politically contested security claims."
+    },
+    {
+      "name": "Schweizerische Bundesbahnen",
+      "domain": "sbb.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "company",
+      "affiliation_note": "Swiss national railway company. Primary source for its own operations/documents; not independent for claims concerning the SBB itself.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "ResearchGate",
+      "domain": "researchgate.net",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "independence_note": "Hosting/profile platform, not a publisher; performs no own quality control. Peer-review status lies with the individual paper.",
+      "region": "Global"
+    },
+    {
+      "name": "Finanz und Wirtschaft",
+      "domain": "fuw.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "World Soccer",
+      "domain": "worldsoccer.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Council on Foreign Relations",
+      "domain": "cfr.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "think_tank",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "US foreign-policy think tank and membership organization; treated as neutral for contested geopolitical claims (consistent with SWP/MEI)."
+    },
+    {
+      "name": "Deutschlandfunk Kultur",
+      "domain": "deutschlandfunkkultur.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Public-service broadcaster (Deutschlandradio)."
+    },
+    {
+      "name": "Amnesty International Austria",
+      "domain": "amnesty.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "AT",
+      "region": "Europe",
+      "independence_note": "Human-rights NGO with own research and advocacy mandate; institutionally independent, normatively human-rights positioned."
+    },
+    {
+      "name": "Amnesty International Switzerland",
+      "domain": "amnesty.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Human-rights NGO with own research and advocacy mandate; institutionally independent, normatively human-rights positioned."
+    },
+    {
+      "name": "Amadeu Antonio Stiftung",
+      "domain": "amadeu-antonio-stiftung.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "institution_type": "ngo",
+      "affiliation_note": "Advocacy foundation against right-wing extremism, largely publicly funded; party in the contested discourse on AfD/extremism claims. Not-independent is not a quality judgment (its research may be excellent) — it means it does not count as an independent threshold source on those claims, symmetric to how a mirrored right-leaning advocacy foundation would be treated.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Ballotpedia",
+      "domain": "ballotpedia.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Südwest Presse",
+      "domain": "swp.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Wiener Zeitung",
+      "domain": "wienerzeitung.at",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "institution_type": "media",
+      "affiliation_note": "Owned 100% by the Republic of Austria (Wiener Zeitung GmbH); editorially self-managed but without the public-broadcaster governance buffer between state and newsroom. Official ≠ independent.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "American Presidency Project (UC Santa Barbara)",
+      "domain": "ucsb.edu",
+      "tier": "primary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Academic primary database for US presidential/election statistics."
+    },
+    {
+      "name": "earth.org",
+      "domain": "earth.org",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "region": "Global",
+      "independence_note": "Environmental/climate NGO-style media outlet with advocacy orientation and aggregating character; treated as neutral rather than an independent authority for contested policy claims."
+    },
+    {
+      "name": "Arbeitsmarktservice Österreich",
+      "domain": "ams.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Austrian Public Employment Service; official labour-market data. Not independent for claims concerning its own performance, policy role, or government labour-market policy.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "American Institute of Physics",
+      "domain": "aip.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Scientific publisher / professional physics organization; high-quality expert source. Individual article type and peer-review status must be checked; on domain level treated as secondary, not primary."
+    },
+    {
+      "name": "Grenzwissenschaft-aktuell",
+      "domain": "grewi.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "German blog/outlet for fringe science and speculative topics; not treated as an established scientific source."
+    },
+    {
+      "name": "The Bridge",
+      "domain": "thebridge.in",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "IN",
+      "region": "Asia",
+      "independence_note": "Indian sports news outlet."
+    },
+    {
+      "name": "Israelnetz",
+      "domain": "israelnetz.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "institution_type": "media",
+      "affiliation_note": "Christian pro-Israel media initiative; structurally positioned on Israel/Palestine and Middle East conflict claims.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "US Environmental Protection Agency",
+      "domain": "epa.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "US federal environmental agency; primary source for EPA actions, regulatory documents, enforcement and datasets. Not independent for claims concerning US government policy, EPA decisions, or politically contested regulation.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Republik",
+      "domain": "republik.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "zentralplus",
+      "domain": "zentralplus.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Regional Swiss news outlet for Central Switzerland; own reporting, limited weight for national or technical claims."
+    },
+    {
+      "name": "News24",
+      "domain": "news24.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "ZA",
+      "region": "Africa",
+      "independence_note": "Established South African news outlet (Media24)."
+    },
+    {
+      "name": "iraqfootball.me",
+      "domain": "iraqfootball.me",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "region": "Middle East",
+      "independence_note": "Topical blog on Iraqi football history; can provide context/leads but does not carry a rating threshold like an established editorial or archival source."
+    },
+    {
+      "name": "VICE",
+      "domain": "vice.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Neue Osnabrücker Zeitung",
+      "domain": "noz.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ACLED",
+      "domain": "acleddata.com",
+      "tier": "primary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "region": "Global",
+      "independence_note": "Armed Conflict Location & Event Data — conflict-event dataset with documented methodology; primary/data source for recorded conflict events, not automatically for political interpretation."
+    },
+    {
+      "name": "Roll Call",
+      "domain": "rollcall.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Politico Europe",
+      "domain": "politico.eu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "EU",
+      "region": "Europe"
+    },
+    {
+      "name": "futurezone",
+      "domain": "futurezone.at",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Aargauer Zeitung",
+      "domain": "aargauerzeitung.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+    },
+    {
+      "name": "Anadolu Agency",
+      "domain": "aa.com.tr",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "institution_type": "government",
+      "affiliation_note": "Turkish state news agency; usable as an agency/secondary source but not independent on Turkish government interests or geopolitical conflict situations (analogous to RT/TRT/CGTN).",
+      "country": "TR",
+      "region": "Middle East"
+    },
+    {
+      "name": "Alexandria Magazin",
+      "domain": "alexandria-magazin.at",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "AT",
+      "region": "Europe",
+      "independence_note": "Small Austrian online magazine; editorial structure unclear."
+    },
+    {
+      "name": "ZOiS Berlin",
+      "domain": "zois-berlin.de",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Publicly funded research institute on Eastern Europe; academically relevant but treated as neutral (not institutionally independent) on geopolitical claims, consistent with SWP/MEI/CFR."
+    },
+    {
+      "name": "Clean Energy Wire",
+      "domain": "cleanenergywire.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Non-profit specialist journalism portal on the energy transition and climate policy; thematically focused, editorially independent."
+    },
+    {
+      "name": "Race to the WH",
+      "domain": "racetothewh.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Election forecast/visualization portal."
+    },
+    {
+      "name": "International Business Times UK",
+      "domain": "ibtimes.co.uk",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "International news/business portal with aggregating character; not a load-bearing evidence source for scientific, medical or sensitive political claims."
+    },
+    {
+      "name": "Einstein Foundation Berlin",
+      "domain": "einsteinfoundation.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "other",
+      "affiliation_note": "Publicly funded science-promotion foundation; primary source for its own programs, funding decisions and institutional statements, not independent for assessments of its own activity or funded projects.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "medinfo-verlag.ch",
+      "domain": "medinfo-verlag.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Medical specialist publisher; individual content may be relevant but peer-review and evidence status must be checked per article. Not threshold-bearing at domain level."
+    },
+    {
+      "name": "FemBio",
+      "domain": "fembio.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Women's biography database/portal."
+    },
+    {
+      "name": "Verfassungsblog",
+      "domain": "verfassungsblog.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Legal-scholarship publication with academic collective editorship; suitable for legal analysis, not a primary source for court decisions themselves."
+    },
+    {
+      "name": "Schweiz heute",
+      "domain": "schweizheute.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "National news portal of CH Media (editorial network ~350 journalists); belongs to CH Media (Wanner) — when cited alongside aargauerzeitung.ch / watson.ch / other CH-Media titles, account for owner concentration."
+    },
+    {
+      "name": "FAIR",
+      "domain": "fair.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "counts_for_threshold": true,
+      "institution_type": "media",
+      "affiliation_note": "FAIR (Fairness & Accuracy in Reporting); left/progressive media-criticism advocacy outlet. Not independent, symmetric to right-leaning advocacy media/think tanks.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "egoFM",
+      "domain": "egofm.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Radio-station blog; lifestyle/culture context, not threshold-bearing for political, scientific or technical claims."
+    },
+    {
+      "name": "Rolling Stone (DE)",
+      "domain": "rollingstone.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Der Bund",
+      "domain": "derbund.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "finanzen.net",
+      "domain": "finanzen.net",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Financial portal with news-aggregation character."
+    },
+    {
+      "name": "Born's IT & Windows blog",
+      "domain": "borncity.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Single-author IT/security blog; competent for IT context but no editorial control structure, not threshold-bearing."
+    },
+    {
+      "name": "ComputerBase",
+      "domain": "computerbase.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Tech Policy Press",
+      "domain": "techpolicy.press",
+      "tier": "secondary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Tech-policy specialist publication; editorially produced, thematically focused with policy-analysis orientation; treated as neutral consistent with other policy-analysis sources."
+    },
+    {
+      "name": "futurism.com",
+      "domain": "futurism.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Tech/science news portal with magazine and aggregation character; not a load-bearing source for scientific, medical or security-critical evidence."
+    },
+    {
+      "name": "notevenpast.org",
+      "domain": "notevenpast.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "History publication portal (University of Texas at Austin, Dept. of History)."
+    },
+    {
+      "name": "Einstein-Website",
+      "domain": "einstein-website.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Private Einstein biography website (single operator)."
+    },
+    {
+      "name": "bahnonline.ch",
+      "domain": "bahnonline.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Railway-enthusiast/specialist portal; not an established editorial news outlet."
+    },
+    {
+      "name": "investing.com",
+      "domain": "investing.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "region": "Global",
+      "independence_note": "Financial aggregator/market-data portal."
+    },
+    {
+      "name": "270toWin",
+      "domain": "270towin.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Election forecast/visualization portal aggregating polls and forecasts."
+    },
+    {
+      "name": "NDR",
+      "domain": "ndr.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Public-service broadcaster (Norddeutscher Rundfunk)."
     }
   ]
 }
