@@ -67,9 +67,11 @@
       merged and deduplicated. This ensures broader source coverage and reduces the risk of missing
       evidence when one source returns insufficient results.
       The two parallel analysis pipelines (Claude and Mistral) each run their own independent
-      search queries, so neither pipeline&rsquo;s findings influence the other. The search phase
-      intentionally allows some variation in query construction so that different runs may surface
-      different evidence, improving coverage across multiple analyses of the same claim.
+      search queries, so neither pipeline&rsquo;s findings influence the other. The search query is
+      deterministic: the claim text itself &mdash; plus an English translation for broader coverage
+      &mdash; is the query, identical for both pipelines. Run-to-run variation in results comes from
+      the search indices themselves, which may return slightly different results at different times;
+      this variance is visible in each claim&rsquo;s public judgment history.
     </li>
     <li data-i18n="methodology.pipeline_li3" data-i18n-target="html">
       <strong>Structured judgment.</strong>
