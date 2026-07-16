@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import subprocess
 import uuid
 from pathlib import Path
@@ -1069,12 +1070,39 @@ def _sources_unusable(sources) -> bool:
         return True
 
 
+# The escape characters the JSON grammar permits after a backslash.
+# Anything else (\', \x, \%, …) is an illegal escape and makes the document unparseable.
+_JSON_LEGAL_ESCAPES = frozenset('"\\/bfnrtu')
+
+
+def _repair_json_escapes(raw: str) -> str:
+    """Strip backslashes that introduce JSON-illegal escape sequences.
+
+    Single left-to-right pass. Because the scan consumes each backslash together with
+    the character it escapes, a legal ``\\\\`` is matched as one unit and the character
+    after it is never mistaken for an escaped character. Legal escapes (``\\\\``, ``\\n``,
+    ``\\t``, ``\\r``, ``\\"``, ``\\/``, ``\\b``, ``\\f``, ``\\uXXXX``) are emitted unchanged;
+    only the backslash of an illegal sequence is dropped, leaving the character it
+    wrongly escaped.
+
+    ``u`` is treated as legal without checking the four hex digits: a malformed ``\\u``
+    stays malformed and the caller's json.loads retry still fails, which is the
+    conservative outcome (fall through to the re-ask, never accept junk).
+    """
+    def _fix(match: "re.Match[str]") -> str:
+        return match.group(0) if match.group(1) in _JSON_LEGAL_ESCAPES else match.group(1)
+
+    return re.sub(r"\\(.)", _fix, raw, flags=re.DOTALL)
+
+
 def _coerce_sources(sources):
     """If sources is a JSON-encoded string, attempt to parse it into a Python object.
 
     - str → json.loads succeeds → list   : return the list
     - str → json.loads succeeds → dict   : return [dict]  (single object wrapped)
-    - str → json.loads raises / returns non-list/non-dict: return original value unchanged
+    - str → json.loads raises: retry once via _repair_json_escapes (illegal escapes only),
+      then apply the same list/dict rules to the repaired parse
+    - str → still unparseable / parses to non-list/non-dict: return original value unchanged
       (so the downstream _sources_unusable check still catches it and re-ask fires)
     - anything else (list, None, …): return unchanged.
 
@@ -1086,7 +1114,13 @@ def _coerce_sources(sources):
     try:
         parsed = json.loads(sources)
     except (json.JSONDecodeError, ValueError):
-        return sources
+        # Models intermittently emit JSON-illegal escapes (e.g. \' inside "Hussein's").
+        # Try one bounded, conservative repair before giving up; if the repair does not
+        # yield parseable JSON, return the ORIGINAL value so the existing re-ask fires.
+        try:
+            parsed = json.loads(_repair_json_escapes(sources))
+        except (json.JSONDecodeError, ValueError):
+            return sources
     if isinstance(parsed, list):
         return parsed
     if isinstance(parsed, dict):

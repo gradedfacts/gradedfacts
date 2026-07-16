@@ -575,6 +575,26 @@ class TestSourceReaskNet:
 
 _STRINGIFIED_SOURCES = json.dumps(_REASK_SOURCES)  # the mis-serialised-array failure mode
 
+# The invalid-escape failure mode: the model serialises sources as a string containing
+# \' , which the JSON grammar forbids.  json.dumps cannot produce this, which is why the
+# original coercion tests missed it.
+_INVALID_ESCAPE_SOURCES = (
+    r'[{"url": "https://example.com/", "title": "Title", "tier": "secondary", '
+    r'"is_independent": true, "relevance_score": 0.8, "supports_claim": true, '
+    r'"excerpt": "Hussein\'s speech"}]'
+)
+
+# Same failure, but with legal \\ and \n escapes alongside the illegal \' — the repair
+# must fix only the illegal one and leave the backslash and newline intact.
+_MIXED_ESCAPE_SOURCES = (
+    r'[{"url": "https://ex.com/a\\b", "title": "Title", "tier": "secondary", '
+    r'"is_independent": true, "relevance_score": 0.8, "supports_claim": true, '
+    r'"excerpt": "C:\\dir\nnext, Hussein\'s"}]'
+)
+
+# Repairable escape, but the document is truncated — repair cannot rescue it.
+_TRUNCATED_ESCAPE_SOURCES = r'[{"url": "https://ex.com", "excerpt": "Hussein\'s'
+
 
 class TestSourceReaskUnusableTrigger:
     """
@@ -850,3 +870,113 @@ class TestCoerceSources:
         from backend.analysis.engine import _coerce_sources, _sources_unusable
         assert _coerce_sources(None) is None
         assert _sources_unusable(None) is True
+
+
+class TestRepairJsonEscapes:
+    """
+    Coverage for the invalid-escape rescue path in _coerce_sources.
+
+    This is the gap that let the bug ship: the original coercion tests built their
+    fixtures with json.dumps, which by construction emits only legal escapes, so no
+    test ever exercised a JSON-illegal escape sequence.
+    """
+
+    # ── (b) the \' case → repaired, parses, sources survive ──
+
+    def test_coerce_invalid_escape_string_repaired(self):
+        """A sources string with a JSON-illegal \\' escape is repaired and parsed."""
+        from backend.analysis.engine import _coerce_sources, _sources_unusable
+
+        result = _coerce_sources(_INVALID_ESCAPE_SOURCES)
+
+        assert isinstance(result, list), f"Expected a list, got {type(result).__name__}"
+        assert result[0]["excerpt"] == "Hussein's speech"
+        assert result[0]["url"] == "https://example.com/"
+        assert _sources_unusable(result) is False, "Repaired sources must not trigger a re-ask"
+
+    # ── (c) legal escapes survive the repair intact ──
+
+    def test_repair_preserves_legal_escapes(self):
+        """Legal \\\\ and \\n inside a URL/excerpt are not corrupted by the repair."""
+        from backend.analysis.engine import _coerce_sources
+
+        result = _coerce_sources(_MIXED_ESCAPE_SOURCES)
+
+        assert isinstance(result, list)
+        # \\ decoded to a single literal backslash, not dropped
+        assert result[0]["url"] == "https://ex.com/a\\b"
+        # \\ → backslash, \n → real newline, \' → apostrophe, all in one value
+        assert result[0]["excerpt"] == "C:\\dir\nnext, Hussein's"
+
+    # ── (d) truncated → repair fails → falls through to the re-ask ──
+
+    def test_coerce_truncated_string_still_reasks(self):
+        """A truncated string is not rescued: original returned, still unusable."""
+        from backend.analysis.engine import _coerce_sources, _sources_unusable
+
+        result = _coerce_sources(_TRUNCATED_ESCAPE_SOURCES)
+
+        assert result is _TRUNCATED_ESCAPE_SOURCES, "Junk must be returned unchanged"
+        assert _sources_unusable(result) is True, "Junk must still trigger the re-ask"
+
+    # ── valid input never reaches the repair (no-op for both legs) ──
+
+    def test_repair_not_invoked_on_valid_json(self):
+        """Already-valid JSON parses on the first attempt; the repair is never called."""
+        from backend.analysis import engine as eng
+
+        with patch.object(eng, "_repair_json_escapes",
+                          side_effect=AssertionError("repair must not run on valid JSON")):
+            result = eng._coerce_sources(_STRINGIFIED_SOURCES)
+
+        assert result == _REASK_SOURCES
+
+    # ── Sonnet integration: invalid escape → repaired → NO re-ask ──
+
+    def test_sonnet_invalid_escape_sources_no_reask(self):
+        """Sonnet mirror: an invalid-escape sources string is repaired in-line,
+        so exactly 1 API call is made and the sources are not lost."""
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response(
+            "verified", "Rationale.", _INVALID_ESCAPE_SOURCES
+        )
+
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = first_response
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert mock_client.messages.create.call_count == 1, \
+            f"Expected 1 call (no re-ask), got {mock_client.messages.create.call_count}"
+        assert result["sources"][0]["excerpt"] == "Hussein's speech"
+
+    # ── Mistral integration: same rescue, shared helper → symmetric ──
+
+    def test_mistral_invalid_escape_sources_no_reask(self):
+        """Mistral mirror of the Sonnet test: _coerce_sources is shared, so the
+        repair applies to Mistral's leg identically."""
+        from backend.analysis import consensus as cons
+
+        first_response = _make_mistral_response_reask(
+            "submit_judgment",
+            {"rating": "speculative", "rationale": "Mistral rationale.",
+             "sources": _INVALID_ESCAPE_SOURCES},
+        )
+
+        mock_client = MagicMock()
+        mock_client.chat.complete.return_value = first_response
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency",
+                   side_effect=lambda r, s, *a, **kw: s), \
+             patch("backend.analysis.consensus._verify_temporal_cap",
+                   side_effect=lambda r, *a, **kw: r), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            result = cons._mistral_phase2_judgment("Test claim", _FINDINGS)
+
+        assert mock_client.chat.complete.call_count == 1, \
+            f"Expected 1 call (no re-ask), got {mock_client.chat.complete.call_count}"
+        assert result["sources"][0]["excerpt"] == "Hussein's speech"
