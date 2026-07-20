@@ -1716,3 +1716,90 @@ class TestMistralOnlyPath:
         m_j = {"rationale": "Mistral speculative.", "sources": [], "rating": "speculative"}
         j, _ = _run_mistral_only(m_j)
         assert j.rating == EpistemicRating.MISSING
+
+
+# ── BUG 2: consensus hard quality gate is evaluated over BOTH legs ────────────
+
+_TERTIARY_ONLY = [{
+    "url": "https://wiki.example.com/bug2",
+    "title": "Wiki",
+    "tier": "tertiary",
+    "is_independent": True,
+    "relevance_score": 0.8,
+    "supports_claim": True,
+}]
+
+
+class TestConsensusHardQualityGateUnion:
+    """
+    The consensus gate must fire only when NEITHER leg has an independent qualifying
+    source — it is evaluated over the same source set the tiebreak weighed. Judging the
+    consensus verdict against Claude's evidence alone capped verdicts that Mistral's
+    independent sources fully carried.
+    """
+
+    def test_consensus_gate_not_fired_when_mistral_has_qualifying(self):
+        """
+        Reported shape: Claude has no qualifying source (tertiary only → its own leg is
+        capped to SPECULATIVE), Mistral has independent primaries and says VERIFIED.
+        The tiebreak awards VERIFIED to Mistral; the consensus gate must NOT override it.
+        """
+        claude_j = {"rationale": "Claude says verified.", "sources": _TERTIARY_ONLY, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        assert j.claude_rating == EpistemicRating.SPECULATIVE.value
+        assert j.mistral_rating == EpistemicRating.VERIFIED.value
+        assert j.consensus_rating == EpistemicRating.VERIFIED
+        assert j.rating == EpistemicRating.VERIFIED
+
+    def test_consensus_gate_fires_when_neither_leg_qualifies(self):
+        """
+        The floor: with no independent qualifying source on either leg, a VERIFIED
+        consensus must still be overridden to SPECULATIVE. _resolve_consensus is stubbed
+        so the gate is reached with VERIFIED regardless of the per-leg caps.
+        """
+        from backend.analysis import consensus as cons
+
+        claude_j = {"rationale": "Claude says verified.", "sources": _TERTIARY_ONLY, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says verified.", "sources": _TERTIARY_ONLY, "rating": "verified"}
+
+        with patch.object(cons, "_resolve_consensus", return_value=(EpistemicRating.VERIFIED, True)):
+            j, sources = _run_consensus(claude_j, mistral_j)
+
+        assert len(sources) > 0  # not the 0-sources path — the quality gate is what fired
+        assert j.consensus_rating == EpistemicRating.SPECULATIVE
+        assert j.rating == EpistemicRating.SPECULATIVE
+
+    def test_consensus_gate_fires_when_mistral_leg_absent(self):
+        """
+        Mistral leg dropped out entirely (mistral_data is None). mistral_has_qualifying
+        must be initialised, so the gate evaluates without raising UnboundLocalError and
+        still caps Claude's unsupported VERIFIED.
+        """
+        from backend.analysis import consensus as cons
+
+        claude_j = {"rationale": "Claude says verified.", "sources": _TERTIARY_ONLY, "rating": "verified"}
+
+        with patch.object(cons, "_resolve_consensus", return_value=(EpistemicRating.VERIFIED, None)):
+            j, sources = _run_consensus(claude_j, None)
+
+        assert len(sources) > 0
+        assert j.consensus_rating == EpistemicRating.SPECULATIVE
+        assert j.rating == EpistemicRating.SPECULATIVE
+
+    def test_consensus_gate_not_fired_when_claude_has_qualifying(self):
+        """
+        Mirror of the reported shape with the legs swapped — Mistral weak, Claude strong.
+        Symmetry: the gate must stay silent in both directions.
+        """
+        claude_j = {"rationale": "Claude says verified.", "sources": _THREE_DISTINCT_PRIMARIES, "rating": "verified"}
+        mistral_j = {"rationale": "Mistral says verified.", "sources": _TERTIARY_ONLY, "rating": "verified"}
+
+        j, _ = _run_consensus(claude_j, mistral_j)
+
+        assert j.claude_rating == EpistemicRating.VERIFIED.value
+        assert j.mistral_rating == EpistemicRating.SPECULATIVE.value
+        assert j.consensus_rating == EpistemicRating.VERIFIED
+        assert j.rating == EpistemicRating.VERIFIED

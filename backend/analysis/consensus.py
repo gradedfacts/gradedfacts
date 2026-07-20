@@ -854,6 +854,7 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
     mistral_rating: EpistemicRating | None = None
     mistral_rationale: str | None = None
     mistral_source_quality: tuple[int, int] = (0, 0)
+    mistral_has_qualifying = False
     if mistral_data is not None:
         mistral_rationale = mistral_data.get("rationale", "")
         raw_mistral_rating = mistral_data.get("rating")
@@ -946,11 +947,14 @@ def analyze_claim_with_consensus(claim_id: str, session, user_language: str | No
 
     # Hard quality gate on consensus — applied after resolution so neither model
     # nor the consensus logic can produce VERIFIED/DEBUNKED without an independent source.
-    if not claude_has_qualifying and consensus_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
+    # The gate is evaluated over the union of both legs — the same source set the
+    # tiebreak in _resolve_consensus() weighed. A consensus verdict carried by
+    # Mistral's independent evidence must not be capped because Claude's leg was weak.
+    if not (claude_has_qualifying or mistral_has_qualifying) and consensus_rating in (EpistemicRating.VERIFIED, EpistemicRating.DEBUNKED):
         logger.warning(
-            "claim %s: hard quality gate (consensus) — no independent qualifying source; "
-            "consensus rating %s overridden to SPECULATIVE.",
-            claim_id, consensus_rating,
+            "claim %s: hard quality gate (consensus) — no independent qualifying source "
+            "on either leg (claude=%s mistral=%s); consensus rating %s overridden to SPECULATIVE.",
+            claim_id, claude_has_qualifying, mistral_has_qualifying, consensus_rating,
         )
         consensus_rating = EpistemicRating.SPECULATIVE
 
