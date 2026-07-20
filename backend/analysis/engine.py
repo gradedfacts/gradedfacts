@@ -534,7 +534,14 @@ _JUDGMENT_TOOL = {
                         },
                         "excerpt": {
                             "type": "string",
-                            "description": "Key passage from the source that informed your evaluation.",
+                            "description": (
+                                "Key passage from the source that informed your evaluation. "
+                                "Write it as plain text containing NO double-quote character (\") "
+                                "at all: do not wrap the passage in quotation marks, and render any "
+                                "quotation inside it with single quotes ('like this'). A double quote "
+                                "in this value makes the entire sources array unparseable and every "
+                                "source is discarded."
+                            ),
                         },
                         "supports_claim": {
                             "type": "boolean",

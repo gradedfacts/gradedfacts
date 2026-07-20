@@ -1193,3 +1193,50 @@ class TestSourceParseFailDiagnostic:
         from backend.analysis import engine as eng
         from backend.analysis import consensus as cons
         assert cons._log_source_parse_failure is eng._log_source_parse_failure
+
+
+class TestExcerptQuoteInstruction:
+    """
+    Surface D (bug1_schema_fix.md): the excerpt description tells the model to avoid
+    double quotes entirely, because an unescaped `"` inside an excerpt value is what
+    breaks the sources array (claim b23f2bdb, 20.07) and no repair may guess it back.
+
+    NOTE: these tests assert only that the instruction is PRESENT and reaches every
+    tool definition.  Whether the model obeys it is not unit-testable — that can only
+    be measured from [SOURCE-PARSE-FAIL] rates in the live log.
+    """
+
+    def _excerpt_desc(self):
+        from backend.analysis.engine import _JUDGMENT_TOOL
+        return (
+            _JUDGMENT_TOOL["input_schema"]["properties"]["sources"]
+            ["items"]["properties"]["excerpt"]["description"]
+        )
+
+    def test_excerpt_description_forbids_double_quotes(self):
+        desc = self._excerpt_desc()
+        assert 'NO double-quote character' in desc
+        assert "single quotes" in desc
+        # the field's original meaning is unchanged
+        assert "Key passage from the source" in desc
+
+    def test_instruction_reaches_the_reask_tool(self):
+        """_SOURCES_ONLY_TOOL aliases the same sources schema object — the re-ask
+        reproduced the identical defect, so it must carry the instruction too."""
+        from backend.analysis.engine import _JUDGMENT_TOOL, _SOURCES_ONLY_TOOL
+        assert (
+            _SOURCES_ONLY_TOOL["input_schema"]["properties"]["sources"]
+            is _JUDGMENT_TOOL["input_schema"]["properties"]["sources"]
+        )
+
+    def test_instruction_reaches_both_mistral_tools(self):
+        """Mistral's tools wrap the same engine objects — no per-leg duplication."""
+        from backend.analysis.engine import _JUDGMENT_TOOL, _SOURCES_ONLY_TOOL
+        from backend.analysis.consensus import (
+            _MISTRAL_JUDGMENT_TOOL, _MISTRAL_SOURCES_ONLY_TOOL,
+        )
+        assert _MISTRAL_JUDGMENT_TOOL["function"]["parameters"] is _JUDGMENT_TOOL["input_schema"]
+        assert (
+            _MISTRAL_SOURCES_ONLY_TOOL["function"]["parameters"]
+            is _SOURCES_ONLY_TOOL["input_schema"]
+        )
