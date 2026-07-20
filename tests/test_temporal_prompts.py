@@ -11,6 +11,7 @@ Verifies:
 """
 
 import json
+import logging
 import re
 from unittest.mock import MagicMock, patch
 
@@ -980,3 +981,215 @@ class TestRepairJsonEscapes:
         assert mock_client.chat.complete.call_count == 1, \
             f"Expected 1 call (no re-ask), got {mock_client.chat.complete.call_count}"
         assert result["sources"][0]["excerpt"] == "Hussein's speech"
+
+
+# ── Bug 1 part C: re-ask coercion symmetry + parse-failure diagnostics ────────
+
+# The 20.07 failure mode (claim 277edf17): a MISSING escape, not an illegal one.
+# The model closed a German quotation with an ASCII `"` inside a string value, which
+# terminates the JSON string early.  _repair_json_escapes only strips backslashes, so
+# it cannot touch this input — the string must survive coercion unchanged.
+_UNESCAPED_QUOTE_SOURCES = (
+    '[{"url": "https://example.com/", "title": "Title", "tier": "secondary", '
+    '"is_independent": true, "relevance_score": 0.8, "supports_claim": true, '
+    '"excerpt": "das „Rote Zimmer" oder das Gefängnis von Almadonya"}]'
+)
+
+
+class TestReaskCoercionSymmetry:
+    """
+    The re-ask must coerce its OWN return value exactly as the first Phase 2 call does.
+    Before this fix a valid JSON-string array from submit_sources was discarded untouched
+    — the one genuine asymmetry between the first call and the retry.
+    """
+
+    # ── (i) Sonnet: re-ask returns a valid JSON STRING → coerced and used ──
+
+    def test_sonnet_reask_string_sources_are_coerced(self):
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", [])
+        reask_response = _make_sonnet_reask_response(_STRINGIFIED_SOURCES)
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2
+        assert result["sources"] == _REASK_SOURCES, \
+            "a valid JSON-string array from the re-ask must be coerced, not discarded"
+
+    # ── (ii) Mistral mirror of (i) ──
+
+    def test_mistral_reask_string_sources_are_coerced(self):
+        from backend.analysis import consensus as cons
+
+        first_response = _make_mistral_response_reask(
+            "submit_judgment",
+            {"rating": "speculative", "rationale": "Mistral rationale.", "sources": []},
+        )
+        reask_response = _make_mistral_response_reask(
+            "submit_sources", {"sources": _STRINGIFIED_SOURCES}
+        )
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.chat.complete.side_effect = side_effect
+
+        with patch("backend.analysis.consensus._get_mistral_client", return_value=mock_client), \
+             patch("backend.analysis.consensus._verify_rating_consistency",
+                   side_effect=lambda r, s, *a, **kw: s), \
+             patch("backend.analysis.consensus._verify_temporal_cap",
+                   side_effect=lambda r, *a, **kw: r), \
+             patch("backend.analysis.consensus._get_client", return_value=MagicMock()):
+            result = cons._mistral_phase2_judgment("Test claim", _FINDINGS)
+
+        assert call_count["n"] == 2
+        assert result["sources"] == _REASK_SOURCES
+
+    # ── (iii) Sonnet: re-ask returns a MALFORMED string → still discarded, logged ──
+
+    def test_sonnet_reask_malformed_string_discarded_and_logged(self, caplog):
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", [])
+        reask_response = _make_sonnet_reask_response("not valid json [{{broken")
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with caplog.at_level(logging.WARNING), \
+             patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert result["sources"] == []
+        assert "[SOURCE-REASK-EMPTY] (Claude): sources not a list after coercion" in caplog.text
+
+    # ── (iv) Sonnet: re-ask returns NO tool block → logged ──
+
+    def test_sonnet_reask_no_tool_block_logged(self, caplog):
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", [])
+        empty_response = MagicMock()
+        empty_response.content = []
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else empty_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with caplog.at_level(logging.WARNING), \
+             patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            result = eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert result["sources"] == []
+        assert "[SOURCE-REASK-EMPTY] (Claude): no submit_sources tool block" in caplog.text
+
+    # ── (v) Sonnet: re-ask returns an empty array → logged ──
+
+    def test_sonnet_reask_empty_array_logged(self, caplog):
+        from backend.analysis import engine as eng
+
+        first_response = _make_sonnet_phase2_response("verified", "Rationale.", [])
+        reask_response = _make_sonnet_reask_response([])
+
+        call_count = {"n": 0}
+
+        def side_effect(**kwargs):
+            call_count["n"] += 1
+            return first_response if call_count["n"] == 1 else reask_response
+
+        mock_client = MagicMock()
+        mock_client.messages.create.side_effect = side_effect
+
+        with caplog.at_level(logging.WARNING), \
+             patch.object(eng, "_verify_rating_consistency", side_effect=lambda r, s, *a, **kw: s), \
+             patch.object(eng, "_verify_temporal_cap", side_effect=lambda r, *a, **kw: r):
+            eng._phase2_judgment(mock_client, "Test claim", _FINDINGS)
+
+        assert "[SOURCE-REASK-EMPTY] (Claude): sources absent/None/empty" in caplog.text
+
+
+class TestSourceParseFailDiagnostic:
+    """
+    [SOURCE-PARSE-FAIL]: why a string `sources` value could not be parsed after the
+    escape-repair retry.  repair_changed is the decisive field.
+    """
+
+    # ── (i) the 20.07 input class: unescaped `"` — repair cannot help ──
+
+    def test_unescaped_quote_survives_coercion_as_str(self):
+        from backend.analysis.engine import _coerce_sources, _repair_json_escapes, _sources_unusable
+
+        assert _repair_json_escapes(_UNESCAPED_QUOTE_SOURCES) == _UNESCAPED_QUOTE_SOURCES, \
+            "the repair must leave a missing-escape document byte-for-byte unchanged"
+        assert _coerce_sources(_UNESCAPED_QUOTE_SOURCES) is _UNESCAPED_QUOTE_SOURCES
+        assert _sources_unusable(_UNESCAPED_QUOTE_SOURCES) is True
+
+    def test_parse_fail_logs_repair_changed_false_with_window(self, caplog):
+        from backend.analysis.engine import _log_source_parse_failure
+
+        with caplog.at_level(logging.WARNING):
+            _log_source_parse_failure(_UNESCAPED_QUOTE_SOURCES, "Claude")
+
+        assert "[SOURCE-PARSE-FAIL] (Claude)" in caplog.text
+        assert "repair_changed=False" in caplog.text, \
+            "nothing was stripped — this is a missing escape, not an illegal one"
+        assert "Rote Zimmer" in caplog.text, "the window must show the offending quote"
+
+    # ── (ii) a genuinely illegal escape that is ALSO broken a second way ──
+
+    def test_parse_fail_logs_repair_changed_true(self, caplog):
+        from backend.analysis.engine import _log_source_parse_failure
+
+        # \' is stripped by the repair; the unterminated array still fails to parse.
+        broken_twice = r'[{"excerpt": "Hussein\'s speech"'
+        with caplog.at_level(logging.WARNING):
+            _log_source_parse_failure(broken_twice, "Claude")
+
+        assert "repair_changed=True" in caplog.text
+
+    # ── (iii) no log for values that are not strings, or that parse cleanly ──
+
+    def test_no_log_for_non_string_or_parseable(self, caplog):
+        from backend.analysis.engine import _log_source_parse_failure
+
+        with caplog.at_level(logging.WARNING):
+            _log_source_parse_failure(_REASK_SOURCES, "Claude")
+            _log_source_parse_failure(_STRINGIFIED_SOURCES, "Claude")
+
+        assert "[SOURCE-PARSE-FAIL]" not in caplog.text
+
+    # ── (iv) shared across both legs: one implementation, no drift ──
+
+    def test_log_source_parse_failure_is_shared_object(self):
+        from backend.analysis import engine as eng
+        from backend.analysis import consensus as cons
+        assert cons._log_source_parse_failure is eng._log_source_parse_failure

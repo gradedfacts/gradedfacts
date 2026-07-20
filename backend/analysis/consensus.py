@@ -47,6 +47,7 @@ from backend.analysis.engine import (
     _sources_unusable,
     _coerce_sources,
     _get_no_search_results_message,
+    _log_source_parse_failure,
     _verify_rating_consistency,
     _verify_temporal_cap,
     _zurich_date,
@@ -160,6 +161,7 @@ def _mistral_phase2_judgment(claim_text: str, search_findings: str, lang_instruc
     # trigger a re-ask and is returned directly.  Genuinely broken strings are
     # returned unchanged by _coerce_sources and still fail _sources_unusable.
     _raw_sources = _coerce_sources(args.get("sources"))
+    _log_source_parse_failure(_raw_sources, "Mistral")
     args = {**args, "sources": _raw_sources}
     # Re-ask only if sources are still unusable after coercion.
     if _sources_unusable(_raw_sources) and search_findings:
@@ -233,12 +235,32 @@ def _mistral_reask_sources(
         )
         tool_calls = response.choices[0].message.tool_calls
         if not tool_calls:
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Mistral): no submit_sources tool call in response"
+            )
             return []
         reask_args = tool_calls[0].function.arguments
         if isinstance(reask_args, str):
             reask_args = json.loads(reask_args)
-        sources = reask_args.get("sources") or []
-        return sources if isinstance(sources, list) else []
+        # Coerce the re-ask's OWN return value exactly as the first call's is coerced —
+        # identical to the Claude re-ask (engine.py) so the two legs cannot drift.
+        _reask_raw = reask_args.get("sources")
+        sources = _coerce_sources(_reask_raw)
+        if not sources:
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Mistral): sources absent/None/empty — type=%s repr=%.200s",
+                type(_reask_raw).__name__, repr(_reask_raw),
+            )
+            return []
+        if not isinstance(sources, list):
+            _log_source_parse_failure(sources, "Mistral re-ask")
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Mistral): sources not a list after coercion — "
+                "type=%s repr=%.200s",
+                type(sources).__name__, repr(sources),
+            )
+            return []
+        return sources
     except Exception as exc:
         logger.warning("[SOURCE-REASK] Mistral re-ask call failed (%s)", exc)
         return []

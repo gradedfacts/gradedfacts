@@ -1128,6 +1128,38 @@ def _coerce_sources(sources):
     return sources
 
 
+def _log_source_parse_failure(sources, model_label: str) -> None:
+    """Log why a string `sources` value could not be parsed, after the repair retry.
+
+    Diagnostics only — never changes control flow, never raises.  Kept OUT of
+    _coerce_sources so that helper stays pure (see its docstring); called from the
+    Phase 2 call sites of BOTH models so the two legs cannot drift.
+
+    The decisive field is repair_changed:
+      False → _repair_json_escapes had nothing to strip, so the document is not
+              broken by an illegal escape at all (e.g. an unescaped `"` inside a
+              string value, a raw control character, a malformed \\uXXXX).
+      True  → an illegal escape WAS stripped and the document is still broken,
+              i.e. it carries a second, independent defect.
+    """
+    if not isinstance(sources, str):
+        return
+    repaired = _repair_json_escapes(sources)
+    try:
+        json.loads(repaired)
+    except (json.JSONDecodeError, ValueError) as exc:
+        pos = getattr(exc, "pos", 0)
+        logger.warning(
+            "[SOURCE-PARSE-FAIL] (%s): msg=%s pos=%s lineno=%s colno=%s "
+            "repair_changed=%s window=%r",
+            model_label,
+            getattr(exc, "msg", str(exc)), pos,
+            getattr(exc, "lineno", None), getattr(exc, "colno", None),
+            repaired != sources,
+            repaired[max(0, pos - 60):pos + 60],
+        )
+
+
 def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findings: str, lang_instruction: str = "") -> dict:
     """
     Force Claude to emit a submit_judgment tool call with structured source evaluations.
@@ -1176,6 +1208,7 @@ def _phase2_judgment(client: anthropic.Anthropic, claim_text: str, search_findin
     # trigger a re-ask and is returned directly.  Genuinely broken strings are
     # returned unchanged by _coerce_sources and still fail _sources_unusable.
     _raw_sources = _coerce_sources(raw.get("sources"))
+    _log_source_parse_failure(_raw_sources, "Claude")
     raw = {**raw, "sources": _raw_sources}
     # Re-ask only if sources are still unusable after coercion.
     if _sources_unusable(_raw_sources) and search_findings:
@@ -1248,9 +1281,30 @@ def _claude_reask_sources(
             None,
         )
         if tool_block is None:
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Claude): no submit_sources tool block in response"
+            )
             return []
-        sources = tool_block.input.get("sources") or []
-        return sources if isinstance(sources, list) else []
+        # Coerce the re-ask's OWN return value exactly as the first call's is coerced
+        # (engine.py Phase 2): a valid JSON-string array from submit_sources used to be
+        # discarded untouched here — the one asymmetry between the first call and the retry.
+        _reask_raw = tool_block.input.get("sources")
+        sources = _coerce_sources(_reask_raw)
+        if not sources:
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Claude): sources absent/None/empty — type=%s repr=%.200s",
+                type(_reask_raw).__name__, repr(_reask_raw),
+            )
+            return []
+        if not isinstance(sources, list):
+            _log_source_parse_failure(sources, "Claude re-ask")
+            logger.warning(
+                "[SOURCE-REASK-EMPTY] (Claude): sources not a list after coercion — "
+                "type=%s repr=%.200s",
+                type(sources).__name__, repr(sources),
+            )
+            return []
+        return sources
     except Exception as exc:
         logger.warning("[SOURCE-REASK] Claude re-ask call failed (%s)", exc)
         return []
