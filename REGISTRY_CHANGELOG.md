@@ -71,7 +71,7 @@ No Batch-E candidate domains were added in this commit; the 79 proposals from
 | Change    | Secondary / Independent → Secondary / Independent (**unchanged**) |
 | Type      | (b) fact correction — note added, classification untouched |
 | Rationale | Ownership fact, not a judgement change. The entry is named *"Luzerner Zeitung (CH Media)"* but was the only one of the four registered CH-Media titles without the owner-concentration note the other three received in commit `e6f02c6` (2026-07-02). Evidence: the entry's own `name` field records the CH-Media affiliation; the note wording is copied verbatim from the `aargauerzeitung.ch` sibling. This is **not** a §2.4 finding — CH Media is a private publisher and the title remains editorially independent. The note exists so that citing several CH-Media titles is not mistaken for independent corroboration, per the Symmetry and Transparency Principles. |
-| Commit    | *(pending — fill in on commit)* |
+| Commit    | `e40f115` |
 
 Concurrent housekeeping in the same commit: the enumerated title list inside all four CH-Media
 notes was extended so each entry names the other three (alphabetical, self excluded). Previously
@@ -96,7 +96,7 @@ separately for the whole class of independent-but-owner-concentrated sources.
 | Old value | `"Official government institution of France."` |
 | New value | `"Official government institution of France. Not editorially independent."` |
 | Rationale | §2.4 criterion 1 (direct government oversight / ministerial control) — already the basis of the existing Not Independent classification, which is not being changed. The note was missing the second sentence of the standard Stufe-1 template documented in `docs/registry_review/Registry_Batch_D_Staatsquellen.md:11` and carried by 71 other entries (e.g. `gov.pl`, `bmi.gv.at`). Evidence: the template itself and the 71 conforming entries. A drafting omission, corrected for consistency. |
-| Commit    | *(pending — fill in on commit)* |
+| Commit    | `e40f115` |
 
 ### 3. ipcc.ch — RECLASSIFICATION (individual justification per §3.3)
 
@@ -105,7 +105,7 @@ separately for the whole class of independent-but-owner-concentrated sources.
 | Domain    | `ipcc.ch` |
 | Change    | **Primary / Neutral → Primary / Not Independent** |
 | Type      | Reclassification — not a fact correction |
-| Commit    | *(pending — fill in on commit)* |
+| Commit    | `e40f115` |
 
 **Old entry:**
 ```json
