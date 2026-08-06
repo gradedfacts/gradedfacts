@@ -3083,7 +3083,7 @@
       "tier": "primary",
       "is_independent": false,
       "institution_type": "government",
-      "affiliation_note": "Official government institution of France.",
+      "affiliation_note": "Official government institution of France. Not editorially independent.",
       "country": "FR",
       "region": "Europe"
     },
@@ -3211,8 +3211,9 @@
       "name": "Intergovernmental Panel on Climate Change (IPCC)",
       "domain": "ipcc.ch",
       "tier": "primary",
-      "is_independent": "neutral",
+      "is_independent": false,
       "institution_type": "government",
+      "affiliation_note": "Intergovernmental body of the United Nations (WMO/UNEP); member states exercise political direction over the IPCC's mandate, work programme, and the line-by-line government approval of Summary for Policymakers texts. Structurally identical to un.org and who.int, both classified primary / not independent. The underlying assessment chapters are authored by scientists under scholarly standards and remain authoritative primary sources for the state of climate research; the approved policymaker summaries are negotiated documents. Reclassified 2026-08-06 from neutral to not independent to remove an unexplained exception to the standing UN rule (see REGISTRY_CHANGELOG.md).",
       "country": "INT",
       "region": "INT"
     },
@@ -3367,7 +3368,8 @@
       "is_independent": true,
       "institution_type": "media",
       "country": "CH",
-      "region": "Europe"
+      "region": "Europe",
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Berliner Zeitung",
@@ -3570,7 +3572,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Blick",
@@ -7299,7 +7301,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside luzernerzeitung.ch / schweizheute.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Anadolu Agency",
@@ -7415,7 +7417,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "National news portal of CH Media (editorial network ~350 journalists); belongs to CH Media (Wanner) — when cited alongside aargauerzeitung.ch / watson.ch / other CH-Media titles, account for owner concentration."
+      "independence_note": "National news portal of CH Media (editorial network ~350 journalists); belongs to CH Media (Wanner) — when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / watson.ch / other CH-Media titles, account for owner concentration."
     },
     {
       "name": "FAIR",
