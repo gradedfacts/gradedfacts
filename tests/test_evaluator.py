@@ -8,6 +8,7 @@ and relevance_score clamping. Also covers extract_domain() deduplication helper.
 from backend.sources.evaluator import (
     evaluate_source,
     extract_domain,
+    is_defunct_domain_url,
     is_party_politician_url,
     is_social_media_url,
     is_user_content_url,
@@ -299,3 +300,71 @@ class TestUserContentBlacklist:
 
     def test_non_user_content_not_excluded(self):
         assert is_user_content_url("https://documentcloud.org/documents/123") is False
+
+    # ── Additions 2026-08-06 ──────────────────────────────────────────────────
+
+    def test_dillum_excluded(self):
+        # Single-author self-published pseudohistory — no editorial structure
+        src = {"url": "https://www.dillum.ch/html/some_article.htm", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_github_excluded(self):
+        # Code hosting — arbitrary user repositories, no publisher
+        src = {"url": "https://github.com/someuser/somerepo", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_windows_net_excluded(self):
+        # Azure blob storage — hosting layer with no publisher
+        src = {"url": "https://someaccount.blob.core.windows.net/container/file.pdf",
+               "tier": "tertiary", "is_independent": "neutral", "relevance_score": 0.4,
+               "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_user_content_url_dillum(self):
+        assert is_user_content_url("https://www.dillum.ch/html/x.htm") is True
+
+    def test_is_user_content_url_github(self):
+        assert is_user_content_url("https://github.com/org/repo/blob/main/README.md") is True
+
+    def test_is_user_content_url_windows_net(self):
+        assert is_user_content_url("https://acct.blob.core.windows.net/c/f.pdf") is True
+
+
+class TestDefunctDomainBlacklist:
+
+    def test_iog_hu_excluded(self):
+        src = {"url": "https://iog.hu/some-article", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_defunct_domain_url_iog(self):
+        assert is_defunct_domain_url("https://iog.hu/") is True
+
+    def test_is_defunct_domain_url_subdomain(self):
+        assert is_defunct_domain_url("https://www.iog.hu/publications") is True
+
+    def test_live_domain_not_defunct(self):
+        assert is_defunct_domain_url("https://www.reuters.com/article/example") is False
+
+    def test_live_domain_not_excluded_by_defunct_check(self):
+        src = {"url": "https://www.reuters.com/article/example", "tier": "secondary",
+               "is_independent": True, "relevance_score": 0.85, "supports_claim": True}
+        assert evaluate_source(src) is not None
+
+    def test_defunct_domains_are_not_in_registry(self):
+        # A blacklisted domain must never carry a registry classification — the
+        # blacklist short-circuits before lookup, so an entry would be dead config.
+        import json
+        from pathlib import Path
+
+        from backend.sources.evaluator import _DEFUNCT_DOMAIN_BLACKLIST
+
+        path = (
+            Path(__file__).parent.parent
+            / "backend" / "sources" / "registries" / "registry.json"
+        )
+        with path.open(encoding="utf-8") as f:
+            domains = {s["domain"].lower() for s in json.load(f)["sources"]}
+        assert not (domains & _DEFUNCT_DOMAIN_BLACKLIST)

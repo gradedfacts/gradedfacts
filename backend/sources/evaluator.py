@@ -170,20 +170,43 @@ def is_party_politician_url(url: str) -> bool:
     return extract_domain(url) in _PARTY_POLITICIAN_BLACKLIST
 
 
-# User-content and upload platforms produce no original editorial content and
-# cannot be evaluated for independence or tier — excluded like social media.
+# User-content platforms, upload/hosting layers, and single-author self-published
+# sites without editorial structure. The common property is not the absence of
+# original content — a single-author site produces plenty — but the absence of any
+# editorial control structure, which leaves nothing to assess for independence or
+# tier. Excluded like social media.
 _USER_CONTENT_BLACKLIST: frozenset[str] = frozenset({
     "vocal.media",      # user-generated content platform
     "docplayer.org",    # document upload platform (unverifiable provenance)
     "quora.com",        # user-generated Q&A platform (unverifiable provenance)
     "blogspan.net",     # open blog-hosting platform
     "michael-mannheimer.net",  # single-author blog, no editorial control structure
+    "dillum.ch",        # Chronologiekritik/pseudohistory, single author, self-published, verified 2026-08-06
+    "github.com",       # code hosting, arbitrary user repositories — decision recorded June 2026, never implemented
+    "windows.net",      # Azure blob storage, hosting layer with no publisher — same June 2026 decision
 })
 
 
 def is_user_content_url(url: str) -> bool:
     """Return True if the URL belongs to a user-content or document-upload platform."""
     return extract_domain(url) in _USER_CONTENT_BLACKLIST
+
+
+# Defunct, parked, and redirect-to-parking domains. These still surface in search
+# results but carry no assessable content, so there is nothing to rate. They must
+# NOT be registered in registry.json instead: a parked domain can be sold and
+# repurposed at any time, while a registry classification would outlive the change
+# and silently vouch for whatever the new owner publishes.
+# Every entry carries the date the status was established — this list can go stale
+# in both directions (a parked domain may be revived, a live one may lapse).
+_DEFUNCT_DOMAIN_BLACKLIST: frozenset[str] = frozenset({
+    "iog.hu",   # redirects to parking service domain2.hu, verified 2026-08-06
+})
+
+
+def is_defunct_domain_url(url: str) -> bool:
+    """Return True if the URL belongs to a defunct or parked domain."""
+    return extract_domain(url) in _DEFUNCT_DOMAIN_BLACKLIST
 
 
 _GENERIC_AFFILIATION_NOTE = (
@@ -196,7 +219,8 @@ def evaluate_source(src: dict) -> dict | None:
     Apply all quality checks to a single source dict from Claude's judgment.
 
     Returns a new dict (or the same object if no changes are needed).
-    Returns None when the URL is on the social media blacklist — callers must filter.
+    Returns None when the URL is on any blacklist (social media, user content,
+    party/politician, defunct/parked) — callers must filter.
     """
     url = src.get("url", "")
     if url and is_social_media_url(url):
@@ -207,6 +231,9 @@ def evaluate_source(src: dict) -> dict | None:
         return None
     if url and is_party_politician_url(url):
         logger.warning("[BLACKLIST] Party/politician URL excluded: %s", url)
+        return None
+    if url and is_defunct_domain_url(url):
+        logger.warning("[BLACKLIST] Defunct/parked domain excluded: %s", url)
         return None
     _is_unregistered = bool(url) and lookup_source_all_registries(url) is None
 
