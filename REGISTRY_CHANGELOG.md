@@ -52,6 +52,196 @@ For new entries where no prior classification existed, the old classification is
 
 ---
 
+## 2026-11-23 — Registry Batch E+F: +111 entries, blacklist changes, msnbc.com fact correction
+
+Basis: `docs/registry_review/Registry_Batch_E_Review.md` (§6 overrides §3/§4),
+`docs/registry_review/Registry_Batch_F_Review.md` (✅ rows only), implementation plan
+`registry_batch_ef_plan.md`, and Marc's decisions of 2026-11-23 (numbered as in the plan, §5).
+Collision rule: (a) same facts → keep existing; (b) changed facts → correct with date and evidence.
+
+| Field     | Value |
+|-----------|-------|
+| Scope     | 111 new entries (777 → **888**), 1 fact correction (`msnbc.com`), 4 note extensions (CH Media), blacklist: +3 / −1 |
+| Commit    | the commit that adds this entry ("Registry Batch E+F: +111 entries, …"); hash to be filled in afterwards, as in `a06ab72` |
+
+### 1. Fact correction — `msnbc.com` (case (b), NOT a reclassification)
+
+| Field     | Value |
+|-----------|-------|
+| Domain    | `msnbc.com` |
+| Change    | Secondary / Not Independent → Secondary / Not Independent (**unchanged**) |
+| Type      | (b) fact correction: ownership clause in `affiliation_note` and `independence_note` |
+| Old       | *"Owned by NBCUniversal/Comcast."* / *"Owned by NBCUniversal (Comcast)."* |
+| New       | Ownership by NBCUniversal/Comcast ended with the Comcast cable-network spin-off: separated from NBC News on 2025-10-06, rebranded **MS NOW** (`ms.now`) on **2025-11-15**, now part of **Versant**. |
+| Evidence  | NewscastStudio, 2025-11-15 (*"On Nov. 15, 2025, MSNBC rebranded as MS NOW"*; separation from NBC News 2025-10-06; Versant). |
+| Rationale | Fact about ownership, not a §2.4 re-assessment. tier and is_independent unchanged; the rest of both notes is untouched. Legacy debt in the entry (dead `category` field, two overlapping note fields, no country/region) deliberately left as is, to keep this change a pure fact correction. |
+
+### 2. Note extensions — CH Media cross-notes (case (b), classifications unchanged)
+
+`tagblatt.ch` joins as fifth CH-Media title (decision 7). The `independence_note` enumeration of
+the four existing titles was extended to name it (alphabetical, self excluded):
+`aargauerzeitung.ch`, `luzernerzeitung.ch`, `schweizheute.ch`, `watson.ch`. **No tier or
+independence value changed.** Evidence for tagblatt.ch's CH-Media ownership: Batch E §3.2 note
+(St. Galler Tagblatt, CH-Media group, Wanner). Reminder: `independence_note` is not read by the
+pipeline (see the 2026-08-06 entry below).
+
+### 3. Blacklist changes — `backend/sources/evaluator.py`
+
+| Domain | Change | Rationale |
+|---|---|---|
+| `windows.net` | **removed** from `_USER_CONTENT_BLACKLIST` | The blacklist matches on `extract_domain()`, so it silently dropped every IEA report hosted on `iea.blob.core.windows.net` (Batch E §6.1). Removal verified with the real lookup before adding the subdomain entry: `lookup_source_all_registries("https://iea.blob.core.windows.net/…")` → `iea.blob.core.windows.net`, `evaluate_source()` → primary / independent. Every **other** Azure container now falls back to the unregistered default (tertiary / neutral, `counts_for_threshold: false`) instead of being dropped. |
+| `ithy.com` | added to `_USER_CONTENT_BLACKLIST` | AI-generated answer aggregator, no human author (Batch E §6.3). Not assessable for independence or tier. Precedent `blogspan.net`. |
+| `beyondtmrw.org` | added to `_USER_CONTENT_BLACKLIST` | About page: articles *"researched and drafted with AI tools"*, *"No human reads each piece before it goes live"* (ZYNK PTY LTD; Batch F §2). |
+| `wordpress.com` | added to `_USER_CONTENT_BLACKLIST` | Blog-hosting platform with arbitrary user blogs on subdomains (Batch F §2), analogous to `blogspan.net`. Note: `blogspot.com`, `medium.com`, `substack.com` are not listed; consistency left for a future review. |
+
+Not changed: `github.com` stays blacklisted (decision 1; Batch E §3.5 proposal dropped).
+`mattioli1885journals.com` is **not** blacklisted (decision 17) but registered, see below.
+
+### 4. Decision 13 — no umbrella domains
+
+Government portals that host many distinct institutions were **not** registered at the root;
+only the subdomain that actually occurred was registered:
+
+| Planned root | Registered instead | Reason |
+|---|---|---|
+| `niedersachsen.de` | `mb.niedersachsen.de` | subdomain hit |
+| `bundeswehr.de` | `zms.bundeswehr.de` | subdomain hit |
+| `wien.gv.at` | `geschichtewiki.wien.gv.at` | subdomain hit |
+| `hessen.de` | — (nothing) | hit was `hlz.hessen.de` (Landeszentrale); skipped in this batch by decision |
+| `vorarlberg.at` | — (nothing) | Land portal = umbrella; hit URL not available locally, so root vs. subdomain could not be established. Skipped; reappears in the next unknown-sources run |
+
+All other government domains in the batch are single-institution sites (a ministry, agency,
+embassy network, municipality or project portal), whose subdomains belong to the same institution.
+
+### 5. New entries (111)
+
+Old classification for all: `— / —`. Every Not Independent entry names its §2.4 criterion and
+evidence; the same text is in the entry's `affiliation_note`.
+
+| Domain | Change | institution_type | Source | Rationale / NI criterion |
+|---|---|---|---|---|
+| `lpb-bw.de` | — / — → Secondary / Independent | government | E §2 | Classified per review; see note in entry. |
+| `hanisauland.de` | — / — → Secondary / Independent | government | E §2 | Classified per review; see note in entry. |
+| `hdg.de` | — / — → Secondary / Independent | other | E §2 | Classified per review; see note in entry. |
+| `irishstar.com` | — / — → Tertiary / Neutral | media | E §2 | Classified per review; see note in entry. |
+| `unfccc.int` | — / — → Primary / Not Independent | government | E §2 | **§2.4 criterion 1**: UN treaty secretariat; member states direct mandates and outputs. Standing UN rule (`docs/registry_review/Registry_Review_301_Domains.md:26`, *"nie 'independent'"*), identical to `un.org`, `who.int`, `ipcc.ch`. |
+| `dgvn.de` | — / — → Secondary / Not Independent | ngo | E §2 | **§2.4 criterion 2** (>50% state funding): Bundestag lobby register R001926, FY2025 — Federal Foreign Office institutional grant EUR 1.34–1.35m + BMZ EUR 0.21–0.22m vs membership fees EUR 0.13–0.14m. Plus programmatic pro-UN mission (stated in note, not a criterion). |
+| `ms.now` | — / — → Secondary / Not Independent | media | E §2 | **Successor domain, no new §2.4 finding.** Same outlet as `msnbc.com` under a new name (NewscastStudio, 2025-11-15); classification inherited unchanged. `msnbc.com`'s own NI basis predates this changelog and is not reconstructed here. |
+| `zms.bundeswehr.de` | — / — → Primary / Not Independent | government | E §2 + decision 13 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. ZMSBw = research centre of the Bundeswehr (MoD); site self-identifies as *Zentrum für Militärgeschichte und Sozialwissenschaften der Bundeswehr* (fetched 2026-11-23). |
+| `bmz.de` | — / — → Primary / Not Independent | government | E §2 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry. |
+| `history.com` | — / — → Tertiary / Neutral | media | E §2 | Classified per review; see note in entry. |
+| `ebsco.com` | — / — → Tertiary / Neutral | aggregator | E §2 | Classified per review; see note in entry. |
+| `yahoo.com` | — / — → Tertiary / Neutral | aggregator | E §2 | Classified per review; see note in entry. |
+| `auswaertiges-amt.de` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry. |
+| `bundesumweltministerium.de` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry (supervising ministry of `umweltbundesamt.de`). |
+| `bundeskanzler.de` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal Chancellery web presence (cf. `bundesregierung.de`). |
+| `geschichtewiki.wien.gv.at` | — / — → Primary / Not Independent | government | E §3.1 + decision 13 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Page footer: *"Ein Service der Stadt Wien"* (fetched 2026-11-23). |
+| `bmwet.gv.at` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry (precedent: `*.gv.at` siblings, all primary/NI). |
+| `bmeia.gv.at` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry. |
+| `bmluk.gv.at` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Federal ministry. |
+| `ambafrance.org` | — / — → Primary / Not Independent | government | E §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. French embassy network (foreign service). |
+| `datenschutz.de` | — / — → Secondary / Independent | government | E §6.5 + decision 23.11. | Classified per review; see note in entry. |
+| `theatlantic.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `newyorker.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `independent.co.uk` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `stern.de` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `forbes.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review; see note in entry. |
+| `fortune.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `inquirer.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `sun-sentinel.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `tagblatt.ch` | — / — → Secondary / Independent | media | E §3.2 + decision 7 | Classified per review; see note in entry. |
+| `statnews.com` | — / — → Secondary / Independent | media | E §3.2 | Classified per review convention. |
+| `dailymail.com` | — / — → Tertiary / Neutral | media | E §3.3 | Classified per review convention. |
+| `dailystar.co.uk` | — / — → Tertiary / Neutral | media | E §3.3 | Classified per review; see note in entry. |
+| `theblast.com` | — / — → Tertiary / Neutral | media | E §3.3 | Classified per review convention. |
+| `indiatimes.com` | — / — → Tertiary / Neutral | media | E §3.3 | Classified per review convention. |
+| `onthisday.com` | — / — → Tertiary / Neutral | aggregator | E §3.4 | Classified per review convention. |
+| `newworldencyclopedia.org` | — / — → Tertiary / Neutral | aggregator | E §3.4 | Classified per review convention. |
+| `dewiki.de` | — / — → Tertiary / Neutral | aggregator | E §6.2 | Classified per review; see note in entry. |
+| `lexicanum.de` | — / — → Tertiary / Neutral | aggregator | E §3.4 | Classified per review; see note in entry. |
+| `lingoda.com` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `advisori.de` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `morningstar.de` | — / — → Tertiary / Neutral | media | E §3.5 + decision 10 | Classified per review convention. |
+| `swissdaytours.com` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `myswitzerland.com` | — / — → Tertiary / Not Independent | government | E §6.4 | **§2.4 criterion 4** (closest match; commercial/promotional interest): Switzerland Tourism, public-law corporation (HR Zürich CH-020.8.900.013-0) whose mandate is national tourism marketing; content is promotional (E §6.4). |
+| `baublatt.ch` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `cstoredive.com` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `prpg.digital` | — / — → Tertiary / Not Independent | company | E §6.2 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `healthdigest.com` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `thedrive.com` | — / — → Tertiary / Not Independent | company | E §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `cornell.edu` | — / — → Secondary / Independent | academic | E §3.6 | Classified per review convention. |
+| `mattioli1885journals.com` | — / — → Tertiary / Neutral | academic | E §6.3 + decision 17 | Classified per review; see note in entry. |
+| `planet-wissen.de` | — / — → Secondary / Independent | media | E §6.2 | Classified per review; see note in entry. |
+| `myclimate.org` | — / — → Secondary / Not Independent | ngo | E §3.7 | **§2.4 criterion 4** (commercial conflict of interest): sells carbon-offset services while advocating on climate policy. |
+| `amnesty-todesstrafe.de` | — / — → Secondary / Independent | ngo | E §6.1 | Classified per review; see note in entry. |
+| `progress.org.uk` | — / — → Secondary / Independent | ngo | E §6.1 | Classified per review; see note in entry. |
+| `demokratiezentrum.org` | — / — → Secondary / Independent | ngo | E §3.7 | Classified per review convention. |
+| `easyvote.ch` | — / — → Secondary / Independent | ngo | E §6.4 | Classified per review; see note in entry. |
+| `chstiftung.ch` | — / — → Secondary / Not Independent | ngo | E §6.2 + decision 16 | **§2.4 criterion 2** (>50% state funding) **and criterion 1** (governance by government members): annual report 2025 — cantonal contributions CHF 5,097,615 of CHF 6,447,457 revenue = 79.1% (83.7% incl. SECO); foundation council = one government member per canton. |
+| `amendmentsproject.org` | — / — → Secondary / Independent | academic | E §6.2 | Classified per review; see note in entry. |
+| `treffpunkteuropa.de` | — / — → Tertiary / Not Independent | ngo | E §3.7 | ⚠️ **No numbered §2.4 criterion documented.** Classification rests on the Batch E §3.7 advocacy convention (programmatic advocacy line → NI; precedent `amadeu-antonio-stiftung.de`): magazine of the Junge Europäische Föderalisten (JEF), a pro-European advocacy organisation. Funding not examined. |
+| `stiftung-berliner-mauer.de` | — / — → Secondary / Independent | other | E §6.2 | Classified per review; see note in entry. |
+| `nationalww2museum.org` | — / — → Tertiary / Neutral | other | E §6.4 | Classified per review; see note in entry. |
+| `snopes.com` | — / — → Secondary / Independent | media | E §3.9 | Classified per review convention. |
+| `schweiz.blog` | — / — → Tertiary / Neutral | media | E §6.2 | Classified per review convention. |
+| `politicalwire.com` | — / — → Tertiary / Neutral | media | E §6.2 | Classified per review; see note in entry. |
+| `2mecs.de` | — / — → Tertiary / Neutral | other | E §6.2 | Classified per review convention. |
+| `sajr.co.za` | — / — → Secondary / Independent | media | E §6.2 | Classified per review convention. |
+| `winfuture.de` | — / — → Secondary / Independent | media | E §6.2 | Classified per review convention. |
+| `atlantablackstar.com` | — / — → Secondary / Independent | media | E §6.2 | Classified per review convention. |
+| `glarus-sued.ch` | — / — → Primary / Not Independent | government | E §6.4 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Official municipal site (checked by hand, Marc, 2026-11-23). |
+| `schienenverkehr-schweiz.ch` | — / — → Tertiary / Neutral | other | E §4a + decision 18 | Classified per review; see note in entry. |
+| `iea.blob.core.windows.net` | — / — → Primary / Independent | — | E §6.1 + decision 23.11. | Classified per review; see note in entry. |
+| `csr-in-deutschland.de` | — / — → Primary / Not Independent | government | F §1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. Imprint: *"© 2026 Bundesministerium für Arbeit und Soziales"* (F §1). |
+| `theemancipator.org` | — / — → Secondary / Independent | media | F §1 | Classified per review; see note in entry. |
+| `frontiersin.org` | — / — → Secondary / Independent | academic | F §1 | Classified per review convention. |
+| `ntd.com` | — / — → Secondary / Not Independent | media | F §1 + decision 16 | **Media-group dependency:** same group as The Epoch Times (Epoch Media Group) with shared leadership (NBC News investigation, August 2019); About page calls The Epoch Times its *"sister media"*. ⚠️ None of the four §2.4 criteria matches verbatim; recorded as decided 2026-11-23 (decision 16). **§3.2 question 3:** a media outlet sharing ownership and leadership with any other outlet is assessed identically regardless of political direction. |
+| `zukunft-braucht-erinnerung.de` | — / — → Tertiary / Neutral | other | F §1 | Classified per review convention. |
+| `democracydocket.com` | — / — → Secondary / Not Independent | media | F §1 + decision 16 | **§2.4 criterion 4** (documented financial relationship with an actor that has a material stake in the claims covered): founder and publisher Marc Elias is a paid legal adviser to the Democratic National Committee (Bloomberg Law, 2026-08-04). **§3.2 question 3:** an equivalent outlet published by a paid adviser to the RNC would be classified identically. |
+| `nps.gov` | — / — → Primary / Not Independent | government | F §3.1 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. US federal agency (Department of the Interior). |
+| `mb.niedersachsen.de` | — / — → Primary / Not Independent | government | F §3.1 + decision 13 | **§2.4 criterion 1** (direct government oversight): the site is operated by a government body itself. State ministry; page title *"Nds. Ministerium für Bundes- und Europaangelegenheiten und Regionale Entwicklung"* (fetched 2026-11-23). |
+| `armywarcollege.edu` | — / — → Secondary / Not Independent | academic | F §3.1 + decision 11 | **§2.4 criterion 1**: government-operated military college (US Army). Classified identically to the precedent `westpoint.edu` (secondary / NI / academic), decision 11. |
+| `slate.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `livemint.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `finews.ch` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `commercialappeal.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `abc7ny.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `fox5dc.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `wjcl.com` | — / — → Secondary / Independent | media | F §3.2 | Classified per review convention. |
+| `rfi.fr` | — / — → Secondary / Not Independent | media | F §3.3 | **§2.4 criterion 2**: part of France Médias Monde, the state-controlled company that also owns `france24.com`, whose entry documents 100% state appropriations. Same parent, same classification. |
+| `mcgill.ca` | — / — → Secondary / Independent | academic | F §3.4 | Classified per review convention. |
+| `vcu.edu` | — / — → Secondary / Independent | academic | F §3.4 | Classified per review convention. |
+| `plos.org` | — / — → Secondary / Independent | academic | F §3.4 | Classified per review convention. |
+| `poynter.org` | — / — → Secondary / Independent | academic | F §3.7 | Classified per review; see note in entry. |
+| `taylorwessing.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `twobirds.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `osborneclarke.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `legaltegrity.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `eclear.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `vattenfall.de` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `unioncitizenship.com` | — / — → Tertiary / Not Independent | company | F §3.5 | **§2.4 criterion 4** (commercial interest): corporate source, registry convention *"Corporate source; not editorially independent."* (precedent `ubs.com`). |
+| `unilad.com` | — / — → Tertiary / Neutral | media | F §3.6 | Classified per review convention. |
+| `fiveable.me` | — / — → Tertiary / Neutral | other | F §3.6 | Classified per review convention. |
+| `military.com` | — / — → Tertiary / Neutral | media | F §3.7 | Classified per review; see note in entry. |
+| `normandy1944.info` | — / — → Tertiary / Neutral | other | F §3.6 | Classified per review convention. |
+| `iamexpat.ch` | — / — → Tertiary / Neutral | media | F §3.6 | Classified per review convention. |
+| `frontaliereticino.ch` | — / — → Tertiary / Neutral | media | F §3.6 | Classified per review convention. |
+| `travelnews.ch` | — / — → Tertiary / Neutral | media | F §3.6 | Classified per review convention. |
+| `moneycab.com` | — / — → Secondary / Independent | media | F §3.7 | Classified per review convention. |
+| `vermoegenmagazin.de` | — / — → Tertiary / Neutral | media | F §3.6 | Classified per review convention. |
+| `anwalt.org` | — / — → Tertiary / Neutral | other | F §3.6 | Classified per review convention. |
+| `gfmag.com` | — / — → Secondary / Independent | media | F §3.7 | Classified per review; see note in entry. |
+
+**Open governance items from this batch:**
+
+- ⚠️ **§3.4 audit due by 2026-12-23** (111 domains > 10). The audit for `e6f02c6` (due 2026-08-01) is still outstanding.
+- ⚠️ **Not Independent without a verbatim §2.4 criterion:** `ntd.com` (media-group dependency) and `treffpunkteuropa.de` (advocacy convention). Flagged for the next governance review.
+- `geschichtewiki.wien.gv.at` is a wiki (with public contributions) registered with the planned `wien.gv.at` classification (primary). Its tier should be reviewed.
+- `dailymail.co.uk` is **not** registered. HTTP check 2026-11-23: `https://www.dailymail.co.uk/` 301-redirects to `https://www.dailymail.com/home/index.html` (title *"UK Home | Daily Mail Online"*), so it is the same outlet. Unregistered URLs default to tertiary / neutral, which already equals the `dailymail.com` classification.
+- Registry-wide side effect of the `windows.net` change: `extract_domain()` still reduces all Azure containers to `windows.net`, so for domain dedup in the rating, all Azure-hosted sources in one judgment count as one domain.
+
+---
+
 ## 2026-08-06 — Fact corrections and one reclassification (3 domains)
 
 Basis: the collision rule in force since 2026-08-06 — **(a)** same facts → keep the existing

@@ -315,21 +315,60 @@ class TestUserContentBlacklist:
                "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
         assert evaluate_source(src) is None
 
-    def test_windows_net_excluded(self):
-        # Azure blob storage — hosting layer with no publisher
-        src = {"url": "https://someaccount.blob.core.windows.net/container/file.pdf",
-               "tier": "tertiary", "is_independent": "neutral", "relevance_score": 0.4,
-               "supports_claim": True}
-        assert evaluate_source(src) is None
-
     def test_is_user_content_url_dillum(self):
         assert is_user_content_url("https://www.dillum.ch/html/x.htm") is True
 
     def test_is_user_content_url_github(self):
         assert is_user_content_url("https://github.com/org/repo/blob/main/README.md") is True
 
-    def test_is_user_content_url_windows_net(self):
-        assert is_user_content_url("https://acct.blob.core.windows.net/c/f.pdf") is True
+    # ── Changes 2026-11-23 (Registry Batch E+F) ───────────────────────────────
+
+    def test_ithy_excluded(self):
+        # AI-generated answer aggregator — no human author
+        src = {"url": "https://ithy.com/article/some-answer", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_beyondtmrw_excluded(self):
+        # AI-drafted articles, no human review before publication
+        src = {"url": "https://beyondtmrw.org/some-article", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_wordpress_com_excluded(self):
+        # Blog-hosting platform — user blogs live on subdomains
+        src = {"url": "https://someblog.wordpress.com/2025/01/01/post/", "tier": "tertiary",
+               "is_independent": "neutral", "relevance_score": 0.4, "supports_claim": True}
+        assert evaluate_source(src) is None
+
+    def test_is_user_content_url_new_entries(self):
+        assert is_user_content_url("https://ithy.com/article/x") is True
+        assert is_user_content_url("https://www.beyondtmrw.org/x") is True
+        assert is_user_content_url("https://anyone.wordpress.com/x") is True
+
+    def test_windows_net_no_longer_blacklisted(self):
+        # windows.net was removed: blacklisting all of Azure storage dropped every
+        # IEA report hosted on iea.blob.core.windows.net.
+        assert is_user_content_url("https://acct.blob.core.windows.net/c/f.pdf") is False
+
+    def test_iea_azure_storage_resolves_to_iea_classification(self):
+        src = {"url": "https://iea.blob.core.windows.net/assets/x/report.pdf",
+               "tier": "tertiary", "is_independent": False, "relevance_score": 0.8,
+               "supports_claim": True}
+        result = evaluate_source(src)
+        assert result is not None
+        assert result["tier"] == "primary"
+        assert result["is_independent"] is True
+
+    def test_unregistered_azure_storage_gets_conservative_default(self):
+        # Any other Azure container is unregistered: tertiary / neutral, not excluded.
+        src = {"url": "https://someaccount.blob.core.windows.net/container/file.pdf",
+               "tier": "primary", "is_independent": True, "relevance_score": 0.8,
+               "supports_claim": True}
+        result = evaluate_source(src)
+        assert result is not None
+        assert result["tier"] == "tertiary"
+        assert result["is_independent"] == "neutral"
 
 
 class TestDefunctDomainBlacklist:
@@ -368,3 +407,58 @@ class TestDefunctDomainBlacklist:
         with path.open(encoding="utf-8") as f:
             domains = {s["domain"].lower() for s in json.load(f)["sources"]}
         assert not (domains & _DEFUNCT_DOMAIN_BLACKLIST)
+
+
+class TestBlacklistsNeverOverlapRegistry:
+    """No registry entry may be shadowed by ANY of the four blacklists.
+
+    The blacklists run before the registry lookup in evaluate_source() and match on
+    extract_domain(), so an entry is dead config not only when its domain is listed
+    verbatim but also when it is a subdomain of a listed domain (e.g. an entry
+    'x.blob.core.windows.net' while 'windows.net' is blacklisted). The check therefore
+    calls the real is_*_url() predicates on every registry domain.
+    """
+
+    @staticmethod
+    def _registry_domains():
+        import json
+        from pathlib import Path
+
+        path = (
+            Path(__file__).parent.parent
+            / "backend" / "sources" / "registries" / "registry.json"
+        )
+        with path.open(encoding="utf-8") as f:
+            return [s["domain"].lower() for s in json.load(f)["sources"]]
+
+    def test_no_registry_domain_is_blacklisted(self):
+        predicates = {
+            "social_media": is_social_media_url,
+            "user_content": is_user_content_url,
+            "party_politician": is_party_politician_url,
+            "defunct": is_defunct_domain_url,
+        }
+        shadowed = [
+            (domain, name)
+            for domain in self._registry_domains()
+            for name, pred in predicates.items()
+            if pred(f"https://{domain}/")
+        ]
+        assert not shadowed, f"Registry entries shadowed by a blacklist: {shadowed}"
+
+    def test_blacklist_sets_disjoint_from_registry(self):
+        from backend.sources.evaluator import (
+            _DEFUNCT_DOMAIN_BLACKLIST,
+            _PARTY_POLITICIAN_BLACKLIST,
+            _SOCIAL_MEDIA_BLACKLIST,
+            _USER_CONTENT_BLACKLIST,
+        )
+
+        domains = set(self._registry_domains())
+        for name, bl in (
+            ("social_media", _SOCIAL_MEDIA_BLACKLIST),
+            ("user_content", _USER_CONTENT_BLACKLIST),
+            ("party_politician", _PARTY_POLITICIAN_BLACKLIST),
+            ("defunct", _DEFUNCT_DOMAIN_BLACKLIST),
+        ):
+            assert not (domains & bl), f"{name} blacklist overlaps registry: {domains & bl}"

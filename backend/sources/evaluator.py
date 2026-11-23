@@ -183,7 +183,12 @@ _USER_CONTENT_BLACKLIST: frozenset[str] = frozenset({
     "michael-mannheimer.net",  # single-author blog, no editorial control structure
     "dillum.ch",        # Chronologiekritik/pseudohistory, single author, self-published, verified 2026-08-06
     "github.com",       # code hosting, arbitrary user repositories — decision recorded June 2026, never implemented
-    "windows.net",      # Azure blob storage, hosting layer with no publisher — same June 2026 decision
+    "ithy.com",         # AI-generated answer aggregator ("combines the findings of several AIs"), no human author, verified 2026-11-23
+    "beyondtmrw.org",   # AI-drafted articles, "No human reads each piece before it goes live" (About, ZYNK PTY LTD), verified 2026-11-23
+    "wordpress.com",    # blog-hosting platform, arbitrary user blogs (cf. blogspan.net), verified 2026-11-23
+    # windows.net was removed 2026-11-23: blacklisting the whole Azure storage domain
+    # silently dropped every IEA report hosted on iea.blob.core.windows.net. Publishers
+    # on Azure storage are registered per subdomain instead (see REGISTRY_CHANGELOG.md).
 })
 
 

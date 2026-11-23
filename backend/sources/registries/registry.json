@@ -165,8 +165,8 @@
       "tier": "secondary",
       "is_independent": false,
       "category": "broadcaster",
-      "affiliation_note": "Owned by NBCUniversal/Comcast. Documented progressive-leaning editorial orientation with systematic framing favoring Democratic positions. Ownership structure creates commercial incentives misaligned with editorial neutrality.",
-      "independence_note": "Owned by NBCUniversal (Comcast). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under GradedFacts's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
+      "affiliation_note": "Owned by NBCUniversal/Comcast until the Comcast cable-network spin-off: separated from NBC News on 2025-10-06 and rebranded MS NOW (ms.now) on 2025-11-15, now part of Versant (source: NewscastStudio, 2025-11-15). Documented progressive-leaning editorial orientation with systematic framing favoring Democratic positions. Ownership structure creates commercial incentives misaligned with editorial neutrality.",
+      "independence_note": "Owned by NBCUniversal (Comcast) until 2025; since 2025-11-15 MS NOW (ms.now), part of Versant (source: NewscastStudio, 2025-11-15). Programming is predominantly opinion-driven in prime time and daytime (Rachel Maddow, Lawrence O'Donnell, Joy Reid, Nicolle Wallace). Multiple academic content analyses document systematic and consistent alignment with Democratic Party political positions. Opinion content and news reporting share on-air talent, reducing audience ability to distinguish them. Not independent under GradedFacts's framework, which applies the same standard as would be applied to a systematically right-aligned outlet."
     },
     {
       "name": "Fox News",
@@ -3369,7 +3369,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / schweizheute.ch / tagblatt.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Berliner Zeitung",
@@ -3572,7 +3572,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / schweizheute.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / schweizheute.ch / tagblatt.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Blick",
@@ -7301,7 +7301,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside luzernerzeitung.ch / schweizheute.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside luzernerzeitung.ch / schweizheute.ch / tagblatt.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
     },
     {
       "name": "Anadolu Agency",
@@ -7417,7 +7417,7 @@
       "institution_type": "media",
       "country": "CH",
       "region": "Europe",
-      "independence_note": "National news portal of CH Media (editorial network ~350 journalists); belongs to CH Media (Wanner) — when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / watson.ch / other CH-Media titles, account for owner concentration."
+      "independence_note": "National news portal of CH Media (editorial network ~350 journalists); belongs to CH Media (Wanner) — when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / tagblatt.ch / watson.ch / other CH-Media titles, account for owner concentration."
     },
     {
       "name": "FAIR",
@@ -7573,6 +7573,1118 @@
       "country": "DE",
       "region": "Europe",
       "independence_note": "Public-service broadcaster (Norddeutscher Rundfunk)."
+    },
+    {
+      "name": "Landeszentrale für politische Bildung Baden-Württemberg",
+      "domain": "lpb-bw.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "government",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "State civic-education agency within the remit of the Landtag of Baden-Württemberg (legislature, not the executive). Oversight by a Kuratorium of 17 members of the Landtag and 7 experts; bound by the Beutelsbach Consensus (non-partisanship, controversy requirement). State-level counterpart of bpb.de, classified independent on the same statutory cross-party-oversight argument."
+    },
+    {
+      "name": "HanisauLand (bpb)",
+      "domain": "hanisauland.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "government",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Children's civic-education portal published by the Bundeszentrale für politische Bildung; inherits the bpb.de classification."
+    },
+    {
+      "name": "Stiftung Haus der Geschichte der Bundesrepublik Deutschland",
+      "domain": "hdg.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Federal foundation under public law established by the HdGStiftG, deliberately not a subordinate federal authority; subject to legal supervision only. An academic advisory board (wissenschaftlicher Beirat) safeguards scholarly independence. Consistent with lemo.dhm.de, whose note names the Haus der Geschichte as a partner under an independent scholarly mandate."
+    },
+    {
+      "name": "Irish Star",
+      "domain": "irishstar.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "IE",
+      "region": "Europe",
+      "independence_note": "Reach plc tabloid; owner concentration with dailystar.co.uk — when cited together, do not treat as independent corroboration."
+    },
+    {
+      "name": "UNFCCC Secretariat (United Nations Framework Convention on Climate Change)",
+      "domain": "unfccc.int",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "UN treaty secretariat (UNFCCC); member states exercise political direction over mandates and outputs.",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Deutsche Gesellschaft für die Vereinten Nationen (DGVN)",
+      "domain": "dgvn.de",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Registered association (e.V.) promoting the United Nations in Germany. Predominantly publicly funded (more than 50%): according to its entry in the German Bundestag lobby register (R001926, financial year 2025) it received an institutional grant of EUR 1.34–1.35m from the Federal Foreign Office and EUR 0.21–0.22m from the Federal Ministry for Economic Cooperation and Development (BMZ), against membership fees of EUR 0.13–0.14m. Its programmatic mission is explicitly pro-UN. Usable for information on UN structures and German UN policy debates, not as an independent assessment of UN performance.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "MS NOW",
+      "domain": "ms.now",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Successor of MSNBC (msnbc.com): separated from NBC News on 2025-10-06 and rebranded MS NOW on 2025-11-15 as part of Versant, the Comcast cable-network spin-off (source: NewscastStudio, 2025-11-15). Same outlet under a new name; classified identically to msnbc.com.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Zentrum für Militärgeschichte und Sozialwissenschaften der Bundeswehr (ZMSBw)",
+      "domain": "zms.bundeswehr.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesministerium für wirtschaftliche Zusammenarbeit und Entwicklung (BMZ)",
+      "domain": "bmz.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "HISTORY (A+E Networks)",
+      "domain": "history.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Commercial TV channel; popular history."
+    },
+    {
+      "name": "EBSCO",
+      "domain": "ebsco.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Global",
+      "independence_note": "Database/hosting platform, not a publisher; performs no own quality control (cf. researchgate.net)."
+    },
+    {
+      "name": "Yahoo",
+      "domain": "yahoo.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "US",
+      "region": "Global",
+      "independence_note": "News aggregator."
+    },
+    {
+      "name": "Auswärtiges Amt (German Federal Foreign Office)",
+      "domain": "auswaertiges-amt.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesumweltministerium (BMUV)",
+      "domain": "bundesumweltministerium.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundeskanzler (German Federal Chancellor)",
+      "domain": "bundeskanzler.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Wien Geschichte Wiki (Stadt Wien)",
+      "domain": "geschichtewiki.wien.gv.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesministerium für Wirtschaft, Energie und Tourismus (BMWET)",
+      "domain": "bmwet.gv.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesministerium für europäische und internationale Angelegenheiten (BMEIA)",
+      "domain": "bmeia.gv.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Bundesministerium (BMLUK)",
+      "domain": "bmluk.gv.at",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Austria. Not editorially independent.",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "Ambassades de France (French embassy network)",
+      "domain": "ambafrance.org",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of France. Not editorially independent.",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "Virtuelles Datenschutzbüro",
+      "domain": "datenschutz.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "government",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Joint information portal of data protection supervisory authorities (DE, CH, LI) and church and broadcasting data protection supervisors; partner contributions are published without further review."
+    },
+    {
+      "name": "The Atlantic",
+      "domain": "theatlantic.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The New Yorker",
+      "domain": "newyorker.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The Independent",
+      "domain": "independent.co.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "stern",
+      "domain": "stern.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Forbes",
+      "domain": "forbes.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Established business publication with a professional newsroom. Note that Forbes also publishes contributor articles that do not pass the same editorial review as staff reporting; contributor pieces should be weighed accordingly."
+    },
+    {
+      "name": "Fortune",
+      "domain": "fortune.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The Philadelphia Inquirer",
+      "domain": "inquirer.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "South Florida Sun Sentinel",
+      "domain": "sun-sentinel.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "St. Galler Tagblatt (CH Media)",
+      "domain": "tagblatt.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Belongs to CH Media (Wanner, sole ownership since 2026-04-01); when cited alongside aargauerzeitung.ch / luzernerzeitung.ch / schweizheute.ch / watson.ch / other CH-Media titles, account for owner concentration (not independent domains)."
+    },
+    {
+      "name": "STAT",
+      "domain": "statnews.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Daily Mail Online (DMGT)",
+      "domain": "dailymail.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Daily Star",
+      "domain": "dailystar.co.uk",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "Reach plc tabloid; owner concentration with irishstar.com — when cited together, do not treat as independent corroboration."
+    },
+    {
+      "name": "The Blast",
+      "domain": "theblast.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Indiatimes",
+      "domain": "indiatimes.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "IN",
+      "region": "Asia"
+    },
+    {
+      "name": "On This Day",
+      "domain": "onthisday.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "New World Encyclopedia",
+      "domain": "newworldencyclopedia.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "dewiki.de (Wikipedia mirror)",
+      "domain": "dewiki.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Mirror of de.wikipedia.org content (CC BY-SA); operator not identified. Treated like Wikipedia (Hard Rule 11): tertiary, never counts toward a threshold."
+    },
+    {
+      "name": "Lexicanum",
+      "domain": "lexicanum.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "aggregator",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Fan wiki."
+    },
+    {
+      "name": "Lingoda",
+      "domain": "lingoda.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "ADVISORI",
+      "domain": "advisori.de",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Morningstar Deutschland",
+      "domain": "morningstar.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Swiss Day Tours",
+      "domain": "swissdaytours.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Schweiz Tourismus (Switzerland Tourism)",
+      "domain": "myswitzerland.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "government",
+      "affiliation_note": "Switzerland Tourism, a public-law corporation (HR Zürich CH-020.8.900.013-0) responsible for national tourism marketing; promotional content, not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Baublatt",
+      "domain": "baublatt.ch",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "C-Store Dive",
+      "domain": "cstoredive.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "PRPG (Tobias Lindemann, Dülmen)",
+      "domain": "prpg.digital",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Health Digest",
+      "domain": "healthdigest.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "The Drive",
+      "domain": "thedrive.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Cornell University",
+      "domain": "cornell.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Mattioli1885 Journals",
+      "domain": "mattioli1885journals.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "academic",
+      "country": "IT",
+      "region": "Europe",
+      "independence_note": "Removed from MEDLINE in 2023 (per the journal's own indexing page: 'Not currently indexed for MEDLINE'). Publisher Mattioli1885 srl; single-blind peer review, Scopus-indexed."
+    },
+    {
+      "name": "Planet Wissen (WDR/SWR/BR)",
+      "domain": "planet-wissen.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Educational format of WDR (lead: WDR Redaktion Bildung; SWR/BR for their parts) per imprint; classified like wdr.de."
+    },
+    {
+      "name": "myclimate",
+      "domain": "myclimate.org",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Climate-protection advocacy organisation that also sells carbon-offset services; commercial interest in the outcome of climate-policy claims.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Amnesty International Deutschland — Koordinationsgruppe gegen die Todesstrafe",
+      "domain": "amnesty-todesstrafe.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Imprint: Amnesty International Deutschland e.V.; part of Amnesty's internal network. Classified like amnesty.de."
+    },
+    {
+      "name": "Progress Educational Trust",
+      "domain": "progress.org.uk",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "GB",
+      "region": "Europe",
+      "independence_note": "Charity no. 1139856; specialist charity on genetics and assisted reproduction. Not related to the Labour-affiliated group 'Progress'."
+    },
+    {
+      "name": "Demokratiezentrum Wien",
+      "domain": "demokratiezentrum.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "AT",
+      "region": "Europe"
+    },
+    {
+      "name": "easyvote (Dachverband Schweizer Jugendparlamente)",
+      "domain": "easyvote.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "ngo",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Published by the Dachverband Schweizer Jugendparlamente; statutes require party-political and confessional neutrality, enforced by a neutrality committee. Federal support under the KJFG (share unknown)."
+    },
+    {
+      "name": "ch Stiftung für eidgenössische Zusammenarbeit",
+      "domain": "chstiftung.ch",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Foundation for federal cooperation, based at the Haus der Kantone, Bern. Predominantly publicly funded and governed by the cantonal governments: according to its 2025 annual report, cantonal contributions were CHF 5,097,615 of CHF 6,447,457 total revenue (79.1%; 83.7% including SECO funding), and its foundation council consists of one government member per canton. Not independent of the cantonal governments.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "The Amendments Project (Harvard)",
+      "domain": "amendmentsproject.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Harvard project led by Jill Lepore, funded by NEH and Harvard; static since 2026, no longer updated."
+    },
+    {
+      "name": "treffpunkteuropa.de (JEF Deutschland)",
+      "domain": "treffpunkteuropa.de",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "ngo",
+      "affiliation_note": "Magazine of the Junge Europäische Föderalisten (JEF); pro-European advocacy organisation.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Stiftung Berliner Mauer",
+      "domain": "stiftung-berliner-mauer.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe",
+      "independence_note": "Foundation under public law established by the Mauerstiftungsgesetz (17 Sep 2008); legal supervision by the Berlin Senate only; academic advisory board (wissenschaftlicher Beirat). Funded by BKM, the Land Berlin and EFRE. Classified like hdg.de."
+    },
+    {
+      "name": "The National WWII Museum",
+      "domain": "nationalww2museum.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Designated by Congress as the official WWII museum; no independent scholarly advisory board documented."
+    },
+    {
+      "name": "Snopes",
+      "domain": "snopes.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "schweiz.blog (Giudice Management)",
+      "domain": "schweiz.blog",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Political Wire (Goddard Media)",
+      "domain": "politicalwire.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Short news round-ups with quotes; founder-led blog rather than a newsroom."
+    },
+    {
+      "name": "2mecs (private)",
+      "domain": "2mecs.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "South African Jewish Report",
+      "domain": "sajr.co.za",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "ZA",
+      "region": "Africa"
+    },
+    {
+      "name": "WinFuture",
+      "domain": "winfuture.de",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Atlanta Black Star",
+      "domain": "atlantablackstar.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Gemeinde Glarus Süd",
+      "domain": "glarus-sued.ch",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Switzerland. Not editorially independent.",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "schienenverkehr-schweiz.ch",
+      "domain": "schienenverkehr-schweiz.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "CH",
+      "region": "Europe",
+      "independence_note": "Privately maintained railway enthusiast site; single author, no editorial structure."
+    },
+    {
+      "name": "International Energy Agency (IEA) — report storage (Azure)",
+      "domain": "iea.blob.core.windows.net",
+      "tier": "primary",
+      "is_independent": true,
+      "counts_for_threshold": true,
+      "country": "INT",
+      "region": "INT",
+      "independence_note": "Azure blob storage container used by the International Energy Agency to host its published reports (e.g. Energy Policy Review Switzerland 2023). Classified identically to iea.org; see that entry for the independence rationale."
+    },
+    {
+      "name": "CSR in Deutschland (BMAS)",
+      "domain": "csr-in-deutschland.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "The Emancipator",
+      "domain": "theemancipator.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Published by the Institute for Advanced Study, Howard University; states it is editorially independent of Howard University. Nonprofit newsroom, relaunched 2026."
+    },
+    {
+      "name": "Frontiers",
+      "domain": "frontiersin.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "NTD Television",
+      "domain": "ntd.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "NTD Television Network (501(c)(3)) belongs to the same media group as The Epoch Times (Epoch Media Group), with shared leadership (NBC News investigation, August 2019); its own About page calls The Epoch Times its 'sister media'. Not independent of the Epoch Media Group.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Zukunft braucht Erinnerung",
+      "domain": "zukunft-braucht-erinnerung.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Democracy Docket",
+      "domain": "democracydocket.com",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "Democracy Docket LLC, founded and published by Marc Elias, who is a paid legal adviser to the Democratic National Committee (Bloomberg Law, 2026-08-04). Classified not independent because its publisher is embedded in a political party; an equivalent outlet published by a paid adviser to the Republican National Committee would be classified identically (Symmetry Principle).",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "National Park Service",
+      "domain": "nps.gov",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of the United States. Not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Niedersächsisches Ministerium für Bundes- und Europaangelegenheiten und Regionale Entwicklung",
+      "domain": "mb.niedersachsen.de",
+      "tier": "primary",
+      "is_independent": false,
+      "institution_type": "government",
+      "affiliation_note": "Official government institution of Germany. Not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "U.S. Army War College",
+      "domain": "armywarcollege.edu",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "academic",
+      "affiliation_note": "US Army War College; government-operated institution, not editorially independent.",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Slate",
+      "domain": "slate.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Mint (HT Media)",
+      "domain": "livemint.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "IN",
+      "region": "Asia"
+    },
+    {
+      "name": "finews.ch",
+      "domain": "finews.ch",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "The Commercial Appeal (Gannett)",
+      "domain": "commercialappeal.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "ABC7 New York",
+      "domain": "abc7ny.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "FOX 5 DC",
+      "domain": "fox5dc.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "WJCL (Hearst)",
+      "domain": "wjcl.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Radio France Internationale (RFI)",
+      "domain": "rfi.fr",
+      "tier": "secondary",
+      "is_independent": false,
+      "institution_type": "media",
+      "affiliation_note": "RFI is part of France Médias Monde, a public company under French state control that also owns France 24 (see france24.com: 100% of the budget through state appropriations). Its editorial charter provides formal independence protections, but structural independence from the French state cannot be assumed; French foreign-policy coverage should be cross-referenced with independent sources.",
+      "country": "FR",
+      "region": "Europe"
+    },
+    {
+      "name": "McGill University",
+      "domain": "mcgill.ca",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "CA",
+      "region": "North America"
+    },
+    {
+      "name": "Virginia Commonwealth University",
+      "domain": "vcu.edu",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "PLOS",
+      "domain": "plos.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "INT",
+      "region": "INT"
+    },
+    {
+      "name": "Poynter Institute",
+      "domain": "poynter.org",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "academic",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Nonprofit journalism institute; owner of PolitiFact (politifact.com, secondary/independent), seat of the IFCN."
+    },
+    {
+      "name": "Taylor Wessing",
+      "domain": "taylorwessing.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "Bird & Bird",
+      "domain": "twobirds.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "Osborne Clarke",
+      "domain": "osborneclarke.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "Legaltegrity",
+      "domain": "legaltegrity.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "eClear",
+      "domain": "eclear.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Vattenfall Deutschland",
+      "domain": "vattenfall.de",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Union Citizenship",
+      "domain": "unioncitizenship.com",
+      "tier": "tertiary",
+      "is_independent": false,
+      "counts_for_threshold": false,
+      "institution_type": "company",
+      "affiliation_note": "Corporate source; not editorially independent.",
+      "country": "INT",
+      "region": "Global"
+    },
+    {
+      "name": "UNILAD",
+      "domain": "unilad.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "GB",
+      "region": "Europe"
+    },
+    {
+      "name": "Fiveable",
+      "domain": "fiveable.me",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "US",
+      "region": "North America"
+    },
+    {
+      "name": "Military.com",
+      "domain": "military.com",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Operated by Iron Corp US Inc.; business model includes lead generation (insurance, VA loans). Tertiary since 2025 per manual review 2026-11-23."
+    },
+    {
+      "name": "normandy1944.info (private)",
+      "domain": "normandy1944.info",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "INT",
+      "region": "Europe"
+    },
+    {
+      "name": "IamExpat Switzerland",
+      "domain": "iamexpat.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Frontaliere Ticino",
+      "domain": "frontaliereticino.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "travelnews.ch",
+      "domain": "travelnews.ch",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Moneycab",
+      "domain": "moneycab.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "CH",
+      "region": "Europe"
+    },
+    {
+      "name": "Vermögenmagazin",
+      "domain": "vermoegenmagazin.de",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "media",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "anwalt.org",
+      "domain": "anwalt.org",
+      "tier": "tertiary",
+      "is_independent": "neutral",
+      "counts_for_threshold": false,
+      "institution_type": "other",
+      "country": "DE",
+      "region": "Europe"
+    },
+    {
+      "name": "Global Finance (Class Editori)",
+      "domain": "gfmag.com",
+      "tier": "secondary",
+      "is_independent": true,
+      "institution_type": "media",
+      "country": "US",
+      "region": "North America",
+      "independence_note": "Named editorial staff; also sells awards and partner/sponsored content — weigh such pieces accordingly."
     }
   ]
 }
